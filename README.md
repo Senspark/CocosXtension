@@ -1,4 +1,4 @@
-#Senspark Plugin
+#Senspark Plugins
 
 Senspark Plugin provides common utilities for developers to use in game across different platforms with [cocos2d-x](https://github.com/cocos2d/cocos2d-x).
 

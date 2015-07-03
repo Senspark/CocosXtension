@@ -10,4 +10,4 @@ This project adheres to [Senspark Co.,Ltd.](http://www.senspark.com/).
 ### Changed
 - README.md file to describe objectives of the project.
 
-[unreleased]: https://github.com/Senspark/plugin-x/compare/v3...HEAD
+[unreleased]: https://github.com/cocos2d-x/plugin-x/compare/v3...Senspark:v3
