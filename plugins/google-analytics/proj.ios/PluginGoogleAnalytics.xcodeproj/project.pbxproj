@@ -1,0 +1,373 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		95FA08491B4BCB9000D5246A /* GAI.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08321B4BCB9000D5246A /* GAI.h */; };
+		95FA084A1B4BCB9000D5246A /* GAIDictionaryBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08331B4BCB9000D5246A /* GAIDictionaryBuilder.h */; };
+		95FA084B1B4BCB9000D5246A /* GAIEcommerceFields.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08341B4BCB9000D5246A /* GAIEcommerceFields.h */; };
+		95FA084C1B4BCB9000D5246A /* GAIEcommerceProduct.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08351B4BCB9000D5246A /* GAIEcommerceProduct.h */; };
+		95FA084D1B4BCB9000D5246A /* GAIEcommerceProductAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08361B4BCB9000D5246A /* GAIEcommerceProductAction.h */; };
+		95FA084E1B4BCB9000D5246A /* GAIEcommercePromotion.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08371B4BCB9000D5246A /* GAIEcommercePromotion.h */; };
+		95FA084F1B4BCB9000D5246A /* GAIFields.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08381B4BCB9000D5246A /* GAIFields.h */; };
+		95FA08501B4BCB9000D5246A /* GAILogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08391B4BCB9000D5246A /* GAILogger.h */; };
+		95FA08511B4BCB9000D5246A /* GAITrackedViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA083A1B4BCB9000D5246A /* GAITrackedViewController.h */; };
+		95FA08521B4BCB9000D5246A /* GAITracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA083B1B4BCB9000D5246A /* GAITracker.h */; };
+		95FA08531B4BCB9000D5246A /* TAGContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08401B4BCB9000D5246A /* TAGContainer.h */; };
+		95FA08541B4BCB9000D5246A /* TAGContainerOpener.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08411B4BCB9000D5246A /* TAGContainerOpener.h */; };
+		95FA08551B4BCB9000D5246A /* TAGDataLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08421B4BCB9000D5246A /* TAGDataLayer.h */; };
+		95FA08561B4BCB9000D5246A /* TAGLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08431B4BCB9000D5246A /* TAGLogger.h */; };
+		95FA08571B4BCB9000D5246A /* TAGManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08441B4BCB9000D5246A /* TAGManager.h */; };
+		95FA08581B4BCB9000D5246A /* libAdIdAccess.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95FA08461B4BCB9000D5246A /* libAdIdAccess.a */; };
+		95FA08591B4BCB9000D5246A /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95FA08471B4BCB9000D5246A /* libGoogleAnalyticsServices.a */; };
+		95FA085C1B4BCDA900D5246A /* AnalyticsGoogle.m in Sources */ = {isa = PBXBuildFile; fileRef = 95FA085A1B4BCDA900D5246A /* AnalyticsGoogle.m */; };
+		95FA085D1B4BCDA900D5246A /* AnalyticsGoogle.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA085B1B4BCDA900D5246A /* AnalyticsGoogle.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		954306EA1B4A92C10025B342 /* libPluginGoogleAnalytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginGoogleAnalytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		95FA08301B4BCB9000D5246A /* Changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Changelog.txt; sourceTree = "<group>"; };
+		95FA08321B4BCB9000D5246A /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
+		95FA08331B4BCB9000D5246A /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
+		95FA08341B4BCB9000D5246A /* GAIEcommerceFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceFields.h; sourceTree = "<group>"; };
+		95FA08351B4BCB9000D5246A /* GAIEcommerceProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceProduct.h; sourceTree = "<group>"; };
+		95FA08361B4BCB9000D5246A /* GAIEcommerceProductAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceProductAction.h; sourceTree = "<group>"; };
+		95FA08371B4BCB9000D5246A /* GAIEcommercePromotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommercePromotion.h; sourceTree = "<group>"; };
+		95FA08381B4BCB9000D5246A /* GAIFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIFields.h; sourceTree = "<group>"; };
+		95FA08391B4BCB9000D5246A /* GAILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAILogger.h; sourceTree = "<group>"; };
+		95FA083A1B4BCB9000D5246A /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
+		95FA083B1B4BCB9000D5246A /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
+		95FA083C1B4BCB9000D5246A /* Readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
+		95FA083E1B4BCB9000D5246A /* Changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Changelog.txt; sourceTree = "<group>"; };
+		95FA08401B4BCB9000D5246A /* TAGContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAGContainer.h; sourceTree = "<group>"; };
+		95FA08411B4BCB9000D5246A /* TAGContainerOpener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAGContainerOpener.h; sourceTree = "<group>"; };
+		95FA08421B4BCB9000D5246A /* TAGDataLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAGDataLayer.h; sourceTree = "<group>"; };
+		95FA08431B4BCB9000D5246A /* TAGLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAGLogger.h; sourceTree = "<group>"; };
+		95FA08441B4BCB9000D5246A /* TAGManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAGManager.h; sourceTree = "<group>"; };
+		95FA08451B4BCB9000D5246A /* Readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
+		95FA08461B4BCB9000D5246A /* libAdIdAccess.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAdIdAccess.a; sourceTree = "<group>"; };
+		95FA08471B4BCB9000D5246A /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
+		95FA08481B4BCB9000D5246A /* Readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
+		95FA085A1B4BCDA900D5246A /* AnalyticsGoogle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsGoogle.m; sourceTree = "<group>"; };
+		95FA085B1B4BCDA900D5246A /* AnalyticsGoogle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsGoogle.h; sourceTree = "<group>"; };
+		95FA085E1B4BE4AD00D5246A /* PluginGoogleAnalytics-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PluginGoogleAnalytics-Prefix.pch"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		954306E71B4A92C10025B342 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95FA08581B4BCB9000D5246A /* libAdIdAccess.a in Frameworks */,
+				95FA08591B4BCB9000D5246A /* libGoogleAnalyticsServices.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		954306E11B4A92C10025B342 = {
+			isa = PBXGroup;
+			children = (
+				95FA085E1B4BE4AD00D5246A /* PluginGoogleAnalytics-Prefix.pch */,
+				95FA085A1B4BCDA900D5246A /* AnalyticsGoogle.m */,
+				95FA085B1B4BCDA900D5246A /* AnalyticsGoogle.h */,
+				95FA082F1B4BCB9000D5246A /* GoogleAnalytics */,
+				95FA083D1B4BCB9000D5246A /* GoogleTagManager */,
+				95FA08461B4BCB9000D5246A /* libAdIdAccess.a */,
+				95FA08471B4BCB9000D5246A /* libGoogleAnalyticsServices.a */,
+				95FA08481B4BCB9000D5246A /* Readme.txt */,
+				954306EB1B4A92C10025B342 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		954306EB1B4A92C10025B342 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				954306EA1B4A92C10025B342 /* libPluginGoogleAnalytics.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		95FA082F1B4BCB9000D5246A /* GoogleAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				95FA08301B4BCB9000D5246A /* Changelog.txt */,
+				95FA08311B4BCB9000D5246A /* Library */,
+				95FA083C1B4BCB9000D5246A /* Readme.txt */,
+			);
+			path = GoogleAnalytics;
+			sourceTree = "<group>";
+		};
+		95FA08311B4BCB9000D5246A /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				95FA08321B4BCB9000D5246A /* GAI.h */,
+				95FA08331B4BCB9000D5246A /* GAIDictionaryBuilder.h */,
+				95FA08341B4BCB9000D5246A /* GAIEcommerceFields.h */,
+				95FA08351B4BCB9000D5246A /* GAIEcommerceProduct.h */,
+				95FA08361B4BCB9000D5246A /* GAIEcommerceProductAction.h */,
+				95FA08371B4BCB9000D5246A /* GAIEcommercePromotion.h */,
+				95FA08381B4BCB9000D5246A /* GAIFields.h */,
+				95FA08391B4BCB9000D5246A /* GAILogger.h */,
+				95FA083A1B4BCB9000D5246A /* GAITrackedViewController.h */,
+				95FA083B1B4BCB9000D5246A /* GAITracker.h */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		95FA083D1B4BCB9000D5246A /* GoogleTagManager */ = {
+			isa = PBXGroup;
+			children = (
+				95FA083E1B4BCB9000D5246A /* Changelog.txt */,
+				95FA083F1B4BCB9000D5246A /* Library */,
+				95FA08451B4BCB9000D5246A /* Readme.txt */,
+			);
+			path = GoogleTagManager;
+			sourceTree = "<group>";
+		};
+		95FA083F1B4BCB9000D5246A /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				95FA08401B4BCB9000D5246A /* TAGContainer.h */,
+				95FA08411B4BCB9000D5246A /* TAGContainerOpener.h */,
+				95FA08421B4BCB9000D5246A /* TAGDataLayer.h */,
+				95FA08431B4BCB9000D5246A /* TAGLogger.h */,
+				95FA08441B4BCB9000D5246A /* TAGManager.h */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		954306E81B4A92C10025B342 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95FA084A1B4BCB9000D5246A /* GAIDictionaryBuilder.h in Headers */,
+				95FA084E1B4BCB9000D5246A /* GAIEcommercePromotion.h in Headers */,
+				95FA08551B4BCB9000D5246A /* TAGDataLayer.h in Headers */,
+				95FA08501B4BCB9000D5246A /* GAILogger.h in Headers */,
+				95FA08521B4BCB9000D5246A /* GAITracker.h in Headers */,
+				95FA084C1B4BCB9000D5246A /* GAIEcommerceProduct.h in Headers */,
+				95FA084B1B4BCB9000D5246A /* GAIEcommerceFields.h in Headers */,
+				95FA08541B4BCB9000D5246A /* TAGContainerOpener.h in Headers */,
+				95FA08511B4BCB9000D5246A /* GAITrackedViewController.h in Headers */,
+				95FA08531B4BCB9000D5246A /* TAGContainer.h in Headers */,
+				95FA08491B4BCB9000D5246A /* GAI.h in Headers */,
+				95FA084F1B4BCB9000D5246A /* GAIFields.h in Headers */,
+				95FA085D1B4BCDA900D5246A /* AnalyticsGoogle.h in Headers */,
+				95FA08571B4BCB9000D5246A /* TAGManager.h in Headers */,
+				95FA084D1B4BCB9000D5246A /* GAIEcommerceProductAction.h in Headers */,
+				95FA08561B4BCB9000D5246A /* TAGLogger.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		954306E91B4A92C10025B342 /* PluginGoogleAnalytics */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 954306EE1B4A92C10025B342 /* Build configuration list for PBXNativeTarget "PluginGoogleAnalytics" */;
+			buildPhases = (
+				954306E61B4A92C10025B342 /* Sources */,
+				954306E71B4A92C10025B342 /* Frameworks */,
+				954306E81B4A92C10025B342 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PluginGoogleAnalytics;
+			productName = PluginGoogleAnalytics;
+			productReference = 954306EA1B4A92C10025B342 /* libPluginGoogleAnalytics.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		954306E21B4A92C10025B342 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = "Senspark Co., Ltd";
+				TargetAttributes = {
+					954306E91B4A92C10025B342 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+				};
+			};
+			buildConfigurationList = 954306E51B4A92C10025B342 /* Build configuration list for PBXProject "PluginGoogleAnalytics" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 954306E11B4A92C10025B342;
+			productRefGroup = 954306EB1B4A92C10025B342 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				954306E91B4A92C10025B342 /* PluginGoogleAnalytics */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		954306E61B4A92C10025B342 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95FA085C1B4BCDA900D5246A /* AnalyticsGoogle.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		954306EC1B4A92C10025B342 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		954306ED1B4A92C10025B342 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		954306EF1B4A92C10025B342 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PluginGoogleAnalytics-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../../../protocols/platform/ios",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		954306F01B4A92C10025B342 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PluginGoogleAnalytics-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../../../protocols/platform/ios",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		954306E51B4A92C10025B342 /* Build configuration list for PBXProject "PluginGoogleAnalytics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				954306EC1B4A92C10025B342 /* Debug */,
+				954306ED1B4A92C10025B342 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		954306EE1B4A92C10025B342 /* Build configuration list for PBXNativeTarget "PluginGoogleAnalytics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				954306EF1B4A92C10025B342 /* Debug */,
+				954306F01B4A92C10025B342 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 954306E21B4A92C10025B342 /* Project object */;
+}
