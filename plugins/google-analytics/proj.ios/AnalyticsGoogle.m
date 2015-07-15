@@ -13,9 +13,12 @@
 #import "GAILogger.h"
 #import "GAIFields.h"
 
-#define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
+#define OUTPUT_LOG(...)     if (_debug) NSLog(__VA_ARGS__);
 
 @implementation AnalyticsGoogle
+
+
+#pragma mark - Analytics Interface
 
 - (void) startSession: (NSString*) appKey
 {
@@ -41,19 +44,9 @@
     }
 }
 
-- (void) logScreen:(NSString *)screenName
-{
-    if (self.tracker) {
-        [self.tracker set:kGAIScreenName value:screenName];
-        [self.tracker send:[[GAIDictionaryBuilder createScreenView] build]];
-    } else {
-        OUTPUT_LOG(@"Log Screen called w/o valid tracker");
-    }
-}
-
 - (void) setSessionContinueMillis: (long) millis
 {
-    
+    OUTPUT_LOG(@"Not supported on iOS");
 }
 
 - (void) setCaptureUncaughtException: (BOOL) isEnabled
@@ -69,37 +62,29 @@
 
 - (void) logError: (NSString*) errorId withMsg:(NSString*) message
 {
-    
+    OUTPUT_LOG(@"Not supported on iOS");
 }
 
 - (void) logEvent: (NSString*) eventId
 {
-    OUTPUT_LOG(@"Log Event w/o parameters is not support in Google Analytics.");
+    OUTPUT_LOG(@"Not supported on iOS");
 }
 
 - (void) logEvent: (NSString*) eventId withParam:(NSMutableDictionary*) paramMap
 {
-    if (self.tracker) {
-        NSString* eventCategory = [[paramMap objectForKey:kGAIEventCategory] stringValue];
-        NSString* eventAction = [[paramMap objectForKey:kGAIEventAction] stringValue];
-        NSString* eventLabel = [[paramMap objectForKey:kGAIEventLabel] stringValue];
-        NSNumber* eventValue = [paramMap objectForKey:kGAIEventValue];
-        
-        [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:eventCategory action:eventAction label:eventLabel value:eventValue] build]];
-    } else {
-        OUTPUT_LOG(@"Log Event called w/o valid tracker");
-    }
+    OUTPUT_LOG(@"Not supported on iOS");
 }
 
 - (void) logTimedEventBegin: (NSString*) eventId
 {
-    
+    OUTPUT_LOG(@"Not supported on iOS");
 }
 
 - (void) logTimedEventEnd: (NSString*) eventId
 {
-    
+    OUTPUT_LOG(@"Not supported on iOS");
 }
+
 
 - (NSString*) getSDKVersion
 {
@@ -109,6 +94,87 @@
 - (NSString*) getPluginVersion
 {
     return @"0.1.0";
+}
+
+#pragma mark - Google Analytics Interface
+
+
+- (void) dispatchHits
+{
+    [[GAI sharedInstance] dispatch];
+}
+- (void) dispatchPeriodically: (int) seconds
+{
+    [GAI sharedInstance].dispatchInterval = seconds;
+}
+
+- (void) stopPeriodicalDispatch
+{
+    // Disable periodic dispatch by setting dispatch interval to a value less than 1.
+    [GAI sharedInstance].dispatchInterval = 0;
+}
+
+- (void) logScreen:(NSString *)screenName
+{
+    if (self.tracker) {
+        [self.tracker set:kGAIScreenName value:screenName];
+        [self.tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+    } else {
+        OUTPUT_LOG(@"Log Screen called w/o valid tracker");
+    }
+}
+
+- (void) logEventWithCategory:(NSString *)category action: (NSString*) action label: (NSString*) label value: (NSNumber*) value
+{
+    if (self.tracker) {
+        [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:category action:action label:label value:value] build]];
+    } else {
+        OUTPUT_LOG(@"Log Event called w/o valid tracker");
+    }
+}
+
+- (void) logExceptionWithDescription: (NSString*) description fatal: (BOOL) isFatal {
+    
+    if (self.tracker) {
+        
+        [self.tracker send:[[GAIDictionaryBuilder createExceptionWithDescription:description withFatal:isFatal ? @YES : @NO] build]];
+    } else {
+        OUTPUT_LOG(@"Log Exception called w/o valid tracker.");
+    }
+}
+
+- (void) logTimmingWithCategory: (NSString*) category interval: (int) interval name:(NSString*) name label: (NSString*) label
+{
+    
+    if (self.tracker) {
+        [self.tracker send:[[GAIDictionaryBuilder createTimingWithCategory:category interval:[NSNumber numberWithInt:interval] name:name label:label] build]];
+    } else {
+        OUTPUT_LOG(@"Timing called w/o valid tracker");
+    }
+}
+
+- (void) logSocialWithNetwork: (NSString*) network action: (NSString*) action target: (NSString*) target
+{
+    if (self.tracker) {
+        [self.tracker send:[[GAIDictionaryBuilder createSocialWithNetwork:network action:action target:target] build]];
+    } else {
+        OUTPUT_LOG(@"Log Social called w/o valid tracker.");
+    }
+}
+
+- (void) setDryRun: (BOOL) isDryRun
+{
+    [self setDebugMode:isDryRun];
+}
+
+- (void) enableAdvertisingTracking: (BOOL) enable
+{
+    if (self.tracker) {
+        [self.tracker setAllowIDFACollection: enable];
+    }
+    else {
+        OUTPUT_LOG(@"Advertising called w/o valid tracker.");
+    }
 }
 
 @end

@@ -14,11 +14,11 @@
 
 @interface AnalyticsGoogle : NSObject <InterfaceAnalytics>
 {
+    BOOL _debug;
 }
 
 @property (nonatomic, assign) NSDictionary *trackers;
 @property (nonatomic, assign) id<GAITracker> tracker;
-@property BOOL debug;
 
 /**
  interfaces of protocol : InterfaceAnalytics
@@ -40,6 +40,15 @@
 /**
  interfaces of Google Analytics SDK
  */
-- (void) logScreen: (NSString*) screenName;
+- (void) dispatchHits;
+- (void) dispatchPeriodically: (int) seconds;
+- (void) stopPeriodicalDispatch;
 
+- (void) logScreen: (NSString*) screenName;
+- (void) logEventWithCategory:(NSString *)category action: (NSString*) action label: (NSString*) label value: (NSNumber*) value;
+- (void) logExceptionWithDescription: (NSString*) description fatal: (BOOL) isFatal;
+- (void) logTimmingWithCategory: (NSString*) category interval: (int) interval name:(NSString*) name label: (NSString*) label;
+- (void) logSocialWithNetwork: (NSString*) network action: (NSString*) action target: (NSString*) target;
+- (void) setDryRun: (BOOL) isDryRun;
+- (void) enableAdvertisingTracking: (BOOL) enable;
 #endif /* defined(__PluginGoogleAnalytics__AnalyticsGoogle__) */
