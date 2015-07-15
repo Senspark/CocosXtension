@@ -1,13 +1,8 @@
+
 //
-//  PluginGoogle-Prefix.pch
-//  PluginGoogleAnalytics
-//
-//  Created by Duc Nguyen on 7/7/15.
-//  Copyright (c) 2015 Senspark Co., Ltd. All rights reserved.
+// Prefix header for all source files of the 'libGoogleAnalytics' target in the 'libGoogleAnalytics' project
 //
 
-#ifndef PluginGoogleAnalytics_PluginGoogle_Prefix_pch
-#define PluginGoogleAnalytics_PluginGoogle_Prefix_pch
-
-
+#ifdef __OBJC__
+#import <Foundation/Foundation.h>
 #endif

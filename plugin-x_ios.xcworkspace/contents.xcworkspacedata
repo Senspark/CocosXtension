@@ -28,6 +28,12 @@
       <FileRef
          location = "group:plugins/weibo/proj.ios/PluginWeibo.xcodeproj">
       </FileRef>
+      <FileRef
+         location = "group:plugins/senspark/proj.ios/PluginSenspark.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:plugins/google-analytics/proj.ios/PluginGoogleAnalytics.xcodeproj">
+      </FileRef>
    </Group>
    <FileRef
       location = "group:samples/HelloPlugins/proj.ios/HelloPlugins.xcodeproj">
