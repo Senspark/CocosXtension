@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9507AADD1B56504100D367EB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9507AADC1B56504100D367EB /* Foundation.framework */; };
 		95FA08491B4BCB9000D5246A /* GAI.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08321B4BCB9000D5246A /* GAI.h */; };
 		95FA084A1B4BCB9000D5246A /* GAIDictionaryBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08331B4BCB9000D5246A /* GAIDictionaryBuilder.h */; };
 		95FA084B1B4BCB9000D5246A /* GAIEcommerceFields.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FA08341B4BCB9000D5246A /* GAIEcommerceFields.h */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9507AADC1B56504100D367EB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		954306EA1B4A92C10025B342 /* libPluginGoogleAnalytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginGoogleAnalytics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		95FA08301B4BCB9000D5246A /* Changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Changelog.txt; sourceTree = "<group>"; };
 		95FA08321B4BCB9000D5246A /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9507AADD1B56504100D367EB /* Foundation.framework in Frameworks */,
 				95FA08581B4BCB9000D5246A /* libAdIdAccess.a in Frameworks */,
 				95FA08591B4BCB9000D5246A /* libGoogleAnalyticsServices.a in Frameworks */,
 			);
@@ -70,6 +73,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9507AADE1B56505700D367EB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9507AADC1B56504100D367EB /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		954306E11B4A92C10025B342 = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +92,7 @@
 				95FA08461B4BCB9000D5246A /* libAdIdAccess.a */,
 				95FA08471B4BCB9000D5246A /* libGoogleAnalyticsServices.a */,
 				95FA08481B4BCB9000D5246A /* Readme.txt */,
+				9507AADE1B56505700D367EB /* Frameworks */,
 				954306EB1B4A92C10025B342 /* Products */,
 			);
 			sourceTree = "<group>";

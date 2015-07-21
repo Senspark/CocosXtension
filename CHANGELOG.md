@@ -22,6 +22,8 @@ This project adheres to [Senspark Co.,Ltd.](http://www.senspark.com/).
 ###  Added
 - Cloning project from [Plugin-x](https://github.com/cocos2d-x/plugin-x)
 - CHANGELOG.md file to hopefully serve better change log for this project.
+- Implementation of Google Analytics
+- Implementation Senspark test scene for new features.
 
 ### Changed
 - README.md file to describe objectives of the project.

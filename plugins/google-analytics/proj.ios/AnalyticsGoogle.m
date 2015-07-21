@@ -20,6 +20,16 @@
 
 #pragma mark - Analytics Interface
 
+- (id) init
+{
+    self = [super init];
+    if (self) {
+        self.trackers = [[NSMutableDictionary alloc] init];
+    }
+    
+    return self;
+}
+
 - (void) startSession: (NSString*) appKey
 {
     if (self.tracker) {
@@ -98,6 +108,44 @@
 
 #pragma mark - Google Analytics Interface
 
+- (void) configureTracker: (NSString*) trackerId
+{
+    if (nil == trackerId) {
+        OUTPUT_LOG(@"Null tracker id at configure time.");
+        return;
+    }
+    
+    OUTPUT_LOG(@"Configure with trackerId: %@", trackerId);
+    
+    [self createTracker:trackerId];
+}
+
+- (void) enableTracker: (NSString*) trackerId
+{
+    if (nil == trackerId) {
+        return;
+    }
+    
+    id<GAITracker> tr = [self.trackers objectForKey:trackerId];
+    if (tr == nil) {
+        OUTPUT_LOG(@"Trying to enable unknown tracker: %@", trackerId);
+    } else {
+        OUTPUT_LOG(@"Selected tracker: %@", trackerId);
+        self.tracker = tr;
+    }
+}
+
+- (void) createTracker: (NSString*) trackerId
+{
+    id<GAITracker> tr = [self.trackers objectForKey:trackerId];
+    
+    if (tr == nil) {
+        tr = [[GAI sharedInstance] trackerWithTrackingId:trackerId];
+        [self.trackers setValue:tr forKey:trackerId];
+    }
+    
+    [self enableTracker:trackerId];
+}
 
 - (void) dispatchHits
 {

@@ -19,5 +19,8 @@ One unified API for all SDKs
 
 1. Prerequisites
 	- Define environment variable `COCOS2DX_ROOT` in `/etc/launchd.conf` ([using this help](http://stackoverflow.com/questions/135688/setting-environment-variables-in-os-x/588442#588442))
+	- Put this line in ~/.profile file
+	
+			grep -E "^setenv" /etc/launchd.conf | xargs -t -L 1 launchctl
 
 2. 

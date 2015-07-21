@@ -17,8 +17,8 @@
     BOOL _debug;
 }
 
-@property (nonatomic, assign) NSDictionary *trackers;
-@property (nonatomic, assign) id<GAITracker> tracker;
+@property (nonatomic, retain) NSDictionary *trackers;
+@property (nonatomic, retain) id<GAITracker> tracker;
 
 /**
  interfaces of protocol : InterfaceAnalytics
@@ -40,6 +40,11 @@
 /**
  interfaces of Google Analytics SDK
  */
+
+- (void) configureTracker: (NSString*) trackerId;
+- (void) enableTracker: (NSString*) trackerId;
+- (void) createTracker: (NSString*) trackerId;
+
 - (void) dispatchHits;
 - (void) dispatchPeriodically: (int) seconds;
 - (void) stopPeriodicalDispatch;
@@ -51,4 +56,6 @@
 - (void) logSocialWithNetwork: (NSString*) network action: (NSString*) action target: (NSString*) target;
 - (void) setDryRun: (BOOL) isDryRun;
 - (void) enableAdvertisingTracking: (BOOL) enable;
+
+@end
 #endif /* defined(__PluginGoogleAnalytics__AnalyticsGoogle__) */
