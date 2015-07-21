@@ -6,8 +6,24 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		953C06F11B57A8DD002BB1A2 /* SensparkPluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 953C06EF1B57A8DD002BB1A2 /* SensparkPluginManager.cpp */; };
+		95C1602A1B5CEC1A00501400 /* SensparkProtocolAnalytics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95C160281B5CEC1A00501400 /* SensparkProtocolAnalytics.mm */; };
+		95C1602E1B5CF0BA00501400 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C1602D1B5CF0BA00501400 /* Foundation.framework */; };
+		95C160311B5CF17A00501400 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C160301B5CF17A00501400 /* CoreFoundation.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		9520E0B31B46A74800B7768B /* libPluginSenspark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginSenspark.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		953C06EB1B577563002BB1A2 /* SensparkProtocolAnalytics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkProtocolAnalytics.h; sourceTree = "<group>"; };
+		953C06EC1B578105002BB1A2 /* SensparkProtocolAds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkProtocolAds.h; sourceTree = "<group>"; };
+		953C06ED1B57A267002BB1A2 /* SensparkPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkPluginManager.h; sourceTree = "<group>"; };
+		953C06EF1B57A8DD002BB1A2 /* SensparkPluginManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SensparkPluginManager.cpp; sourceTree = "<group>"; };
+		95C160251B5CD83500501400 /* SensparkPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkPlugin.h; sourceTree = "<group>"; };
+		95C160281B5CEC1A00501400 /* SensparkProtocolAnalytics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SensparkProtocolAnalytics.mm; sourceTree = "<group>"; };
+		95C1602C1B5CEC9B00501400 /* SensparkPluginMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkPluginMacros.h; sourceTree = "<group>"; };
+		95C1602D1B5CF0BA00501400 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		95C160301B5CF17A00501400 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -15,6 +31,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95C160311B5CF17A00501400 /* CoreFoundation.framework in Frameworks */,
+				95C1602E1B5CF0BA00501400 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -24,7 +42,11 @@
 		9520E0AA1B46A74800B7768B = {
 			isa = PBXGroup;
 			children = (
+				953C06EE1B57A8B5002BB1A2 /* classes */,
+				95FE48EA1B5769A700739C4A /* ios */,
+				95FE48E91B57693A00739C4A /* include */,
 				9520E0BB1B46A84F00B7768B /* Senspark */,
+				95C1602F1B5CF0D300501400 /* Frameworks */,
 				9520E0B41B46A74800B7768B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -42,6 +64,46 @@
 			children = (
 			);
 			name = Senspark;
+			sourceTree = "<group>";
+		};
+		953C06EE1B57A8B5002BB1A2 /* classes */ = {
+			isa = PBXGroup;
+			children = (
+				953C06EF1B57A8DD002BB1A2 /* SensparkPluginManager.cpp */,
+			);
+			name = classes;
+			path = ../classes;
+			sourceTree = "<group>";
+		};
+		95C1602F1B5CF0D300501400 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				95C160301B5CF17A00501400 /* CoreFoundation.framework */,
+				95C1602D1B5CF0BA00501400 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		95FE48E91B57693A00739C4A /* include */ = {
+			isa = PBXGroup;
+			children = (
+				953C06EB1B577563002BB1A2 /* SensparkProtocolAnalytics.h */,
+				953C06EC1B578105002BB1A2 /* SensparkProtocolAds.h */,
+				953C06ED1B57A267002BB1A2 /* SensparkPluginManager.h */,
+				95C160251B5CD83500501400 /* SensparkPlugin.h */,
+				95C1602C1B5CEC9B00501400 /* SensparkPluginMacros.h */,
+			);
+			name = include;
+			path = ../include;
+			sourceTree = "<group>";
+		};
+		95FE48EA1B5769A700739C4A /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				95C160281B5CEC1A00501400 /* SensparkProtocolAnalytics.mm */,
+			);
+			name = ios;
+			path = ../platform/ios;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -110,6 +172,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				953C06F11B57A8DD002BB1A2 /* SensparkPluginManager.cpp in Sources */,
+				95C1602A1B5CEC1A00501400 /* SensparkProtocolAnalytics.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,10 +215,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../../../protocols/include",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LIBTOOLFLAGS = "";
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../protocols/platform/ios";
 			};
 			name = Debug;
 		};
@@ -187,9 +258,16 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../../../protocols/include",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LIBTOOLFLAGS = "";
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../protocols/platform/ios";
 			};
 			name = Release;
 		};
@@ -197,6 +275,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos8.4;
 			};
@@ -206,6 +285,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos8.4;
 			};
