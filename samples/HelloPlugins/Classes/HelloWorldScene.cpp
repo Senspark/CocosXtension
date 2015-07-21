@@ -8,10 +8,12 @@
 #include "TestSocialScene.h"
 #include "TestFacebookUserScene.h"
 #include "TestFacebookShare.h"
+#include "TestSenspark.h"
 
 USING_NS_CC;
 
 std::string g_testCases[] = {
+    "Test Senspark",
     "Test Ads",
     "Test Analytics",
     "Test Share",
@@ -90,33 +92,36 @@ void HelloWorld::menuCallback(Ref* pSender)
     Scene* newScene = NULL;
     switch (pItem->getTag()) {
     case 0:
-        newScene = TestAds::scene();
+        newScene = senspark::TestSenspark::scene();
         break;
     case 1:
-        newScene = TestAnalytics::scene();
+        newScene = TestAds::scene();
         break;
     case 2:
-        newScene = TestShare::scene();
+        newScene = TestAnalytics::scene();
         break;
     case 3:
-        newScene = TestFacebookUser::scene();
+        newScene = TestShare::scene();
         break;
     case 4:
-        newScene = TestFacebookShare::scene();
+        newScene = TestFacebookUser::scene();
         break;
     case 5:
-        newScene = TestIAP::scene();
+        newScene = TestFacebookShare::scene();
         break;
     case 6:
-        newScene = TestIAPOnline::scene();
+        newScene = TestIAP::scene();
         break;
     case 7:
-        newScene = TestUser::scene();
+        newScene = TestIAPOnline::scene();
         break;
     case 8:
-        newScene = TestSocial::scene();
+        newScene = TestUser::scene();
         break;
     case 9:
+        newScene = TestSocial::scene();
+        break;
+    case 10:
         break;
     default:
         break;

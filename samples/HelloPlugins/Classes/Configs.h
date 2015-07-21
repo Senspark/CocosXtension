@@ -11,13 +11,26 @@
 #define APP_NAME                "HelloPlugins"
 
 /**
+ @brief Senspark namespace
+ */
+#define NS_SENSPARK_BEGIN       namespace senspark {
+#define NS_SENSPARK_END         }
+#define USING_NS_SENSPARK       using namespace senspark;
+
+/**
  @brief Developer information of flurry
  */
 #define FLURRY_KEY_IOS          "KMGG7CD9WPK2TW4X9VR8"
 #define FLURRY_KEY_ANDROID      "SPKFH8KMPGHMMBWRBT5W"
 
 /**
- @brief Developer information of flurry
+ @brief Developer information of google analytics
+ */
+#define GOOGLE_ANALYTICS_KEY_IOS            "UA-65216593-1"
+#define GOOGLE_ANALYTICS_KEY_ANDROID        "UA-65216593-1"
+
+/**
+ @brief Developer information of facebook
  */
 #define FACEBOOK_KEY_IOS          "281024655411962_324933371021090"
 #define FACEBOOK_KEY_ANDROID      "281024655411962_326911607489933"

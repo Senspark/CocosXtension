@@ -2,9 +2,10 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+$(call import-add-path,$(COCOS2DX_ROOT))
 $(call import-add-path,$(LOCAL_PATH)/../../../../..)
-$(call import-add-path,$(LOCAL_PATH)/../../../../../external)
-$(call import-add-path,$(LOCAL_PATH)/../../../../../cocos)
+$(call import-add-path,$(COCOS2DX_ROOT)/external)
+$(call import-add-path,$(COCOS2DX_ROOT)/cocos)
 $(call import-add-path,$(LOCAL_PATH)/../../../../publish)
 
 LOCAL_MODULE := cocos2dcpp_shared
@@ -47,5 +48,5 @@ PluginProtocolStatic
 
 include $(BUILD_SHARED_LIBRARY)
 
-$(call import-module,plugin/protocols/proj.android/jni)
+$(call import-module,plugin-x/protocols/proj.android/jni)
 $(call import-module,cocos)
