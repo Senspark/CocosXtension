@@ -10,6 +10,7 @@
 #define __PluginGoogleAnalytics__AnalyticsGoogle__
 
 #import "InterfaceAnalytics.h"
+#import "GAILogger.h"
 #import "GAITracker.h"
 
 @interface AnalyticsGoogle : NSObject <InterfaceAnalytics>
@@ -45,17 +46,27 @@
 - (void) enableTracker: (NSString*) trackerId;
 - (void) createTracker: (NSString*) trackerId;
 
+- (void) setLogLevel: (NSNumber*) logLevel;
 - (void) dispatchHits;
-- (void) dispatchPeriodically: (int) seconds;
+- (void) dispatchPeriodically: (NSNumber*) seconds;
 - (void) stopPeriodicalDispatch;
 
-- (void) logScreen: (NSString*) screenName;
-- (void) logEventWithCategory:(NSString *)category action: (NSString*) action label: (NSString*) label value: (NSNumber*) value;
-- (void) logExceptionWithDescription: (NSString*) description fatal: (BOOL) isFatal;
-- (void) logTimmingWithCategory: (NSString*) category interval: (int) interval name:(NSString*) name label: (NSString*) label;
-- (void) logSocialWithNetwork: (NSString*) network action: (NSString*) action target: (NSString*) target;
-- (void) setDryRun: (BOOL) isDryRun;
-- (void) enableAdvertisingTracking: (BOOL) enable;
+- (void) trackScreen: (NSString*) screenName;
+
+- (void) trackEventWithCategory:(NSString *)category action: (NSString*) action label: (NSString*) label value: (NSNumber*) value;
+- (void) trackEventWithCategory: (NSMutableDictionary*) params;
+
+- (void) trackExceptionWithDescription: (NSString*) description fatal: (BOOL) isFatal;
+- (void) trackExceptionWithDescription: (NSMutableDictionary*) params;
+
+- (void) trackTimmingWithCategory: (NSString*) category interval: (int) interval name:(NSString*) name label: (NSString*) label;
+- (void) trackTimmingWithCategory: (NSMutableDictionary*) params;
+
+- (void) trackSocialWithNetwork: (NSString*) network action: (NSString*) action target: (NSString*) target;
+- (void) trackSocialWithNetwork: (NSMutableDictionary*) params;
+
+- (void) setDryRun: (NSNumber*) isDryRun;
+- (void) enableAdvertisingTracking: (NSNumber*) enable;
 
 @end
 #endif /* defined(__PluginGoogleAnalytics__AnalyticsGoogle__) */

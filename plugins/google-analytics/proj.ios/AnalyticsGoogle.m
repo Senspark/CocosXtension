@@ -147,13 +147,19 @@
     [self enableTracker:trackerId];
 }
 
+- (void) setLogLevel: (NSNumber*) logLevel
+{
+    [[[GAI sharedInstance] logger] setLogLevel:[logLevel unsignedIntegerValue]];
+}
+
 - (void) dispatchHits
 {
     [[GAI sharedInstance] dispatch];
 }
-- (void) dispatchPeriodically: (int) seconds
+
+- (void) dispatchPeriodically: (NSNumber*) seconds
 {
-    [GAI sharedInstance].dispatchInterval = seconds;
+    [GAI sharedInstance].dispatchInterval = [seconds intValue];
 }
 
 - (void) stopPeriodicalDispatch
@@ -162,7 +168,7 @@
     [GAI sharedInstance].dispatchInterval = 0;
 }
 
-- (void) logScreen:(NSString *)screenName
+- (void) trackScreen:(NSString *)screenName
 {
     if (self.tracker) {
         [self.tracker set:kGAIScreenName value:screenName];
@@ -172,7 +178,7 @@
     }
 }
 
-- (void) logEventWithCategory:(NSString *)category action: (NSString*) action label: (NSString*) label value: (NSNumber*) value
+- (void) trackEventWithCategory:(NSString *)category action: (NSString*) action label: (NSString*) label value: (NSNumber*) value
 {
     if (self.tracker) {
         [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:category action:action label:label value:value] build]];
@@ -181,7 +187,16 @@
     }
 }
 
-- (void) logExceptionWithDescription: (NSString*) description fatal: (BOOL) isFatal {
+- (void) trackEventWithCategory: (NSMutableDictionary*) params {
+    NSString* category = (NSString*) [params objectForKey:@"Param1"];
+    NSString* action = (NSString*) [params objectForKey:@"Param2"];
+    NSString* label = (NSString*) [params objectForKey:@"Param3"];
+    NSNumber* value = (NSNumber*) [params objectForKey:@"Param4"];
+    
+    [self trackEventWithCategory:category action:action label:label value:value];
+}
+
+- (void) trackExceptionWithDescription: (NSString*) description fatal: (BOOL) isFatal {
     
     if (self.tracker) {
         
@@ -191,7 +206,15 @@
     }
 }
 
-- (void) logTimmingWithCategory: (NSString*) category interval: (int) interval name:(NSString*) name label: (NSString*) label
+- (void) trackExceptionWithDescription: (NSMutableDictionary*) params
+{
+    NSString* description = (NSString*) [params objectForKey:@"Param1"];
+    BOOL isFatal = [(NSNumber*) [params objectForKey:@"Param2"] boolValue];
+    
+    [self trackExceptionWithDescription:description fatal:isFatal];
+}
+
+- (void) trackTimmingWithCategory: (NSString*) category interval: (int) interval name:(NSString*) name label: (NSString*) label
 {
     
     if (self.tracker) {
@@ -201,7 +224,17 @@
     }
 }
 
-- (void) logSocialWithNetwork: (NSString*) network action: (NSString*) action target: (NSString*) target
+- (void) trackTimmingWithCategory: (NSMutableDictionary*) params
+{
+    NSString* category = (NSString*) [params objectForKey:@"Param1"];
+    int interval = [(NSNumber*) [params objectForKey:@"Param2"] intValue];
+    NSString* name = (NSString*) [params objectForKey:@"Param3"];
+    NSString* label = (NSString*) [params objectForKey:@"Param4"];
+    
+    [self trackTimmingWithCategory:category interval:interval name:name label:label];
+}
+
+- (void) trackSocialWithNetwork: (NSString*) network action: (NSString*) action target: (NSString*) target
 {
     if (self.tracker) {
         [self.tracker send:[[GAIDictionaryBuilder createSocialWithNetwork:network action:action target:target] build]];
@@ -210,15 +243,24 @@
     }
 }
 
-- (void) setDryRun: (BOOL) isDryRun
+- (void) trackSocialWithNetwork: (NSMutableDictionary*) params
 {
-    [self setDebugMode:isDryRun];
+    NSString* network = (NSString*) [params objectForKey:@"Param1"];
+    NSString* action = (NSString*) [params objectForKey:@"Param2"];
+    NSString* target = (NSString*) [params objectForKey:@"Param3"];
+
+    [self trackSocialWithNetwork:network action:action target:target];
 }
 
-- (void) enableAdvertisingTracking: (BOOL) enable
+- (void) setDryRun: (NSNumber*) isDryRun
+{
+    [self setDebugMode:[isDryRun boolValue]];
+}
+
+- (void) enableAdvertisingTracking: (NSNumber*) enable
 {
     if (self.tracker) {
-        [self.tracker setAllowIDFACollection: enable];
+        [self.tracker setAllowIDFACollection: [enable boolValue]];
     }
     else {
         OUTPUT_LOG(@"Advertising called w/o valid tracker.");
