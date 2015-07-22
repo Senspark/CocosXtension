@@ -1,13 +1,13 @@
 //
-//  SensparkProtocolAnalytics.h
+//  GoogleProtocolAnalytics.h
 //  PluginSenspark
 //
 //  Created by Duc Nguyen on 7/16/15.
 //  Copyright (c) 2015 Senspark Co., Ltd. All rights reserved.
 //
 
-#ifndef PluginSenspark_SensparkProtocolAnalytics_h
-#define PluginSenspark_SensparkProtocolAnalytics_h
+#ifndef PluginSenspark_GoogleProtocolAnalytics_h
+#define PluginSenspark_GoogleProtocolAnalytics_h
 
 #include "ProtocolAnalytics.h"
 #include "SensparkPluginMacros.h"
@@ -16,11 +16,19 @@
 using namespace std;
 
 NS_SENSPARK_PLUGIN_BEGIN
-   
-class SensparkProtocolAnalytics : public cocos2d::plugin::ProtocolAnalytics {
+
+enum class GALogLevel {
+    NONE = 0,
+    ERROR = 1,
+    WARNING = 2,
+    INFO = 3,
+    VERBOSE = 4
+};
+
+class GoogleProtocolAnalytics : public cocos2d::plugin::ProtocolAnalytics {
 public:
-    SensparkProtocolAnalytics();
-    virtual ~SensparkProtocolAnalytics();
+    GoogleProtocolAnalytics();
+    virtual ~GoogleProtocolAnalytics();
     
     void configureTracker(const string& trackerId);
     void createTracker(const string& trackerId);
@@ -38,6 +46,8 @@ public:
      */
     void stopSession();
 
+    void setLogLevel(GALogLevel logLevel);
+    
     void setCaptureUncaughtException(bool isEnabled);
     
     void dispatchHits();
@@ -46,15 +56,15 @@ public:
     
     void stopPeriodicalDispatch();
     
-    void logScreen(const string& screenName);
+    void trackScreen(const string& screenName);
     
-    void logEvent(const string& category, const string& action, const string& label, float value);
+    void trackEvent(const string& category, const string& action, const string& label, float value);
     
-    void logException(const string& description, bool isFatal);
+    void trackException(const string& description, bool isFatal);
     
-    void logTimming(const string& category, int interval, const string& name, const string& label);
+    void trackTimming(const string& category, int interval, const string& name, const string& label);
     
-    void logSocial(const string& network, const string& action, const string& target);
+    void trackSocial(const string& network, const string& action, const string& target);
     
     void setDryRun(bool isDryRun);
     

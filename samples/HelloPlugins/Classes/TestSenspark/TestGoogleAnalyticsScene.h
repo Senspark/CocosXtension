@@ -13,24 +13,41 @@
 #include "cocos2d.h"
 #include "Configs.h"
 
+#include "ListLayer.h"
 #include "SensparkPlugin.h"
 
 USING_NS_CC;
 
 NS_SENSPARK_BEGIN
 
-class TestGoogleAnalytics : public Layer {
+enum class MenuItemTag {
+    TAG_LOG_SCREEN,
+    TAG_LOG_EVENT,
+    TAG_LOG_TIMING,
+    TAG_LOG_SOCIAL,
+    TAG_MAKE_ME_CRASH,
+};
+
+struct EventMenuItem {
+    std::string title;
+    MenuItemTag tag;
+};
+
+class TestGoogleAnalytics : public ListLayer {
 public:
     virtual bool init();
+    
+    virtual void onEnter();
     virtual void onExit();
+    
+    void doAction(MenuItemTag tag);
     
     static Scene* scene();
     
     CREATE_FUNC(TestGoogleAnalytics);
-    
+
 private:
-    senspark::plugin::SensparkProtocolAnalytics* _pluginAnalytics;
-    
+    senspark::plugin::GoogleProtocolAnalytics* _pluginAnalytics;
 };
 
 NS_SENSPARK_END

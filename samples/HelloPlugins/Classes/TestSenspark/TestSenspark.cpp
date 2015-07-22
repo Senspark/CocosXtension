@@ -12,6 +12,10 @@
 using namespace senspark;
 USING_NS_CC;
 
+void pushScene(Scene* scene) {
+    Director::getInstance()->pushScene(scene);
+}
+
 Scene* TestSenspark::scene() {
     // 'scene' is an autorelease object
     Scene *scene = Scene::create();
@@ -31,21 +35,21 @@ bool TestSenspark::init() {
         return false;
     }
     
-    addTest("Analytics - Google", TestGoogleAnalytics::scene());
-    addTest("Analytics - Flurry", Scene::create());
+    addTest("Analytics - Google", []() { pushScene(TestGoogleAnalytics::scene()); });
+    addTest("Analytics - Flurry", []() { pushScene(Scene::create()); });
     
-    addTest("Ads - Google Admob", Scene::create());
-    addTest("Ads - Flurry", Scene::create());
-    addTest("Ads - Vungle", Scene::create());
-    addTest("Ads - Chartboost", Scene::create());
+    addTest("Ads - Google Admob", []() { pushScene(Scene::create()); });
+    addTest("Ads - Flurry", []() { pushScene(Scene::create()); });
+    addTest("Ads - Vungle", []() { pushScene(Scene::create()); });
+    addTest("Ads - Chartboost", []() { pushScene(Scene::create()); });
 
-    addTest("Game Service - Google Play", Scene::create());
-    addTest("Game Service - Game Center", Scene::create());
+    addTest("Game Service - Google Play", []() { pushScene(Scene::create()); });
+    addTest("Game Service - Game Center", []() { pushScene(Scene::create()); });
     
-    addTest("Social - Facebook", Scene::create());
-    addTest("Cloud Sync - Parse", Scene::create());
+    addTest("Social - Facebook", []() { pushScene(Scene::create()); });
+    addTest("Cloud Sync - Parse", []() { pushScene(Scene::create()); });
     
-    addTest("User - Facebook", Scene::create());
+    addTest("User - Facebook", []() { pushScene(Scene::create()); });
     
     return true;
 }

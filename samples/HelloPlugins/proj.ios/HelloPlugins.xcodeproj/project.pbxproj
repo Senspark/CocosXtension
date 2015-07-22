@@ -640,15 +640,15 @@
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				LIBRARY_SEARCH_PATHS = (
-					"/Users/ndpduc/GitRepo/plugin-x/plugins/senspark/proj.ios/build/Debug-iphoneos",
-					"/Users/ndpduc/GitRepo/plugin-x/plugins/google-analytics/proj.ios/build/Debug-iphoneos",
+					"$(SRCROOT)/../../../plugins/senspark/proj.ios/build/Debug-iphoneos",
+					"$(SRCROOT)/../../../plugins/google-analytics/proj.ios/build/Debug-iphoneos",
 				);
 				OTHER_CFLAGS = "-O2";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = HelloPlugins;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "$(COCOS2DX_ROOT) $(COCOS2DX_ROOT)/cocos/math $(COCOS2DX_ROOT)/cocos/base $(COCOS2DX_ROOT)/cocos $(COCOS2DX_ROOT)/cocos/2d $(COCOS2DX_ROOT)/cocos/platform/ios $(COCOS2DX_ROOT)/cocos/physics $(COCOS2DX_ROOT)/external $(SRCROOT)/../../../protocols/include $(SRCROOT)/../../../plugins/senspark/include";
+				USER_HEADER_SEARCH_PATHS = "$(COCOS2DX_ROOT) $(COCOS2DX_ROOT)/cocos/math $(COCOS2DX_ROOT)/cocos/base $(COCOS2DX_ROOT)/cocos $(COCOS2DX_ROOT)/cocos/2d $(COCOS2DX_ROOT)/cocos/platform/ios $(COCOS2DX_ROOT)/cocos/physics $(COCOS2DX_ROOT)/external $(SRCROOT)/../../../protocols/include $(SRCROOT)/../../../plugins/senspark/include $(SRCROOT)/../../../plugins/google-analytics/proj.ios/GoogleAnalytics/Library";
 				VALID_ARCHS = "armv7s armv7 arm64";
 			};
 			name = Debug;
@@ -681,14 +681,14 @@
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				LIBRARY_SEARCH_PATHS = (
-					"/Users/ndpduc/GitRepo/plugin-x/plugins/senspark/proj.ios/build/Debug-iphoneos",
-					"/Users/ndpduc/GitRepo/plugin-x/plugins/google-analytics/proj.ios/build/Debug-iphoneos",
+					"$(SRCROOT)/../../../plugins/senspark/proj.ios/build/Debug-iphoneos",
+					"$(SRCROOT)/../../../plugins/google-analytics/proj.ios/build/Debug-iphoneos",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = HelloPlugins;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "$(COCOS2DX_ROOT) $(COCOS2DX_ROOT)/cocos/math $(COCOS2DX_ROOT)/cocos/base $(COCOS2DX_ROOT)/cocos $(COCOS2DX_ROOT)/cocos/2d $(COCOS2DX_ROOT)/cocos/platform/ios $(COCOS2DX_ROOT)/cocos/physics $(COCOS2DX_ROOT)/external $(SRCROOT)/../../../protocols/include $(SRCROOT)/../../../plugins/senspark/include";
+				USER_HEADER_SEARCH_PATHS = "$(COCOS2DX_ROOT) $(COCOS2DX_ROOT)/cocos/math $(COCOS2DX_ROOT)/cocos/base $(COCOS2DX_ROOT)/cocos $(COCOS2DX_ROOT)/cocos/2d $(COCOS2DX_ROOT)/cocos/platform/ios $(COCOS2DX_ROOT)/cocos/physics $(COCOS2DX_ROOT)/external $(SRCROOT)/../../../protocols/include $(SRCROOT)/../../../plugins/senspark/include $(SRCROOT)/../../../plugins/google-analytics/proj.ios/GoogleAnalytics/Library";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7s armv7 arm64";
 			};

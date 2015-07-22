@@ -8,19 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		953C06F11B57A8DD002BB1A2 /* SensparkPluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 953C06EF1B57A8DD002BB1A2 /* SensparkPluginManager.cpp */; };
-		95C1602A1B5CEC1A00501400 /* SensparkProtocolAnalytics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95C160281B5CEC1A00501400 /* SensparkProtocolAnalytics.mm */; };
+		95C1602A1B5CEC1A00501400 /* GoogleProtocolAnalytics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95C160281B5CEC1A00501400 /* GoogleProtocolAnalytics.mm */; };
 		95C1602E1B5CF0BA00501400 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C1602D1B5CF0BA00501400 /* Foundation.framework */; };
 		95C160311B5CF17A00501400 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C160301B5CF17A00501400 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9520E0B31B46A74800B7768B /* libPluginSenspark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginSenspark.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		953C06EB1B577563002BB1A2 /* SensparkProtocolAnalytics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkProtocolAnalytics.h; sourceTree = "<group>"; };
+		953C06EB1B577563002BB1A2 /* GoogleProtocolAnalytics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoogleProtocolAnalytics.h; sourceTree = "<group>"; };
 		953C06EC1B578105002BB1A2 /* SensparkProtocolAds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkProtocolAds.h; sourceTree = "<group>"; };
 		953C06ED1B57A267002BB1A2 /* SensparkPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkPluginManager.h; sourceTree = "<group>"; };
 		953C06EF1B57A8DD002BB1A2 /* SensparkPluginManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SensparkPluginManager.cpp; sourceTree = "<group>"; };
 		95C160251B5CD83500501400 /* SensparkPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkPlugin.h; sourceTree = "<group>"; };
-		95C160281B5CEC1A00501400 /* SensparkProtocolAnalytics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SensparkProtocolAnalytics.mm; sourceTree = "<group>"; };
+		95C160281B5CEC1A00501400 /* GoogleProtocolAnalytics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GoogleProtocolAnalytics.mm; sourceTree = "<group>"; };
 		95C1602C1B5CEC9B00501400 /* SensparkPluginMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkPluginMacros.h; sourceTree = "<group>"; };
 		95C1602D1B5CF0BA00501400 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		95C160301B5CF17A00501400 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -87,7 +87,7 @@
 		95FE48E91B57693A00739C4A /* include */ = {
 			isa = PBXGroup;
 			children = (
-				953C06EB1B577563002BB1A2 /* SensparkProtocolAnalytics.h */,
+				953C06EB1B577563002BB1A2 /* GoogleProtocolAnalytics.h */,
 				953C06EC1B578105002BB1A2 /* SensparkProtocolAds.h */,
 				953C06ED1B57A267002BB1A2 /* SensparkPluginManager.h */,
 				95C160251B5CD83500501400 /* SensparkPlugin.h */,
@@ -100,7 +100,7 @@
 		95FE48EA1B5769A700739C4A /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				95C160281B5CEC1A00501400 /* SensparkProtocolAnalytics.mm */,
+				95C160281B5CEC1A00501400 /* GoogleProtocolAnalytics.mm */,
 			);
 			name = ios;
 			path = ../platform/ios;
@@ -173,7 +173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				953C06F11B57A8DD002BB1A2 /* SensparkPluginManager.cpp in Sources */,
-				95C1602A1B5CEC1A00501400 /* SensparkProtocolAnalytics.mm in Sources */,
+				95C1602A1B5CEC1A00501400 /* GoogleProtocolAnalytics.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

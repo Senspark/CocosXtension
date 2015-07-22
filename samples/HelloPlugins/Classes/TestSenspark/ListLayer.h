@@ -40,13 +40,13 @@ public:
     void onMenuCallback(Ref* pSender);
     void onBackCallback(Ref* pSender);
     
-    void addTest(const std::string& title, cocos2d::Scene* scene);
+    void addTest(const std::string& title, const std::function<void()> &action);
     
     CREATE_FUNC(ListLayer);
     
 protected:
     vector<string>  _titles;
-    Vector<Scene*>  _testScenes;
+    vector<std::function<void()>> _actions;
     TableView*      _testListView;
 };
 

@@ -64,8 +64,8 @@ void ListLayer::onBackCallback(cocos2d::Ref* pSender) {
         Director::getInstance()->popScene();
 }
 
-void ListLayer::addTest(const std::string &title, cocos2d::Scene *scene) {
-    _testScenes.pushBack(scene);
+void ListLayer::addTest(const std::string &title, const std::function<void()> &action) {
+    _actions.push_back(action);
     _titles.push_back(title);
     _testListView->reloadData();
 }
@@ -102,7 +102,8 @@ ssize_t ListLayer::numberOfCellsInTableView(TableView *table) {
 #pragma mark - TableViewDelegate Interface
 
 void ListLayer::tableCellTouched(TableView* table, TableViewCell* cell) {
-    Director::getInstance()->pushScene(_testScenes.at(cell->getIdx()));
+    auto func = _actions[cell->getIdx()];
+    func();
 }
 
 void ListLayer::tableCellHighlight(TableView* table, TableViewCell* cell) {

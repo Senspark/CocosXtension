@@ -11,7 +11,7 @@
 
 
 
-#include "SensparkProtocolAnalytics.h"
+#include "GoogleProtocolAnalytics.h"
 //#include "SensparkProtocolAds.h"
 
 #include "SensparkPluginManager.h"

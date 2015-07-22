@@ -1,5 +1,5 @@
 //
-//  SensparkProtocolAnalytics.cpp
+//  GoogleProtocolAnalytics.cpp
 //  PluginSenspark
 //
 //  Created by Duc Nguyen on 7/20/15.
@@ -8,36 +8,36 @@
 
 #import <Foundation/Foundation.h>
 #include "InterfaceAnalytics.h"
-#include "SensparkProtocolAnalytics.h"
+#include "GoogleProtocolAnalytics.h"
 #include "PluginUtilsIOS.h"
 
 USING_NS_SENSPARK_PLUGIN;
 using namespace cocos2d::plugin;
 
-SensparkProtocolAnalytics::SensparkProtocolAnalytics() {
+GoogleProtocolAnalytics::GoogleProtocolAnalytics() {
     
 }
 
-SensparkProtocolAnalytics::~SensparkProtocolAnalytics() {
+GoogleProtocolAnalytics::~GoogleProtocolAnalytics() {
     PluginUtilsIOS::erasePluginOCData(this);
 }
 
-void SensparkProtocolAnalytics::configureTracker(const string& trackerId) {
+void GoogleProtocolAnalytics::configureTracker(const string& trackerId) {
     PluginParam trackerIdParam(trackerId.c_str());
     callFuncWithParam("configureTracker", &trackerIdParam, nullptr);
 }
 
-void SensparkProtocolAnalytics::createTracker(const string& trackerId) {
+void GoogleProtocolAnalytics::createTracker(const string& trackerId) {
     PluginParam trackerIdParam(trackerId.c_str());
     callFuncWithParam("createTracker", &trackerIdParam, nullptr);
 }
 
-void SensparkProtocolAnalytics::enableTracker(const string& trackerId) {
+void GoogleProtocolAnalytics::enableTracker(const string& trackerId) {
     PluginParam trackerIdParam(trackerId.c_str());
     callFuncWithParam("enableTracker", &trackerIdParam, nullptr);
 }
 
-void SensparkProtocolAnalytics::startSession(const char* appName) {
+void GoogleProtocolAnalytics::startSession(const char* appName) {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
     
@@ -49,7 +49,7 @@ void SensparkProtocolAnalytics::startSession(const char* appName) {
     }
 }
 
-void SensparkProtocolAnalytics::stopSession() {
+void GoogleProtocolAnalytics::stopSession() {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != NULL);
     
@@ -60,7 +60,12 @@ void SensparkProtocolAnalytics::stopSession() {
     }
 }
 
-void SensparkProtocolAnalytics::setCaptureUncaughtException(bool isEnabled) {
+void GoogleProtocolAnalytics::setLogLevel(GALogLevel logLevel) {
+    PluginParam logLevelParam((int) logLevel);
+    callFuncWithParam("setLogLevel", &logLevelParam, nullptr);
+}
+
+void GoogleProtocolAnalytics::setCaptureUncaughtException(bool isEnabled) {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != NULL);
     
@@ -71,45 +76,63 @@ void SensparkProtocolAnalytics::setCaptureUncaughtException(bool isEnabled) {
     }
 }
 
-void SensparkProtocolAnalytics::dispatchHits() {
+void GoogleProtocolAnalytics::dispatchHits() {
     callFuncWithParam("dispatchHits", nullptr);
 }
 
-void SensparkProtocolAnalytics::dispatchPeriodically(int seconds) {
+void GoogleProtocolAnalytics::dispatchPeriodically(int seconds) {
     PluginParam secondsParam(seconds);
-    callFuncWithParam("dispatchHits", &secondsParam, nullptr);
+    callFuncWithParam("dispatchPeriodically", &secondsParam, nullptr);
 }
 
-void SensparkProtocolAnalytics::stopPeriodicalDispatch() {
+void GoogleProtocolAnalytics::stopPeriodicalDispatch() {
     callFuncWithParam("stopPeriodcalDispatch", nullptr);
 }
 
-void SensparkProtocolAnalytics::logScreen(const string& screenName) {
-    
+void GoogleProtocolAnalytics::trackScreen(const string& screenName) {
+    PluginParam screenParam(screenName.c_str());
+    callFuncWithParam("trackScreen", &screenParam, nullptr);
 }
 
-void SensparkProtocolAnalytics::logEvent(const string& category, const string& action, const string& label, float value) {
+void GoogleProtocolAnalytics::trackEvent(const string& category, const string& action, const string& label, float value) {
+    PluginParam categoryParam(category.c_str());
+    PluginParam actionParam(action.c_str());
+    PluginParam labelParam(label.c_str());
+    PluginParam valueParam(value);
     
+    callFuncWithParam("trackEventWithCategory", &categoryParam, &actionParam, &labelParam, &valueParam, nullptr);
 }
 
-void SensparkProtocolAnalytics::logException(const string& description, bool isFatal) {
+void GoogleProtocolAnalytics::trackException(const string& description, bool isFatal) {
+    PluginParam descParam(description.c_str());
+    PluginParam fatalParam(isFatal);
     
+    callFuncWithParam("trackTimmingWithCategory", &descParam, &fatalParam, nullptr);
 }
 
-void SensparkProtocolAnalytics::logTimming(const string& category, int interval, const string& name, const string& label) {
+void GoogleProtocolAnalytics::trackTimming(const string& category, int interval, const string& name, const string& label) {
+    PluginParam categoryParam(category.c_str());
+    PluginParam intervalParam(interval);
+    PluginParam nameParam(name.c_str());
+    PluginParam labelParam(label.c_str());
     
+    callFuncWithParam("trackTimmingWithCategory", &categoryParam, &intervalParam, &nameParam, &labelParam, nullptr);
 }
 
-void SensparkProtocolAnalytics::logSocial(const string& network, const string& action, const string& target) {
+void GoogleProtocolAnalytics::trackSocial(const string& network, const string& action, const string& target) {
+    PluginParam networkParam(network.c_str());
+    PluginParam actionParam(action.c_str());
+    PluginParam targetParam(target.c_str());
     
+    callFuncWithParam("trackSocialWithNetwork", &networkParam, &actionParam, &targetParam, nullptr);
 }
 
-void SensparkProtocolAnalytics::setDryRun(bool isDryRun) {
+void GoogleProtocolAnalytics::setDryRun(bool isDryRun) {
     PluginParam dryRun(isDryRun);
     callFuncWithParam("setDryRun", &dryRun, nullptr);
 }
 
-void SensparkProtocolAnalytics::enableAdvertisingTracking(bool enable) {
+void GoogleProtocolAnalytics::enableAdvertisingTracking(bool enable) {
     PluginParam enableParam(enable);
     callFuncWithParam("enableAdvertisingTracking", &enableParam, nullptr);
 }
