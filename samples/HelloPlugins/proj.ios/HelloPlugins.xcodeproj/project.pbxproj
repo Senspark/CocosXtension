@@ -29,6 +29,11 @@
 		951D66B21B5658E50043A09E /* libPluginSenspark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 951D66B11B5658E50043A09E /* libPluginSenspark.a */; };
 		9520E0991B4693A000B7768B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95E352641B468BAE00C60173 /* libcocos2d iOS.a */; };
 		952260801B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9522607E1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp */; };
+		95245C091B60C978000EDF84 /* TestSensparkAdsScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95245C071B60C978000EDF84 /* TestSensparkAdsScene.cpp */; };
+		95245C171B60EFD0000EDF84 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C161B60EFD0000EDF84 /* GoogleMobileAds.framework */; };
+		95245C191B60F8C5000EDF84 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C181B60F8C5000EDF84 /* EventKit.framework */; };
+		95245C1B1B60F8D5000EDF84 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */; };
+		95245C1D1B60F8F2000EDF84 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */; };
 		95B098251B58DBB400EAC5AB /* libPluginAdmob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD554ED177C16A100968F54 /* libPluginAdmob.a */; };
 		95B098281B58DC9800EAC5AB /* TestSenspark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B098261B58DC9800EAC5AB /* TestSenspark.cpp */; };
 		95B0982B1B58DD2E00EAC5AB /* ListLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B098291B58DD2E00EAC5AB /* ListLayer.cpp */; };
@@ -127,6 +132,12 @@
 		951D66B11B5658E50043A09E /* libPluginSenspark.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPluginSenspark.a; path = "../../../plugins/senspark/proj.ios/build/Debug-iphoneos/libPluginSenspark.a"; sourceTree = "<group>"; };
 		9522607E1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestGoogleAnalyticsScene.cpp; sourceTree = "<group>"; };
 		9522607F1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestGoogleAnalyticsScene.h; sourceTree = "<group>"; };
+		95245C071B60C978000EDF84 /* TestSensparkAdsScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestSensparkAdsScene.cpp; sourceTree = "<group>"; };
+		95245C081B60C978000EDF84 /* TestSensparkAdsScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestSensparkAdsScene.h; sourceTree = "<group>"; };
+		95245C161B60EFD0000EDF84 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
+		95245C181B60F8C5000EDF84 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
+		95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
+		95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		95B098261B58DC9800EAC5AB /* TestSenspark.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestSenspark.cpp; sourceTree = "<group>"; };
 		95B098271B58DC9800EAC5AB /* TestSenspark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestSenspark.h; sourceTree = "<group>"; };
 		95B098291B58DD2E00EAC5AB /* ListLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ListLayer.cpp; sourceTree = "<group>"; };
@@ -199,6 +210,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95245C1D1B60F8F2000EDF84 /* CoreMedia.framework in Frameworks */,
+				95245C1B1B60F8D5000EDF84 /* EventKitUI.framework in Frameworks */,
+				95245C191B60F8C5000EDF84 /* EventKit.framework in Frameworks */,
 				9520E0991B4693A000B7768B /* libcocos2d iOS.a in Frameworks */,
 				591A8D2419DF4DB700F71BFD /* libPluginFacebook.a in Frameworks */,
 				591A8D2519DF4DB700F71BFD /* libPluginFacebookAds.a in Frameworks */,
@@ -211,6 +225,7 @@
 				FA848862182B3DEB00858BDD /* CoreMotion.framework in Frameworks */,
 				59EB3BEC1964A86D0020118E /* CoreTelephony.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				95245C171B60EFD0000EDF84 /* GoogleMobileAds.framework in Frameworks */,
 				BA0613BE1AC23DCE003118D6 /* FacebookSDK.framework in Frameworks */,
 				592A55791964AD7D008E4BC7 /* GameController.framework in Frameworks */,
 				D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */,
@@ -321,6 +336,10 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */,
+				95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */,
+				95245C181B60F8C5000EDF84 /* EventKit.framework */,
+				95245C161B60EFD0000EDF84 /* GoogleMobileAds.framework */,
 				95C160381B5CF5FB00501400 /* CoreData.framework */,
 				95C160361B5CF5DA00501400 /* libsqlite3.dylib */,
 				95C160321B5CF5A800501400 /* libPluginGoogleAnalytics.a */,
@@ -383,6 +402,8 @@
 		9507AADF1B5651E100D367EB /* TestSenspark */ = {
 			isa = PBXGroup;
 			children = (
+				95245C071B60C978000EDF84 /* TestSensparkAdsScene.cpp */,
+				95245C081B60C978000EDF84 /* TestSensparkAdsScene.h */,
 				95B098261B58DC9800EAC5AB /* TestSenspark.cpp */,
 				95B098271B58DC9800EAC5AB /* TestSenspark.h */,
 				95B098291B58DD2E00EAC5AB /* ListLayer.cpp */,
@@ -592,6 +613,7 @@
 				FAD554E5177C131500968F54 /* TestAdsScene.cpp in Sources */,
 				FAD554E6177C131500968F54 /* TestAnalyticsScene.cpp in Sources */,
 				95B098281B58DC9800EAC5AB /* TestSenspark.cpp in Sources */,
+				95245C091B60C978000EDF84 /* TestSensparkAdsScene.cpp in Sources */,
 				FAD554E9177C131500968F54 /* MyShareManager.cpp in Sources */,
 				95B0982B1B58DD2E00EAC5AB /* ListLayer.cpp in Sources */,
 				FAD554EA177C131500968F54 /* TestShareScene.cpp in Sources */,
@@ -622,6 +644,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../plugins/facebookads/proj.ios",
 					"$(SRCROOT)/../../../plugins/facebook/proj.ios",
+					"$(PROJECT_DIR)",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -665,6 +688,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../plugins/facebookads/proj.ios",
 					"$(SRCROOT)/../../../plugins/facebook/proj.ios",
+					"$(PROJECT_DIR)",
 				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
