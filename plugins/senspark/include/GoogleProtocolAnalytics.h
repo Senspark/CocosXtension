@@ -33,22 +33,8 @@ public:
     void configureTracker(const string& trackerId);
     void createTracker(const string& trackerId);
     void enableTracker(const string& trackerId);
-    
-    /**
-     @brief Start a new session.
-     @param appKey The identity of the application.
-     */
-    void startSession(const char* appName);
-    
-    /**
-     @brief Stop a session.
-     @warning This interface only worked on android
-     */
-    void stopSession();
 
     void setLogLevel(GALogLevel logLevel);
-    
-    void setCaptureUncaughtException(bool isEnabled);
     
     void dispatchHits();
     

@@ -107,6 +107,21 @@ const char* SensparkPluginManager::getAnalyticsPluginName(AnalyticsPluginType ty
 
 const char* SensparkPluginManager::getAdsPluginName(AdsPluginType type) {
     const char* name = nullptr;
+    switch (type) {
+        case AdsPluginType::ADMOB:
+            name = "AdsAdmob";
+            break;
+        case AdsPluginType::FACEBOOK_ADS:
+            name = "AdsFacebook";
+            break;
+        case AdsPluginType::FLURRY_ADS:
+            name = "AdsFlurry";
+            break;
+        case AdsPluginType::CHARTBOOST:
+            name = "AdsChartboost";
+            break;
+    }
+    
     return name;
 }
 

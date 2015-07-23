@@ -30,7 +30,8 @@
 @implementation AdsAdmob
 
 @synthesize debug = __debug;
-@synthesize strPublishID = __PublishID;
+@synthesize strBannerID = __BannerID;
+@synthesize strInterstitialID = __InterstitialID;
 @synthesize testDeviceIDs = __TestDeviceIDs;
 
 - (void) dealloc
@@ -40,10 +41,16 @@
         self.bannerView = nil;
     }
 
+    if (self.interstitialView != nil) {
+        [self.interstitialView release];
+        self.interstitialView = nil;
+    }
+    
     if (self.testDeviceIDs != nil) {
         [self.testDeviceIDs release];
         self.testDeviceIDs = nil;
     }
+    
     [super dealloc];
 }
 
@@ -51,30 +58,41 @@
 
 - (void) configDeveloperInfo: (NSMutableDictionary*) devInfo
 {
-    self.strPublishID = (NSString*) [devInfo objectForKey:@"AdmobID"];
+    self.strBannerID = (NSString*) [devInfo objectForKey:@"AdmobBannerID"];
+    self.strInterstitialID = (NSString*) [devInfo objectForKey:@"AdmobInterstitialID"];
 }
 
 - (void) showAds: (NSMutableDictionary*) info position:(int) pos
 {
-    if (self.strPublishID == nil ||
-        [self.strPublishID length] == 0) {
-        OUTPUT_LOG(@"configDeveloperInfo() not correctly invoked in Admob!");
-        return;
-    }
+    
 
     NSString* strType = [info objectForKey:@"AdmobType"];
     int type = [strType intValue];
     switch (type) {
     case kTypeBanner:
         {
+            if (self.strBannerID == nil ||
+                [self.strBannerID length] == 0) {
+                OUTPUT_LOG(@"configDeveloperInfo() not correctly invoked in Admob!");
+                return;
+            }
+            
             NSString* strSize = [info objectForKey:@"AdmobSizeEnum"];
             int sizeEnum = [strSize intValue];
             [self showBanner:sizeEnum atPos:pos];
             break;
         }
     case kTypeFullScreen:
-        OUTPUT_LOG(@"Now not support full screen view in Admob");
-        break;
+        {
+            if (self.strInterstitialID == nil ||
+                [self.strInterstitialID length] == 0) {
+                OUTPUT_LOG(@"configDeveloperInfo() not correctly invoked in Admob!");
+                return;
+            }
+            
+            [self loadInterstitial];
+            break;
+        }
     default:
         OUTPUT_LOG(@"The value of 'AdmobType' is wrong (should be 1 or 2)");
         break;
@@ -121,12 +139,12 @@
 
 - (NSString*) getSDKVersion
 {
-    return @"6.4.2";
+    return @"7.3.1";
 }
 
 - (NSString*) getPluginVersion
 {
-    return @"0.2.0";
+    return @"0.3.0";
 }
 
 - (void) showBanner: (int) sizeEnum atPos:(int) pos
@@ -158,7 +176,7 @@
     }
     
     self.bannerView = [[GADBannerView alloc] initWithAdSize:size];
-    self.bannerView.adUnitID = self.strPublishID;
+    self.bannerView.adUnitID = self.strBannerID;
     self.bannerView.delegate = self;
     [self.bannerView setRootViewController:[AdsWrapper getCurrentRootViewController]];
     [AdsWrapper addAdView:self.bannerView atPos:pos];
@@ -168,14 +186,36 @@
     [self.bannerView loadRequest:request];
 }
 
+- (void) loadInterstitial
+{
+    self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strInterstitialID];
+    self.interstitialView.delegate = self;
+
+    GADRequest* request = [GADRequest request];
+    request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
+    [self.interstitialView loadRequest:request];
+}
+
+- (void) showInterstitial
+{
+    if (!self.interstitialView || !self.interstitialView.isReady) {
+        // Ad not ready to present.
+        OUTPUT_LOG(@"Admob interstitial not loaded.");
+    } else {
+        [self.interstitialView presentFromRootViewController:[AdsWrapper getCurrentRootViewController]];
+        [AdsWrapper onAdsResult:self withRet:kAdsShown withMsg:@"Ads is shown!"];
+    }
+}
+
 #pragma mark interface for Admob SDK
 
 - (void) addTestDevice: (NSString*) deviceID
 {
     if (nil == self.testDeviceIDs) {
         self.testDeviceIDs = [[NSMutableArray alloc] init];
-        [self.testDeviceIDs addObject:GAD_SIMULATOR_ID];
+        [self.testDeviceIDs addObject:kDFPSimulatorID];
     }
+    
     [self.testDeviceIDs addObject:deviceID];
 }
 
@@ -198,6 +238,41 @@
         break;
     }
     [AdsWrapper onAdsResult:self withRet:errorNo withMsg:[error localizedDescription]];
+}
+
+#pragma mark GADInterstitialDelegate impl
+
+- (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
+    OUTPUT_LOG(@"Interstitial ad was loaded. Can present now.");
+    [AdsWrapper onAdsResult:self withRet:kAdsReceived withMsg:@"Ads request received success!"];
+    [self showInterstitial];
+}
+
+/// Called when an interstitial ad request completed without an interstitial to
+/// show. This is common since interstitials are shown sparingly to users.
+- (void)interstitial:(GADInterstitial *)ad didFailToReceiveAdWithError:(GADRequestError *)error {
+    OUTPUT_LOG(@"Interstitial failed to load with error: %@", error.description);
+    [AdsWrapper onAdsResult:self withRet:kUnknownError withMsg:error.description];
+}
+
+#pragma mark Display-Time Lifecycle Notifications
+
+- (void)interstitialWillPresentScreen:(GADInterstitial *)ad {
+    [AdsWrapper onAdsResult:self withRet:kAdsShown withMsg:@"Interstitial is showing"];
+}
+
+- (void)interstitialWillDismissScreen:(GADInterstitial *)ad {
+    OUTPUT_LOG(@"Interstitial will dismiss.");
+}
+
+- (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
+    OUTPUT_LOG(@"Interstitial dismissed")
+    self.interstitialView = nil;
+    [AdsWrapper onAdsResult:self withRet:kAdsDismissed withMsg:@"Interstital dismissed."];
+}
+
+- (void)interstitialWillLeaveApplication:(GADInterstitial *)ad {
+    OUTPUT_LOG(@"Interstitial will leave application.");
 }
 
 @end

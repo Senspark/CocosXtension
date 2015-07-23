@@ -23,9 +23,9 @@
  ****************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import <GoogleMobileAds/GoogleMobileAds.h>
+
 #import "InterfaceAds.h"
-#import "GADBannerView.h"
-#import "GADBannerViewDelegate.h"
 
 typedef enum {
     kSizeBanner = 1,
@@ -40,13 +40,15 @@ typedef enum {
     kTypeFullScreen,
 } AdmobType;
 
-@interface AdsAdmob : NSObject <InterfaceAds, GADBannerViewDelegate>
+@interface AdsAdmob : NSObject <InterfaceAds, GADBannerViewDelegate, GADInterstitialDelegate>
 {
 }
 
 @property BOOL debug;
-@property (copy, nonatomic) NSString* strPublishID;
+@property (copy, nonatomic) NSString* strBannerID;
+@property (copy, nonatomic) NSString* strInterstitialID;
 @property (assign, nonatomic) GADBannerView* bannerView;
+@property (assign, nonatomic) GADInterstitial* interstitialView;
 @property (assign, nonatomic) NSMutableArray* testDeviceIDs;
 
 /**

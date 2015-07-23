@@ -37,43 +37,9 @@ void GoogleProtocolAnalytics::enableTracker(const string& trackerId) {
     callFuncWithParam("enableTracker", &trackerIdParam, nullptr);
 }
 
-void GoogleProtocolAnalytics::startSession(const char* appName) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-    
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceAnalytics)]) {
-        NSObject<InterfaceAnalytics>* curObj = ocObj;
-        NSString* pStrKey = [NSString stringWithUTF8String:appName];
-        [curObj startSession:pStrKey];
-    }
-}
-
-void GoogleProtocolAnalytics::stopSession() {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != NULL);
-    
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceAnalytics)]) {
-        NSObject<InterfaceAnalytics>* curObj = ocObj;
-        [curObj stopSession];
-    }
-}
-
 void GoogleProtocolAnalytics::setLogLevel(GALogLevel logLevel) {
     PluginParam logLevelParam((int) logLevel);
     callFuncWithParam("setLogLevel", &logLevelParam, nullptr);
-}
-
-void GoogleProtocolAnalytics::setCaptureUncaughtException(bool isEnabled) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != NULL);
-    
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceAnalytics)]) {
-        NSObject<InterfaceAnalytics>* curObj = ocObj;
-        [curObj setCaptureUncaughtException:isEnabled];
-    }
 }
 
 void GoogleProtocolAnalytics::dispatchHits() {
