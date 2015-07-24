@@ -41,6 +41,7 @@
 		95C160331B5CF5A800501400 /* libPluginGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C160321B5CF5A800501400 /* libPluginGoogleAnalytics.a */; };
 		95C160371B5CF5DA00501400 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C160361B5CF5DA00501400 /* libsqlite3.dylib */; };
 		95C160391B5CF5FB00501400 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C160381B5CF5FB00501400 /* CoreData.framework */; };
+		95C954241B621F530014047A /* libPluginVungle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C954231B621F530014047A /* libPluginVungle.a */; };
 		BA0613BE1AC23DCE003118D6 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA0613BD1AC23DCE003118D6 /* FacebookSDK.framework */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712461292920000B8313A /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB212928DE900B8313A /* libxml2.dylib */; };
@@ -146,6 +147,7 @@
 		95C160321B5CF5A800501400 /* libPluginGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPluginGoogleAnalytics.a; path = "../../../plugins/google-analytics/proj.ios/build/Debug-iphoneos/libPluginGoogleAnalytics.a"; sourceTree = "<group>"; };
 		95C160361B5CF5DA00501400 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		95C160381B5CF5FB00501400 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		95C954231B621F530014047A /* libPluginVungle.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPluginVungle.a; path = "../../../plugins/vungle/proj.ios/build/Debug-iphoneos/libPluginVungle.a"; sourceTree = "<group>"; };
 		BA0613BD1AC23DCE003118D6 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../../plugins/facebook/proj.ios/FacebookSDK.framework; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB212928DE900B8313A /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -239,6 +241,7 @@
 				FAD55501177C16F100968F54 /* SystemConfiguration.framework in Frameworks */,
 				95C160331B5CF5A800501400 /* libPluginGoogleAnalytics.a in Frameworks */,
 				951D66B21B5658E50043A09E /* libPluginSenspark.a in Frameworks */,
+				95C954241B621F530014047A /* libPluginVungle.a in Frameworks */,
 				FAD554F4177C16A100968F54 /* libPluginFlurry.a in Frameworks */,
 				95B098251B58DBB400EAC5AB /* libPluginAdmob.a in Frameworks */,
 				FAD554F5177C16A100968F54 /* libPluginProtocol.a in Frameworks */,
@@ -336,6 +339,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				95C954231B621F530014047A /* libPluginVungle.a */,
 				95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */,
 				95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */,
 				95245C181B60F8C5000EDF84 /* EventKit.framework */,
@@ -662,10 +666,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/../../../plugins/senspark/proj.ios/build/Debug-iphoneos",
-					"$(SRCROOT)/../../../plugins/google-analytics/proj.ios/build/Debug-iphoneos",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "-O2";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = HelloPlugins;
@@ -704,10 +705,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/../../../plugins/senspark/proj.ios/build/Debug-iphoneos",
-					"$(SRCROOT)/../../../plugins/google-analytics/proj.ios/build/Debug-iphoneos",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = HelloPlugins;
 				SDKROOT = iphoneos;

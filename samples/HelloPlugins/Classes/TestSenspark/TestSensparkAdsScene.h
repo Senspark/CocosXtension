@@ -62,6 +62,7 @@ public:
 
 private:
     plugin::ads::AdmobProtocolAds* _admob;
+    plugin::ads::VungleProtocolAds* _vungle;
     cocos2d::plugin::ProtocolAds* _flurryAds;
     cocos2d::plugin::ProtocolAds* _facebookAds;
     

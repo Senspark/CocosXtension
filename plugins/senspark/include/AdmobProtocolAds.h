@@ -29,4 +29,5 @@ public:
 };
 
 NS_SENSPARK_PLUGIN_ADS_END
+
 #endif

@@ -16,6 +16,19 @@ static SensparkPluginManager* s_pPluginManager = nullptr;
 SensparkPluginManager::SensparkPluginManager(void)
 {
     _cocosPluginManager = PluginManager::getInstance();
+    
+    //------ Register Analytics Service -------
+    _registeredAnalyticsPlugins[AnalyticsPluginType::FLURRY_ANALYTICS] = "AnalyticsFlurry";
+    _registeredAnalyticsPlugins[AnalyticsPluginType::GOOGLE_ANALYTICS] = "AnalyticsGoogle";
+    
+    //------ Register Ads Service -------
+    _registeredAdsPlugins[AdsPluginType::ADMOB]         = "AdsAdmob";
+    _registeredAdsPlugins[AdsPluginType::CHARTBOOST]    = "AdsChartboost";
+    _registeredAdsPlugins[AdsPluginType::FACEBOOK_ADS]  = "AdsFacebook";
+    _registeredAdsPlugins[AdsPluginType::FLURRY_ADS]    = "AdsFlurry";
+    _registeredAdsPlugins[AdsPluginType::VUNGLE]        = "AdsVungle";
+    
+    
 }
 
 SensparkPluginManager::~SensparkPluginManager(void)
@@ -93,34 +106,20 @@ void SensparkPluginManager::unloadUserPlugin(UserPluginType type) {
 const char* SensparkPluginManager::getAnalyticsPluginName(AnalyticsPluginType type) {
     const char* name = nullptr;
     
-    switch (type) {
-        case AnalyticsPluginType::FLURRY_ANALYTICS:
-            name = "AnalyticsFlurry";
-            break;
-        case AnalyticsPluginType::GOOGLE_ANALYTICS:
-            name = "AnalyticsGoogle";
-            break;
-    }
+    auto got = _registeredAnalyticsPlugins.find(type);
+    if (got != _registeredAnalyticsPlugins.end())
+        name = got->second.c_str();
     
     return name;
 }
 
 const char* SensparkPluginManager::getAdsPluginName(AdsPluginType type) {
     const char* name = nullptr;
-    switch (type) {
-        case AdsPluginType::ADMOB:
-            name = "AdsAdmob";
-            break;
-        case AdsPluginType::FACEBOOK_ADS:
-            name = "AdsFacebook";
-            break;
-        case AdsPluginType::FLURRY_ADS:
-            name = "AdsFlurry";
-            break;
-        case AdsPluginType::CHARTBOOST:
-            name = "AdsChartboost";
-            break;
-    }
+    
+    auto got = _registeredAdsPlugins.find(type);
+    
+    if (got != _registeredAdsPlugins.end())
+        name = got->second.c_str();
     
     return name;
 }

@@ -42,6 +42,7 @@ const std::string s_aTestAdType[] = {
 const std::string s_aTestCases[] = {
 	"Admob",
     "Flurry",
+    "Vungle",
     "Facebook"
 };
 
@@ -82,7 +83,7 @@ bool TestSensparkAds::init()
 
     _listener = new MyAdsListener();
     _admob = static_cast<AdmobProtocolAds*>(SensparkPluginManager::getInstance()->loadAdsPlugin(AdsPluginType::ADMOB));
-                                            
+    _vungle = static_cast<VungleProtocolAds*>(SensparkPluginManager::getInstance()->loadAdsPlugin(AdsPluginType::VUNGLE));
     _flurryAds = dynamic_cast<ProtocolAds*>(PluginManager::getInstance()->loadPlugin("AdsFlurry"));
     _facebookAds = dynamic_cast<ProtocolAds*>(PluginManager::getInstance()->loadPlugin("AdsFacebook"));
     
@@ -92,10 +93,12 @@ bool TestSensparkAds::init()
     devInfo["AdmobID"]      = ADMOB_ID_IOS;
     devInfo["FlurryAppKey"] = FLURRY_KEY_IOS;
     devInfo["FacebookAdID"]   = FACEBOOK_KEY_IOS;
+    devInfo["VungleID"] = "vungleTest";
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     devInfo["AdmobID"]      = ADMOB_ID_ANDROID;
     devInfo["FlurryAppKey"] = FLURRY_KEY_ANDROID;
     devInfo["FacebookAdID"]   = FACEBOOK_KEY_ANDROID;
+    devInfo["VungleID"] = "vungleTest";
 #endif
     
     _admob->configureAds(devInfo["AdmobID"]);
@@ -106,6 +109,10 @@ bool TestSensparkAds::init()
     _flurryAds->configDeveloperInfo(devInfo);
     _flurryAds->setAdsListener(_listener);
     _flurryAds->setDebugMode(true);
+    
+    _vungle->configDeveloperInfo(devInfo);
+    _vungle->setAdsListener(_listener);
+    _vungle->setDebugMode(true);
     
     _facebookAds->configDeveloperInfo(devInfo);
     _facebookAds->setAdsListener(_listener);
@@ -251,6 +258,10 @@ void TestSensparkAds::caseChanged(Ref* pSender)
             strLog = "Flurry Ads";
             break;
         case 2:
+            _ads = _vungle;
+            strLog = "Vungle Ads";
+            break;
+        case 3:
             _ads = _facebookAds;
             strLog = "Facebook Ads";
             break;

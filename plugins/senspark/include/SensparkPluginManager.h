@@ -13,12 +13,13 @@
 #include "PluginManager.h"
 
 #include "SensparkPluginMacros.h"
+#include <map>
 
 NS_SENSPARK_PLUGIN_BEGIN
     
 enum class AnalyticsPluginType {
-    GOOGLE_ANALYTICS,
     FLURRY_ANALYTICS,
+    GOOGLE_ANALYTICS,
 };
 
 enum class AdsPluginType {
@@ -26,6 +27,7 @@ enum class AdsPluginType {
     CHARTBOOST,
     FACEBOOK_ADS,
     FLURRY_ADS,
+    VUNGLE,
 };
 
 enum class SocialPluginType {
@@ -70,7 +72,7 @@ public:
     cocos2d::plugin::PluginProtocol* loadUserPlugin(UserPluginType type);
     void unloadUserPlugin(UserPluginType type);
     
-private:
+protected:
     SensparkPluginManager(void);
     
     const char* getAnalyticsPluginName(AnalyticsPluginType type);
@@ -81,6 +83,12 @@ private:
     const char* getUserPluginName(UserPluginType type);
     
     cocos2d::plugin::PluginManager *_cocosPluginManager;
+    
+    std::map<AnalyticsPluginType, std::string> _registeredAnalyticsPlugins;
+    std::map<AdsPluginType, std::string> _registeredAdsPlugins;
+    std::map<SocialPluginType, std::string> _registerSocialPlugins;
+    std::map<CloudSyncPluginType, std::string> _registerCloudPlugins;
+    std::map<IAPPluginType, std::string> _registerIAPPlugins;
 };
 
 NS_SENSPARK_PLUGIN_END

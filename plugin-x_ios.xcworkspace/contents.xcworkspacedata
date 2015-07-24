@@ -32,10 +32,10 @@
          location = "group:plugins/weibo/proj.ios/PluginWeibo.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:plugins/senspark/proj.ios/PluginSenspark.xcodeproj">
+         location = "group:plugins/vungle/proj.ios/PluginVungle.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:plugins/vungle/proj.ios/PluginVungle.xcodeproj">
+         location = "group:plugins/senspark/proj.ios/PluginSenspark.xcodeproj">
       </FileRef>
    </Group>
    <FileRef

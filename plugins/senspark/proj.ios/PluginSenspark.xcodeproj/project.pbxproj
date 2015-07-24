@@ -12,6 +12,7 @@
 		95C1602A1B5CEC1A00501400 /* GoogleProtocolAnalytics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95C160281B5CEC1A00501400 /* GoogleProtocolAnalytics.mm */; };
 		95C1602E1B5CF0BA00501400 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C1602D1B5CF0BA00501400 /* Foundation.framework */; };
 		95C160311B5CF17A00501400 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C160301B5CF17A00501400 /* CoreFoundation.framework */; };
+		95C954291B62212B0014047A /* VungleProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95C954281B62212B0014047A /* VungleProtocolAds.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,8 @@
 		95C1602C1B5CEC9B00501400 /* SensparkPluginMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkPluginMacros.h; sourceTree = "<group>"; };
 		95C1602D1B5CF0BA00501400 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		95C160301B5CF17A00501400 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		95C954271B62207E0014047A /* VungleProtocolAds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VungleProtocolAds.h; sourceTree = "<group>"; };
+		95C954281B62212B0014047A /* VungleProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VungleProtocolAds.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +97,7 @@
 				953C06ED1B57A267002BB1A2 /* SensparkPluginManager.h */,
 				95C160251B5CD83500501400 /* SensparkPlugin.h */,
 				95C1602C1B5CEC9B00501400 /* SensparkPluginMacros.h */,
+				95C954271B62207E0014047A /* VungleProtocolAds.h */,
 			);
 			name = include;
 			path = ../include;
@@ -104,6 +108,7 @@
 			children = (
 				95C160281B5CEC1A00501400 /* GoogleProtocolAnalytics.mm */,
 				95245C0C1B60D614000EDF84 /* AdmobProtocolAds.mm */,
+				95C954281B62212B0014047A /* VungleProtocolAds.mm */,
 			);
 			name = ios;
 			path = ../platform/ios;
@@ -176,6 +181,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				95245C0D1B60D614000EDF84 /* AdmobProtocolAds.mm in Sources */,
+				95C954291B62212B0014047A /* VungleProtocolAds.mm in Sources */,
 				953C06F11B57A8DD002BB1A2 /* SensparkPluginManager.cpp in Sources */,
 				95C1602A1B5CEC1A00501400 /* GoogleProtocolAnalytics.mm in Sources */,
 			);

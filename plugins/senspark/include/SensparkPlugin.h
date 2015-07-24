@@ -12,8 +12,9 @@
 
 
 #include "GoogleProtocolAnalytics.h"
+
 #include "AdmobProtocolAds.h"
-//#include "SensparkProtocolAds.h"
+#include "VungleProtocolAds.h"
 
 #include "SensparkPluginManager.h"
 
