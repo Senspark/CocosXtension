@@ -4,10 +4,6 @@
 #import "AppDelegate.h"
 #import "RootViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
-#import "GAIFields.h"
-#import "GAIDictionaryBuilder.h"
-#import "GAI.h"
-#import "Configs.h"
 
 @implementation AppController
 
