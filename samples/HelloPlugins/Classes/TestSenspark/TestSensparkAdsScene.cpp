@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 USING_NS_SENSPARK;
 USING_NS_SENSPARK_PLUGIN;
+USING_NS_SENSPARK_PLUGIN_ADS;
 USING_NS_CC;
 
 using namespace cocos2d::plugin;
@@ -233,8 +234,7 @@ void TestSensparkAds::menuBackCallback(Ref* pSender)
     	_listener = NULL;
     }
 
-    Scene* newScene = HelloWorld::scene();
-    Director::getInstance()->replaceScene(newScene);
+    Director::getInstance()->popScene();
 }
 
 void TestSensparkAds::caseChanged(Ref* pSender)

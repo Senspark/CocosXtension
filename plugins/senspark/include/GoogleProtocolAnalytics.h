@@ -15,7 +15,7 @@
 
 using namespace std;
 
-NS_SENSPARK_PLUGIN_BEGIN
+NS_SENSPARK_PLUGIN_ANALYTICS_BEGIN
 
 enum class GALogLevel {
     NONE = 0,
@@ -57,7 +57,7 @@ public:
     void enableAdvertisingTracking(bool enable);
 };
 
-NS_SENSPARK_PLUGIN_END
+NS_SENSPARK_PLUGIN_ANALYTICS_END
 
 
 #endif

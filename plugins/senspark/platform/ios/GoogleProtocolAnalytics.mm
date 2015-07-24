@@ -11,8 +11,9 @@
 #include "GoogleProtocolAnalytics.h"
 #include "PluginUtilsIOS.h"
 
-USING_NS_SENSPARK_PLUGIN;
 using namespace cocos2d::plugin;
+USING_NS_SENSPARK_PLUGIN_ANALYTICS;
+
 
 GoogleProtocolAnalytics::GoogleProtocolAnalytics() {
     

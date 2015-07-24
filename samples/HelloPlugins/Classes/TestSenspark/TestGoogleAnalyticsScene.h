@@ -47,7 +47,7 @@ public:
     CREATE_FUNC(TestGoogleAnalytics);
 
 private:
-    senspark::plugin::GoogleProtocolAnalytics* _pluginAnalytics;
+    senspark::plugin::analytics::GoogleProtocolAnalytics* _pluginAnalytics;
 };
 
 NS_SENSPARK_END

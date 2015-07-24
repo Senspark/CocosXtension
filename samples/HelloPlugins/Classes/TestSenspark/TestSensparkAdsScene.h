@@ -61,7 +61,7 @@ public:
     CREATE_FUNC(TestSensparkAds);
 
 private:
-    senspark::plugin::AdmobProtocolAds* _admob;
+    plugin::ads::AdmobProtocolAds* _admob;
     cocos2d::plugin::ProtocolAds* _flurryAds;
     cocos2d::plugin::ProtocolAds* _facebookAds;
     

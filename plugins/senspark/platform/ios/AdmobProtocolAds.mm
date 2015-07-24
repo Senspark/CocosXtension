@@ -11,7 +11,8 @@
 #include "AdmobProtocolAds.h"
 #include "PluginUtilsIOS.h"
 
-USING_NS_SENSPARK_PLUGIN;
+USING_NS_SENSPARK_PLUGIN_ADS;
+
 using namespace cocos2d::plugin;
 
 AdmobProtocolAds::AdmobProtocolAds() {

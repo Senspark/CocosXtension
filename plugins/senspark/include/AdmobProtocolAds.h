@@ -13,7 +13,7 @@
 #include "SensparkPluginMacros.h"
 #include <string>
 
-NS_SENSPARK_PLUGIN_BEGIN
+NS_SENSPARK_PLUGIN_ADS_BEGIN
 
 #define GAD_SIMULATOR_ID "Simulator"
 
@@ -28,5 +28,5 @@ public:
     void addTestDevice(const std::string& deviceId);
 };
 
-NS_SENSPARK_PLUGIN_END
+NS_SENSPARK_PLUGIN_ADS_END
 #endif
