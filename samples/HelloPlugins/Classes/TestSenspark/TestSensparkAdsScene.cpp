@@ -97,7 +97,7 @@ bool TestSensparkAds::init()
     devInfo["FacebookAdID"]   = FACEBOOK_KEY_ANDROID;
 #endif
     
-    _admob->configureAds(devInfo["AdmobID"], devInfo["AdmobID"]);
+    _admob->configureAds(devInfo["AdmobID"]);
     _admob->setAdsListener(_listener);
     _admob->setDebugMode(true);
     _admob->addTestDevice(GAD_SIMULATOR_ID);

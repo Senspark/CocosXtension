@@ -22,10 +22,9 @@ AdmobProtocolAds::~AdmobProtocolAds() {
     PluginUtilsIOS::erasePluginOCData(this);
 }
 
-void AdmobProtocolAds::configureAds(const std::string &bannerId, const std::string &interstitialId) {
+void AdmobProtocolAds::configureAds(const std::string &adsId) {
     TAdsDeveloperInfo devInfo;
-    devInfo["AdmobBannerID"] = bannerId;
-    devInfo["AdmobInterstitialID"] = interstitialId;
+    devInfo["AdmobID"] = adsId;
     configDeveloperInfo(devInfo);
 }
 

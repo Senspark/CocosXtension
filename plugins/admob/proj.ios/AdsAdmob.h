@@ -45,8 +45,8 @@ typedef enum {
 }
 
 @property BOOL debug;
-@property (copy, nonatomic) NSString* strBannerID;
-@property (copy, nonatomic) NSString* strInterstitialID;
+
+@property (copy, nonatomic) NSString* strPublishID;
 @property (assign, nonatomic) GADBannerView* bannerView;
 @property (assign, nonatomic) GADInterstitial* interstitialView;
 @property (assign, nonatomic) NSMutableArray* testDeviceIDs;
@@ -66,6 +66,7 @@ typedef enum {
 /**
  interface for Admob SDK
  */
+- (void) configureAds: (NSString*) adsId;
 - (void) addTestDevice: (NSString*) deviceID;
 
 @end

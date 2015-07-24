@@ -23,7 +23,7 @@ public:
     AdmobProtocolAds();
     virtual ~AdmobProtocolAds();
     
-    void configureAds(const std::string& bannerId, const std::string& interstitialId);
+    void configureAds(const std::string& adsId);
     
     void addTestDevice(const std::string& deviceId);
 };

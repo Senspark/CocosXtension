@@ -30,8 +30,7 @@
 @implementation AdsAdmob
 
 @synthesize debug = __debug;
-@synthesize strBannerID = __BannerID;
-@synthesize strInterstitialID = __InterstitialID;
+@synthesize strPublishID = __PublishID;
 @synthesize testDeviceIDs = __TestDeviceIDs;
 
 - (void) dealloc
@@ -58,25 +57,32 @@
 
 - (void) configDeveloperInfo: (NSMutableDictionary*) devInfo
 {
-    self.strBannerID = (NSString*) [devInfo objectForKey:@"AdmobBannerID"];
-    self.strInterstitialID = (NSString*) [devInfo objectForKey:@"AdmobInterstitialID"];
+    NSString* adsId = (NSString*) [devInfo objectForKey:@"AdmobID"];
+    
+    if (nil == adsId) {
+        OUTPUT_LOG(@"Null ads Id at configure time.");
+        return;
+    }
+    
+    OUTPUT_LOG(@"Configure with adsId: %@", adsId);
+    
+    self.strPublishID = adsId;
 }
 
 - (void) showAds: (NSMutableDictionary*) info position:(int) pos
 {
-    
+    if (self.strPublishID == nil ||
+        [self.strPublishID length] == 0) {
+        OUTPUT_LOG(@"configDeveloperInfo() not correctly invoked in Admob!");
+        return;
+    }
+
 
     NSString* strType = [info objectForKey:@"AdmobType"];
     int type = [strType intValue];
     switch (type) {
     case kTypeBanner:
         {
-            if (self.strBannerID == nil ||
-                [self.strBannerID length] == 0) {
-                OUTPUT_LOG(@"configDeveloperInfo() not correctly invoked in Admob!");
-                return;
-            }
-            
             NSString* strSize = [info objectForKey:@"AdmobSizeEnum"];
             int sizeEnum = [strSize intValue];
             [self showBanner:sizeEnum atPos:pos];
@@ -84,12 +90,6 @@
         }
     case kTypeFullScreen:
         {
-            if (self.strInterstitialID == nil ||
-                [self.strInterstitialID length] == 0) {
-                OUTPUT_LOG(@"configDeveloperInfo() not correctly invoked in Admob!");
-                return;
-            }
-            
             [self loadInterstitial];
             break;
         }
@@ -176,7 +176,7 @@
     }
     
     self.bannerView = [[GADBannerView alloc] initWithAdSize:size];
-    self.bannerView.adUnitID = self.strBannerID;
+    self.bannerView.adUnitID = self.strPublishID;
     self.bannerView.delegate = self;
     [self.bannerView setRootViewController:[AdsWrapper getCurrentRootViewController]];
     [AdsWrapper addAdView:self.bannerView atPos:pos];
@@ -188,7 +188,7 @@
 
 - (void) loadInterstitial
 {
-    self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strInterstitialID];
+    self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strPublishID];
     self.interstitialView.delegate = self;
 
     GADRequest* request = [GADRequest request];
