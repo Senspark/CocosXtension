@@ -5,6 +5,9 @@
       location = "container:"
       name = "plugins">
       <FileRef
+         location = "group:plugins/google-analytics/proj.ios/PluginGoogleAnalytics.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:plugins/facebook/proj.ios/PluginFacebook.xcodeproj">
       </FileRef>
       <FileRef
@@ -32,7 +35,7 @@
          location = "group:plugins/senspark/proj.ios/PluginSenspark.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:plugins/google-analytics/proj.ios/PluginGoogleAnalytics.xcodeproj">
+         location = "group:plugins/vungle/proj.ios/PluginVungle.xcodeproj">
       </FileRef>
    </Group>
    <FileRef
