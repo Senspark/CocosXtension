@@ -30,7 +30,6 @@
 		9520E0991B4693A000B7768B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95E352641B468BAE00C60173 /* libcocos2d iOS.a */; };
 		952260801B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9522607E1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp */; };
 		95245C091B60C978000EDF84 /* TestSensparkAdsScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95245C071B60C978000EDF84 /* TestSensparkAdsScene.cpp */; };
-		95245C171B60EFD0000EDF84 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C161B60EFD0000EDF84 /* GoogleMobileAds.framework */; };
 		95245C191B60F8C5000EDF84 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C181B60F8C5000EDF84 /* EventKit.framework */; };
 		95245C1B1B60F8D5000EDF84 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */; };
 		95245C1D1B60F8F2000EDF84 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */; };
@@ -42,6 +41,7 @@
 		95C160371B5CF5DA00501400 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C160361B5CF5DA00501400 /* libsqlite3.dylib */; };
 		95C160391B5CF5FB00501400 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C160381B5CF5FB00501400 /* CoreData.framework */; };
 		95C954241B621F530014047A /* libPluginVungle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C954231B621F530014047A /* libPluginVungle.a */; };
+		95EBD84F1B65E6C10004D448 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95EBD84E1B65E6C10004D448 /* GoogleMobileAds.framework */; };
 		BA0613BE1AC23DCE003118D6 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA0613BD1AC23DCE003118D6 /* FacebookSDK.framework */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712461292920000B8313A /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB212928DE900B8313A /* libxml2.dylib */; };
@@ -135,7 +135,6 @@
 		9522607F1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestGoogleAnalyticsScene.h; sourceTree = "<group>"; };
 		95245C071B60C978000EDF84 /* TestSensparkAdsScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestSensparkAdsScene.cpp; sourceTree = "<group>"; };
 		95245C081B60C978000EDF84 /* TestSensparkAdsScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestSensparkAdsScene.h; sourceTree = "<group>"; };
-		95245C161B60EFD0000EDF84 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 		95245C181B60F8C5000EDF84 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -148,6 +147,7 @@
 		95C160361B5CF5DA00501400 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		95C160381B5CF5FB00501400 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		95C954231B621F530014047A /* libPluginVungle.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPluginVungle.a; path = "../../../plugins/vungle/proj.ios/build/Debug-iphoneos/libPluginVungle.a"; sourceTree = "<group>"; };
+		95EBD84E1B65E6C10004D448 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = ../../../plugins/admob/proj.ios/Admob/GoogleMobileAds.framework; sourceTree = "<group>"; };
 		BA0613BD1AC23DCE003118D6 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../../plugins/facebook/proj.ios/FacebookSDK.framework; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB212928DE900B8313A /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -214,6 +214,7 @@
 			files = (
 				95245C1D1B60F8F2000EDF84 /* CoreMedia.framework in Frameworks */,
 				95245C1B1B60F8D5000EDF84 /* EventKitUI.framework in Frameworks */,
+				95EBD84F1B65E6C10004D448 /* GoogleMobileAds.framework in Frameworks */,
 				95245C191B60F8C5000EDF84 /* EventKit.framework in Frameworks */,
 				9520E0991B4693A000B7768B /* libcocos2d iOS.a in Frameworks */,
 				591A8D2419DF4DB700F71BFD /* libPluginFacebook.a in Frameworks */,
@@ -227,7 +228,6 @@
 				FA848862182B3DEB00858BDD /* CoreMotion.framework in Frameworks */,
 				59EB3BEC1964A86D0020118E /* CoreTelephony.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
-				95245C171B60EFD0000EDF84 /* GoogleMobileAds.framework in Frameworks */,
 				BA0613BE1AC23DCE003118D6 /* FacebookSDK.framework in Frameworks */,
 				592A55791964AD7D008E4BC7 /* GameController.framework in Frameworks */,
 				D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */,
@@ -339,11 +339,11 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				95EBD84E1B65E6C10004D448 /* GoogleMobileAds.framework */,
 				95C954231B621F530014047A /* libPluginVungle.a */,
 				95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */,
 				95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */,
 				95245C181B60F8C5000EDF84 /* EventKit.framework */,
-				95245C161B60EFD0000EDF84 /* GoogleMobileAds.framework */,
 				95C160381B5CF5FB00501400 /* CoreData.framework */,
 				95C160361B5CF5DA00501400 /* libsqlite3.dylib */,
 				95C160321B5CF5A800501400 /* libPluginGoogleAnalytics.a */,
@@ -648,6 +648,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../plugins/facebookads/proj.ios",
 					"$(SRCROOT)/../../../plugins/facebook/proj.ios",
+					"$(SRCROOT)/../../../plugins/admob/proj.ios/Admob",
 					"$(PROJECT_DIR)",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -689,6 +690,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../plugins/facebookads/proj.ios",
 					"$(SRCROOT)/../../../plugins/facebook/proj.ios",
+					"$(SRCROOT)/../../../plugins/admob/proj.ios/Admob",
 					"$(PROJECT_DIR)",
 				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
