@@ -56,7 +56,7 @@ struct PluginTypes;
         static std::map<T, std::string>   registeredPlugins; \
     }
 
-#define REGISTER_PLUGIN_NAME(T, X, N) PluginTypes<T>::registeredPlugins[T::X] = #N
+#define REGISTER_PLUGIN_NAME(T, X, N) PluginTypes<T>::registeredPlugins[T::X] = N
 
 #define PLUGIN_TYPE(X)      X ## PluginType
 #define STRINGNIFICATE(X)   #X

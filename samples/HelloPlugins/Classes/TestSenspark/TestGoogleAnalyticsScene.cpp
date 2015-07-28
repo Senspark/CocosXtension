@@ -36,9 +36,7 @@ Scene* TestGoogleAnalytics::scene() {
 bool TestGoogleAnalytics::init() {
     if (!ListLayer::init())
         return false;
-    SensparkPluginManager::getInstance();
-    
-    
+
     auto pluginProtocol = SensparkPluginManager::getInstance()->loadAnalyticsPlugin(AnalyticsPluginType::GOOGLE_ANALYTICS);
     
     _pluginAnalytics = nullptr;
