@@ -100,3 +100,7 @@ plugins/touchpay*
 samplesPrivate*
 userconf.ini
 samples/HelloPluginsLua/runtime
+plugins/googleplay/platform/ios/gpg.framework
+plugins/googleplay/platform/ios/gpg.bundle
+plugins/googleplay/platform/android/include/gpg
+plugins/googleplay/platform

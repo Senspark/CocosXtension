@@ -4,35 +4,60 @@
    <Group
       location = "container:"
       name = "plugins">
-      <FileRef
-         location = "group:plugins/google-analytics/proj.ios/PluginGoogleAnalytics.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:plugins/facebook/proj.ios/PluginFacebook.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:plugins/facebookads/proj.ios/PluginFacebookAds.xcodeproj">
-      </FileRef>
+      <Group
+         location = "container:"
+         name = "analytics">
+         <FileRef
+            location = "group:plugins/google-analytics/proj.ios/PluginGoogleAnalytics.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:plugins/umeng/proj.ios/PluginUmeng.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "ads">
+         <FileRef
+            location = "group:plugins/adcolony/proj.ios/PluginAdColony.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:plugins/admob/proj.ios/PluginAdmob.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:plugins/facebookads/proj.ios/PluginFacebookAds.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:plugins/vungle/proj.ios/PluginVungle.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/ndpduc/GitRepo/plugin-x/plugins/chartboost/proj.ios/PluginChartboost.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "social">
+         <FileRef
+            location = "group:plugins/facebook/proj.ios/PluginFacebook.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:plugins/twitter/proj.ios/PluginTwitter.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:plugins/weibo/proj.ios/PluginWeibo.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "mixed">
+         <FileRef
+            location = "group:plugins/flurry/proj.ios/PluginFlurry.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:plugins/googleplay/proj.ios/PluginGooglePlay.xcodeproj">
+         </FileRef>
+      </Group>
       <FileRef
          location = "group:protocols/proj.ios/PluginProtocol.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:plugins/admob/proj.ios/PluginAdmob.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:plugins/flurry/proj.ios/PluginFlurry.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:plugins/twitter/proj.ios/PluginTwitter.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:plugins/umeng/proj.ios/PluginUmeng.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:plugins/weibo/proj.ios/PluginWeibo.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:plugins/vungle/proj.ios/PluginVungle.xcodeproj">
       </FileRef>
       <FileRef
          location = "group:plugins/senspark/proj.ios/PluginSenspark.xcodeproj">

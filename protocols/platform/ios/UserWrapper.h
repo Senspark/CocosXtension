@@ -23,6 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 typedef enum {
     kLoginSucceed = 0,
@@ -52,4 +53,5 @@ typedef enum {
 + (void) onPermissionsResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg;
 + (void) onGraphResult:(id) result withRet:(GraphResult)ret withMsg:(NSString *)msg withCallback:(int)cbid;
 + (void)onPermissionListResult:(id)obj withRet:(PermissionListResult )ret withMsg:(NSString *)msg;
++ (UIViewController *) getCurrentRootViewController;
 @end

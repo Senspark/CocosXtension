@@ -33,6 +33,7 @@
 		95245C191B60F8C5000EDF84 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C181B60F8C5000EDF84 /* EventKit.framework */; };
 		95245C1B1B60F8D5000EDF84 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */; };
 		95245C1D1B60F8F2000EDF84 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */; };
+		9525AF9F1B67284300CBF477 /* TestGooglePlayUserScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9525AF9D1B67284300CBF477 /* TestGooglePlayUserScene.cpp */; };
 		95B098251B58DBB400EAC5AB /* libPluginAdmob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD554ED177C16A100968F54 /* libPluginAdmob.a */; };
 		95B098281B58DC9800EAC5AB /* TestSenspark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B098261B58DC9800EAC5AB /* TestSenspark.cpp */; };
 		95B0982B1B58DD2E00EAC5AB /* ListLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B098291B58DD2E00EAC5AB /* ListLayer.cpp */; };
@@ -138,6 +139,8 @@
 		95245C181B60F8C5000EDF84 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		9525AF9D1B67284300CBF477 /* TestGooglePlayUserScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestGooglePlayUserScene.cpp; sourceTree = "<group>"; };
+		9525AF9E1B67284300CBF477 /* TestGooglePlayUserScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestGooglePlayUserScene.h; sourceTree = "<group>"; };
 		95B098261B58DC9800EAC5AB /* TestSenspark.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestSenspark.cpp; sourceTree = "<group>"; };
 		95B098271B58DC9800EAC5AB /* TestSenspark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestSenspark.h; sourceTree = "<group>"; };
 		95B098291B58DD2E00EAC5AB /* ListLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ListLayer.cpp; sourceTree = "<group>"; };
@@ -406,14 +409,16 @@
 		9507AADF1B5651E100D367EB /* TestSenspark */ = {
 			isa = PBXGroup;
 			children = (
-				95245C071B60C978000EDF84 /* TestSensparkAdsScene.cpp */,
+				9522607F1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.h */,
+				9522607E1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp */,
 				95245C081B60C978000EDF84 /* TestSensparkAdsScene.h */,
+				95245C071B60C978000EDF84 /* TestSensparkAdsScene.cpp */,
+				9525AF9E1B67284300CBF477 /* TestGooglePlayUserScene.h */,
+				9525AF9D1B67284300CBF477 /* TestGooglePlayUserScene.cpp */,
 				95B098261B58DC9800EAC5AB /* TestSenspark.cpp */,
 				95B098271B58DC9800EAC5AB /* TestSenspark.h */,
 				95B098291B58DD2E00EAC5AB /* ListLayer.cpp */,
 				95B0982A1B58DD2E00EAC5AB /* ListLayer.h */,
-				9522607E1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp */,
-				9522607F1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.h */,
 			);
 			name = TestSenspark;
 			path = ../Classes/TestSenspark;
@@ -614,6 +619,7 @@
 				952260801B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp in Sources */,
 				1AFCDA8216D4A25900906EA6 /* RootViewController.mm in Sources */,
 				15CF33D919C0319E00D5614B /* TestFacebookShare.cpp in Sources */,
+				9525AF9F1B67284300CBF477 /* TestGooglePlayUserScene.cpp in Sources */,
 				FAD554E5177C131500968F54 /* TestAdsScene.cpp in Sources */,
 				FAD554E6177C131500968F54 /* TestAnalyticsScene.cpp in Sources */,
 				95B098281B58DC9800EAC5AB /* TestSenspark.cpp in Sources */,

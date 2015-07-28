@@ -36,13 +36,14 @@ Scene* TestGoogleAnalytics::scene() {
 bool TestGoogleAnalytics::init() {
     if (!ListLayer::init())
         return false;
+    SensparkPluginManager::getInstance();
+    
     
     auto pluginProtocol = SensparkPluginManager::getInstance()->loadAnalyticsPlugin(AnalyticsPluginType::GOOGLE_ANALYTICS);
     
     _pluginAnalytics = nullptr;
     _pluginAnalytics = static_cast<GoogleProtocolAnalytics*>(pluginProtocol);
-    
-    assert(pluginProtocol != nullptr);
+
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     _pluginAnalytics->configureTracker(GOOGLE_ANALYTICS_KEY_IOS);
@@ -84,7 +85,7 @@ void TestGoogleAnalytics::onExit() {
 
     _pluginAnalytics->stopSession();
     
-    SensparkPluginManager::getInstance()->unloadAnalyticsPlugin(AnalyticsPluginType::GOOGLE_ANALYTICS);
+//    SensparkPluginManager::getInstance()->unloadAnalyticsPlugin(AnalyticsPluginType::GOOGLE_ANALYTICS);
     _pluginAnalytics = nullptr;
 }
 

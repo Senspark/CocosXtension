@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		95245C0D1B60D614000EDF84 /* AdmobProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95245C0C1B60D614000EDF84 /* AdmobProtocolAds.mm */; };
+		9525AFA31B672C0A00CBF477 /* GooglePlayProtocolUser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9525AFA21B672C0A00CBF477 /* GooglePlayProtocolUser.mm */; };
 		953C06F11B57A8DD002BB1A2 /* SensparkPluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 953C06EF1B57A8DD002BB1A2 /* SensparkPluginManager.cpp */; };
 		95C1602A1B5CEC1A00501400 /* GoogleProtocolAnalytics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95C160281B5CEC1A00501400 /* GoogleProtocolAnalytics.mm */; };
 		95C1602E1B5CF0BA00501400 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C1602D1B5CF0BA00501400 /* Foundation.framework */; };
@@ -18,6 +19,7 @@
 /* Begin PBXFileReference section */
 		9520E0B31B46A74800B7768B /* libPluginSenspark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginSenspark.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		95245C0C1B60D614000EDF84 /* AdmobProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdmobProtocolAds.mm; sourceTree = "<group>"; };
+		9525AFA21B672C0A00CBF477 /* GooglePlayProtocolUser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GooglePlayProtocolUser.mm; sourceTree = "<group>"; };
 		953C06EB1B577563002BB1A2 /* GoogleProtocolAnalytics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoogleProtocolAnalytics.h; sourceTree = "<group>"; };
 		953C06EC1B578105002BB1A2 /* AdmobProtocolAds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdmobProtocolAds.h; sourceTree = "<group>"; };
 		953C06ED1B57A267002BB1A2 /* SensparkPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkPluginManager.h; sourceTree = "<group>"; };
@@ -29,6 +31,8 @@
 		95C160301B5CF17A00501400 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		95C954271B62207E0014047A /* VungleProtocolAds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VungleProtocolAds.h; sourceTree = "<group>"; };
 		95C954281B62212B0014047A /* VungleProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VungleProtocolAds.mm; sourceTree = "<group>"; };
+		95EBD89A1B664AC00004D448 /* GooglePlayProtocolUser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GooglePlayProtocolUser.h; sourceTree = "<group>"; };
+		95EBD89B1B664AD80004D448 /* GooglePlayProtocolSocial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GooglePlayProtocolSocial.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,9 +51,9 @@
 		9520E0AA1B46A74800B7768B = {
 			isa = PBXGroup;
 			children = (
+				95FE48E91B57693A00739C4A /* include */,
 				953C06EE1B57A8B5002BB1A2 /* classes */,
 				95FE48EA1B5769A700739C4A /* ios */,
-				95FE48E91B57693A00739C4A /* include */,
 				9520E0BB1B46A84F00B7768B /* Senspark */,
 				95C1602F1B5CF0D300501400 /* Frameworks */,
 				9520E0B41B46A74800B7768B /* Products */,
@@ -93,6 +97,8 @@
 			isa = PBXGroup;
 			children = (
 				953C06EB1B577563002BB1A2 /* GoogleProtocolAnalytics.h */,
+				95EBD89B1B664AD80004D448 /* GooglePlayProtocolSocial.h */,
+				95EBD89A1B664AC00004D448 /* GooglePlayProtocolUser.h */,
 				953C06EC1B578105002BB1A2 /* AdmobProtocolAds.h */,
 				953C06ED1B57A267002BB1A2 /* SensparkPluginManager.h */,
 				95C160251B5CD83500501400 /* SensparkPlugin.h */,
@@ -109,6 +115,7 @@
 				95C160281B5CEC1A00501400 /* GoogleProtocolAnalytics.mm */,
 				95245C0C1B60D614000EDF84 /* AdmobProtocolAds.mm */,
 				95C954281B62212B0014047A /* VungleProtocolAds.mm */,
+				9525AFA21B672C0A00CBF477 /* GooglePlayProtocolUser.mm */,
 			);
 			name = ios;
 			path = ../platform/ios;
@@ -182,6 +189,7 @@
 			files = (
 				95245C0D1B60D614000EDF84 /* AdmobProtocolAds.mm in Sources */,
 				95C954291B62212B0014047A /* VungleProtocolAds.mm in Sources */,
+				9525AFA31B672C0A00CBF477 /* GooglePlayProtocolUser.mm in Sources */,
 				953C06F11B57A8DD002BB1A2 /* SensparkPluginManager.cpp in Sources */,
 				95C1602A1B5CEC1A00501400 /* GoogleProtocolAnalytics.mm in Sources */,
 			);

@@ -18,6 +18,12 @@
 #define USING_NS_SENSPARK       using namespace senspark;
 
 /**
+ @brief Developer information of Google Play
+ */
+#define GOOGLE_PLAY_KEY_IOS     "972910531858"
+#define GOOGLE_PLAY_KEY_ANDROID "972910531858"
+
+/**
  @brief Developer information of flurry
  */
 #define FLURRY_KEY_IOS          "KMGG7CD9WPK2TW4X9VR8"

@@ -23,6 +23,7 @@ enum class AnalyticsPluginType {
 };
 
 enum class AdsPluginType {
+    ADCOLONY,
     ADMOB,
     CHARTBOOST,
     FACEBOOK_ADS,
@@ -43,9 +44,46 @@ enum class IAPPluginType {
 };
 
 enum class UserPluginType {
-    
+    GAME_CENTER,
+    GOOGLE_PLAY,
 };
-    
+
+template<typename T>
+struct PluginTypes;
+
+#define REGISTER_PLUGIN_TYPE(T) template <> struct PluginTypes<T> \
+    {   static const char* name; \
+        static std::map<T, std::string>   registeredPlugins; \
+    }
+
+#define REGISTER_PLUGIN_NAME(T, X, N) PluginTypes<T>::registeredPlugins[T::X] = #N
+
+#define PLUGIN_TYPE(X)      X ## PluginType
+#define STRINGNIFICATE(X)   #X
+
+#define DECLARE_PLUGIN_LOADER_METHODS(X) \
+    cocos2d::plugin::PluginProtocol* load##X##Plugin(PLUGIN_TYPE(X) type); \
+    void unload##X##Plugin(PLUGIN_TYPE(X) type)
+
+#define DEFINE_PLUGIN_LOADER_METHODS(X) \
+    const char* PluginTypes<PLUGIN_TYPE(X)>::name = STRINGNIFICATE(PLUGIN_TYPE(X)); \
+    \
+    std::map< PLUGIN_TYPE(X), std::string> PluginTypes< PLUGIN_TYPE(X) >::registeredPlugins; \
+    \
+    cocos2d::plugin::PluginProtocol* SensparkPluginManager::load##X##Plugin(PLUGIN_TYPE(X) type) { \
+            return _cocosPluginManager->loadPlugin(getPluginName(type)); \
+    } \
+    \
+    void SensparkPluginManager::unload##X##Plugin(PLUGIN_TYPE(X) type) { \
+        _cocosPluginManager->unloadPlugin(getPluginName(type)); \
+    }
+
+REGISTER_PLUGIN_TYPE(AnalyticsPluginType);
+REGISTER_PLUGIN_TYPE(AdsPluginType);
+REGISTER_PLUGIN_TYPE(SocialPluginType);
+REGISTER_PLUGIN_TYPE(IAPPluginType);
+REGISTER_PLUGIN_TYPE(UserPluginType);
+
 class SensparkPluginManager {
 public:
     virtual ~SensparkPluginManager();
@@ -54,41 +92,20 @@ public:
     
     static void end();
     
-    cocos2d::plugin::PluginProtocol* loadAnalyticsPlugin(AnalyticsPluginType type);
-    void unloadAnalyticsPlugin(AnalyticsPluginType type);
-    
-    cocos2d::plugin::PluginProtocol* loadAdsPlugin(AdsPluginType type);
-    void unloadAdsPlugin(AdsPluginType type);
-    
-    cocos2d::plugin::PluginProtocol* loadSocialPlugin(SocialPluginType type);
-    void unloadSocialPlugin(SocialPluginType type);
-    
-    cocos2d::plugin::PluginProtocol* loadCloudSyncPlugin(CloudSyncPluginType type);
-    void unloadCloudSyncPlugin(CloudSyncPluginType type);
-    
-    cocos2d::plugin::PluginProtocol* loadIAPPlugin(IAPPluginType type);
-    void unloadIAPPlugin(IAPPluginType type);
-    
-    cocos2d::plugin::PluginProtocol* loadUserPlugin(UserPluginType type);
-    void unloadUserPlugin(UserPluginType type);
+    DECLARE_PLUGIN_LOADER_METHODS(Analytics);
+    DECLARE_PLUGIN_LOADER_METHODS(Ads);
+    DECLARE_PLUGIN_LOADER_METHODS(Social);
+    DECLARE_PLUGIN_LOADER_METHODS(IAP);
+    DECLARE_PLUGIN_LOADER_METHODS(User);
     
 protected:
     SensparkPluginManager(void);
     
-    const char* getAnalyticsPluginName(AnalyticsPluginType type);
-    const char* getAdsPluginName(AdsPluginType type);
-    const char* getSocialPluginName(SocialPluginType type);
-    const char* getCloudSyncPluginName(CloudSyncPluginType type);
-    const char* getIAPPluginName(IAPPluginType type);
-    const char* getUserPluginName(UserPluginType type);
+    template <typename T>
+    const char* getPluginName(T type);
     
     cocos2d::plugin::PluginManager *_cocosPluginManager;
     
-    std::map<AnalyticsPluginType, std::string> _registeredAnalyticsPlugins;
-    std::map<AdsPluginType, std::string> _registeredAdsPlugins;
-    std::map<SocialPluginType, std::string> _registerSocialPlugins;
-    std::map<CloudSyncPluginType, std::string> _registerCloudPlugins;
-    std::map<IAPPluginType, std::string> _registerIAPPlugins;
 };
 
 NS_SENSPARK_PLUGIN_END

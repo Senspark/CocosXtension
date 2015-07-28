@@ -34,7 +34,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	Size frameSize = glView->getFrameSize();
     
     vector<string> searchPath;
-
+    searchPath.push_back("fonts");
     // In this demo, we select resource according to the frame's height.
     // If the resource size is different from design resolution size, you need to set contentScaleFactor.
     // We use the ratio of resource's height to the height of design resolution,

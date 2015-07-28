@@ -10,25 +10,35 @@
 
 using namespace senspark::plugin;
 using namespace cocos2d::plugin;
+using namespace std;
 
 static SensparkPluginManager* s_pPluginManager = nullptr;
+
+DEFINE_PLUGIN_LOADER_METHODS(Analytics);
+DEFINE_PLUGIN_LOADER_METHODS(Ads);
+DEFINE_PLUGIN_LOADER_METHODS(Social);
+DEFINE_PLUGIN_LOADER_METHODS(IAP);
+DEFINE_PLUGIN_LOADER_METHODS(User);
 
 SensparkPluginManager::SensparkPluginManager(void)
 {
     _cocosPluginManager = PluginManager::getInstance();
     
     //------ Register Analytics Service -------
-    _registeredAnalyticsPlugins[AnalyticsPluginType::FLURRY_ANALYTICS] = "AnalyticsFlurry";
-    _registeredAnalyticsPlugins[AnalyticsPluginType::GOOGLE_ANALYTICS] = "AnalyticsGoogle";
+    REGISTER_PLUGIN_NAME(AnalyticsPluginType, FLURRY_ANALYTICS, "AnalyticsFlurry");
+    REGISTER_PLUGIN_NAME(AnalyticsPluginType, GOOGLE_ANALYTICS, "AnalyticsGoogle");
     
     //------ Register Ads Service -------
-    _registeredAdsPlugins[AdsPluginType::ADMOB]         = "AdsAdmob";
-    _registeredAdsPlugins[AdsPluginType::CHARTBOOST]    = "AdsChartboost";
-    _registeredAdsPlugins[AdsPluginType::FACEBOOK_ADS]  = "AdsFacebook";
-    _registeredAdsPlugins[AdsPluginType::FLURRY_ADS]    = "AdsFlurry";
-    _registeredAdsPlugins[AdsPluginType::VUNGLE]        = "AdsVungle";
+    REGISTER_PLUGIN_NAME(AdsPluginType, ADMOB, "AdsAdmob");
+    REGISTER_PLUGIN_NAME(AdsPluginType, ADCOLONY, "AdsAdColony");
+    REGISTER_PLUGIN_NAME(AdsPluginType, CHARTBOOST, "AdsChartboost");
+    REGISTER_PLUGIN_NAME(AdsPluginType, FACEBOOK_ADS, "AdsFacebook");
+    REGISTER_PLUGIN_NAME(AdsPluginType, FLURRY_ADS, "AdsFlurry");
+    REGISTER_PLUGIN_NAME(AdsPluginType, VUNGLE, "AdsVungle");
     
-    
+    //------ Register User Service ------
+    REGISTER_PLUGIN_NAME(UserPluginType, GOOGLE_PLAY, "UserGooglePlay");
+    REGISTER_PLUGIN_NAME(UserPluginType, GAME_CENTER, "UserGameCenter");
 }
 
 SensparkPluginManager::~SensparkPluginManager(void)
@@ -44,6 +54,7 @@ SensparkPluginManager* SensparkPluginManager::getInstance()
     if (s_pPluginManager == nullptr) {
         s_pPluginManager = new SensparkPluginManager();
     }
+    
     return s_pPluginManager;
 }
 
@@ -55,92 +66,12 @@ void SensparkPluginManager::end()
     }
 }
 
-PluginProtocol* SensparkPluginManager::loadAnalyticsPlugin(AnalyticsPluginType type) {
-    return _cocosPluginManager->loadPlugin(getAnalyticsPluginName(type));
-}
-
-void SensparkPluginManager::unloadAnalyticsPlugin(AnalyticsPluginType type) {
-    _cocosPluginManager->unloadPlugin(getAnalyticsPluginName(type));
-}
-
-PluginProtocol* SensparkPluginManager::loadAdsPlugin(AdsPluginType type) {
-    return _cocosPluginManager->loadPlugin(getAdsPluginName(type));
-}
-
-void SensparkPluginManager::unloadAdsPlugin(AdsPluginType type) {
-    _cocosPluginManager->unloadPlugin(getAdsPluginName(type));
-}
-
-PluginProtocol* SensparkPluginManager::loadCloudSyncPlugin(CloudSyncPluginType type) {
-    return _cocosPluginManager->loadPlugin(getCloudSyncPluginName(type));
-}
-
-void SensparkPluginManager::unloadCloudSyncPlugin(CloudSyncPluginType type) {
-    _cocosPluginManager->unloadPlugin(getCloudSyncPluginName(type));
-}
-
-PluginProtocol* SensparkPluginManager::loadIAPPlugin(IAPPluginType type) {
-    return _cocosPluginManager->loadPlugin(getIAPPluginName(type));
-}
-
-void SensparkPluginManager::unloadIAPPlugin(IAPPluginType type) {
-    _cocosPluginManager->unloadPlugin(getIAPPluginName(type));
-}
-
-PluginProtocol* SensparkPluginManager::loadSocialPlugin(SocialPluginType type) {
-    return _cocosPluginManager->loadPlugin(getSocialPluginName(type));
-}
-
-void SensparkPluginManager::unloadSocialPlugin(SocialPluginType type) {
-    _cocosPluginManager->unloadPlugin(getSocialPluginName(type));
-}
-
-PluginProtocol* SensparkPluginManager::loadUserPlugin(UserPluginType type) {
-    return _cocosPluginManager->loadPlugin(getUserPluginName(type));
-}
-
-void SensparkPluginManager::unloadUserPlugin(UserPluginType type) {
-    _cocosPluginManager->unloadPlugin(getUserPluginName(type));
-}
-
-const char* SensparkPluginManager::getAnalyticsPluginName(AnalyticsPluginType type) {
+template <typename T>
+const char* SensparkPluginManager::getPluginName(T type) {
     const char* name = nullptr;
-    
-    auto got = _registeredAnalyticsPlugins.find(type);
-    if (got != _registeredAnalyticsPlugins.end())
+    auto got = PluginTypes<T>::registeredPlugins.find(type);
+    if (got != PluginTypes<T>::registeredPlugins.end())
         name = got->second.c_str();
     
     return name;
 }
-
-const char* SensparkPluginManager::getAdsPluginName(AdsPluginType type) {
-    const char* name = nullptr;
-    
-    auto got = _registeredAdsPlugins.find(type);
-    
-    if (got != _registeredAdsPlugins.end())
-        name = got->second.c_str();
-    
-    return name;
-}
-
-const char* SensparkPluginManager::getSocialPluginName(SocialPluginType type) {
-    const char* name = nullptr;
-    return name;
-}
-
-const char* SensparkPluginManager::getCloudSyncPluginName(CloudSyncPluginType type) {
-    const char* name = nullptr;
-    return name;
-}
-
-const char* SensparkPluginManager::getIAPPluginName(IAPPluginType type) {
-    const char* name = nullptr;
-    return name;
-}
-
-const char* SensparkPluginManager::getUserPluginName(UserPluginType type) {
-    const char* name = nullptr;
-    return name;
-}
-
