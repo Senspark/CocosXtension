@@ -9,9 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <InterfaceSocial.h>
 
-@interface SocialGooglePlay : NSObject
+@interface SocialGooglePlay : NSObject<InterfaceSocial>
 {
-    
 }
 
 @property BOOL  debug;
@@ -25,5 +24,10 @@
 - (void) setDebugMode: (BOOL) debug;
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;
+
+- (void) showLeaderboards;
+- (void) resetAchievements;
+- (void) revealAchievement: (NSMutableDictionary*) achInfo;
+- (void) resetAchievement: (NSMutableDictionary*) achiInfo;
 
 @end

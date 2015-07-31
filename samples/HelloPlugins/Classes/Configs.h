@@ -20,8 +20,13 @@
 /**
  @brief Developer information of Google Play
  */
-#define GOOGLE_PLAY_KEY_IOS     "972910531858"
+#define GOOGLE_PLAY_KEY_IOS     "972910531858-sj6n2joc4l35lqboc9vtsjlh3hasona0.apps.googleusercontent.com"
 #define GOOGLE_PLAY_KEY_ANDROID "972910531858"
+
+#define GOOGLE_PLAY_LEADERBOARD_KEY_IOS_EASY    "CgkIkqryr6gcEAIQAg"
+#define GOOGLE_PLAY_LEADERBOARD_KEY_IOS_HARD    "CgkIkqryr6gcEAIQAw"
+
+#define GOOGLE_PLAY_ACHIEVEMENT_KEY_IOS_PRIME   "CgkIkqryr6gcEAIQBA"
 
 /**
  @brief Developer information of flurry

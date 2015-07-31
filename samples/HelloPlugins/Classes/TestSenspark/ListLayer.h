@@ -12,12 +12,13 @@
 #include <stdio.h>
 #include "cocos2d.h"
 #include "extensions/cocos-ext.h"
+#include "Configs.h"
 
 using namespace std;
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-namespace senspark {
+NS_SENSPARK_BEGIN
 
 #define MAIN_LAYER_TAG      0x10
 #define TABLE_LABEL_TAG     0x20
@@ -50,5 +51,5 @@ protected:
     TableView*      _testListView;
 };
 
-}
+NS_SENSPARK_END
 #endif /* defined(__HelloPlugins__ListScene__) */

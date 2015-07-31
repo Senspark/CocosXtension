@@ -24,17 +24,20 @@ SensparkPluginManager::SensparkPluginManager(void)
 {
     _cocosPluginManager = PluginManager::getInstance();
     
-    //------ Register Analytics Service -------
+    //------ Register Analytics Services -------
     REGISTER_PLUGIN_NAME(AnalyticsPluginType, FLURRY_ANALYTICS, "AnalyticsFlurry");
     REGISTER_PLUGIN_NAME(AnalyticsPluginType, GOOGLE_ANALYTICS, "AnalyticsGoogle");
     
-    //------ Register Ads Service -------
+    //------ Register Ads Services -------
     REGISTER_PLUGIN_NAME(AdsPluginType, ADMOB, "AdsAdmob");
     REGISTER_PLUGIN_NAME(AdsPluginType, ADCOLONY, "AdsAdColony");
     REGISTER_PLUGIN_NAME(AdsPluginType, CHARTBOOST, "AdsChartboost");
     REGISTER_PLUGIN_NAME(AdsPluginType, FACEBOOK_ADS, "AdsFacebook");
     REGISTER_PLUGIN_NAME(AdsPluginType, FLURRY_ADS, "AdsFlurry");
     REGISTER_PLUGIN_NAME(AdsPluginType, VUNGLE, "AdsVungle");
+    
+    //------ Register Social Services
+    REGISTER_PLUGIN_NAME(SocialPluginType, GOOGLE_PLAY, "SocialGooglePlay");
     
     //------ Register User Service ------
     REGISTER_PLUGIN_NAME(UserPluginType, GOOGLE_PLAY, "UserGooglePlay");

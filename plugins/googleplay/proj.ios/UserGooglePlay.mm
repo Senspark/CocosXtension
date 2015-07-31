@@ -7,10 +7,15 @@
 //
 
 #import "UserGooglePlay.h"
-#import <gpg/gpg.h>
+#import <gpg/GooglePlayGames.h>
+#import <GooglePlus/GooglePlus.h>
 #import "UserWrapper.h"
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
+
+@interface UserGooglePlay() <GPGStatusDelegate, GPGStatusDelegate>
+
+@end
 
 @implementation UserGooglePlay
 
@@ -18,58 +23,30 @@
 
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo
 {
-    NSString* cliendId = (NSString*) [cpInfo objectForKey:@"GooglePlayAppID"];
-    gpg::IosPlatformConfiguration config;
-    config.SetClientID(std::string([cliendId cStringUsingEncoding:NSASCIIStringEncoding]));
-    config.SetOptionalViewControllerForPopups([UserWrapper getCurrentRootViewController]);
+    _clientID = (NSString*) [cpInfo objectForKey:@"GoogleClientID"];
+    [GPGManager sharedInstance].statusDelegate = self;
     
-    if (!_gameServices) {
-        _isSignedIn = false;
-        
-        OUTPUT_LOG(@"Uninitialized services, so creating");
-        _gameServices = gpg::GameServices::Builder().SetOnAuthActionFinished([self](gpg::AuthOperation op, gpg::AuthStatus status) -> void {
-            OUTPUT_LOG(@"Sign In finished with a result of %d", (int) status);
-            
-            switch (status) {
-                case gpg::AuthStatus::VALID:
-                    _isSignedIn = true;
-                    [UserWrapper onActionResult:self withRet:kLoginSucceed withMsg:@"Google Play: login successful"];
-                    break;
-                case gpg::AuthStatus::ERROR_INTERNAL:
-                case gpg::AuthStatus::ERROR_NOT_AUTHORIZED:
-                case gpg::AuthStatus::ERROR_TIMEOUT:
-                case gpg::AuthStatus::ERROR_VERSION_UPDATE_REQUIRED:
-                    [UserWrapper onActionResult:self withRet:kLoginFailed withMsg:@"Google Play: login failed"];
-                    _isSignedIn = false;
-                    break;
-            }
-        }).Create(config);
-    }
+    [[GPGManager sharedInstance] signInWithClientID:_clientID silently:YES];
+    
 }
 
 - (void) login
 {
-    if (!_gameServices->IsAuthorized()) {
-        OUTPUT_LOG(@"Google Play: Start Authorization UI");
-        _gameServices->StartAuthorizationUI();
+    if (_clientID) {
+        [[GPGManager sharedInstance] signInWithClientID:_clientID silently:NO];
     } else {
-        OUTPUT_LOG(@"Google Play: Logined already!");
+        OUTPUT_LOG(@"No Client ID");
     }
 }
 
 - (void) logout
 {
-    if (!_gameServices->IsAuthorized()) {
-        OUTPUT_LOG(@"Google Play: Logout");
-        _gameServices->SignOut();
-    } else {
-        OUTPUT_LOG(@"Google Play: Not yet login");
-    }
+    [[GPGManager sharedInstance] signOut];
 }
 
 - (BOOL) isLogined
 {
-    return _isSignedIn;
+    return [[GPGManager sharedInstance] isSignedIn];
 }
 
 - (NSString*) getSessionID
@@ -97,6 +74,40 @@
 - (void) beginUserInitiatedSignIn
 {
     [self login];
+}
+
+#pragma mark -
+#pragma mark Delegate
+
+- (void)didFinishGamesSignInWithError:(NSError *)error
+{
+    if (error) {
+        NSLog(@"Received an error while signing in %@", [error localizedDescription]);
+        [UserWrapper onActionResult:self withRet:kLoginFailed withMsg:@"Google Play: login failed"];
+    } else {
+        NSLog(@"Signed in!");
+        [UserWrapper onActionResult:self withRet:kLoginSucceed withMsg:@"Google Play: login successful"];
+    }
+}
+
+- (void)didFinishGamesSignOutWithError:(NSError *)error
+{
+    if (error) {
+        NSLog(@"Received an error while signing out %@", [error localizedDescription]);
+        [UserWrapper onActionResult:self withRet:kLogoutFailed withMsg:@"Google Play: logout failed"];
+    } else {
+        NSLog(@"Signed out!");
+        [UserWrapper onActionResult:self withRet:kLogoutSucceed withMsg:@"Google Play: logout successful"];
+    }
+}
+
+- (void)didFinishGoogleAuthWithError:(NSError *)error
+{
+    if (error) {
+        NSLog(@"Received an error while authenticate %@", [error localizedDescription]);
+    } else {
+        NSLog(@"Authenticate successfully!");
+    }
 }
 
 @end

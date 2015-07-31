@@ -32,7 +32,7 @@ enum class AdsPluginType {
 };
 
 enum class SocialPluginType {
-    
+    GOOGLE_PLAY,
 };
 
 enum class CloudSyncPluginType {
@@ -59,14 +59,14 @@ struct PluginTypes;
 #define REGISTER_PLUGIN_NAME(T, X, N) PluginTypes<T>::registeredPlugins[T::X] = N
 
 #define PLUGIN_TYPE(X)      X ## PluginType
-#define STRINGNIFICATE(X)   #X
+#define STRINGNIFY(X)   #X
 
 #define DECLARE_PLUGIN_LOADER_METHODS(X) \
     cocos2d::plugin::PluginProtocol* load##X##Plugin(PLUGIN_TYPE(X) type); \
     void unload##X##Plugin(PLUGIN_TYPE(X) type)
 
 #define DEFINE_PLUGIN_LOADER_METHODS(X) \
-    const char* PluginTypes<PLUGIN_TYPE(X)>::name = STRINGNIFICATE(PLUGIN_TYPE(X)); \
+    const char* PluginTypes<PLUGIN_TYPE(X)>::name = STRINGNIFY(PLUGIN_TYPE(X)); \
     \
     std::map< PLUGIN_TYPE(X), std::string> PluginTypes< PLUGIN_TYPE(X) >::registeredPlugins; \
     \

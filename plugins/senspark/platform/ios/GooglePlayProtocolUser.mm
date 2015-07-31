@@ -25,6 +25,6 @@ GooglePlayProtocolUser::~GooglePlayProtocolUser() {
 
 void GooglePlayProtocolUser::configureUser(const std::string &appId) {
     TUserDeveloperInfo devInfo;
-    devInfo["GooglePlayAppID"] = appId;
+    devInfo["GoogleClientID"] = appId;
     configDeveloperInfo(devInfo);
 }

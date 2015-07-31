@@ -66,7 +66,6 @@ typedef enum {
 /**
  interface for Admob SDK
  */
-- (void) configureAds: (NSString*) adsId;
 - (void) addTestDevice: (NSString*) deviceID;
 
 @end

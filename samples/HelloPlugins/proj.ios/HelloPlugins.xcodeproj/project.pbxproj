@@ -26,6 +26,12 @@
 		59EB3BEA1964A7DD0020118E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59EB3BE91964A7DD0020118E /* Security.framework */; };
 		59EB3BEC1964A86D0020118E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59EB3BEB1964A86D0020118E /* CoreTelephony.framework */; };
 		7855E0E1153FEF240059DD9A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7855E0DF153FEF240059DD9A /* Default.png */; };
+		95175B531B6795FF0005CC3D /* libPluginGooglePlay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175B521B6795FF0005CC3D /* libPluginGooglePlay.a */; };
+		95175B571B6796DE0005CC3D /* gpg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175B561B6796DE0005CC3D /* gpg.framework */; };
+		95175C191B6798870005CC3D /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175C181B6798870005CC3D /* GooglePlus.framework */; };
+		95175C1B1B67988D0005CC3D /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175C1A1B67988D0005CC3D /* GoogleOpenSource.framework */; };
+		95175C1D1B67997D0005CC3D /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175C1C1B67997D0005CC3D /* AddressBook.framework */; };
+		95175C1F1B6799A60005CC3D /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175C1E1B6799A60005CC3D /* AssetsLibrary.framework */; };
 		951D66B21B5658E50043A09E /* libPluginSenspark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 951D66B11B5658E50043A09E /* libPluginSenspark.a */; };
 		9520E0991B4693A000B7768B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95E352641B468BAE00C60173 /* libcocos2d iOS.a */; };
 		952260801B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9522607E1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp */; };
@@ -33,7 +39,9 @@
 		95245C191B60F8C5000EDF84 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C181B60F8C5000EDF84 /* EventKit.framework */; };
 		95245C1B1B60F8D5000EDF84 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */; };
 		95245C1D1B60F8F2000EDF84 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */; };
-		9525AF9F1B67284300CBF477 /* TestGooglePlayUserScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9525AF9D1B67284300CBF477 /* TestGooglePlayUserScene.cpp */; };
+		9525AF9F1B67284300CBF477 /* TestGooglePlayScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9525AF9D1B67284300CBF477 /* TestGooglePlayScene.cpp */; };
+		953F8D2D1B68915300517E1B /* GooglePlus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 953F8D2B1B68915300517E1B /* GooglePlus.bundle */; };
+		953F8D2E1B68915300517E1B /* gpg.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 953F8D2C1B68915300517E1B /* gpg.bundle */; };
 		95B098251B58DBB400EAC5AB /* libPluginAdmob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD554ED177C16A100968F54 /* libPluginAdmob.a */; };
 		95B098281B58DC9800EAC5AB /* TestSenspark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B098261B58DC9800EAC5AB /* TestSenspark.cpp */; };
 		95B0982B1B58DD2E00EAC5AB /* ListLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B098291B58DD2E00EAC5AB /* ListLayer.cpp */; };
@@ -131,6 +139,12 @@
 		59EB3BE91964A7DD0020118E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		59EB3BEB1964A86D0020118E /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		7855E0DF153FEF240059DD9A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = SOURCE_ROOT; };
+		95175B521B6795FF0005CC3D /* libPluginGooglePlay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPluginGooglePlay.a; path = "../../../plugins/googleplay/proj.ios/build/Debug-iphoneos/libPluginGooglePlay.a"; sourceTree = "<group>"; };
+		95175B561B6796DE0005CC3D /* gpg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpg.framework; path = ../../../plugins/googleplay/platform/ios/gpg.framework; sourceTree = "<group>"; };
+		95175C181B6798870005CC3D /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlus.framework; path = ../../../plugins/googleplay/platform/ios/GooglePlus.framework; sourceTree = "<group>"; };
+		95175C1A1B67988D0005CC3D /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleOpenSource.framework; path = ../../../plugins/googleplay/platform/ios/GoogleOpenSource.framework; sourceTree = "<group>"; };
+		95175C1C1B67997D0005CC3D /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		95175C1E1B6799A60005CC3D /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		951D66B11B5658E50043A09E /* libPluginSenspark.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPluginSenspark.a; path = "../../../plugins/senspark/proj.ios/build/Debug-iphoneos/libPluginSenspark.a"; sourceTree = "<group>"; };
 		9522607E1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestGoogleAnalyticsScene.cpp; sourceTree = "<group>"; };
 		9522607F1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestGoogleAnalyticsScene.h; sourceTree = "<group>"; };
@@ -139,8 +153,10 @@
 		95245C181B60F8C5000EDF84 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		9525AF9D1B67284300CBF477 /* TestGooglePlayUserScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestGooglePlayUserScene.cpp; sourceTree = "<group>"; };
-		9525AF9E1B67284300CBF477 /* TestGooglePlayUserScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestGooglePlayUserScene.h; sourceTree = "<group>"; };
+		9525AF9D1B67284300CBF477 /* TestGooglePlayScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestGooglePlayScene.cpp; sourceTree = "<group>"; };
+		9525AF9E1B67284300CBF477 /* TestGooglePlayScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestGooglePlayScene.h; sourceTree = "<group>"; };
+		953F8D2B1B68915300517E1B /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlus.bundle; path = ../../../plugins/googleplay/platform/ios/GooglePlus.bundle; sourceTree = "<group>"; };
+		953F8D2C1B68915300517E1B /* gpg.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = gpg.bundle; path = ../../../plugins/googleplay/platform/ios/gpg.bundle; sourceTree = "<group>"; };
 		95B098261B58DC9800EAC5AB /* TestSenspark.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestSenspark.cpp; sourceTree = "<group>"; };
 		95B098271B58DC9800EAC5AB /* TestSenspark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestSenspark.h; sourceTree = "<group>"; };
 		95B098291B58DD2E00EAC5AB /* ListLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ListLayer.cpp; sourceTree = "<group>"; };
@@ -215,6 +231,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95175C1F1B6799A60005CC3D /* AssetsLibrary.framework in Frameworks */,
+				95175C1D1B67997D0005CC3D /* AddressBook.framework in Frameworks */,
 				95245C1D1B60F8F2000EDF84 /* CoreMedia.framework in Frameworks */,
 				95245C1B1B60F8D5000EDF84 /* EventKitUI.framework in Frameworks */,
 				95EBD84F1B65E6C10004D448 /* GoogleMobileAds.framework in Frameworks */,
@@ -245,11 +263,15 @@
 				95C160331B5CF5A800501400 /* libPluginGoogleAnalytics.a in Frameworks */,
 				951D66B21B5658E50043A09E /* libPluginSenspark.a in Frameworks */,
 				95C954241B621F530014047A /* libPluginVungle.a in Frameworks */,
+				95175B531B6795FF0005CC3D /* libPluginGooglePlay.a in Frameworks */,
 				FAD554F4177C16A100968F54 /* libPluginFlurry.a in Frameworks */,
 				95B098251B58DBB400EAC5AB /* libPluginAdmob.a in Frameworks */,
 				FAD554F5177C16A100968F54 /* libPluginProtocol.a in Frameworks */,
 				FAD554F6177C16A100968F54 /* libPluginTwitter.a in Frameworks */,
 				FAD554F7177C16A100968F54 /* libPluginUmeng.a in Frameworks */,
+				95175C1B1B67988D0005CC3D /* GoogleOpenSource.framework in Frameworks */,
+				95175B571B6796DE0005CC3D /* gpg.framework in Frameworks */,
+				95175C191B6798870005CC3D /* GooglePlus.framework in Frameworks */,
 				FAD554F8177C16A100968F54 /* libPluginWeibo.a in Frameworks */,
 				95C160371B5CF5DA00501400 /* libsqlite3.dylib in Frameworks */,
 				BF1712461292920000B8313A /* libxml2.dylib in Frameworks */,
@@ -263,6 +285,8 @@
 		080E96DDFE201D6D7F000001 /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				953F8D2B1B68915300517E1B /* GooglePlus.bundle */,
+				953F8D2C1B68915300517E1B /* gpg.bundle */,
 				1AC3624216D4A1E8000847F2 /* AppController.h */,
 				1AC3624316D4A1E8000847F2 /* AppController.mm */,
 				D4F9F37B12E54555005CA6D2 /* Info.plist */,
@@ -272,7 +296,6 @@
 				1AFCDA8116D4A25900906EA6 /* RootViewController.mm */,
 			);
 			name = ios;
-			path = Classes;
 			sourceTree = "<group>";
 		};
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
@@ -342,6 +365,12 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				95175C1A1B67988D0005CC3D /* GoogleOpenSource.framework */,
+				95175C1E1B6799A60005CC3D /* AssetsLibrary.framework */,
+				95175C1C1B67997D0005CC3D /* AddressBook.framework */,
+				95175C181B6798870005CC3D /* GooglePlus.framework */,
+				95175B561B6796DE0005CC3D /* gpg.framework */,
+				95175B521B6795FF0005CC3D /* libPluginGooglePlay.a */,
 				95EBD84E1B65E6C10004D448 /* GoogleMobileAds.framework */,
 				95C954231B621F530014047A /* libPluginVungle.a */,
 				95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */,
@@ -413,8 +442,8 @@
 				9522607E1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp */,
 				95245C081B60C978000EDF84 /* TestSensparkAdsScene.h */,
 				95245C071B60C978000EDF84 /* TestSensparkAdsScene.cpp */,
-				9525AF9E1B67284300CBF477 /* TestGooglePlayUserScene.h */,
-				9525AF9D1B67284300CBF477 /* TestGooglePlayUserScene.cpp */,
+				9525AF9E1B67284300CBF477 /* TestGooglePlayScene.h */,
+				9525AF9D1B67284300CBF477 /* TestGooglePlayScene.cpp */,
 				95B098261B58DC9800EAC5AB /* TestSenspark.cpp */,
 				95B098271B58DC9800EAC5AB /* TestSenspark.h */,
 				95B098291B58DD2E00EAC5AB /* ListLayer.cpp */,
@@ -588,7 +617,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				953F8D2E1B68915300517E1B /* gpg.bundle in Resources */,
 				7855E0E1153FEF240059DD9A /* Default.png in Resources */,
+				953F8D2D1B68915300517E1B /* GooglePlus.bundle in Resources */,
 				D4EF949A15BD2D8B00D803EB /* Icon-57.png in Resources */,
 				D4EF949C15BD2D8E00D803EB /* Icon-114.png in Resources */,
 				95B0982F1B59113500EAC5AB /* fonts in Resources */,
@@ -619,7 +650,7 @@
 				952260801B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp in Sources */,
 				1AFCDA8216D4A25900906EA6 /* RootViewController.mm in Sources */,
 				15CF33D919C0319E00D5614B /* TestFacebookShare.cpp in Sources */,
-				9525AF9F1B67284300CBF477 /* TestGooglePlayUserScene.cpp in Sources */,
+				9525AF9F1B67284300CBF477 /* TestGooglePlayScene.cpp in Sources */,
 				FAD554E5177C131500968F54 /* TestAdsScene.cpp in Sources */,
 				FAD554E6177C131500968F54 /* TestAnalyticsScene.cpp in Sources */,
 				95B098281B58DC9800EAC5AB /* TestSenspark.cpp in Sources */,
@@ -655,7 +686,9 @@
 					"$(SRCROOT)/../../../plugins/facebookads/proj.ios",
 					"$(SRCROOT)/../../../plugins/facebook/proj.ios",
 					"$(SRCROOT)/../../../plugins/admob/proj.ios/Admob",
+					"$(SRCROOT)/../../../plugins/googleplay/platform/ios",
 					"$(PROJECT_DIR)",
+					"/Users/ndpduc/GitRepo/plugin-x/plugins/googleplay/platform/ios",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -679,7 +712,7 @@
 				PRODUCT_NAME = HelloPlugins;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "$(COCOS2DX_ROOT) $(COCOS2DX_ROOT)/cocos/math $(COCOS2DX_ROOT)/cocos/base $(COCOS2DX_ROOT)/cocos $(COCOS2DX_ROOT)/cocos/2d $(COCOS2DX_ROOT)/cocos/platform/ios $(COCOS2DX_ROOT)/cocos/physics $(COCOS2DX_ROOT)/external $(SRCROOT)/../../../protocols/include $(SRCROOT)/../../../plugins/senspark/include $(SRCROOT)/../../../plugins/google-analytics/proj.ios/GoogleAnalytics/Library";
+				USER_HEADER_SEARCH_PATHS = "$(COCOS2DX_ROOT) $(COCOS2DX_ROOT)/cocos/math $(COCOS2DX_ROOT)/cocos/base $(COCOS2DX_ROOT)/cocos $(COCOS2DX_ROOT)/cocos/2d $(COCOS2DX_ROOT)/cocos/platform/ios $(COCOS2DX_ROOT)/cocos/physics $(COCOS2DX_ROOT)/external $(COCOS2DX_ROOT)/extensions $(SRCROOT)/../../../protocols/include $(SRCROOT)/../../../plugins/senspark/include $(SRCROOT)/../../../plugins/google-analytics/proj.ios/GoogleAnalytics/Library";
 				VALID_ARCHS = "armv7s armv7 arm64";
 			};
 			name = Debug;
@@ -697,7 +730,9 @@
 					"$(SRCROOT)/../../../plugins/facebookads/proj.ios",
 					"$(SRCROOT)/../../../plugins/facebook/proj.ios",
 					"$(SRCROOT)/../../../plugins/admob/proj.ios/Admob",
+					"$(SRCROOT)/../../../plugins/googleplay/platform/ios",
 					"$(PROJECT_DIR)",
+					"/Users/ndpduc/GitRepo/plugin-x/plugins/googleplay/platform/ios",
 				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -718,7 +753,7 @@
 				PRODUCT_NAME = HelloPlugins;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "$(COCOS2DX_ROOT) $(COCOS2DX_ROOT)/cocos/math $(COCOS2DX_ROOT)/cocos/base $(COCOS2DX_ROOT)/cocos $(COCOS2DX_ROOT)/cocos/2d $(COCOS2DX_ROOT)/cocos/platform/ios $(COCOS2DX_ROOT)/cocos/physics $(COCOS2DX_ROOT)/external $(SRCROOT)/../../../protocols/include $(SRCROOT)/../../../plugins/senspark/include $(SRCROOT)/../../../plugins/google-analytics/proj.ios/GoogleAnalytics/Library";
+				USER_HEADER_SEARCH_PATHS = "$(COCOS2DX_ROOT) $(COCOS2DX_ROOT)/cocos/math $(COCOS2DX_ROOT)/cocos/base $(COCOS2DX_ROOT)/cocos $(COCOS2DX_ROOT)/cocos/2d $(COCOS2DX_ROOT)/cocos/platform/ios $(COCOS2DX_ROOT)/cocos/physics $(COCOS2DX_ROOT)/external $(COCOS2DX_ROOT)/extensions $(SRCROOT)/../../../protocols/include $(SRCROOT)/../../../plugins/senspark/include $(SRCROOT)/../../../plugins/google-analytics/proj.ios/GoogleAnalytics/Library";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7s armv7 arm64";
 			};

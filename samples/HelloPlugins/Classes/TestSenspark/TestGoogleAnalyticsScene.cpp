@@ -83,7 +83,7 @@ void TestGoogleAnalytics::onExit() {
 
     _pluginAnalytics->stopSession();
     
-//    SensparkPluginManager::getInstance()->unloadAnalyticsPlugin(AnalyticsPluginType::GOOGLE_ANALYTICS);
+    SensparkPluginManager::getInstance()->unloadAnalyticsPlugin(AnalyticsPluginType::GOOGLE_ANALYTICS);
     _pluginAnalytics = nullptr;
 }
 

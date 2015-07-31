@@ -11,15 +11,15 @@
 
 #import <Foundation/Foundation.h>
 #import <InterfaceUser.h>
-#import <gpg/gpg.h>
 
 @interface UserGooglePlay : NSObject <InterfaceUser> {
-    std::unique_ptr<gpg::GameServices> _gameServices;
-    BOOL _isSignedIn;
+//    std::unique_ptr<gpg::GameServices> _gameServices;
+    NSString*   _clientID;
+//    BOOL        _silentlySigningIn;
 }
 
 @property BOOL debug;
-@property (copy, nonatomic) NSMutableDictionary* _userInfo;
+//@property (copy, nonatomic) NSMutableDictionary* _userInfo;
 
 // ----- Interface User ------
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;

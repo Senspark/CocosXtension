@@ -12,7 +12,7 @@
 
 USING_NS_CC;
 USING_NS_CC_EXT;
-using namespace senspark;
+USING_NS_SENSPARK;
 
 bool ListLayer::init() {
     //////////////////////////////
@@ -43,7 +43,7 @@ bool ListLayer::init() {
     
     _testListView = TableView::create(this, visibleSize);
     _testListView->setDelegate(this);
-    _testListView->setPosition(Point::ZERO);
+    _testListView->setPosition(posBL);
     _testListView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);
     
     addChild(_testListView);
