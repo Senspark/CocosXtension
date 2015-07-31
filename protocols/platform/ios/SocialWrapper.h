@@ -30,6 +30,12 @@ typedef enum {
 
     kUnlockAchiSuccess,
     kUnlockAchiFailed,
+    
+    kRevealAchiSuccess,
+    kRevealAchiFailed,
+    
+    kResetAchiSuccess,
+    kResetAchiFailed
 } SocialResult;
 
 @interface SocialWrapper : NSObject
