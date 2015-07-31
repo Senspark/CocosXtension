@@ -3,7 +3,11 @@
 #import "cocos2d.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
+
 #import <FacebookSDK/FacebookSDK.h>
+
+#import <GoogleOpenSource/GoogleOpenSource.h>
+#import <GoogleOpenSource/GTLBase64.h>
 
 @implementation AppController
 
@@ -120,8 +124,27 @@ static AppDelegate s_sharedApplication;
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    return [FBSession.activeSession handleOpenURL:url];
+    NSLog(@"Handle URL: %@", sourceApplication);
+    
+    BOOL canRespond = NO;
+    
+    canRespond |= [GPPURLHandler handleURL:url sourceApplication:sourceApplication annotation:annotation];
+    canRespond |= [FBSession.activeSession handleOpenURL:url];
+    
+    return canRespond;
 }
 
+#pragma mark -
+#pragma mark Google
+- (void) didReceiveDeepLink:(GPPDeepLink *)deepLink
+{
+//    NSString* deepLinkID = [deepLink deepLinkID];
+//    NSData* decodedData = GTLDecodeWebSafeBase64(deepLinkID);
+//    
+//    if (!decodedData) {
+//        NSLog(@"Google: No decoded data.");
+//        return;
+//    }
+}
 
 @end
