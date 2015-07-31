@@ -29,6 +29,7 @@ typedef enum {
     kLoginSucceed = 0,
     kLoginFailed,
     kLogoutSucceed,
+    kLogoutFailed,
 } UserActionResult;
 typedef enum {
     kPermissionSucceed = 0,
