@@ -23,6 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 typedef enum {
     kSubmitScoreSuccess = 1,
@@ -44,4 +45,6 @@ typedef enum {
 }
 
 + (void) onSocialResult:(id) obj withRet:(SocialResult) ret withMsg:(NSString*) msg;
+
++ (UIViewController *) getCurrentRootViewController;
 @end
