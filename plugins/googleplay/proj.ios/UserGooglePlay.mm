@@ -44,7 +44,7 @@
     [[GPGManager sharedInstance] signOut];
 }
 
-- (BOOL) isLogined
+- (BOOL) isLoggedIn
 {
     return [[GPGManager sharedInstance] isSignedIn];
 }

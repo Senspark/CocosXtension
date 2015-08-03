@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		95175BBB1B67987A0005CC3D /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175B591B67987A0005CC3D /* GoogleOpenSource.framework */; };
 		95175BBC1B67987A0005CC3D /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175B5B1B67987A0005CC3D /* GooglePlus.framework */; };
-		953F8D311B68BB7F00517E1B /* GooglePlayManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 953F8D2F1B68BB7F00517E1B /* GooglePlayManager.h */; };
-		953F8D321B68BB7F00517E1B /* GooglePlayManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 953F8D301B68BB7F00517E1B /* GooglePlayManager.cpp */; };
 		95EBD8861B6613380004D448 /* gpg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95EBD8841B6613380004D448 /* gpg.framework */; };
 		95EBD88B1B6623000004D448 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95EBD88A1B6623000004D448 /* Foundation.framework */; };
 		95EBD88D1B6623BA0004D448 /* UserGooglePlay.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95EBD88C1B6623BA0004D448 /* UserGooglePlay.mm */; };
@@ -26,8 +24,6 @@
 		95175B5A1B67987A0005CC3D /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GooglePlus.bundle; sourceTree = "<group>"; };
 		95175B5B1B67987A0005CC3D /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GooglePlus.framework; sourceTree = "<group>"; };
 		95175BBA1B67987A0005CC3D /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		953F8D2F1B68BB7F00517E1B /* GooglePlayManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GooglePlayManager.h; sourceTree = "<group>"; };
-		953F8D301B68BB7F00517E1B /* GooglePlayManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GooglePlayManager.cpp; sourceTree = "<group>"; };
 		95EBD87B1B65F36B0004D448 /* libPluginGooglePlay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginGooglePlay.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		95EBD8831B6613380004D448 /* gpg.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = gpg.bundle; sourceTree = "<group>"; };
 		95EBD8841B6613380004D448 /* gpg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = gpg.framework; sourceTree = "<group>"; };
@@ -56,20 +52,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		953F8D331B68BC6300517E1B /* include */ = {
-			isa = PBXGroup;
-			children = (
-				953F8D2F1B68BB7F00517E1B /* GooglePlayManager.h */,
-				953F8D301B68BB7F00517E1B /* GooglePlayManager.cpp */,
-			);
-			name = include;
-			path = ../include;
-			sourceTree = "<group>";
-		};
 		95EBD8721B65F36B0004D448 = {
 			isa = PBXGroup;
 			children = (
-				953F8D331B68BC6300517E1B /* include */,
 				95EBD8921B6648F60004D448 /* IAPGooglePlay.h */,
 				95EBD8931B6648F60004D448 /* IAPGooglePlay.m */,
 				95EBD88E1B6644550004D448 /* SocialGooglePlay.h */,
@@ -121,7 +106,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				953F8D311B68BB7F00517E1B /* GooglePlayManager.h in Headers */,
 				95EBD8941B6648F60004D448 /* IAPGooglePlay.h in Headers */,
 				95EBD8901B6644550004D448 /* SocialGooglePlay.h in Headers */,
 			);
@@ -183,7 +167,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				953F8D321B68BB7F00517E1B /* GooglePlayManager.cpp in Sources */,
 				95EBD88D1B6623BA0004D448 /* UserGooglePlay.mm in Sources */,
 				95EBD8951B6648F60004D448 /* IAPGooglePlay.m in Sources */,
 				95EBD8911B6644550004D448 /* SocialGooglePlay.mm in Sources */,
@@ -279,7 +262,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../platform/ios",
-					"/Users/ndpduc/GitRepo/plugin-x/plugins/googleplay/platform/ios",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -300,7 +282,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../platform/ios",
-					"/Users/ndpduc/GitRepo/plugin-x/plugins/googleplay/platform/ios",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
