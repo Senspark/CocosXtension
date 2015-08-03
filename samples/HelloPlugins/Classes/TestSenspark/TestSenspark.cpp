@@ -9,6 +9,8 @@
 #include "TestSenspark.h"
 #include "TestGoogleAnalyticsScene.h"
 #include "TestGooglePlayScene.h"
+#include "TestGameCenterScene.h"
+#include "TestFacebookScene.h"
 #include "TestSensparkAdsScene.h"
 
 using namespace senspark;
@@ -42,13 +44,11 @@ bool TestSenspark::init() {
     
     addTest("Ads", []() { pushScene(TestSensparkAds::scene()); });
 
-    addTest("Game Service - Google Play", []() { pushScene(TestGooglePlay::scene()); });
-    addTest("Game Service - Game Center", []() { pushScene(Scene::create()); });
+    addTest("Social - Facebook", []() { pushScene(TestFacebook::scene()); });
+    addTest("Social - Google Play", []() { pushScene(TestGooglePlay::scene()); });
+    addTest("Social - Game Center", []() { pushScene(TestGameCenter::scene()); });
     
-    addTest("Social - Facebook", []() { pushScene(Scene::create()); });
-    addTest("Cloud Sync - Parse", []() { pushScene(Scene::create()); });
-    
-    addTest("User - Facebook", []() { pushScene(Scene::create()); });
+    addTest("Cloud Sync - Parse", []() { pushScene(ListLayer::scene()); });
     
     return true;
 }

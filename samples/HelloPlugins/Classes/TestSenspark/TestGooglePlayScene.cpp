@@ -169,6 +169,8 @@ void TestGooglePlay::doAction(int tag) {
         case TAG_GP_SUBMIT_SCORE: {
             UserDefault* userDefault = UserDefault::getInstance();
             int score = userDefault->getIntegerForKey("high-score", 1000) + 1;
+            userDefault->setIntegerForKey("high-score", score);
+            userDefault->flush();
             _protocolGooglePlaySocial->submitScore(GOOGLE_PLAY_LEADERBOARD_KEY_IOS_EASY, score, CC_CALLBACK_2(TestGooglePlay::onSocialCallback, this));
             _resultInfo->setString(StringUtils::format("Submitting new high score: %d", score));
             break;
