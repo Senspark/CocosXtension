@@ -27,6 +27,7 @@ class ListLayer : public Layer, public TableViewDataSource, public TableViewDele
 {
 public:
     virtual bool init();
+    static Scene* scene();
     
     //interface of TableViewDataSource
     virtual Size cellSizeForTable(TableView *table);

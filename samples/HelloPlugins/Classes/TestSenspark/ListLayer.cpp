@@ -51,6 +51,12 @@ bool ListLayer::init() {
     return true;
 }
 
+Scene* ListLayer::scene() {
+    Scene* scene = Scene::create();
+    scene->addChild(ListLayer::create());
+    return scene;
+}
+
 void ListLayer::onMenuCallback(cocos2d::Ref* pSender) {
     Director::getInstance()->replaceScene(HelloWorld::scene());
 }
