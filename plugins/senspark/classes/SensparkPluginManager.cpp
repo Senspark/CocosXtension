@@ -37,11 +37,14 @@ SensparkPluginManager::SensparkPluginManager(void)
     REGISTER_PLUGIN_NAME(AdsPluginType, VUNGLE, "AdsVungle");
     
     //------ Register Social Services
+    REGISTER_PLUGIN_NAME(SocialPluginType, FACEBOOK, "SocialFacebook");
+    REGISTER_PLUGIN_NAME(SocialPluginType, GAME_CENTER, "SocialGameCenter");
     REGISTER_PLUGIN_NAME(SocialPluginType, GOOGLE_PLAY, "SocialGooglePlay");
     
     //------ Register User Service ------
-    REGISTER_PLUGIN_NAME(UserPluginType, GOOGLE_PLAY, "UserGooglePlay");
+    REGISTER_PLUGIN_NAME(UserPluginType, FACEBOOK, "UserFacebook");
     REGISTER_PLUGIN_NAME(UserPluginType, GAME_CENTER, "UserGameCenter");
+    REGISTER_PLUGIN_NAME(UserPluginType, GOOGLE_PLAY, "UserGooglePlay");
 }
 
 SensparkPluginManager::~SensparkPluginManager(void)

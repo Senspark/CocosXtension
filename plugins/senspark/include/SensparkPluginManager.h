@@ -32,6 +32,8 @@ enum class AdsPluginType {
 };
 
 enum class SocialPluginType {
+    FACEBOOK,
+    GAME_CENTER,
     GOOGLE_PLAY,
 };
 
@@ -44,6 +46,7 @@ enum class IAPPluginType {
 };
 
 enum class UserPluginType {
+    FACEBOOK,
     GAME_CENTER,
     GOOGLE_PLAY,
 };

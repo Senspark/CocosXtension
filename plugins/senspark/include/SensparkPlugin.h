@@ -12,9 +12,24 @@
 
 
 #include "GoogleProtocolAnalytics.h"
+#include "FlurryProtocolAnalytics.h"
 
+#include "AdColonyProtocolAds.h"
 #include "AdmobProtocolAds.h"
+#include "ChartboostProtocolAds.h"
+#include "FacebookProtocolAds.h"
+#include "FlurryProtocolAds.h"
 #include "VungleProtocolAds.h"
+
+#include "FacebookProtocolShare.h"
+
+#include "FacebookProtocolSocial.h"
+#include "GameCenterProtocolSocial.h"
+#include "GooglePlayProtocolSocial.h"
+
+#include "FacebookProtocolUser.h"
+#include "GameCenterProtocolUser.h"
+#include "GooglePlayProtocolUser.h"
 
 #include "SensparkPluginManager.h"
 
