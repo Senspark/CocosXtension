@@ -27,6 +27,14 @@
 #define GOOGLE_PLAY_LEADERBOARD_KEY_IOS_HARD    "CgkIkqryr6gcEAIQAw"
 
 #define GOOGLE_PLAY_ACHIEVEMENT_KEY_IOS_PRIME   "CgkIkqryr6gcEAIQBA"
+/**
+ @brief Developer information of Game Center
+ */
+
+#define GAME_CENTER_LEADERBOARD_KEY_IOS_EASY    "com.senspark.cocos2dx.plugin.test_easy"
+#define GAME_CENTER_LEADERBOARD_KEY_IOS_HARD    "com.senspark.cocos2dx.plugin.test_hard"
+
+#define GAME_CENTER_ACHIEVEMENT_KEY_IOS_PRIME   "com.senspark.cocos2dx.plugin.test_achievement.prime"
 
 /**
  @brief Developer information of flurry
