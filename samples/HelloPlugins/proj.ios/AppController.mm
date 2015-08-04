@@ -4,7 +4,7 @@
 #import "AppDelegate.h"
 #import "RootViewController.h"
 
-#import <FacebookSDK/FacebookSDK.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 #import <GoogleOpenSource/GoogleOpenSource.h>
 #import <GoogleOpenSource/GTLBase64.h>
@@ -80,7 +80,7 @@ static AppDelegate s_sharedApplication;
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
-    [FBAppCall handleDidBecomeActive];
+    [FBSDKAppEvents activateApp];
     cocos2d::Director::getInstance()->resume();
 }
 
@@ -129,7 +129,7 @@ static AppDelegate s_sharedApplication;
     BOOL canRespond = NO;
     
     canRespond |= [GPPURLHandler handleURL:url sourceApplication:sourceApplication annotation:annotation];
-    canRespond |= [FBSession.activeSession handleOpenURL:url];
+    canRespond |= [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
     
     return canRespond;
 }

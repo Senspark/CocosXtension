@@ -22,6 +22,10 @@ public:
     virtual ~FacebookProtocolUser();
     
     void configureUser();
+    void loginWithPermissions(const std::string& permissions);
+    void loginWithPermissions(const std::string& permissions, FacebookProtocolUser::ProtocolUserCallback& cb);
+    std::string getUserID();
+    
 };
 
 NS_SENSPARK_PLUGIN_USER_END

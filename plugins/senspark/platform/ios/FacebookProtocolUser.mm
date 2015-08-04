@@ -29,3 +29,17 @@ void FacebookProtocolUser::configureUser() {
     configDeveloperInfo(info);
 }
 
+void FacebookProtocolUser::loginWithPermissions(const std::string &permission) {
+    PluginParam permissionParam(permission.c_str());
+    callFuncWithParam("loginWithPermissions", &permissionParam, nullptr);
+}
+
+void FacebookProtocolUser::loginWithPermissions(const std::string &permission, FacebookProtocolUser::ProtocolUserCallback &cb) {
+    
+    setCallback(cb);
+    loginWithPermissions(permission);
+}
+
+std::string FacebookProtocolUser::getUserID() {
+    return callStringFuncWithParam("getUserID", nullptr);
+}

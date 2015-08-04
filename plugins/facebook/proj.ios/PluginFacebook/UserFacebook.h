@@ -25,28 +25,24 @@
 #import <Foundation/Foundation.h>
 #import "InterfaceUser.h"
 @interface UserFacebook : NSObject <InterfaceUser>{
-    
 }
+
 @property BOOL debug;
-@property (copy, nonatomic) NSMutableDictionary* mUserInfo;
+//@property (copy, nonatomic) NSMutableDictionary* mUserInfo;
+@property (copy, nonatomic) NSArray* permissions;
 
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
 - (void) login;
-- (void) loginWithPermission:(NSString *)permission;
+- (void) loginWithPermissions:(NSString *)permissions;
 - (void) logout;
 - (BOOL) isLoggedIn;
-- (BOOL) isLogined;
 - (NSString*) getSessionID;
 - (NSString*) getUserID;
 - (void) setDebugMode: (BOOL) debug;
 - (NSString*) getSDKVersion;
-- (void) setSDKVersion:(NSString *)version;
 - (NSString*) getPluginVersion;
 - (NSString *) getAccessToken;
 - (NSString *) getPermissionList;
-- (void) api:(NSDictionary *)params;
-- (void) activateApp;
-- (void) logEvent:(NSMutableDictionary*) logInfo;
-- (void) logEventWithName:(NSString*) eventName;
-- (void) logPurchase:(NSMutableDictionary *)purchaseInfo;
+//- (void) api:(NSDictionary *)params;
+
 @end

@@ -357,6 +357,26 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					USE_FILE32API,
+					CC_TARGET_OS_IPHONE,
+					"COCOS2D_DEBUG=1",
+					CC_ENABLE_CHIPMUNK_INTEGRATION,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../../../protocols/include",
+					"$(COCOS2DX_ROOT)",
+					"$(COCOS2DX_ROOT)/cocos",
+					"$(COCOS2DX_ROOT)/cocos/math",
+					"$(COCOS2DX_ROOT)/cocos/base",
+					"$(COCOS2DX_ROOT)/cocos/2d",
+					"$(COCOS2DX_ROOT)/cocos/platform/ios",
+					"$(COCOS2DX_ROOT)/cocos/physics",
+					"$(COCOS2DX_ROOT)/external",
+					"$(COCOS2DX_ROOT)/extensions",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos8.4;
@@ -367,6 +387,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					USE_FILE32API,
+					CC_TARGET_OS_IPHONE,
+					CC_ENABLE_CHIPMUNK_INTEGRATION,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../../../protocols/include",
+					"$(COCOS2DX_ROOT)",
+					"$(COCOS2DX_ROOT)/cocos",
+					"$(COCOS2DX_ROOT)/cocos/math",
+					"$(COCOS2DX_ROOT)/cocos/base",
+					"$(COCOS2DX_ROOT)/cocos/2d",
+					"$(COCOS2DX_ROOT)/cocos/platform/ios",
+					"$(COCOS2DX_ROOT)/cocos/physics",
+					"$(COCOS2DX_ROOT)/external",
+					"$(COCOS2DX_ROOT)/extensions",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos8.4;
