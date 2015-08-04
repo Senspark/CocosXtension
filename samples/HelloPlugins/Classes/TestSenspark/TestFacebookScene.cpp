@@ -22,14 +22,17 @@ enum {
     TAG_FB_LOGIN = 1,
     TAG_FB_LOGIN_WITH_PERMISSION,
     TAG_FB_LOGOUT,
+    TAG_FB_GETUID,
+    TAG_FB_GETTOKEN,
+    
     TAG_FB_SHOW_LEADERBOARDS,
     TAG_FB_SUBMIT_SCORE,
     TAG_FB_SHOW_ACHIEVEMENTS,
     TAG_FB_UNLOCK_ACHIEVEMENT,
     TAG_FB_REVEAL_ACHIEVEMENT,
     TAG_FB_RESET_ACHIEVEMENTS
-    //    TAG_FB_GETUID,
-    //    TAG_FB_GETTOKEN,
+
+
     //    TAG_FB_GETPERMISSIONS,
     //    TAG_FB_REQUEST_API,
     //    TAG_FB_PUBLISH_INSTALL,
@@ -47,6 +50,8 @@ static FBEventMenuItem s_GPMenuItem[] =
     {"login", TAG_FB_LOGIN},
     {"loginWithPermission", TAG_FB_LOGIN_WITH_PERMISSION},
     {"logout", TAG_FB_LOGOUT},
+    {"user ID", TAG_FB_GETUID},
+    {"access token", TAG_FB_GETTOKEN},
     {"show leaderboards", TAG_FB_SHOW_LEADERBOARDS},
     {"show achievements", TAG_FB_SHOW_ACHIEVEMENTS},
     {"submit score", TAG_FB_SUBMIT_SCORE},
@@ -137,15 +142,30 @@ void TestFacebook::doAction(int tag) {
             
             
             if (_protocolFacebookUser->isLoggedIn()) {
-                _resultInfo->setString("GameCenter: log in already.");
+                _resultInfo->setString("Facebook: log in already.");
             } else {
                 _protocolFacebookUser->login(callback);
             }
         }
             break;
+        case TAG_FB_LOGIN_WITH_PERMISSION: {
+            std::string permissions = "public_profile, email, user_about_me, user_friends";
+            std::function<void(int, std::string&)> callback = CC_CALLBACK_2(TestFacebook::onUserCallback, this);
+            
+            _protocolFacebookUser->loginWithPermissions(permissions, callback);
+            break;
+        }
         case TAG_FB_LOGOUT: {
             std::function<void(int, std::string&)> callback = CC_CALLBACK_2(TestFacebook::onUserCallback, this);
             _protocolFacebookUser->logout(callback);
+            break;
+        }
+        case TAG_FB_GETUID: {
+            _resultInfo->setString(_protocolFacebookUser->getUserID());
+            break;
+        }
+        case TAG_FB_GETTOKEN: {
+            _resultInfo->setString(_protocolFacebookUser->getAccessToken());
             break;
         }
         case TAG_FB_SHOW_LEADERBOARDS: {

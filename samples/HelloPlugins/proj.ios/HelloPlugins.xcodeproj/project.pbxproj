@@ -26,6 +26,10 @@
 		59EB3BEA1964A7DD0020118E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59EB3BE91964A7DD0020118E /* Security.framework */; };
 		59EB3BEC1964A86D0020118E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59EB3BEB1964A86D0020118E /* CoreTelephony.framework */; };
 		7855E0E1153FEF240059DD9A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7855E0DF153FEF240059DD9A /* Default.png */; };
+		95088B531B6FC52C002095FF /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95088B501B6FC52C002095FF /* FBSDKShareKit.framework */; };
+		95088B541B6FC52C002095FF /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95088B511B6FC52C002095FF /* FBSDKCoreKit.framework */; };
+		95088B551B6FC52C002095FF /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95088B521B6FC52C002095FF /* FBSDKLoginKit.framework */; };
+		95088B571B6FC6BA002095FF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95088B561B6FC6BA002095FF /* CoreLocation.framework */; };
 		95175B531B6795FF0005CC3D /* libPluginGooglePlay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175B521B6795FF0005CC3D /* libPluginGooglePlay.a */; };
 		95175B571B6796DE0005CC3D /* gpg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175B561B6796DE0005CC3D /* gpg.framework */; };
 		95175C191B6798870005CC3D /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175C181B6798870005CC3D /* GooglePlus.framework */; };
@@ -54,7 +58,6 @@
 		95EBD84F1B65E6C10004D448 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95EBD84E1B65E6C10004D448 /* GoogleMobileAds.framework */; };
 		95F0346F1B6B329100BD28F2 /* TestGameCenterScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F0346D1B6B329100BD28F2 /* TestGameCenterScene.cpp */; };
 		95F034711B6B3BCD00BD28F2 /* libPluginGameCenter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F034701B6B3BCD00BD28F2 /* libPluginGameCenter.a */; };
-		BA0613BE1AC23DCE003118D6 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA0613BD1AC23DCE003118D6 /* FacebookSDK.framework */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712461292920000B8313A /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB212928DE900B8313A /* libxml2.dylib */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
@@ -142,6 +145,10 @@
 		59EB3BE91964A7DD0020118E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		59EB3BEB1964A86D0020118E /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		7855E0DF153FEF240059DD9A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = SOURCE_ROOT; };
+		95088B501B6FC52C002095FF /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = ../../../plugins/facebook/proj.ios/FBSDKShareKit.framework; sourceTree = "<group>"; };
+		95088B511B6FC52C002095FF /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../plugins/facebook/proj.ios/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		95088B521B6FC52C002095FF /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../plugins/facebook/proj.ios/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		95088B561B6FC6BA002095FF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		95175B521B6795FF0005CC3D /* libPluginGooglePlay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPluginGooglePlay.a; path = "../../../plugins/googleplay/proj.ios/build/Debug-iphoneos/libPluginGooglePlay.a"; sourceTree = "<group>"; };
 		95175B561B6796DE0005CC3D /* gpg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpg.framework; path = ../../../plugins/googleplay/platform/ios/gpg.framework; sourceTree = "<group>"; };
 		95175C181B6798870005CC3D /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlus.framework; path = ../../../plugins/googleplay/platform/ios/GooglePlus.framework; sourceTree = "<group>"; };
@@ -175,7 +182,6 @@
 		95F0346D1B6B329100BD28F2 /* TestGameCenterScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestGameCenterScene.cpp; sourceTree = "<group>"; };
 		95F0346E1B6B329100BD28F2 /* TestGameCenterScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestGameCenterScene.h; sourceTree = "<group>"; };
 		95F034701B6B3BCD00BD28F2 /* libPluginGameCenter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPluginGameCenter.a; path = "../../../plugins/game-center/proj.ios/build/Debug-iphoneos/libPluginGameCenter.a"; sourceTree = "<group>"; };
-		BA0613BD1AC23DCE003118D6 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../../plugins/facebook/proj.ios/FacebookSDK.framework; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB212928DE900B8313A /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -239,6 +245,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95088B571B6FC6BA002095FF /* CoreLocation.framework in Frameworks */,
 				95F034711B6B3BCD00BD28F2 /* libPluginGameCenter.a in Frameworks */,
 				95175C1F1B6799A60005CC3D /* AssetsLibrary.framework in Frameworks */,
 				95175C1D1B67997D0005CC3D /* AddressBook.framework in Frameworks */,
@@ -253,12 +260,12 @@
 				FAD55505177C170300968F54 /* AdSupport.framework in Frameworks */,
 				D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */,
 				D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */,
+				95088B551B6FC52C002095FF /* FBSDKLoginKit.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
 				593E0BDD19BE206C00836D29 /* FBAudienceNetwork.framework in Frameworks */,
 				FA848862182B3DEB00858BDD /* CoreMotion.framework in Frameworks */,
 				59EB3BEC1964A86D0020118E /* CoreTelephony.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
-				BA0613BE1AC23DCE003118D6 /* FacebookSDK.framework in Frameworks */,
 				592A55791964AD7D008E4BC7 /* GameController.framework in Frameworks */,
 				D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */,
 				BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */,
@@ -270,6 +277,8 @@
 				FAD55503177C16FA00968F54 /* StoreKit.framework in Frameworks */,
 				FAD55501177C16F100968F54 /* SystemConfiguration.framework in Frameworks */,
 				95C160331B5CF5A800501400 /* libPluginGoogleAnalytics.a in Frameworks */,
+				95088B541B6FC52C002095FF /* FBSDKCoreKit.framework in Frameworks */,
+				95088B531B6FC52C002095FF /* FBSDKShareKit.framework in Frameworks */,
 				951D66B21B5658E50043A09E /* libPluginSenspark.a in Frameworks */,
 				95C954241B621F530014047A /* libPluginVungle.a in Frameworks */,
 				95175B531B6795FF0005CC3D /* libPluginGooglePlay.a in Frameworks */,
@@ -374,7 +383,11 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				95088B561B6FC6BA002095FF /* CoreLocation.framework */,
 				95F034701B6B3BCD00BD28F2 /* libPluginGameCenter.a */,
+				95088B501B6FC52C002095FF /* FBSDKShareKit.framework */,
+				95088B511B6FC52C002095FF /* FBSDKCoreKit.framework */,
+				95088B521B6FC52C002095FF /* FBSDKLoginKit.framework */,
 				95175C1A1B67988D0005CC3D /* GoogleOpenSource.framework */,
 				95175C1E1B6799A60005CC3D /* AssetsLibrary.framework */,
 				95175C1C1B67997D0005CC3D /* AddressBook.framework */,
@@ -390,7 +403,6 @@
 				95C160361B5CF5DA00501400 /* libsqlite3.dylib */,
 				95C160321B5CF5A800501400 /* libPluginGoogleAnalytics.a */,
 				951D66B11B5658E50043A09E /* libPluginSenspark.a */,
-				BA0613BD1AC23DCE003118D6 /* FacebookSDK.framework */,
 				593E0BDC19BE206C00836D29 /* FBAudienceNetwork.framework */,
 				592A55781964AD7D008E4BC7 /* GameController.framework */,
 				59EB3BEB1964A86D0020118E /* CoreTelephony.framework */,
@@ -704,6 +716,7 @@
 					"$(SRCROOT)/../../../plugins/admob/proj.ios/Admob",
 					"$(SRCROOT)/../../../plugins/googleplay/platform/ios",
 					"$(PROJECT_DIR)",
+					"/Users/ndpduc/GitRepo/plugin-x/plugins/facebook/proj.ios",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -747,6 +760,7 @@
 					"$(SRCROOT)/../../../plugins/admob/proj.ios/Admob",
 					"$(SRCROOT)/../../../plugins/googleplay/platform/ios",
 					"$(PROJECT_DIR)",
+					"/Users/ndpduc/GitRepo/plugin-x/plugins/facebook/proj.ios",
 				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
