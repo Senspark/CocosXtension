@@ -64,6 +64,8 @@ static AppDelegate s_sharedApplication;
     
     app->run();
     
+    [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
+    
     return YES;
 }
 
