@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		95F034671B6B317100BD28F2 /* UserGameCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 95F034651B6B317100BD28F2 /* UserGameCenter.h */; };
-		95F034681B6B317100BD28F2 /* UserGameCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 95F034661B6B317100BD28F2 /* UserGameCenter.m */; };
+		95F034681B6B317100BD28F2 /* UserGameCenter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95F034661B6B317100BD28F2 /* UserGameCenter.mm */; };
 		95F0346B1B6B319400BD28F2 /* SocialGameCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 95F034691B6B319400BD28F2 /* SocialGameCenter.h */; };
-		95F0346C1B6B319400BD28F2 /* SocialGameCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 95F0346A1B6B319400BD28F2 /* SocialGameCenter.m */; };
+		95F0346C1B6B319400BD28F2 /* SocialGameCenter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95F0346A1B6B319400BD28F2 /* SocialGameCenter.mm */; };
 		95F034731B6B551500BD28F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F034721B6B551500BD28F2 /* Foundation.framework */; };
 		95F034751B6B552000BD28F2 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F034741B6B552000BD28F2 /* GameKit.framework */; };
 		95F034771B6B552900BD28F2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F034761B6B552900BD28F2 /* UIKit.framework */; };
@@ -19,9 +19,9 @@
 /* Begin PBXFileReference section */
 		95F0345D1B6B30C600BD28F2 /* libPluginGameCenter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginGameCenter.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		95F034651B6B317100BD28F2 /* UserGameCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserGameCenter.h; sourceTree = "<group>"; };
-		95F034661B6B317100BD28F2 /* UserGameCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserGameCenter.m; sourceTree = "<group>"; };
+		95F034661B6B317100BD28F2 /* UserGameCenter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UserGameCenter.mm; sourceTree = "<group>"; };
 		95F034691B6B319400BD28F2 /* SocialGameCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialGameCenter.h; sourceTree = "<group>"; };
-		95F0346A1B6B319400BD28F2 /* SocialGameCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialGameCenter.m; sourceTree = "<group>"; };
+		95F0346A1B6B319400BD28F2 /* SocialGameCenter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SocialGameCenter.mm; sourceTree = "<group>"; };
 		95F034721B6B551500BD28F2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		95F034741B6B552000BD28F2 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 		95F034761B6B552900BD28F2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -45,9 +45,9 @@
 			isa = PBXGroup;
 			children = (
 				95F034691B6B319400BD28F2 /* SocialGameCenter.h */,
-				95F0346A1B6B319400BD28F2 /* SocialGameCenter.m */,
+				95F0346A1B6B319400BD28F2 /* SocialGameCenter.mm */,
 				95F034651B6B317100BD28F2 /* UserGameCenter.h */,
-				95F034661B6B317100BD28F2 /* UserGameCenter.m */,
+				95F034661B6B317100BD28F2 /* UserGameCenter.mm */,
 				95F034641B6B311F00BD28F2 /* Frameworks */,
 				95F0345E1B6B30C600BD28F2 /* Products */,
 			);
@@ -139,8 +139,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				95F034681B6B317100BD28F2 /* UserGameCenter.m in Sources */,
-				95F0346C1B6B319400BD28F2 /* SocialGameCenter.m in Sources */,
+				95F034681B6B317100BD28F2 /* UserGameCenter.mm in Sources */,
+				95F0346C1B6B319400BD28F2 /* SocialGameCenter.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,8 +231,10 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../../../protocols/include",
 					"$(SRCROOT)/../../../protocols/platform/ios",
 				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
@@ -245,8 +247,10 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../../../protocols/include",
 					"$(SRCROOT)/../../../protocols/platform/ios",
 				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};

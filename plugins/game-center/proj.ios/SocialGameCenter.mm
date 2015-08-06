@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Senspark Co., Ltd. All rights reserved.
 //
 
+#import <GameKit/GameKit.h>
 #import "SocialGameCenter.h"
 #import "SocialWrapper.h"
-#import <GameKit/GameKit.h>
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 

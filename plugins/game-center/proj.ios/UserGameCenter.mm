@@ -8,6 +8,7 @@
 
 #import <GameKit/GameKit.h>
 #import "UserGameCenter.h"
+#import "ProtocolUser.h"
 #import "UserWrapper.h"
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
@@ -20,6 +21,8 @@
 
 #pragma mark -
 #pragma mark Interface User
+
+using namespace cocos2d::plugin;
 
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo
 {
