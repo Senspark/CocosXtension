@@ -7,11 +7,16 @@
 //
 
 #import "UserGooglePlay.h"
+
 #import <gpg/GooglePlayGames.h>
 #import <GooglePlus/GooglePlus.h>
+
 #import "UserWrapper.h"
+#import "ProtocolUser.h"
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
+
+using namespace cocos2d::plugin;
 
 @interface UserGooglePlay() <GPGStatusDelegate, GPGStatusDelegate>
 
