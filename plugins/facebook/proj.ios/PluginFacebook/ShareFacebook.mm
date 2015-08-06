@@ -24,7 +24,7 @@
 
 #import "ShareFacebook.h"
 #import "ShareWrapper.h"
-#import <FacebookSDK/FacebookSDK.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import "ParseUtils.h"
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
