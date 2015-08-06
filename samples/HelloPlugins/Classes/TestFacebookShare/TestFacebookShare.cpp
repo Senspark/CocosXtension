@@ -185,7 +185,7 @@ void TestFacebookShare::eventMenuCallback(Ref* sender)
         break;
     case TAG_FBS_OPEN_GRAPH:
         {
-            FacebookAgent::FBInfo params;
+            FacebookAgent::FBParam params;
             params.insert(std::make_pair("dialog", "share_open_graph"));
             params.insert(std::make_pair("action_type", "cocostestmyfc:share"));
             params.insert(std::make_pair("preview_property_name", "cocos_document"));
@@ -213,7 +213,7 @@ void TestFacebookShare::eventMenuCallback(Ref* sender)
             
             auto delay = DelayTime::create(2.0);
             auto share = CallFunc::create([=](){
-                FacebookAgent::FBInfo params;
+                FacebookAgent::FBParam params;
                 params.insert(std::make_pair("dialog", "share_photo"));
                 params.insert(std::make_pair("photo", imgPath));
                 
@@ -235,7 +235,7 @@ void TestFacebookShare::eventMenuCallback(Ref* sender)
         break;
     case TAG_FBS_LINK_MESSAGE:
         {
-            FacebookAgent::FBInfo params;
+            FacebookAgent::FBParam params;
             params.insert(std::make_pair("dialog", "message_link"));
             params.insert(std::make_pair("description", "Cocos2d-x is a great game engine"));
             params.insert(std::make_pair("title", "Cocos2d-x"));
@@ -256,7 +256,7 @@ void TestFacebookShare::eventMenuCallback(Ref* sender)
         break;
     case TAG_FBS_OPEN_GRAPH_MESSAGE:
         {
-            FacebookAgent::FBInfo params;
+            FacebookAgent::FBParam params;
             params.insert(std::make_pair("dialog", "message_open_graph"));
             params.insert(std::make_pair("action_type", "cocostestmyfc:share"));
             params.insert(std::make_pair("preview_property_name", "cocos_document"));
@@ -284,7 +284,7 @@ void TestFacebookShare::eventMenuCallback(Ref* sender)
             
             auto delay = DelayTime::create(2.0);
             auto share = CallFunc::create([=](){
-                FacebookAgent::FBInfo params;
+                FacebookAgent::FBParam params;
                 params.insert(std::make_pair("dialog", "message_photo"));
                 params.insert(std::make_pair("photo", imgPath));
                 
@@ -395,7 +395,7 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
     {
         case TAG_FBSS_SIMPLE_LINK:
             {
-                FacebookAgent::FBInfo params;
+                FacebookAgent::FBParam params;
                 params.insert(std::make_pair("dialog", "share_link"));
                 params.insert(std::make_pair("link", "http://www.cocos2d-x.org"));
                 
@@ -416,7 +416,7 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
             break;
         case TAG_FBSS_TEXT_LINK:
             {
-                FacebookAgent::FBInfo params;
+                FacebookAgent::FBParam params;
                 params.insert(std::make_pair("dialog", "share_link"));
                 params.insert(std::make_pair("name", "Cocos2d-x web site"));
                 params.insert(std::make_pair("caption", "Cocos2d-x caption"));
@@ -440,7 +440,7 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
             break;
         case TAG_FBSS_PICTURE_LINK:
             {
-                FacebookAgent::FBInfo params;
+                FacebookAgent::FBParam params;
                 params.insert(std::make_pair("dialog", "share_link"));
                 params.insert(std::make_pair("name", "Cocos2d-x web site"));
                 params.insert(std::make_pair("caption", "Cocos2d-x caption"));
@@ -466,7 +466,7 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
             break;
         case TAG_FBSS_MEDIA_LINK:
             {
-                FacebookAgent::FBInfo params;
+                FacebookAgent::FBParam params;
                 params.insert(std::make_pair("dialog", "share_link"));
                 params.insert(std::make_pair("name", "Cocos2d-x web site"));
                 params.insert(std::make_pair("caption", "Cocos2d-x caption"));
@@ -482,7 +482,7 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
             break;
         case TAG_FBSS_INVITES_REQUEST:
             {
-                FacebookAgent::FBInfo params;
+                FacebookAgent::FBParam params;
                 params.insert(std::make_pair("message", "Cocos2d-x is a great game engine"));
                 params.insert(std::make_pair("title", "Cocos2d-x title"));
                 
@@ -493,7 +493,7 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
             break;
         case TAG_FBSS_TIE:
             {
-                FacebookAgent::FBInfo params;
+                FacebookAgent::FBParam params;
                 params.insert(std::make_pair("message", "Cocos2d-x is a great game engine"));
                 params.insert(std::make_pair("title", "Cocos2d-x title"));
                 params.insert(std::make_pair("to", "100006738453912, 10204182777160522"));
@@ -505,7 +505,7 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
             break;
         case TAG_FBSS_SLOF:
             {
-                FacebookAgent::FBInfo params;
+                FacebookAgent::FBParam params;
                 params.insert(std::make_pair("message", "Cocos2d-x is a great game engine"));
                 params.insert(std::make_pair("title", "Cocos2d-x title"));
                 params.insert(std::make_pair("filters", "[{\"name\":\"company\", \"user_ids\":[\"100006738453912\",\"10204182777160522\"]}]"));
@@ -517,7 +517,7 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
             break;
         case TAG_FBSS_SRE:
             {
-                FacebookAgent::FBInfo params;
+                FacebookAgent::FBParam params;
                 params.insert(std::make_pair("message", "Cocos2d-x is a great game engine"));
                 params.insert(std::make_pair("to", "100006738453912"));
                 params.insert(std::make_pair("action_type", "send"));
@@ -530,7 +530,7 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
             break;
         case TAG_FBSS_TBG:
             {
-                FacebookAgent::FBInfo params;
+                FacebookAgent::FBParam params;
                 params.insert(std::make_pair("message", "Cocos2d-x is a great game engine"));
                 params.insert(std::make_pair("title", "Cocos2d-x title"));
                 params.insert(std::make_pair("to", "100006738453912"));
