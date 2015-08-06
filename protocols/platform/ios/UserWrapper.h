@@ -25,34 +25,21 @@ THE SOFTWARE.
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-typedef enum {
-    kLoginSucceed = 0,
-    kLoginFailed,
-    kLogoutSucceed,
-    kLogoutFailed,
-} UserActionResult;
-typedef enum {
-    kPermissionSucceed = 0,
-    kPermissionFailed,
-} UserPermissionResult;
-typedef enum {
-    kGraphResultSuccess = 0,
-    kGraphResultFail,
-    kGraphResultCancel,
-    kGraphResultTimeout,
-} GraphResult;
-typedef enum {
-    kPermissionListSuccessd = 0,
-    kPermissionListFailed = 0,
-} PermissionListResult;
 @interface UserWrapper : NSObject
 {
     
 }
 
-+ (void) onActionResult:(id) obj withRet:(UserActionResult) ret withMsg:(NSString*) msg;
-+ (void) onPermissionsResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg;
-+ (void) onGraphResult:(id) result withRet:(GraphResult)ret withMsg:(NSString *)msg withCallback:(int)cbid;
-+ (void)onPermissionListResult:(id)obj withRet:(PermissionListResult )ret withMsg:(NSString *)msg;
++ (void) onActionResult:(id) obj withRet:(int) ret withMsg:(NSString*) msg;
+
++ (void) onPermissionsResult:(id)obj withRet:(int)ret withMsg: (NSString *)msg;
+
++ (void) onGraphRequestResultFrom:(id) obj withRet: (int) state result: (id) resultObj andCallback: (int) cbid;
+
++ (void) onGraphResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg withCallback:(int)cbid;
+
++ (void)onPermissionListResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg;
+
 + (UIViewController *) getCurrentRootViewController;
+
 @end

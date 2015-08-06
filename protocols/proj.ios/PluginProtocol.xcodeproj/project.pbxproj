@@ -114,8 +114,8 @@
 			isa = PBXGroup;
 			children = (
 				FAB6DF951755D7E500C90D89 /* PluginParam.cpp */,
-				FA0CB8B5168D3CC200E36B11 /* ios */,
 				FA09A33C168ADC1F008C1C7B /* PluginManager.cpp */,
+				FA0CB8B5168D3CC200E36B11 /* ios */,
 				FA09A336168ADC05008C1C7B /* include */,
 				FA09A323168ADBC2008C1C7B /* Frameworks */,
 				FA09A322168ADBC2008C1C7B /* Products */,
@@ -342,12 +342,22 @@
 		FA09A330168ADBC2008C1C7B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				DSTROOT = /tmp/PluginProtocol.dst;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginProtocol-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					CC_TARGET_OS_IPHONE,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
@@ -360,12 +370,17 @@
 		FA09A331168ADBC2008C1C7B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				DSTROOT = /tmp/PluginProtocol.dst;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginProtocol-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

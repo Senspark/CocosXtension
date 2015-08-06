@@ -26,11 +26,14 @@ THE SOFTWARE.
 #include "PluginUtilsIOS.h"
 #include "ProtocolUser.h"
 #include "FacebookAgent.h"
+#include "ParseUtils.h"
+
 using namespace cocos2d::plugin;
+using namespace std;
 
 @implementation UserWrapper
 
-+ (void) onActionResult:(id) obj withRet:(UserActionResult) ret withMsg:(NSString*) msg
++ (void) onActionResult:(id) obj withRet:(int) ret withMsg:(NSString*) msg
 {
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolUser* pUser = dynamic_cast<ProtocolUser*>(pPlugin);
@@ -51,7 +54,19 @@ using namespace cocos2d::plugin;
         PluginUtilsIOS::outputLog("Can't find the C++ object of the User plugin");
     }
 }
-+ (void) onGraphResult:(id)obj withRet:(GraphResult)ret withMsg:(NSString *)msg withCallback:(int)cbid{
+
++ (void) onGraphRequestResultFrom:(id) obj withRet: (int) state result: (id) resultObj andCallback: (int) cbid {
+    FacebookAgent::FBCallback callback = FacebookAgent::getInstance()->getRequestCallback(cbid);
+    
+    if (callback ) {
+        std::string result = [[ParseUtils NSDictionaryToNSString:resultObj] UTF8String];
+        callback((int) state, result);
+    } else {
+        PluginUtilsIOS::outputLog("can't find the C++ object of the callback");
+    }
+}
+
++ (void) onGraphResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg withCallback:(int)cbid{
     const char* chMsg = [msg UTF8String];
     FacebookAgent::FBCallback callback = FacebookAgent::getInstance()->getRequestCallback(cbid);
     if(callback){
@@ -61,6 +76,7 @@ using namespace cocos2d::plugin;
         PluginUtilsIOS::outputLog("an't find the C++ object of the requestCallback");
     }
 }
+
 + (void) onPermissionsResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg{
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolUser* pUser = dynamic_cast<ProtocolUser*>(pPlugin);
@@ -77,7 +93,7 @@ using namespace cocos2d::plugin;
         PluginUtilsIOS::outputLog("Can't find the C++ object of the User plugin");
     }
 }
-+ (void)onPermissionListResult:(id)obj withRet:(PermissionListResult )ret withMsg:(NSString *)msg{
++ (void)onPermissionListResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg{
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolUser* pUser = dynamic_cast<ProtocolUser*>(pPlugin);
     if (pUser) {

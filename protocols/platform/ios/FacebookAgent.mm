@@ -67,62 +67,73 @@ namespace cocos2d{namespace plugin{
         requestCallbacks.clear();
         AgentManager::destroyInstance();
     }
-    
+
+#pragma mark - 
+#pragma User functionalities
+
     void FacebookAgent::login(FBCallback cb)
     {
         agentManager->getUserPlugin()->login(cb);
     }
+    
     void FacebookAgent::login(std::string& permissions, FBCallback cb)
     {
         auto userPlugin = agentManager->getUserPlugin();
         userPlugin->setCallback(cb);
         PluginParam _permissions(permissions.c_str());
-        userPlugin->callFuncWithParam("loginWithPermission", &_permissions, NULL);
+        userPlugin->callFuncWithParam("loginWithReadPermissions", &_permissions, NULL);
     }
+    
     void FacebookAgent::logout()
     {
         agentManager->getUserPlugin()->logout();
     }
+    
     bool FacebookAgent::isLoggedIn()
     {
         return agentManager->getUserPlugin()->isLoggedIn();
     }
+    
     std::string FacebookAgent::getAccessToken()
     {
         return agentManager->getUserPlugin()->callStringFuncWithParam("getAccessToken", NULL);
     }
     
-    void FacebookAgent::share(FBInfo& info, FBCallback cb)
+    void FacebookAgent::share(FBParam& info, FBCallback cb)
     {
         agentManager->getSharePlugin()->share(info, cb);
     }
+    
     std::string FacebookAgent::getPermissionList()
     {
         return agentManager->getUserPlugin()->callStringFuncWithParam("getPermissionList", NULL);
     }
+    
     std::string FacebookAgent::getUserID()
     {
         return  agentManager->getUserPlugin()->callStringFuncWithParam("getUserID", NULL);
     }
-    void FacebookAgent::dialog(FBInfo& info, FBCallback cb)
+    
+    void FacebookAgent::dialog(FBParam& info, FBCallback cb)
     {
         auto sharePlugin = agentManager->getSharePlugin();
         sharePlugin->setCallback(cb);
         PluginParam params(info);
         sharePlugin->callFuncWithParam("dialog", &params, NULL);
     }
-    void FacebookAgent::webDialog(FBInfo &info, FBCallback cb){
+    void FacebookAgent::webDialog(FBParam &info, FBCallback cb){
         auto sharePlugin = agentManager->getSharePlugin();
         sharePlugin->setCallback(cb);
         PluginParam params(info);
         sharePlugin->callFuncWithParam("webDialog", &params, NULL);
     }
-    bool FacebookAgent::canPresentDialogWithParams(FBInfo& info){
+    bool FacebookAgent::canPresentDialogWithParams(FBParam& info){
         PluginParam params(info);
         bool status = agentManager->getSharePlugin()->callBoolFuncWithParam("canPresentDialogWithParams", &params,NULL);
         return status;
     }
-    void FacebookAgent::api(std::string &path, int method, FBInfo &params, FBCallback cb)
+    
+    void FacebookAgent::api(const std::string &path, int method, const FBParam &params, FBCallback cb)
     {
         requestCallbacks.push_back(cb);
         
@@ -133,17 +144,31 @@ namespace cocos2d{namespace plugin{
         
         agentManager->getUserPlugin()->callFuncWithParam("api", &_path, &_method, &_params, &_cbIndex, NULL);
     }
-    void FacebookAgent::appRequest(FBInfo& info, FBCallback cb)
+    
+    void FacebookAgent::graphRequest(const std::string &path, const FBParam params, FBCallback cb)
+    {
+        requestCallbacks.push_back(cb);
+        
+        PluginParam pathParam(path.c_str());
+        PluginParam paramsParam(params);
+        PluginParam cbIndexParam(int(requestCallbacks.size() - 1));
+        
+        agentManager->getUserPlugin()->callFuncWithParam("graphRequestWithParams", &pathParam, &paramsParam, &cbIndexParam, nullptr);
+    }
+    
+    void FacebookAgent::appRequest(FBParam& info, FBCallback cb)
     {
         auto sharePlugin = agentManager->getSharePlugin();
         sharePlugin->setCallback(cb);
         PluginParam params(info);
         sharePlugin->callFuncWithParam("appRequest", &params, NULL);
     }
+    
     FacebookAgent::FBCallback FacebookAgent::getRequestCallback(int index)
     {
         return requestCallbacks[index];
     }
+    
     void FacebookAgent::activateApp()
     {
         agentManager->getUserPlugin()->callFuncWithParam("activateApp", NULL);
@@ -162,7 +187,7 @@ namespace cocos2d{namespace plugin{
         agentManager->getUserPlugin()->callFuncWithParam("logEvent", &_eventName, &_valueToSum, NULL);
     }
     
-    void FacebookAgent::logEvent(std::string& eventName, FBInfo& parameters)
+    void FacebookAgent::logEvent(std::string& eventName, FBParam& parameters)
     {
         PluginParam _eventName(eventName.c_str());
         PluginParam _params(parameters);
@@ -173,13 +198,13 @@ namespace cocos2d{namespace plugin{
         PluginParam _currency(currency.c_str());
         agentManager->getUserPlugin()->callFuncWithParam("logPurchase", &_mount, &_currency, NULL);
     }
-    void FacebookAgent::logPurchase(float mount, std::string currency,FBInfo &params){
+    void FacebookAgent::logPurchase(float mount, std::string currency,FBParam &params){
         PluginParam _mount(mount);
         PluginParam _currency(currency.c_str());
         PluginParam _params(params);
         agentManager->getUserPlugin()->callFuncWithParam("logPurchase", &_mount, &_currency, &_params, NULL);
     }
-    void FacebookAgent::logEvent(std::string& eventName, float valueToSum, FBInfo& parameters)
+    void FacebookAgent::logEvent(std::string& eventName, float valueToSum, FBParam& parameters)
     {
         PluginParam _eventName(eventName.c_str());
         PluginParam _valueToSum(valueToSum);

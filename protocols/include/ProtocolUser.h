@@ -25,7 +25,6 @@ THE SOFTWARE.
 #define __CCX_PROTOCOL_USER_H__
 
 #include "PluginProtocol.h"
-#include <map>
 #include <string>
 #include <functional>
 
@@ -37,10 +36,27 @@ typedef enum
 {
     kLoginSucceed = 0,
     kLoginFailed,
-
     kLogoutSucceed,
+    kLogoutFailed,
 } UserActionResultCode;
 
+typedef enum {
+    kGraphResultSuccess = 0,
+    kGraphResultFail,
+    kGraphResultCancel,
+    kGraphResultTimeout,
+} GraphResult;
+
+typedef enum {
+    kPermissionListSuccessd = 0,
+    kPermissionListFailed = 0,
+} PermissionListResult;
+    
+typedef enum {
+    kPermissionSucceed = 0,
+    kPermissionFailed,
+} UserPermissionResult;
+    
 class ProtocolUser;
 class UserActionListener
 {

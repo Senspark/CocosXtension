@@ -52,7 +52,7 @@ public:
 		Delete
 	};
 
-	typedef std::map<std::string, std::string> FBInfo;
+	typedef std::map<std::string, std::string> FBParam;
 	typedef std::function<void(int, std::string&)> FBCallback;
 
 	/**
@@ -96,22 +96,22 @@ public:
      @param info share information
      @param cb callback of share
      */
-	void share(FBInfo &info, FBCallback cb);
+	void share(FBParam &info, FBCallback cb);
 	/**
      @brief open a dialog of Facebook app
      @param info share information
      @param cb callback of dialog
      */
-	void dialog(FBInfo &info, FBCallback cb);
-    bool canPresentDialogWithParams(FBInfo &info);
-    void webDialog(FBInfo &info,FBCallback cb);
+	void dialog(FBParam &info, FBCallback cb);
+    bool canPresentDialogWithParams(FBParam &info);
+    void webDialog(FBParam &info,FBCallback cb);
 
 	/**
      @brief open the app request dialog of Facebook app
      @param info share information
      @param cb callback of dialog
      */
-    void appRequest(FBInfo &info, FBCallback cb);
+    void appRequest(FBParam &info, FBCallback cb);
 
 	/**
      @brief use Facebook Open Graph api
@@ -120,8 +120,10 @@ public:
      @param params request parameters
      @param cb callback of request
      */
-    void api(std::string &path, int method, FBInfo &params, FBCallback cb);
-
+    void api(const std::string &path, int method, const FBParam &params, FBCallback cb);
+    
+    void graphRequest(const std::string &path, const FBParam params, FBCallback cb);
+    
     /**
      @brief Notifies the events system that the app has launched & logs an activatedApp event. 
     */
@@ -132,14 +134,14 @@ public:
     */
     void logEvent(std::string& eventName);
     void logEvent(std::string& eventName, float valueToSum);
-    void logEvent(std::string& eventName, FBInfo& parameters);
-    void logEvent(std::string& eventName, float valueToSum, FBInfo& parameters);
+    void logEvent(std::string& eventName, FBParam& parameters);
+    void logEvent(std::string& eventName, float valueToSum, FBParam& parameters);
     
     /*
      @breif Log an app event for purchase.
      */
     void logPurchase(float mount,std::string currency);
-    void logPurchase(float mount,std::string currency,FBInfo &parmeters);
+    void logPurchase(float mount,std::string currency,FBParam &parmeters);
     /*
      @breif return the version of Facebook SDK for Cocos 
      */
@@ -150,10 +152,12 @@ public:
     void setSDKVersion(std::string version);
 	
 	FBCallback getRequestCallback(int index);
+
 private:
 	FacebookAgent();
 	
 	AgentManager* agentManager;
+    
 	std::vector<FBCallback> requestCallbacks;
 };
 

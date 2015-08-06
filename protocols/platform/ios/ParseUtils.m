@@ -38,6 +38,7 @@
     }
     
 }
+
 + (NSString *) NSDictionaryToNSString:(id)dic{
     NSString *result = nil;
     NSError *error;
@@ -51,6 +52,7 @@
     }
     return result;
 }
+
 +(NSString *)MakeJsonStringWithObject:(id) obj andKey:(NSString *)key {
     return [ParseUtils NSDictionaryToNSString:[NSDictionary dictionaryWithObject:obj forKey:key]];
 }
