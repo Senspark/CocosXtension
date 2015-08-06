@@ -33,7 +33,8 @@
 
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
 - (void) login;
-- (void) loginWithPermissions:(NSString *)permissions;
+- (void) loginWithReadPermissions:(NSString *)permissions;
+- (void) loginWithPublishPermissions:(NSString *)permissions;
 - (void) logout;
 - (BOOL) isLoggedIn;
 - (NSString*) getSessionID;
@@ -41,8 +42,10 @@
 - (void) setDebugMode: (BOOL) debug;
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;
-- (NSString *) getAccessToken;
-- (NSString *) getPermissionList;
-//- (void) api:(NSDictionary *)params;
+- (NSString*) getAccessToken;
+- (NSString*) getPermissionList;
+- (void) graphRequestWithParams: (NSDictionary*) params;
+- (void) graphRequestWithGraphPath: (NSString*) graphPath parameters: (NSDictionary*) params callback: (int) cbid;
+- (void) api: (NSDictionary*) params;
 
 @end

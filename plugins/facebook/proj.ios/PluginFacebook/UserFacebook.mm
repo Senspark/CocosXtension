@@ -26,8 +26,12 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import "UserWrapper.h"
+#import "ProtocolUser.h"
 #import "ParseUtils.h"
+
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
+
+using namespace cocos2d::plugin;
 
 @implementation UserFacebook
 
@@ -45,12 +49,17 @@
 
 - (void) login {
     self.permissions = @[@"public_profile", @"email", @"user_friends"];
-    [self loginWithPermissionsInArray:_permissions];
+    [self loginWithReadPermissionsInArray:_permissions];
 }
 
-- (void) loginWithPermissions: (NSString *) permissions {
+- (void) loginWithReadPermissions: (NSString *) permissions {
     self.permissions = [permissions componentsSeparatedByString:@","];
-    [self loginWithPermissionsInArray:_permissions];
+    [self loginWithReadPermissionsInArray:_permissions];
+}
+
+- (void) loginWithPublishPermissions: (NSString *) permissions {
+    self.permissions = [permissions componentsSeparatedByString:@","];
+    [self loginWithPublishPermissionsInArray:_permissions];
 }
 
 - (void) onLoginResult: (FBSDKLoginManagerLoginResult*) result error: (NSError*) error {
@@ -65,9 +74,16 @@
     }
 }
 
-- (void) loginWithPermissionsInArray:(NSArray *) permission {
+- (void) loginWithReadPermissionsInArray:(NSArray *) permission {
     FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
     [loginManager logInWithReadPermissions:permission handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+        [self onLoginResult:result error: error];
+    }];
+}
+
+- (void) loginWithPublishPermissionsInArray:(NSArray *) permission {
+    FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
+    [loginManager logInWithPublishPermissions:permission handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         [self onLoginResult:result error: error];
     }];
 }
@@ -84,9 +100,10 @@
     }
 }
 
-- (NSString *) getUserID{
+- (NSString *) getUserID {
     return [FBSDKAccessToken currentAccessToken].userID;
 }
+
 - (BOOL) isLoggedIn{
     return [FBSDKAccessToken currentAccessToken] ? YES : NO;
 }
@@ -99,12 +116,72 @@
 -(NSString *)getAccessToken{
     return [FBSDKAccessToken currentAccessToken].tokenString;
 }
+
 - (NSString*) getSessionID{
     return @"";
 }
+
 - (void) setDebugMode: (BOOL) debug{
     __debug = debug;
 }
+
+- (void) graphRequestWithParams:(NSDictionary *)params {
+    NSString *graphPath = [params objectForKey:@"Param1"];
+    NSDictionary* graphParams =[params objectForKey:@"Param2"];
+    int cbid = [[params objectForKey:@"Param3"] intValue];
+    
+    [self graphRequestWithGraphPath:graphPath parameters:graphParams callback:cbid];
+}
+
+- (void) graphRequestWithGraphPath: (NSString*) graphPath parameters: (NSDictionary*) params callback: (int) cbid {
+    if ([FBSDKAccessToken currentAccessToken]) {
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:params]
+         startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+             if (!error) {
+                 NSLog(@"Fetch facebook info:%@", result);
+                 
+                 [UserWrapper onGraphRequestResultFrom:self withRet:kGraphResultSuccess result:result andCallback:cbid];
+                 
+             } else {
+                 
+                 NSLog(@"Fetch facebook info error: %@", error.description);
+                 
+                 [UserWrapper onGraphRequestResultFrom:self withRet: kGraphResultFail result:result andCallback:cbid];
+             }
+         }];
+    } else {
+        [UserWrapper onGraphRequestResultFrom:self withRet:kGraphResultFail result:nil andCallback:cbid];
+    }
+}
+
+-(void) api: (NSMutableDictionary *)params{
+    NSString *graphPath = [params objectForKey:@"Param1"];
+    int methodID = [[params objectForKey:@"Param2"] intValue];
+    NSString * method = methodID == 0? @"GET":methodID == 1?@"POST":@"DELETE";
+    NSDictionary *param = [params objectForKey:@"Param3"];
+    int cbId = [[params objectForKey:@"Param4"] intValue];
+    
+    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:param HTTPMethod:method];
+    [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+        
+        if(!error){
+            NSString *msg = [ParseUtils NSDictionaryToNSString:(NSDictionary *)result];
+            if(nil == msg){
+                NSString *msg = [ParseUtils MakeJsonStringWithObject:@"parse result failed" andKey:@"error_message"];
+                [UserWrapper onGraphResult:self withRet:kGraphResultFail withMsg:msg withCallback:cbId];
+            }else{
+                OUTPUT_LOG(@"success");
+                [UserWrapper onGraphResult:self withRet:kGraphResultSuccess withMsg:msg withCallback:cbId];
+            }
+        }else{
+            NSString *msg = [ParseUtils MakeJsonStringWithObject:error.description andKey:@"error_message"];
+            [UserWrapper onGraphResult:self withRet:kGraphResultFail withMsg:msg withCallback:cbId];
+            OUTPUT_LOG(@"error %@", error.description);
+        }
+    }];
+}
+
+
 
 - (NSString*) getSDKVersion{
     return [FBSDKSettings sdkVersion];
@@ -114,31 +191,5 @@
     return @"0.1.0";
 }
 
-//-(void)api:(NSMutableDictionary *)params{
-//    NSString *graphPath = [params objectForKey:@"Param1"];
-//    int methodID = [[params objectForKey:@"Param2"] intValue];
-//    NSString * method = methodID == 0? @"GET":methodID == 1?@"POST":@"DELETE";
-//    NSDictionary *param = [params objectForKey:@"Param3"];
-//    int cbId = [[params objectForKey:@"Param4"] intValue];
-//    [FBRequestConnection startWithGraphPath:graphPath
-//                                 parameters:param HTTPMethod:method
-//                          completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-//                              if(!error){
-//                                  NSString *msg = [ParseUtils NSDictionaryToNSString:(NSDictionary *)result];
-//                                  if(nil == msg){
-//                                       NSString *msg = [ParseUtils MakeJsonStringWithObject:@"parse result failed" andKey:@"error_message"];
-//                                      [UserWrapper onGraphResult:self withRet:kGraphResultFail withMsg:msg withCallback:cbId];
-//                                  }else{
-//                                      OUTPUT_LOG(@"success");
-//                                      [UserWrapper onGraphResult:self withRet:kGraphResultSuccess withMsg:msg withCallback:cbId];
-//                                  }
-//                              }else{
-//                                   NSString *msg = [ParseUtils MakeJsonStringWithObject:error.description andKey:@"error_message"];
-//                                  [UserWrapper onGraphResult:self withRet:(int)error.code withMsg:msg withCallback:cbId];
-//                                  OUTPUT_LOG(@"error %@", error.description);
-//                              }
-//                              
-//                          }];
-//}
 
 @end

@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		957D746A1B7341C7004D06A0 /* ShareFacebook.mm in Sources */ = {isa = PBXBuildFile; fileRef = 957D74691B7341C7004D06A0 /* ShareFacebook.mm */; };
 		95B0DFCD1B6F82A700D31FF7 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95B0DFCB1B6F82A700D31FF7 /* FBSDKCoreKit.framework */; };
 		95B0DFCE1B6F82A700D31FF7 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95B0DFCC1B6F82A700D31FF7 /* FBSDKLoginKit.framework */; };
 		95B0DFD01B6F834D00D31FF7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95B0DFCF1B6F834D00D31FF7 /* FBSDKShareKit.framework */; };
 		BA34A761195AA8C7002D0ECD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA34A760195AA8C7002D0ECD /* Foundation.framework */; };
-		BA34A79F195AA939002D0ECD /* UserFacebook.m in Sources */ = {isa = PBXBuildFile; fileRef = BA34A79D195AA939002D0ECD /* UserFacebook.m */; };
+		BA34A79F195AA939002D0ECD /* UserFacebook.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA34A79D195AA939002D0ECD /* UserFacebook.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +28,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		957D74681B7341C7004D06A0 /* ShareFacebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareFacebook.h; sourceTree = "<group>"; };
+		957D74691B7341C7004D06A0 /* ShareFacebook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ShareFacebook.mm; sourceTree = "<group>"; };
 		95B0DFCB1B6F82A700D31FF7 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		95B0DFCC1B6F82A700D31FF7 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		95B0DFCF1B6F834D00D31FF7 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
@@ -34,7 +37,7 @@
 		BA34A760195AA8C7002D0ECD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BA34A764195AA8C7002D0ECD /* PluginFacebook-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PluginFacebook-Prefix.pch"; sourceTree = "<group>"; };
 		BA34A79C195AA939002D0ECD /* UserFacebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserFacebook.h; sourceTree = "<group>"; };
-		BA34A79D195AA939002D0ECD /* UserFacebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserFacebook.m; sourceTree = "<group>"; };
+		BA34A79D195AA939002D0ECD /* UserFacebook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UserFacebook.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,8 +86,10 @@
 		BA34A762195AA8C7002D0ECD /* PluginFacebook */ = {
 			isa = PBXGroup;
 			children = (
+				957D74681B7341C7004D06A0 /* ShareFacebook.h */,
+				957D74691B7341C7004D06A0 /* ShareFacebook.mm */,
 				BA34A79C195AA939002D0ECD /* UserFacebook.h */,
-				BA34A79D195AA939002D0ECD /* UserFacebook.m */,
+				BA34A79D195AA939002D0ECD /* UserFacebook.mm */,
 				BA34A763195AA8C7002D0ECD /* Supporting Files */,
 			);
 			path = PluginFacebook;
@@ -149,7 +154,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA34A79F195AA939002D0ECD /* UserFacebook.m in Sources */,
+				BA34A79F195AA939002D0ECD /* UserFacebook.mm in Sources */,
+				957D746A1B7341C7004D06A0 /* ShareFacebook.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,7 +240,10 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginFacebook/PluginFacebook-Prefix.pch";
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../protocols/platform/ios";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../protocols/include",
+					"$(SRCROOT)/../../../protocols/platform/ios",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -252,7 +261,10 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginFacebook/PluginFacebook-Prefix.pch";
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../protocols/platform/ios";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../protocols/include",
+					"$(SRCROOT)/../../../protocols/platform/ios",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
