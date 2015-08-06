@@ -46,6 +46,7 @@
 		9525AF9F1B67284300CBF477 /* TestGooglePlayScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9525AF9D1B67284300CBF477 /* TestGooglePlayScene.cpp */; };
 		953F8D2D1B68915300517E1B /* GooglePlus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 953F8D2B1B68915300517E1B /* GooglePlus.bundle */; };
 		953F8D2E1B68915300517E1B /* gpg.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 953F8D2C1B68915300517E1B /* gpg.bundle */; };
+		957D746E1B73596B004D06A0 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 957D746D1B73596B004D06A0 /* GameKit.framework */; };
 		95B098251B58DBB400EAC5AB /* libPluginAdmob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD554ED177C16A100968F54 /* libPluginAdmob.a */; };
 		95B098281B58DC9800EAC5AB /* TestSenspark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B098261B58DC9800EAC5AB /* TestSenspark.cpp */; };
 		95B0982B1B58DD2E00EAC5AB /* ListLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B098291B58DD2E00EAC5AB /* ListLayer.cpp */; };
@@ -167,6 +168,7 @@
 		9525AF9E1B67284300CBF477 /* TestGooglePlayScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestGooglePlayScene.h; sourceTree = "<group>"; };
 		953F8D2B1B68915300517E1B /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlus.bundle; path = ../../../plugins/googleplay/platform/ios/GooglePlus.bundle; sourceTree = "<group>"; };
 		953F8D2C1B68915300517E1B /* gpg.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = gpg.bundle; path = ../../../plugins/googleplay/platform/ios/gpg.bundle; sourceTree = "<group>"; };
+		957D746D1B73596B004D06A0 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		95B098261B58DC9800EAC5AB /* TestSenspark.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestSenspark.cpp; sourceTree = "<group>"; };
 		95B098271B58DC9800EAC5AB /* TestSenspark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestSenspark.h; sourceTree = "<group>"; };
 		95B098291B58DD2E00EAC5AB /* ListLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ListLayer.cpp; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				957D746E1B73596B004D06A0 /* GameKit.framework in Frameworks */,
 				95088B571B6FC6BA002095FF /* CoreLocation.framework in Frameworks */,
 				95F034711B6B3BCD00BD28F2 /* libPluginGameCenter.a in Frameworks */,
 				95175C1F1B6799A60005CC3D /* AssetsLibrary.framework in Frameworks */,
@@ -383,6 +386,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				957D746D1B73596B004D06A0 /* GameKit.framework */,
 				95088B561B6FC6BA002095FF /* CoreLocation.framework */,
 				95F034701B6B3BCD00BD28F2 /* libPluginGameCenter.a */,
 				95088B501B6FC52C002095FF /* FBSDKShareKit.framework */,

@@ -7,8 +7,10 @@
 //
 
 #include "TestFacebookScene.h"
-#include "SensparkPlugin.h"
 #include "cocos-ext.h"
+#include "SensparkPlugin.h"
+#include "FacebookAgent.h"
+#include "ProtocolUser.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -20,24 +22,14 @@ USING_NS_SENSPARK_PLUGIN_USER;
 
 enum {
     TAG_FB_LOGIN = 1,
-    TAG_FB_LOGIN_WITH_PERMISSION,
+    TAG_FB_LOGIN_WITH_READ_PERMISSION,
+    TAG_FB_LOGIN_WITH_PUBLISH_PERMISSION,
     TAG_FB_LOGOUT,
     TAG_FB_GETUID,
+    TAG_FB_GETINFO,
     TAG_FB_GETTOKEN,
-    
-    TAG_FB_SHOW_LEADERBOARDS,
-    TAG_FB_SUBMIT_SCORE,
-    TAG_FB_SHOW_ACHIEVEMENTS,
-    TAG_FB_UNLOCK_ACHIEVEMENT,
-    TAG_FB_REVEAL_ACHIEVEMENT,
-    TAG_FB_RESET_ACHIEVEMENTS
-
-
-    //    TAG_FB_GETPERMISSIONS,
-    //    TAG_FB_REQUEST_API,
-    //    TAG_FB_PUBLISH_INSTALL,
-    //    TAG_FB_LOG_EVENT,
-    //    TAG_FB_LOG_PURCHASE,
+    TAG_FB_GRAPH_REQUEST,
+    TAG_FB_PERMISSION,
 };
 
 struct FBEventMenuItem {
@@ -48,15 +40,14 @@ struct FBEventMenuItem {
 static FBEventMenuItem s_GPMenuItem[] =
 {
     {"login", TAG_FB_LOGIN},
-    {"loginWithPermission", TAG_FB_LOGIN_WITH_PERMISSION},
+    {"login with read permission", TAG_FB_LOGIN_WITH_READ_PERMISSION},
+    {"login with publish permission", TAG_FB_LOGIN_WITH_PUBLISH_PERMISSION},
     {"logout", TAG_FB_LOGOUT},
     {"user ID", TAG_FB_GETUID},
+    {"user info", TAG_FB_GETINFO},
     {"access token", TAG_FB_GETTOKEN},
-    {"show leaderboards", TAG_FB_SHOW_LEADERBOARDS},
-    {"show achievements", TAG_FB_SHOW_ACHIEVEMENTS},
-    {"submit score", TAG_FB_SUBMIT_SCORE},
-    {"unlock achievement", TAG_FB_UNLOCK_ACHIEVEMENT},
-    {"reset achievements", TAG_FB_RESET_ACHIEVEMENTS},
+    {"graph request", TAG_FB_GRAPH_REQUEST},
+    {"permissions", TAG_FB_PERMISSION},
     {nullptr, 0},
 };
 
@@ -148,11 +139,18 @@ void TestFacebook::doAction(int tag) {
             }
         }
             break;
-        case TAG_FB_LOGIN_WITH_PERMISSION: {
+        case TAG_FB_LOGIN_WITH_READ_PERMISSION: {
             std::string permissions = "public_profile, email, user_about_me, user_friends";
             std::function<void(int, std::string&)> callback = CC_CALLBACK_2(TestFacebook::onUserCallback, this);
             
-            _protocolFacebookUser->loginWithPermissions(permissions, callback);
+            _protocolFacebookUser->loginWithReadPermissions(permissions, callback);
+            break;
+        }
+        case TAG_FB_LOGIN_WITH_PUBLISH_PERMISSION: {
+            std::string permissions = "publish_actions";
+            std::function<void(int, std::string&)> callback = CC_CALLBACK_2(TestFacebook::onUserCallback, this);
+            
+            _protocolFacebookUser->loginWithPublishPermissions(permissions, callback);
             break;
         }
         case TAG_FB_LOGOUT: {
@@ -164,35 +162,41 @@ void TestFacebook::doAction(int tag) {
             _resultInfo->setString(_protocolFacebookUser->getUserID());
             break;
         }
+        case TAG_FB_GETINFO: {
+            FacebookProtocolUser::FBCallback callback = CC_CALLBACK_2(TestFacebook::onGraphRequestCallback, this);
+            
+            FacebookProtocolUser::FBParam param;
+            _protocolFacebookUser->graphRequest("me?fields=picture.type(square),name,id", param, callback);
+            _resultInfo->setString("Call graph request to query user info...");
+            break;
+        }
         case TAG_FB_GETTOKEN: {
             _resultInfo->setString(_protocolFacebookUser->getAccessToken());
             break;
         }
-        case TAG_FB_SHOW_LEADERBOARDS: {
-            _protocolGameCenterSocial->showLeaderboards();
-            break;
+        case TAG_FB_PERMISSION: {
+            _resultInfo->setString("Call graph request for something...");
+            std::string path = "me/permissions";
+            FacebookAgent::FBParam params;
+            FacebookAgent::getInstance()->api(path, FacebookAgent::HttpMethod::Get, params, [=](int ret, std::string& msg){
+                _resultInfo->setString(msg.c_str());
+            });
         }
-        case TAG_FB_SHOW_ACHIEVEMENTS: {
-            _protocolGameCenterSocial->showAchievements();
             break;
+        case TAG_FB_GRAPH_REQUEST:
+        {
+            std::string path = "/me/photos";
+            FacebookAgent::FBParam params;
+            params["url"] = "http://files.cocos2d-x.org/images/orgsite/logo.png";
+            FacebookAgent::getInstance()->api(path, FacebookAgent::HttpMethod::Post, params, [=](int ret, std::string& msg){
+                if (0 == ret) {
+                    _resultInfo->setString(msg.c_str());
+                } else {
+                    _resultInfo->setString("Error! Please login with publish permissions then retry again.");
+                }
+            });
         }
-        case TAG_FB_SUBMIT_SCORE: {
-            UserDefault* userDefault = UserDefault::getInstance();
-            int score = userDefault->getIntegerForKey("high-score", 1000) + 1;
-            _protocolGameCenterSocial->submitScore(GAME_CENTER_LEADERBOARD_KEY_IOS_EASY, score, CC_CALLBACK_2(TestFacebook::onSocialCallback, this));
-            _resultInfo->setString(StringUtils::format("Submitting new high score: %d", score));
             break;
-        }
-        case TAG_FB_UNLOCK_ACHIEVEMENT: {
-            _protocolGameCenterSocial->unlockAchievement(GAME_CENTER_ACHIEVEMENT_KEY_IOS_PRIME);
-            _resultInfo->setString("Unlocking Achievement PRIME");
-            break;
-        }
-        case TAG_FB_RESET_ACHIEVEMENTS: {
-            _resultInfo->setString("Resetting all achievements...");
-            _protocolGameCenterSocial->resetAchievements(CC_CALLBACK_2(TestFacebook::onSocialCallback, this));
-            break;
-        }
         default:
             break;
     }
@@ -208,4 +212,9 @@ void TestFacebook::onSocialCallback(int code, std::string &msg) {
     log("%s", msg.c_str());
     
     _resultInfo->setString(msg);
+}
+
+void TestFacebook::onGraphRequestCallback(int code, std::string &result) {
+    log("code: %d, result: %s", code, result.c_str());
+    _resultInfo->setString(result);
 }

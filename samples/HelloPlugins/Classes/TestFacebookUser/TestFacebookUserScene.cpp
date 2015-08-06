@@ -200,7 +200,7 @@ void TestFacebookUser::eventMenuCallback(Ref* sender)
     case TAG_FB_GETPERMISSIONS:
         {
             std::string path = "/me/permissions";
-            FacebookAgent::FBInfo params;
+            FacebookAgent::FBParam params;
             FacebookAgent::getInstance()->api(path, FacebookAgent::HttpMethod::Get, params, [=](int ret, std::string& msg){
                 callbackInfo->setString(msg.c_str());
             });
@@ -209,7 +209,7 @@ void TestFacebookUser::eventMenuCallback(Ref* sender)
     case TAG_FB_REQUEST_API:
         {
             std::string path = "/me/photos";
-            FacebookAgent::FBInfo params;
+            FacebookAgent::FBParam params;
             params["url"] = "http://files.cocos2d-x.org/images/orgsite/logo.png";
             FacebookAgent::getInstance()->api(path, FacebookAgent::HttpMethod::Post, params, [=](int ret, std::string& msg){
                 if (0 == ret) {
@@ -228,7 +228,7 @@ void TestFacebookUser::eventMenuCallback(Ref* sender)
         {
             std::string appEventMsg = "fb_mobile_tutorial_completion";
             float floatVal = 888.888;
-            FacebookAgent::FBInfo fbInfo;
+            FacebookAgent::FBParam fbInfo;
             fbInfo["fb_success"] = "1";
             FacebookAgent::getInstance()->logEvent(appEventMsg, floatVal);
             FacebookAgent::getInstance()->logEvent(appEventMsg, fbInfo);
@@ -250,7 +250,7 @@ void TestFacebookUser::eventMenuCallback(Ref* sender)
             static const char*  AppEventParam_LEVEL = "fb_level";
             static const char*  AppEventParam_DESCRIPTION = "fb_description";
             
-            FacebookAgent::FBInfo fbInfo;
+            FacebookAgent::FBParam fbInfo;
             fbInfo[AppEventParam_CURRENCY] = "CNY";
             fbInfo[AppEventParam_REGISTRATION_METHOD]     = "Facebook";
             fbInfo[AppEventParam_CONTENT_TYPE]     = "game";

@@ -35,6 +35,7 @@ public:
     
     void onUserCallback(int code, std::string& msg);
     void onSocialCallback(int code, std::string& msg);
+    void onGraphRequestCallback(int code, std::string& result);
     
 private:
     FacebookProtocolUser* _protocolFacebookUser;
