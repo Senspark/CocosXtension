@@ -23,6 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 typedef enum {
     kShareSuccess = 0,
@@ -37,4 +38,5 @@ typedef enum {
 }
 
 + (void) onShareResult:(id) obj withRet:(int) ret withMsg:(NSString*) msg;
++ (UIViewController *)getCurrentRootViewController;
 @end

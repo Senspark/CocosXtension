@@ -738,7 +738,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
-				LIBRARY_SEARCH_PATHS = "/Users/ndpduc/GitRepo/plugin-x/plugins/game-center/proj.ios/build/Debug-iphoneos";
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "-O2";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = HelloPlugins;
@@ -780,7 +780,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
-				LIBRARY_SEARCH_PATHS = "/Users/ndpduc/GitRepo/plugin-x/plugins/game-center/proj.ios/build/Debug-iphoneos";
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = HelloPlugins;
 				SDKROOT = iphoneos;
