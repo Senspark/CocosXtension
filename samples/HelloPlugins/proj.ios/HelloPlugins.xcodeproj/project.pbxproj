@@ -43,7 +43,7 @@
 		95245C191B60F8C5000EDF84 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C181B60F8C5000EDF84 /* EventKit.framework */; };
 		95245C1B1B60F8D5000EDF84 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */; };
 		95245C1D1B60F8F2000EDF84 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */; };
-		9525AF9F1B67284300CBF477 /* TestGooglePlayScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9525AF9D1B67284300CBF477 /* TestGooglePlayScene.cpp */; };
+		9525AF9F1B67284300CBF477 /* PluginParse.xcodeproj in Sources */ = {isa = PBXBuildFile; fileRef = 9525AF9D1B67284300CBF477 /* PluginParse.xcodeproj */; };
 		953F8D2D1B68915300517E1B /* GooglePlus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 953F8D2B1B68915300517E1B /* GooglePlus.bundle */; };
 		953F8D2E1B68915300517E1B /* gpg.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 953F8D2C1B68915300517E1B /* gpg.bundle */; };
 		957D746E1B73596B004D06A0 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 957D746D1B73596B004D06A0 /* GameKit.framework */; };
@@ -102,6 +102,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		95094CC81B7C926500CEFD43 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9525AF9D1B67284300CBF477 /* PluginParse.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 95094CBC1B7C923400CEFD43;
+			remoteInfo = PluginParse;
+		};
 		95E352611B468BAE00C60173 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FA848830182B3AE300858BDD /* cocos2d_libs.xcodeproj */;
@@ -164,7 +171,7 @@
 		95245C181B60F8C5000EDF84 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		9525AF9D1B67284300CBF477 /* TestGooglePlayScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestGooglePlayScene.cpp; sourceTree = "<group>"; };
+		9525AF9D1B67284300CBF477 /* PluginParse.xcodeproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "wrapper.pb-project"; name = PluginParse.xcodeproj; path = ../../../../plugins/parse/proj.ios/PluginParse.xcodeproj; sourceTree = "<group>"; };
 		9525AF9E1B67284300CBF477 /* TestGooglePlayScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestGooglePlayScene.h; sourceTree = "<group>"; };
 		953F8D2B1B68915300517E1B /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlus.bundle; path = ../../../plugins/googleplay/platform/ios/GooglePlus.bundle; sourceTree = "<group>"; };
 		953F8D2C1B68915300517E1B /* gpg.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = gpg.bundle; path = ../../../plugins/googleplay/platform/ios/gpg.bundle; sourceTree = "<group>"; };
@@ -472,7 +479,7 @@
 				95B0DFB51B6F4DE200D31FF7 /* TestFacebookScene.h */,
 				95F0346D1B6B329100BD28F2 /* TestGameCenterScene.cpp */,
 				95F0346E1B6B329100BD28F2 /* TestGameCenterScene.h */,
-				9525AF9D1B67284300CBF477 /* TestGooglePlayScene.cpp */,
+				9525AF9D1B67284300CBF477 /* PluginParse.xcodeproj */,
 				9525AF9E1B67284300CBF477 /* TestGooglePlayScene.h */,
 				95B098261B58DC9800EAC5AB /* TestSenspark.cpp */,
 				95B098271B58DC9800EAC5AB /* TestSenspark.h */,
@@ -481,6 +488,14 @@
 			);
 			name = TestSenspark;
 			path = ../Classes/TestSenspark;
+			sourceTree = "<group>";
+		};
+		95094CC51B7C926500CEFD43 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				95094CC91B7C926500CEFD43 /* libPluginParse.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		95E3525D1B468BAE00C60173 /* Products */ = {
@@ -617,6 +632,10 @@
 					ProductGroup = 95E3525D1B468BAE00C60173 /* Products */;
 					ProjectRef = FA848830182B3AE300858BDD /* cocos2d_libs.xcodeproj */;
 				},
+				{
+					ProductGroup = 95094CC51B7C926500CEFD43 /* Products */;
+					ProjectRef = 9525AF9D1B67284300CBF477 /* PluginParse.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -626,6 +645,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		95094CC91B7C926500CEFD43 /* libPluginParse.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPluginParse.a;
+			remoteRef = 95094CC81B7C926500CEFD43 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		95E352621B468BAE00C60173 /* libcocos2d Mac.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -681,7 +707,7 @@
 				952260801B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp in Sources */,
 				1AFCDA8216D4A25900906EA6 /* RootViewController.mm in Sources */,
 				15CF33D919C0319E00D5614B /* TestFacebookShare.cpp in Sources */,
-				9525AF9F1B67284300CBF477 /* TestGooglePlayScene.cpp in Sources */,
+				9525AF9F1B67284300CBF477 /* PluginParse.xcodeproj in Sources */,
 				FAD554E5177C131500968F54 /* TestAdsScene.cpp in Sources */,
 				FAD554E6177C131500968F54 /* TestAnalyticsScene.cpp in Sources */,
 				95B098281B58DC9800EAC5AB /* TestSenspark.cpp in Sources */,

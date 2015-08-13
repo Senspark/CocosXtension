@@ -37,12 +37,13 @@ enum class SocialPluginType {
     GOOGLE_PLAY,
 };
 
-enum class CloudSyncPluginType {
-    
+enum class DataPluginType {
+    GOOGLE_PLAY,
 };
 
 enum class IAPPluginType {
-    
+    GOOGLE_PLAY,
+    ITUNE_STORE,
 };
 
 enum class UserPluginType {
@@ -83,8 +84,9 @@ struct PluginTypes;
 
 REGISTER_PLUGIN_TYPE(AnalyticsPluginType);
 REGISTER_PLUGIN_TYPE(AdsPluginType);
-REGISTER_PLUGIN_TYPE(SocialPluginType);
+REGISTER_PLUGIN_TYPE(DataPluginType);
 REGISTER_PLUGIN_TYPE(IAPPluginType);
+REGISTER_PLUGIN_TYPE(SocialPluginType);
 REGISTER_PLUGIN_TYPE(UserPluginType);
 
 class SensparkPluginManager {
@@ -97,6 +99,7 @@ public:
     
     DECLARE_PLUGIN_LOADER_METHODS(Analytics);
     DECLARE_PLUGIN_LOADER_METHODS(Ads);
+    DECLARE_PLUGIN_LOADER_METHODS(Data);
     DECLARE_PLUGIN_LOADER_METHODS(Social);
     DECLARE_PLUGIN_LOADER_METHODS(IAP);
     DECLARE_PLUGIN_LOADER_METHODS(User);

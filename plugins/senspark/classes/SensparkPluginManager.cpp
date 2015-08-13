@@ -16,6 +16,7 @@ static SensparkPluginManager* s_pPluginManager = nullptr;
 
 DEFINE_PLUGIN_LOADER_METHODS(Analytics);
 DEFINE_PLUGIN_LOADER_METHODS(Ads);
+DEFINE_PLUGIN_LOADER_METHODS(Data);
 DEFINE_PLUGIN_LOADER_METHODS(Social);
 DEFINE_PLUGIN_LOADER_METHODS(IAP);
 DEFINE_PLUGIN_LOADER_METHODS(User);
@@ -35,6 +36,8 @@ SensparkPluginManager::SensparkPluginManager(void)
     REGISTER_PLUGIN_NAME(AdsPluginType, FACEBOOK_ADS, "AdsFacebook");
     REGISTER_PLUGIN_NAME(AdsPluginType, FLURRY_ADS, "AdsFlurry");
     REGISTER_PLUGIN_NAME(AdsPluginType, VUNGLE, "AdsVungle");
+    
+    REGISTER_PLUGIN_NAME(DataPluginType, GOOGLE_PLAY, "DataGooglePlay");
     
     //------ Register Social Services
     REGISTER_PLUGIN_NAME(SocialPluginType, FACEBOOK, "SocialFacebook");

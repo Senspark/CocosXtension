@@ -21,6 +21,8 @@
 #include "FlurryProtocolAds.h"
 #include "VungleProtocolAds.h"
 
+#include "GooglePlayProtocolData.h"
+
 #include "FacebookProtocolShare.h"
 
 #include "FacebookProtocolSocial.h"

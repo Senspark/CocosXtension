@@ -28,11 +28,13 @@ THE SOFTWARE.
 #include "ListLayer.h"
 #include "GooglePlayProtocolUser.h"
 #include "GooglePlayProtocolSocial.h"
+#include "GooglePlayProtocolData.h"
 #include "ProtocolUser.h"
 #include <string>
 
 USING_NS_SENSPARK_PLUGIN_USER;
 USING_NS_SENSPARK_PLUGIN_SOCIAL;
+USING_NS_SENSPARK_PLUGIN_DATA;
 USING_NS_SENSPARK;
 
 class TestGooglePlay : public ListLayer
@@ -51,11 +53,12 @@ public:
     
     void onUserCallback(int code, std::string& msg);
     void onSocialCallback(int code, std::string& msg);
+    void onDataCallback(int code, void* data, int64_t length);
 
 private:
-    GooglePlayProtocolUser* _protocolGooglePlayUser;
-    GooglePlayProtocolSocial* _protocolGooglePlaySocial;
-    
+    GooglePlayProtocolUser*     _protocolGooglePlayUser;
+    GooglePlayProtocolSocial*   _protocolGooglePlaySocial;
+    GooglePlayProtocolData*     _protocolGooglePlayData;
     Label* _resultInfo;
     
 };

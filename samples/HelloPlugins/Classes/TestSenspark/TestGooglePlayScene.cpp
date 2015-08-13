@@ -35,14 +35,17 @@ USING_NS_SENSPARK_PLUGIN_USER;
 
 enum {
     TAG_GP_LOGIN = 1,
-//    TAG_FB_LOGIN_WITH_PERMISSION,
     TAG_GP_LOGOUT,
     TAG_GP_SHOW_LEADERBOARDS,
     TAG_GP_SUBMIT_SCORE,
     TAG_GP_SHOW_ACHIEVEMENTS,
     TAG_GP_UNLOCK_ACHIEVEMENT,
     TAG_GP_REVEAL_ACHIEVEMENT,
-    TAG_GP_RESET_ACHIEVEMENTS
+    TAG_GP_RESET_ACHIEVEMENTS,
+    TAG_GP_SHOW_SNAPSHOTS,
+    TAG_GP_OPEN_SNAPSHOT,
+    TAG_GP_READ_SNAPSHOT,
+    TAG_GP_COMMIT_SNAPSHOT,
 //    TAG_GP_GETUID,
 //    TAG_FB_GETTOKEN,
 //    TAG_FB_GETPERMISSIONS,
@@ -67,6 +70,10 @@ static GPEventMenuItem s_GPMenuItem[] =
     {"unlock achievement", TAG_GP_UNLOCK_ACHIEVEMENT},
     {"reveal achievement", TAG_GP_REVEAL_ACHIEVEMENT},
     {"reset achievements", TAG_GP_RESET_ACHIEVEMENTS},
+    {"show snapshots", TAG_GP_SHOW_SNAPSHOTS},
+    {"open snapshot", TAG_GP_OPEN_SNAPSHOT},
+    {"read snapshot", TAG_GP_READ_SNAPSHOT},
+    {"commit snapshot", TAG_GP_COMMIT_SNAPSHOT},
     {nullptr, 0},
 };
 
@@ -140,6 +147,13 @@ bool TestGooglePlay::init()
     _protocolGooglePlaySocial->configureSocial(GOOGLE_PLAY_KEY_IOS);
     _protocolGooglePlaySocial->setDebugMode(true);
 
+    _protocolGooglePlayData = static_cast<GooglePlayProtocolData*>(SensparkPluginManager::getInstance()->loadDataPlugin(DataPluginType::GOOGLE_PLAY));
+    _protocolGooglePlayData->setCallback(CC_CALLBACK_3(TestGooglePlay::onDataCallback, this));
+//    _protocolGooglePlayData->configure(GOOGLE_PLAY_KEY_IOS);
+    _protocolGooglePlayData->setSnapshotListTitle("Test Google Play Data");
+    _protocolGooglePlayData->setAllowDeleteForSnapshotListLauncher(true);
+    _protocolGooglePlayData->setAllowCreateForSnapshotListLauncher(true);
+    _protocolGooglePlayData->setMaxSaveSlots(4);
     
     return true;
 }
@@ -185,6 +199,29 @@ void TestGooglePlay::doAction(int tag) {
             _protocolGooglePlaySocial->resetAchievements(CC_CALLBACK_2(TestGooglePlay::onSocialCallback, this));
             break;
         }
+        case TAG_GP_SHOW_SNAPSHOTS: {
+            _resultInfo->setString("Show snapshot list");
+            _protocolGooglePlayData->showSnapshotList();
+            break;
+        }
+        case TAG_GP_OPEN_SNAPSHOT: {
+            _resultInfo->setString("Opening snapshot with name: Default");
+            _protocolGooglePlayData->openData("Default", kConflictPolicyLastKnownGood);
+            break;
+        }
+        case TAG_GP_READ_SNAPSHOT: {
+            _resultInfo->setString("Reading snapshot content");
+            _protocolGooglePlayData->readCurrentData();
+            break;
+        }
+        case TAG_GP_COMMIT_SNAPSHOT: {
+            srand((int)time(0));
+            int data = rand();
+            
+            _resultInfo->setString(StringUtils::format("Write data with value: %d and commit", data));
+            _protocolGooglePlayData->commitData(&data, sizeof(data), nullptr, "Update value.");
+        }
+            
         default:
             break;
     }
@@ -202,3 +239,21 @@ void TestGooglePlay::onSocialCallback(int code, std::string &msg) {
     _resultInfo->setString(msg);
 }
 
+void TestGooglePlay::onDataCallback(int code, void *data, int64_t length) {
+    if (code == kOpenSucceed) {
+        _resultInfo->setString("Open file successful.");
+    } else if (code == kOpenFailed) {
+        _resultInfo->setString("Open file failed.");
+    } else if (code == kOpenConflicting) {
+        _resultInfo->setString("Open file conflicting.");
+    } else if (code == kReadSucceed) {
+        int saved = *(int*) data;
+        _resultInfo->setString(StringUtils::format("Data contain value: %d, bytecount: %lld", saved, length));
+    } else if (code == kReadFailed) {
+        _resultInfo->setString("Reading file failed");
+    } else if (code == kWriteSucceed) {
+        _resultInfo->setString("Write successfully.");
+    } else if (code == kWriteFailed) {
+        _resultInfo->setString("Write failed.");
+    }
+}

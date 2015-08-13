@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		95245C0D1B60D614000EDF84 /* AdmobProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95245C0C1B60D614000EDF84 /* AdmobProtocolAds.mm */; };
 		9525AFA31B672C0A00CBF477 /* GooglePlayProtocolUser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9525AFA21B672C0A00CBF477 /* GooglePlayProtocolUser.mm */; };
+		9537FD131B7896E500855EE7 /* GooglePlayProtocolData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9537FD121B7896E500855EE7 /* GooglePlayProtocolData.mm */; };
 		953C06F11B57A8DD002BB1A2 /* SensparkPluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 953C06EF1B57A8DD002BB1A2 /* SensparkPluginManager.cpp */; };
 		95C1602A1B5CEC1A00501400 /* GoogleProtocolAnalytics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95C160281B5CEC1A00501400 /* GoogleProtocolAnalytics.mm */; };
 		95C1602E1B5CF0BA00501400 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95C1602D1B5CF0BA00501400 /* Foundation.framework */; };
@@ -31,10 +32,12 @@
 		9520E0B31B46A74800B7768B /* libPluginSenspark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginSenspark.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		95245C0C1B60D614000EDF84 /* AdmobProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdmobProtocolAds.mm; sourceTree = "<group>"; };
 		9525AFA21B672C0A00CBF477 /* GooglePlayProtocolUser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GooglePlayProtocolUser.mm; sourceTree = "<group>"; };
+		9537FD121B7896E500855EE7 /* GooglePlayProtocolData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GooglePlayProtocolData.mm; sourceTree = "<group>"; };
 		953C06EB1B577563002BB1A2 /* GoogleProtocolAnalytics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoogleProtocolAnalytics.h; sourceTree = "<group>"; };
 		953C06EC1B578105002BB1A2 /* AdmobProtocolAds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdmobProtocolAds.h; sourceTree = "<group>"; };
 		953C06ED1B57A267002BB1A2 /* SensparkPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkPluginManager.h; sourceTree = "<group>"; };
 		953C06EF1B57A8DD002BB1A2 /* SensparkPluginManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SensparkPluginManager.cpp; sourceTree = "<group>"; };
+		957727881B78808000E532E6 /* GooglePlayProtocolData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GooglePlayProtocolData.h; sourceTree = "<group>"; };
 		95C160251B5CD83500501400 /* SensparkPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkPlugin.h; sourceTree = "<group>"; };
 		95C160281B5CEC1A00501400 /* GoogleProtocolAnalytics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GoogleProtocolAnalytics.mm; sourceTree = "<group>"; };
 		95C1602C1B5CEC9B00501400 /* SensparkPluginMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensparkPluginMacros.h; sourceTree = "<group>"; };
@@ -128,6 +131,7 @@
 		95FE48E91B57693A00739C4A /* include */ = {
 			isa = PBXGroup;
 			children = (
+				95C160251B5CD83500501400 /* SensparkPlugin.h */,
 				95F034471B6B2C4900BD28F2 /* FlurryProtocolAnalytics.h */,
 				953C06EB1B577563002BB1A2 /* GoogleProtocolAnalytics.h */,
 				95F0344A1B6B2C7B00BD28F2 /* AdColonyProtocolAds.h */,
@@ -136,6 +140,7 @@
 				95F034411B6B2B7900BD28F2 /* FacebookProtocolAds.h */,
 				95F034421B6B2BB100BD28F2 /* FlurryProtocolAds.h */,
 				95C954271B62207E0014047A /* VungleProtocolAds.h */,
+				957727881B78808000E532E6 /* GooglePlayProtocolData.h */,
 				95F0343B1B6B26E900BD28F2 /* FacebookProtocolSocial.h */,
 				95F034321B6B238200BD28F2 /* GameCenterProtocolSocial.h */,
 				95EBD89B1B664AD80004D448 /* GooglePlayProtocolSocial.h */,
@@ -144,7 +149,6 @@
 				95F034351B6B25C100BD28F2 /* GameCenterProtocolUser.h */,
 				95EBD89A1B664AC00004D448 /* GooglePlayProtocolUser.h */,
 				953C06ED1B57A267002BB1A2 /* SensparkPluginManager.h */,
-				95C160251B5CD83500501400 /* SensparkPlugin.h */,
 				95C1602C1B5CEC9B00501400 /* SensparkPluginMacros.h */,
 			);
 			name = include;
@@ -162,6 +166,7 @@
 				95F034451B6B2C2200BD28F2 /* FacebookProtocolAds.mm */,
 				95F034431B6B2BCA00BD28F2 /* FlurryProtocolAds.mm */,
 				95C954281B62212B0014047A /* VungleProtocolAds.mm */,
+				9537FD121B7896E500855EE7 /* GooglePlayProtocolData.mm */,
 				95F0343F1B6B278C00BD28F2 /* FacebookProtocolShare.m */,
 				95F0343C1B6B271000BD28F2 /* FacebookProtocolSocial.mm */,
 				95F034331B6B239400BD28F2 /* GameCenterProtocolSocial.mm */,
@@ -253,6 +258,7 @@
 				95F034461B6B2C2200BD28F2 /* FacebookProtocolAds.mm in Sources */,
 				95F034341B6B239400BD28F2 /* GameCenterProtocolSocial.mm in Sources */,
 				95C1602A1B5CEC1A00501400 /* GoogleProtocolAnalytics.mm in Sources */,
+				9537FD131B7896E500855EE7 /* GooglePlayProtocolData.mm in Sources */,
 				95F034401B6B278C00BD28F2 /* FacebookProtocolShare.m in Sources */,
 				95F0343D1B6B271000BD28F2 /* FacebookProtocolSocial.mm in Sources */,
 				95F034371B6B25E100BD28F2 /* GameCenterProtocolUser.mm in Sources */,
