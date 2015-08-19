@@ -52,6 +52,10 @@ enum class UserPluginType {
     GOOGLE_PLAY,
 };
 
+enum class BaaSPluginType {
+    PARSE
+};
+
 template<typename T>
 struct PluginTypes;
 
@@ -84,6 +88,7 @@ struct PluginTypes;
 
 REGISTER_PLUGIN_TYPE(AnalyticsPluginType);
 REGISTER_PLUGIN_TYPE(AdsPluginType);
+REGISTER_PLUGIN_TYPE(BaaSPluginType);
 REGISTER_PLUGIN_TYPE(DataPluginType);
 REGISTER_PLUGIN_TYPE(IAPPluginType);
 REGISTER_PLUGIN_TYPE(SocialPluginType);
@@ -99,6 +104,7 @@ public:
     
     DECLARE_PLUGIN_LOADER_METHODS(Analytics);
     DECLARE_PLUGIN_LOADER_METHODS(Ads);
+    DECLARE_PLUGIN_LOADER_METHODS(BaaS);
     DECLARE_PLUGIN_LOADER_METHODS(Data);
     DECLARE_PLUGIN_LOADER_METHODS(Social);
     DECLARE_PLUGIN_LOADER_METHODS(IAP);

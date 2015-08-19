@@ -30,14 +30,15 @@ using namespace cocos2d::plugin;
 {
     _clientID = (NSString*) [cpInfo objectForKey:@"GoogleClientID"];
     [GPGManager sharedInstance].statusDelegate = self;
+    [GPGManager sharedInstance].snapshotsEnabled = YES;
     
     [[GPGManager sharedInstance] signInWithClientID:_clientID silently:YES];
-    
 }
 
 - (void) login
 {
     if (_clientID) {
+        [GPGManager sharedInstance].snapshotsEnabled = YES;
         [[GPGManager sharedInstance] signInWithClientID:_clientID silently:NO];
     } else {
         OUTPUT_LOG(@"No Client ID");

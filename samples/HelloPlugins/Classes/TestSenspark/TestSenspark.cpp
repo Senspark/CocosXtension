@@ -12,6 +12,7 @@
 #include "TestGameCenterScene.h"
 #include "TestFacebookScene.h"
 #include "TestSensparkAdsScene.h"
+#include "TestParseScene.h"
 
 using namespace senspark;
 USING_NS_CC;
@@ -48,7 +49,7 @@ bool TestSenspark::init() {
     addTest("Social - Google Play", []() { pushScene(TestGooglePlay::scene()); });
     addTest("Social - Game Center", []() { pushScene(TestGameCenter::scene()); });
     
-    addTest("Cloud Sync - Parse", []() { pushScene(ListLayer::scene()); });
+    addTest("BaaS - Parse", []() { pushScene(TestParseBaaS::scene()); });
     
     return true;
 }

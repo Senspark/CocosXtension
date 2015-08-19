@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9507EB651B7DABD3009FEF7E /* BaaSParse.h in Headers */ = {isa = PBXBuildFile; fileRef = 9507EB631B7DABD3009FEF7E /* BaaSParse.h */; };
+		9507EB661B7DABD3009FEF7E /* BaaSParse.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9507EB641B7DABD3009FEF7E /* BaaSParse.mm */; };
 		95094CD71B7C9E6500CEFD43 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95094CD01B7C9E6500CEFD43 /* Bolts.framework */; };
 		95094CD81B7C9E6500CEFD43 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95094CD11B7C9E6500CEFD43 /* Parse.framework */; };
 		95094CD91B7C9E6500CEFD43 /* ParseCrashReporting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95094CD21B7C9E6500CEFD43 /* ParseCrashReporting.framework */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9507EB631B7DABD3009FEF7E /* BaaSParse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaaSParse.h; sourceTree = "<group>"; };
+		9507EB641B7DABD3009FEF7E /* BaaSParse.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BaaSParse.mm; sourceTree = "<group>"; };
 		95094CBC1B7C923400CEFD43 /* libPluginParse.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginParse.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		95094CD01B7C9E6500CEFD43 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "parse-library-1.8.0/Bolts.framework"; sourceTree = "<group>"; };
 		95094CD11B7C9E6500CEFD43 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = "parse-library-1.8.0/Parse.framework"; sourceTree = "<group>"; };
@@ -79,6 +83,8 @@
 		95094CCB1B7C953500CEFD43 /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				9507EB631B7DABD3009FEF7E /* BaaSParse.h */,
+				9507EB641B7DABD3009FEF7E /* BaaSParse.mm */,
 			);
 			name = ios;
 			sourceTree = "<group>";
@@ -90,6 +96,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9507EB651B7DABD3009FEF7E /* BaaSParse.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +156,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9507EB661B7DABD3009FEF7E /* BaaSParse.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,7 +248,13 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/parse-library-1.8.0",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../../../protocols/platform/ios",
+					"$(SRCROOT)/../../../protocols/include",
+				);
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
@@ -254,6 +268,12 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/parse-library-1.8.0",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../../../protocols/platform/ios",
+					"$(SRCROOT)/../../../protocols/include",
+				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};

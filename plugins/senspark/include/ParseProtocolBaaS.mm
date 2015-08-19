@@ -8,6 +8,10 @@
 
 #import "ParseProtocolBaaS.h"
 
-@implementation ParseProtocolBaaS
+USING_NS_SENSPARK_PLUGIN_BAAS;
 
-@end
+ParseProtocolBaaS::ParseProtocolBaaS() {
+}
+
+ParseProtocolBaaS::~ParseProtocolBaaS() {
+};

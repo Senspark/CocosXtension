@@ -20,6 +20,7 @@ DEFINE_PLUGIN_LOADER_METHODS(Data);
 DEFINE_PLUGIN_LOADER_METHODS(Social);
 DEFINE_PLUGIN_LOADER_METHODS(IAP);
 DEFINE_PLUGIN_LOADER_METHODS(User);
+DEFINE_PLUGIN_LOADER_METHODS(BaaS);
 
 SensparkPluginManager::SensparkPluginManager(void)
 {
@@ -37,6 +38,10 @@ SensparkPluginManager::SensparkPluginManager(void)
     REGISTER_PLUGIN_NAME(AdsPluginType, FLURRY_ADS, "AdsFlurry");
     REGISTER_PLUGIN_NAME(AdsPluginType, VUNGLE, "AdsVungle");
     
+    //------ Register BaaS Services ------
+    REGISTER_PLUGIN_NAME(BaaSPluginType, PARSE, "BaaSParse");
+    
+    //------ Register Data Services ------
     REGISTER_PLUGIN_NAME(DataPluginType, GOOGLE_PLAY, "DataGooglePlay");
     
     //------ Register Social Services

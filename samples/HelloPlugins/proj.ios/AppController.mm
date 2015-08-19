@@ -3,11 +3,13 @@
 #import "cocos2d.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
+#import "Configs.h"
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 #import <GoogleOpenSource/GoogleOpenSource.h>
 #import <GoogleOpenSource/GTLBase64.h>
+#import <Parse/Parse.h>
 
 @implementation AppController
 
@@ -65,7 +67,10 @@ static AppDelegate s_sharedApplication;
     app->run();
     
     [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
-    
+
+    [Parse enableLocalDatastore];
+    [Parse setApplicationId:PARSE_APPLICATION_ID clientKey:PARSE_CLIENT_KEY];
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     return YES;
 }
 

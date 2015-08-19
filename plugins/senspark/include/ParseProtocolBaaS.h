@@ -6,8 +6,22 @@
 //  Copyright (c) 2015 Senspark Co., Ltd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef PluginSenspark_ParseProtocolBaaS_h
+#define PluginSenspark_ParseProtocolBaaS_h
 
-@interface ParseProtocolBaaS : NSObject
+#include "ProtocolBaaS.h"
+#include "SensparkPluginMacros.h"
+#include <string>
 
-@end
+NS_SENSPARK_PLUGIN_BAAS_BEGIN
+
+class ParseProtocolBaaS : public cocos2d::plugin::ProtocolBaaS
+{
+public:
+    ParseProtocolBaaS();
+    virtual ~ParseProtocolBaaS();
+};
+
+NS_SENSPARK_PLUGIN_BAAS_END
+
+#endif
