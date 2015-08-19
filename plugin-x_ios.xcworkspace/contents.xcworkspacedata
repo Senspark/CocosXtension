@@ -6,6 +6,13 @@
       name = "plugins">
       <Group
          location = "container:"
+         name = "baas">
+         <FileRef
+            location = "group:plugins/parse/proj.ios/PluginParse.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
          name = "analytics">
          <FileRef
             location = "group:plugins/google-analytics/proj.ios/PluginGoogleAnalytics.xcodeproj">
