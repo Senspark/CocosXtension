@@ -2,10 +2,11 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-$(call import-add-path,$(LOCAL_PATH)/../../../../..)
-$(call import-add-path,$(LOCAL_PATH)/../../../../../external)
-$(call import-add-path,$(LOCAL_PATH)/../../../../../cocos)
-$(call import-add-path,$(LOCAL_PATH)/../../../../publish)
+$(call import-add-path,$(LOCAL_PATH)/../../../../)
+$(call import-add-path,$(COCOS2DX_ROOT))
+$(call import-add-path,$(COCOS2DX_ROOT)/external)
+$(call import-add-path,$(COCOS2DX_ROOT)/cocos)
+$(call import-add-path,$(COCOS2DX_ROOT)/publish)
 
 LOCAL_MODULE := cocos2dcpp_shared
 
@@ -27,9 +28,18 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/TestSocial/TestSocialScene.cpp \
                    ../../Classes/TestSocial/MySocialManager.cpp \
                    ../../Classes/TestFacebookUser/TestFacebookUserScene.cpp \
-                   ../../Classes/TestFacebookShare/TestFacebookShare.cpp
-
+                   ../../Classes/TestFacebookShare/TestFacebookShare.cpp \
+				   ../../Classes/TestSenspark/ListLayer.cpp \
+				   ../../Classes/TestSenspark/TestFacebookScene.cpp \
+				   ../../Classes/TestSenspark/TestGameCenterScene.cpp \
+				   ../../Classes/TestSenspark/TestGoogleAnalyticsScene.cpp \
+				   ../../Classes/TestSenspark/TestGooglePlayScene.cpp \
+				   ../../Classes/TestSenspark/TestParseScene.cpp \
+				   ../../Classes/TestSenspark/TestSenspark.cpp \
+				   ../../Classes/TestSenspark/TestSensparkAdsScene.cpp
+				   
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
+	$(LOCAL_PATH)/../../Classes/TestSenspark \
     $(LOCAL_PATH)/../../Classes/TestAds \
     $(LOCAL_PATH)/../../Classes/TestAnalytics \
     $(LOCAL_PATH)/../../Classes/TestIAP \
@@ -47,5 +57,5 @@ PluginProtocolStatic
 
 include $(BUILD_SHARED_LIBRARY)
 
-$(call import-module,plugin/protocols/proj.android/jni)
+$(call import-module,protocols/proj.android/jni)
 $(call import-module,cocos)

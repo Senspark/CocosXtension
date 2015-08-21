@@ -207,6 +207,7 @@ void TestParseBaaS::onParseCallback(int ret, const std::string &result) {
             break;
         case BaaSActionResultCode::kLogoutSucceed:
             _resultInfo->setString("Logout succeed.");
+            log(result.c_str());
             break;
         case BaaSActionResultCode::kLogoutFailed:
             _resultInfo->setString(result);
