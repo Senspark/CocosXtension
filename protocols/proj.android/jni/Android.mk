@@ -13,6 +13,7 @@ $(addprefix ../../platform/android/, \
     PluginUtils.cpp \
     PluginProtocol.cpp \
     ProtocolAnalytics.cpp \
+    ProtocolBaaS.cpp \
     ProtocolIAP.cpp \
     ProtocolAds.cpp \
     ProtocolShare.cpp \
