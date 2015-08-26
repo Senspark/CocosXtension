@@ -29,6 +29,7 @@
 namespace cocos2d{namespace plugin{
 
 extern "C" {
+
 JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_UserFacebook_nativeRequestCallback(JNIEnv*  env, jobject thiz, jint ret, jstring msg, jint cbIndex)
 {
 	std::string stdMsg = PluginJniHelper::jstring2string(msg);
@@ -175,6 +176,16 @@ void FacebookAgent::api(const std::string &path, int method, const FBParam &para
 	PluginParam _cbIndex((int)(requestCallbacks.size() - 1));
 
 	agentManager->getUserPlugin()->callFuncWithParam("request", &_path, &_method, &_params, &_cbIndex, NULL);
+}
+
+void FacebookAgent::graphRequest(const std::string &path, const FBParam params, FBCallback cb) {
+    requestCallbacks.push_back(cb);
+
+    PluginParam _path(path.c_str());
+    PluginParam _params(params);
+    PluginParam _cbIndex((int)(requestCallbacks.size() - 1));
+
+    agentManager->getUserPlugin()->callFuncWithParam("graphRequest", &_path, &_params, &_cbIndex, NULL);
 }
 
 FacebookAgent::FBCallback FacebookAgent::getRequestCallback(int index)
