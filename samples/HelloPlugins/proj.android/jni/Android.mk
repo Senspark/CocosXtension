@@ -2,11 +2,11 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-$(call import-add-path,$(LOCAL_PATH)/../../../../)
+#$(call import-add-path,$(LOCAL_PATH)/../../../..)
+$(call import-add-path,$(LOCAL_PATH)/../../../../publish)
 $(call import-add-path,$(COCOS2DX_ROOT))
 $(call import-add-path,$(COCOS2DX_ROOT)/external)
 $(call import-add-path,$(COCOS2DX_ROOT)/cocos)
-$(call import-add-path,$(COCOS2DX_ROOT)/publish)
 
 LOCAL_MODULE := cocos2dcpp_shared
 
@@ -48,14 +48,17 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
     $(LOCAL_PATH)/../../Classes/TestIAPOnline \
     $(LOCAL_PATH)/../../Classes/TestSocial \
     $(LOCAL_PATH)/../../Classes/TestFacebookUser \
-    $(LOCAL_PATH)/../../Classes/TestFacebookShare
+    $(LOCAL_PATH)/../../Classes/TestFacebookShare 
 
 
+LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
+LOCAL_WHOLE_STATIC_LIBRARIES += cocos_extension_static
+LOCAL_WHOLE_STATIC_LIBRARIES += PluginProtocolStatic
+LOCAL_WHOLE_STATIC_LIBRARIES += PluginSensparkStatic
 
-LOCAL_WHOLE_STATIC_LIBRARIES += cocos2dx_static \
-PluginProtocolStatic
+include $(BUILD_SHARED_LIBRARY)$
 
-include $(BUILD_SHARED_LIBRARY)
-
-$(call import-module,protocols/proj.android/jni)
+$(call import-module,protocols/android)
+$(call import-module,plugins/senspark/android)
 $(call import-module,cocos)
+$(call import-module,extensions)

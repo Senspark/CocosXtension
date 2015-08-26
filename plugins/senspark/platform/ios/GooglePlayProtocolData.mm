@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #include "GooglePlayProtocolData.h"
+#include "PluginUtilsIOS.h"
 
 USING_NS_SENSPARK_PLUGIN_DATA;
 using namespace cocos2d::plugin;
@@ -16,6 +17,7 @@ GooglePlayProtocolData::GooglePlayProtocolData() {
 }
 
 GooglePlayProtocolData::~GooglePlayProtocolData() {
+    PluginUtilsIOS::erasePluginOCData(this);
 }
 
 void GooglePlayProtocolData::configure(const std::string& clientId) {
