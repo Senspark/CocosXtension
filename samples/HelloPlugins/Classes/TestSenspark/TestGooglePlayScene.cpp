@@ -220,6 +220,7 @@ void TestGooglePlay::doAction(int tag) {
             
             _resultInfo->setString(StringUtils::format("Write data with value: %d and commit", data));
             _protocolGooglePlayData->commitData(&data, sizeof(data), nullptr, "Update value.");
+            break;
         }
             
         default:
