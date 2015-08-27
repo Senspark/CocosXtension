@@ -1,4 +1,4 @@
-package org.cocos2dx.libpluginparse;
+package org.cocos2dx.plugin;
 
 import java.util.Hashtable;
 import java.util.Iterator;
