@@ -7,6 +7,42 @@
 using namespace std;
 namespace cocos2d { namespace plugin {
 
+extern "C" {
+
+JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_BaaSWrapper_nativeOnActionResult(JNIEnv* env, jobject thiz, jstring className, jint code, jstring result) {
+    std::string strResult = PluginJniHelper::jstring2string(result);
+    std::string strClassName = PluginJniHelper::jstring2string(className);
+    PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
+    PluginUtils::outputLog("ProtocolBaaS", "nativeOnActionResult(), Get plugin ptr : %p", pPlugin);
+
+    if (pPlugin != nullptr) {
+        PluginUtils::outputLog("ProtocolUser", "nativeOnActionResult(), Get plugin name : %s", pPlugin->getPluginName());
+        ProtocolBaaS* pBaaS = dynamic_cast<ProtocolBaaS*>(pPlugin);
+        if (pBaaS != nullptr)
+        {
+            BaaSActionListener* listener = pBaaS->getActionListener();
+            if (nullptr != listener)
+            {
+                listener->onActionResult(pBaaS, code, strResult.c_str());
+            }
+            else
+            {
+                ProtocolBaaS::ProtocolBaaSCallback callback = pBaaS->getCallback();
+                if(callback)
+                {
+                    callback(code, strResult);
+                }
+                else
+                {
+                    PluginUtils::outputLog("Listener of plugin %s not set correctly", pPlugin->getPluginName());
+                }
+            }
+        }
+    }
+}
+
+}
+
 ProtocolBaaS::ProtocolBaaS() : _listener(nullptr) {
 
 }
