@@ -111,7 +111,7 @@ using namespace cocos2d::plugin;
     if (_currentSnapshot && _currentSnapshot.isOpen) {
         [_currentSnapshot readWithCompletionHandler:^(NSData *data, NSError *error) {
             if (error) {
-                NSLog(@"Read data successfully");
+                NSLog(@"Read data failed.");
                 [DataWrapper onDataResult:self withRet:kReadFailed withData:nil];
             } else {
                 NSLog(@"Read data successfully");

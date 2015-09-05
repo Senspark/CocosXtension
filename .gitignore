@@ -104,3 +104,12 @@ plugins/googleplay/platform/ios/gpg.framework
 plugins/googleplay/platform/ios/gpg.bundle
 plugins/googleplay/platform/android/include/gpg
 plugins/googleplay/platform
+plugins/parse/proj.android/Parse-1.10.1
+plugins/google-play/platform/android/include/gpg
+plugins/google-play/platform/ios/GoogleOpenSource.framework
+plugins/google-play/platform/ios/GooglePlus.bundle
+plugins/google-play/platform/ios/gpg.bundle
+plugins/google-play/platform/ios/gpg.framework
+plugins/google-play/platform/ios/OpenSource
+plugins/google-play/platform/ios/GooglePlus.framework
+plugins/google-play/platform/android/lib
