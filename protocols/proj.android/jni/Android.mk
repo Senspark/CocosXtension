@@ -16,6 +16,7 @@ $(addprefix ../../platform/android/, \
     ProtocolBaaS.cpp \
     ProtocolIAP.cpp \
     ProtocolAds.cpp \
+    ProtocolData.cpp \
     ProtocolShare.cpp \
     ProtocolUser.cpp \
     ProtocolSocial.cpp \
@@ -28,8 +29,11 @@ $(addprefix ../../platform/android/, \
 LOCAL_CFLAGS := -std=c++11 -Wno-psabi
 LOCAL_EXPORT_CFLAGS := -Wno-psabi
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../include $(LOCAL_PATH)/../../platform/android
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../include $(LOCAL_PATH)/../../platform/android
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../include
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../platform/android
+
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../include
+LOCAL_EXPORT_C_INCLUDES += $(LOCAL_PATH)/../../platform/android
 
 LOCAL_LDLIBS := -landroid
 LOCAL_LDLIBS += -llog
