@@ -9,13 +9,13 @@ One unified API for all SDKs
 
 * Ads
 * Analytics
-* IAP
-* Social
-* Cloud Sync
-* Game Services
-* Network Utility
+* BaaS (Backend as a Service)
+* Data
+* IAP (comming soon)
+* Sharing
+* Social 
 
-## How To Build
+## How To Contribute
 
 1. Prerequisites
 	- Define environment variable `COCOS2DX_ROOT` in `/etc/launchd.conf` ([using this help](http://stackoverflow.com/questions/135688/setting-environment-variables-in-os-x/588442#588442))
@@ -23,4 +23,45 @@ One unified API for all SDKs
 	
 			grep -E "^setenv" /etc/launchd.conf | xargs -t -L 1 launchctl
 
-2. 
+2. ...
+
+
+## How To Use
+### 1. Analytics
+
+- **Providers**
+	- Flurry Analytics 
+	- Google Analytics 
+
+- **Using**
+	- Example
+			
+			auto manager = SensparkPluginManager::getInstance();
+			
+			auto pluginProtocol = manager->loadAnalyticsPlugin(AnalyticsPluginType::GOOGLE_ANALYTICS);
+		
+			auto googleAnalytics = static_cast<GoogleProtocolAnalytics*>(pluginProtocol) 
+
+
+### 2. Ads
+
+- **Providers**
+	- Admob
+	- AdColony
+	- Facebook Ads
+	- Tapjoy
+	- Vungle
+- **Using**
+	- Example
+			
+			auto manager = SensparkPluginManager::getInstance();
+			
+			auto pluginProtocol = manager->loadAnalyticsPlugin(AdsPluginType::ADMOB);
+		
+			auto admobAd = static_cast<AdmobProtocolAds*>(pluginProtocol) 
+
+### 3. BaaS
+### 4. Data
+### 5. IAP
+### 6. Sharing
+### 7. Social
