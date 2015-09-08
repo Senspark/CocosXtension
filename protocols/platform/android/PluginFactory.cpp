@@ -30,6 +30,8 @@ THE SOFTWARE.
 #include "ProtocolShare.h"
 #include "ProtocolUser.h"
 #include "ProtocolSocial.h"
+#include "ProtocolData.h"
+#include "ProtocolBaaS.h"
 
 namespace cocos2d { namespace plugin {
 

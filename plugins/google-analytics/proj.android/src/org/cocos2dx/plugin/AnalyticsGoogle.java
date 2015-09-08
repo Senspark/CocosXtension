@@ -223,7 +223,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 
 	@Override
 	public String getSDKVersion() {
-		return "4.0";
+		return "7.5.71";
 	}
 
 	@Override

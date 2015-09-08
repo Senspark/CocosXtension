@@ -45,7 +45,7 @@ bool TestGoogleAnalytics::init() {
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     _pluginAnalytics->configureTracker(GOOGLE_ANALYTICS_KEY_IOS);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANROID) 
+#else
     _pluginAnalytics->configureTracker(GOOGLE_ANALYTICS_KEY_ANDROID);
 #endif
     
