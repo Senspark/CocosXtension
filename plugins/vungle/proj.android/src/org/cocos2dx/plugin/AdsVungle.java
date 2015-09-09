@@ -45,7 +45,7 @@ public class AdsVungle implements InterfaceAds, EventListener, PluginListener {
 
 	@Override
 	public String getSDKVersion() {
-		return vunglePub.VERSION;
+		return VunglePub.VERSION;
 	}
 
 	@Override
@@ -148,6 +148,18 @@ public class AdsVungle implements InterfaceAds, EventListener, PluginListener {
 	public void onAdPlayableChanged(boolean arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void onStart() {
+	}
+
+	@Override
+	public void onStop() {
+	}
+
+	@Override
+	public void onBackPressed() {
 	}
 
 }
