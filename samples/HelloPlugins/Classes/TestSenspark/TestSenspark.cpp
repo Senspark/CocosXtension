@@ -41,7 +41,7 @@ bool TestSenspark::init() {
     }
     
     addTest("Analytics - Google", []() { pushScene(TestGoogleAnalytics::scene()); });
-    addTest("Analytics - Flurry", []() { pushScene(Scene::create()); });
+//    addTest("Analytics - Flurry", []() { pushScene(Scene::create()); });
     
     addTest("Ads", []() { pushScene(TestSensparkAds::scene()); });
 

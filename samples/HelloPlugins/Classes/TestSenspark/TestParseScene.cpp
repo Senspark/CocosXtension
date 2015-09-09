@@ -15,6 +15,7 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 USING_NS_SENSPARK_PLUGIN_BAAS;
+
 using namespace cocos2d::plugin;
 using namespace rapidjson;
 
@@ -207,7 +208,7 @@ void TestParseBaaS::onParseCallback(int ret, const std::string &result) {
             break;
         case BaaSActionResultCode::kLogoutSucceed:
             _resultInfo->setString("Logout succeed.");
-            log(result.c_str());
+            log("%s\n", result.c_str());
             break;
         case BaaSActionResultCode::kLogoutFailed:
             _resultInfo->setString(result);
