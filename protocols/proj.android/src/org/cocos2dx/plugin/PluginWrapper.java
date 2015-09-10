@@ -69,6 +69,12 @@ public class PluginWrapper {
 //        }
     }
     
+    public static void onStart() {
+    	for (PluginListener listener : sListeners) {
+    		listener.onStart();
+    	}
+    }
+    
     public static void onResume() {
     	for (PluginListener listener : sListeners) {
     		listener.onResume();
@@ -78,6 +84,18 @@ public class PluginWrapper {
     public static void onPause() {
     	for (PluginListener listener : sListeners) {
     		listener.onPause();
+    	}
+    }
+    
+    public static void onStop() {
+    	for (PluginListener listener : sListeners) {
+    		listener.onStop();
+    	}
+    }
+    
+    public static void onBackPressed() {
+    	for (PluginListener listener : sListeners) {
+    		listener.onBackPressed();
     	}
     }
     
