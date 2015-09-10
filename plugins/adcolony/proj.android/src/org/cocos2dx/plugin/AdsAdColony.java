@@ -135,4 +135,20 @@ public class AdsAdColony implements InterfaceAds, PluginListener {
 		return false;
 	}
 
+	@Override
+	public void onStart() {
+		
+	}
+
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onBackPressed() {
+		AdColony.onBackPressed();		
+	}
+
 }

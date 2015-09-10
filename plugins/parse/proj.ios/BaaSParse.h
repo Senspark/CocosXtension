@@ -27,6 +27,9 @@
 - (void) updateObjectInBackground: (NSString*) className withId: (NSString*) objId withParams: (NSDictionary*) params;
 - (NSString*) updateObject: (NSString*) className withId: (NSString*) objId withParams: (NSDictionary*) params;
 
+- (void) deleteObjectInBackground: (NSString*) className withId: (NSString*) objId;
+- (void) deleteObject: (NSString*) className withId: (NSString*) objId;
+
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;
 
