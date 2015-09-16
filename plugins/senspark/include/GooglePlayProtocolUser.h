@@ -15,6 +15,12 @@
 
 NS_SENSPARK_PLUGIN_USER_BEGIN
 
+#define CLIENT_NONE 0x00
+#define CLIENT_GAMES 0x01
+#define CLIENT_PLUS 0x02
+#define CLIENT_APPSTATE 0x04
+#define CLIENT_SNAPSHOT 0x08
+
 class GooglePlayProtocolUser : public cocos2d::plugin::ProtocolUser
 {
 public:

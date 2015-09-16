@@ -35,7 +35,6 @@ void FacebookProtocolUser::loginWithReadPermissions(const std::string &permissio
 }
 
 void FacebookProtocolUser::loginWithReadPermissions(const std::string &permission, FacebookProtocolUser::ProtocolUserCallback &cb) {
-
     setCallback(cb);
     loginWithReadPermissions(permission);
 }

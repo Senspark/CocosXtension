@@ -141,19 +141,15 @@ bool TestGooglePlay::init()
     _protocolGooglePlayUser->setDebugMode(true);
     
     _protocolGooglePlaySocial = static_cast<GooglePlayProtocolSocial*>(SensparkPluginManager::getInstance()->loadSocialPlugin(SocialPluginType::GOOGLE_PLAY));
-    
+
     assert(_protocolGooglePlaySocial != nullptr);
-    
+
     _protocolGooglePlaySocial->configureSocial(GOOGLE_PLAY_KEY_IOS);
     _protocolGooglePlaySocial->setDebugMode(true);
-
+//
     _protocolGooglePlayData = static_cast<GooglePlayProtocolData*>(SensparkPluginManager::getInstance()->loadDataPlugin(DataPluginType::GOOGLE_PLAY));
     _protocolGooglePlayData->setCallback(CC_CALLBACK_3(TestGooglePlay::onDataCallback, this));
-//    _protocolGooglePlayData->configure(GOOGLE_PLAY_KEY_IOS);
-    _protocolGooglePlayData->setSnapshotListTitle("Test Google Play Data");
-    _protocolGooglePlayData->setAllowDeleteForSnapshotListLauncher(true);
-    _protocolGooglePlayData->setAllowCreateForSnapshotListLauncher(true);
-    _protocolGooglePlayData->setMaxSaveSlots(4);
+    _protocolGooglePlayData->configure(GOOGLE_PLAY_KEY_IOS);
     
     return true;
 }
@@ -201,7 +197,7 @@ void TestGooglePlay::doAction(int tag) {
         }
         case TAG_GP_SHOW_SNAPSHOTS: {
             _resultInfo->setString("Show snapshot list");
-            _protocolGooglePlayData->showSnapshotList();
+            _protocolGooglePlayData->showSnapshotList("Test Google Play Data", true, true, 4);
             break;
         }
         case TAG_GP_OPEN_SNAPSHOT: {
@@ -240,7 +236,7 @@ void TestGooglePlay::onSocialCallback(int code, std::string &msg) {
     _resultInfo->setString(msg);
 }
 
-void TestGooglePlay::onDataCallback(int code, void *data, int64_t length) {
+void TestGooglePlay::onDataCallback(int code, void *data, size_t length) {
     if (code == kOpenSucceed) {
         _resultInfo->setString("Open file successful.");
     } else if (code == kOpenFailed) {
@@ -248,8 +244,11 @@ void TestGooglePlay::onDataCallback(int code, void *data, int64_t length) {
     } else if (code == kOpenConflicting) {
         _resultInfo->setString("Open file conflicting.");
     } else if (code == kReadSucceed) {
-        int saved = *(int*) data;
-        _resultInfo->setString(StringUtils::format("Data contain value: %d, bytecount: %lld", saved, length));
+        int saved = 0;
+        if (data != nullptr) {
+            saved = *(int*) data;
+        }
+        _resultInfo->setString(StringUtils::format("Data contain value: %d, bytecount: %d", saved, (int) length));
     } else if (code == kReadFailed) {
         _resultInfo->setString("Reading file failed");
     } else if (code == kWriteSucceed) {

@@ -54,6 +54,7 @@ public class BaaSParse implements InterfaceBaaS {
 		String appId = devInfo.get("ParseApplicationId");
 		String clientKey = devInfo.get("ParseClientKey");
 		
+		Parse.enableLocalDatastore(mContext);
 		Parse.initialize(mContext, appId, clientKey);
 	}
 

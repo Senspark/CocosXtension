@@ -33,14 +33,14 @@ void GooglePlayProtocolSocial::showLeaderboards() {
 
 void GooglePlayProtocolSocial::unlockAchievement(const std::string &achievementId) {
     TAchievementInfo achievementInfo;
-    achievementInfo["achievemetId"] = achievementId;
+    achievementInfo["achievementId"] = achievementId;
 
     ProtocolSocial::unlockAchievement(achievementInfo);
 }
 
 void GooglePlayProtocolSocial::unlockAchievement(const std::string &achievementId, GooglePlayProtocolSocial::ProtocolSocialCallback pcb) {
     TAchievementInfo achievementInfo;
-    achievementInfo["achievemetId"] = achievementId;
+    achievementInfo["achievementId"] = achievementId;
 
     ProtocolSocial::unlockAchievement(achievementInfo, pcb);
 }
@@ -72,14 +72,14 @@ void GooglePlayProtocolSocial::revealAchievement(cocos2d::plugin::TAchievementIn
 
 void GooglePlayProtocolSocial::revealAchievement(const std::string& achievementId) {
     TAchievementInfo achInfo;
-    achInfo["achievemetId"] = achievementId;
+    achInfo["achievementId"] = achievementId;
 
     revealAchievement(achInfo);
 }
 
 void GooglePlayProtocolSocial::revealAchievement(const std::string& achievementId, GooglePlayProtocolSocial::ProtocolSocialCallback pcb) {
     TAchievementInfo achInfo;
-    achInfo["achievemetId"] = achievementId;
+    achInfo["achievementId"] = achievementId;
 
     revealAchievement(achInfo, pcb);
 }

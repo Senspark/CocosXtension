@@ -53,7 +53,7 @@
 
 - (void) unlockAchievement: (NSMutableDictionary*) achInfo
 {
-    NSString* achievementId = [achInfo objectForKey:@"achievemetId"];
+    NSString* achievementId = [achInfo objectForKey:@"achievementId"];
     GPGAchievement* unlockMe = [GPGAchievement achievementWithId:achievementId];
     
     [unlockMe unlockAchievementWithCompletionHandler:^(BOOL newlyUnlocked, NSError *error) {
@@ -71,7 +71,7 @@
 
 - (void) revealAchievement:(NSMutableDictionary *)achInfo
 {
-    NSString* achievementId = [achInfo objectForKey:@"achievemetId"];
+    NSString* achievementId = [achInfo objectForKey:@"achievementId"];
     GPGAchievement* revealMe = [GPGAchievement achievementWithId:achievementId];
     
     [revealMe revealAchievementWithCompletionHandler:^(GPGAchievementState state, NSError *error) {
@@ -89,7 +89,7 @@
 
 - (void) resetAchievement:(NSMutableDictionary *)achInfo
 {
-    NSString* achievementId = [achInfo objectForKey:@"achievemetId"];
+    NSString* achievementId = [achInfo objectForKey:@"achievementId"];
     GPGAchievement* resetMe = [GPGAchievement achievementWithId:achievementId];
     
     [resetMe resetAchievementWithCompletionHandler:^(NSError *error) {

@@ -41,7 +41,7 @@ namespace cocos2d { namespace plugin {
     class ProtocolData;
     class DataActionListener {
     public:
-        virtual void onDataActionResult(ProtocolData* pPlugin, DataActionResultCode code, void* data, int64_t length) = 0;
+        virtual void onDataActionResult(ProtocolData* pPlugin, int code, void* data, size_t length) = 0;
     };
     
     typedef std::map<std::string, std::string> TDataDeveloperInfo;

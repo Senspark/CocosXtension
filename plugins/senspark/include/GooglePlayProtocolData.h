@@ -28,7 +28,7 @@ public:
     void setAllowCreateForSnapshotListLauncher(bool allow);
     void setAllowDeleteForSnapshotListLauncher(bool allow);
     void setMaxSaveSlots(int maxSlot);
-    void showSnapshotList();
+    void showSnapshotList(const std::string& title, bool allowAdd, bool allowDelete, int maxSlots);
 };
 
 NS_SENSPARK_PLUGIN_DATA_END

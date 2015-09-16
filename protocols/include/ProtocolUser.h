@@ -93,11 +93,6 @@ public:
     void logout();
     void logout(ProtocolUserCallback &cb);
 
-    /**
-     @brief Check whether the user logined or not
-     */
-    CC_DEPRECATED_ATTRIBUTE bool isLogined() {return isLoggedIn();}
-
     bool isLoggedIn();
     /**
      @brief Get session ID

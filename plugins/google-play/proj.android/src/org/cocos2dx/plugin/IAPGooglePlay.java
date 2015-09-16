@@ -346,4 +346,22 @@ public class IAPGooglePlay implements InterfaceIAP, PluginListener {
 	public void onDestroy() {
 		PluginWrapper.removeListener(this);
 	}
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		
+	}
 }

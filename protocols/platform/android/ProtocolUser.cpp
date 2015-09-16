@@ -125,7 +125,7 @@ void ProtocolUser::logout(ProtocolUserCallback &cb)
 
 bool ProtocolUser::isLoggedIn()
 {
-    return PluginUtils::callJavaBoolFuncWithName(this, "isLogined");
+    return PluginUtils::callJavaBoolFuncWithName(this, "isLoggedIn");
 }
 
 std::string ProtocolUser::getSessionID()

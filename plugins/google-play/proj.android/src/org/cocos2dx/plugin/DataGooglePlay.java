@@ -2,25 +2,24 @@ package org.cocos2dx.plugin;
 
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.concurrent.TimeUnit;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesStatusCodes;
 import com.google.android.gms.games.snapshot.Snapshot;
-import com.google.android.gms.games.snapshot.SnapshotMetadata;
 import com.google.android.gms.games.snapshot.SnapshotMetadataChange;
 import com.google.android.gms.games.snapshot.Snapshots;
 import com.google.android.gms.games.snapshot.Snapshots.CommitSnapshotResult;
 import com.google.games.utils.GameHelper;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.util.Log;
 
 public class DataGooglePlay implements InterfaceData {
 	private static final String LOG_TAG = "DataGooglePlay";
@@ -50,17 +49,24 @@ public class DataGooglePlay implements InterfaceData {
 	public static final int RESULT_CODE_WriteSucceed = 7;
 	public static final int RESULT_CODE_WriteFailed = 8;
 	
-	public DataGooglePlay(Activity activity, GameHelper helper) {
-		mActivity = activity;
+	public static final int DEFAULT_TIMEOUT = 10;
+	
+	public DataGooglePlay(Context context) {
+		mActivity = (Activity) context;
 		mAdapter = this;
-		mGameHelper = helper;
+		mGameHelper = GooglePlayAgent.getInstance().getGameHelper();
 	}
 	
 	@Override
 	public void configDeveloperInfo(Hashtable<String, String> devInfo) {
 	}
 
-	public void presentSnapshotList(String title, boolean allowAdd, boolean allowDelete, int maxSlots) {
+	public void presentSnapshotList(Hashtable<String, String> params) {
+		String title = params.get("title");
+		boolean allowAdd = Boolean.parseBoolean(params.get("allowAdd"));
+		boolean allowDelete = Boolean.parseBoolean(params.get("allowDelete"));
+		int maxSlots = Integer.parseInt(params.get("maxSlots"));
+		
 		Intent savedGameIntent = Games.Snapshots.getSelectSnapshotIntent(mGameHelper.getApiClient(), title, allowAdd, allowDelete, maxSlots);
 		mActivity.startActivityForResult(savedGameIntent, RC_SAVED_GAMES);
 	}
@@ -73,7 +79,7 @@ public class DataGooglePlay implements InterfaceData {
 	        protected Integer doInBackground(Void... params) {
 	            // Open the saved game using its name.
 	            Snapshots.OpenSnapshotResult result = Games.Snapshots.open(mGameHelper.getApiClient(),
-	                    fileName, true).await();
+	                    fileName, true).await(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
 
 	            if (result.getStatus().getStatusCode() == GamesStatusCodes.STATUS_OK) {
 	            	mResult = result;
@@ -134,7 +140,7 @@ public class DataGooglePlay implements InterfaceData {
 			    if (status == GamesStatusCodes.STATUS_SNAPSHOT_CONFLICT) {
 			    	resolvedSnapshot.getSnapshotContents().writeBytes(data);
 
-			    	mResult = Games.Snapshots.resolveConflict(mGameHelper.getApiClient(), conflictId, resolvedSnapshot).await();
+			    	mResult = Games.Snapshots.resolveConflict(mGameHelper.getApiClient(), conflictId, resolvedSnapshot).await(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
 			    }
 				
 				return mResult.getStatus().getStatusCode();
@@ -194,9 +200,8 @@ public class DataGooglePlay implements InterfaceData {
 				else 
 					DataWrapper.onDataResult(mAdapter, RESULT_CODE_WriteFailed, data);
 			}
-		});
+		}, DEFAULT_TIMEOUT, TimeUnit.SECONDS);
 		
 	    mResult = null;
 	}
-
 }

@@ -21,8 +21,9 @@ GooglePlayProtocolUser::~GooglePlayProtocolUser() {
     PluginUtils::erasePluginJavaData(this);
 }
 
-void GooglePlayProtocolUser::configureUser(const std::string &appId) {
+void GooglePlayProtocolUser::configureUser(const std::string& appId) {
     TUserDeveloperInfo devInfo;
     devInfo["GoogleClientID"] = appId;
+
     configDeveloperInfo(devInfo);
 }

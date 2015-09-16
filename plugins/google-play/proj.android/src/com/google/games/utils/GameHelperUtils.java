@@ -1,5 +1,8 @@
 package com.google.games.utils;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -9,11 +12,6 @@ import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.games.GamesActivityResultCodes;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-import org.cocos2dx.libPluginGooglePlay.R;
 
 /**
  * Created by btco on 2/10/14.
@@ -29,11 +27,6 @@ class GameHelperUtils {
             "*Failed to sign in. Please check your network connection and try again.",
             "*The application is incorrectly configured. Check that the package name and signing certificate match the client ID created in Developer Console. Also, if the application is not yet published, check that the account you are trying to sign in with is listed as a tester account. See logs for more information.",
             "*License check failed."
-    };
-
-    private final static int[] RES_IDS = {
-            R.string.gamehelper_unknown_error, R.string.gamehelper_sign_in_failed,
-            R.string.gamehelper_app_misconfigured, R.string.gamehelper_license_failed
     };
 
     static String activityResponseCodeToString(int respCode) {
@@ -168,17 +161,7 @@ class GameHelperUtils {
     }
 
     static String getString(Context ctx, int whichString) {
-        whichString = whichString >= 0 && whichString < RES_IDS.length ? whichString : 0;
-        int resId = RES_IDS[whichString];
-        try {
-            return ctx.getString(resId);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            Log.w(GameHelper.TAG, "*** GameHelper could not found resource id #" + resId + ". " +
-                "This probably happened because you included it as a stand-alone JAR. " +
-                "BaseGameUtils should be compiled as a LIBRARY PROJECT, so that it can access " +
-                "its resources. Using a fallback string.");
-            return FALLBACK_STRINGS[whichString];
-        }
+        whichString = whichString >= 0 && whichString < FALLBACK_STRINGS.length ? whichString : 0;
+        return FALLBACK_STRINGS[whichString];
     }
 }

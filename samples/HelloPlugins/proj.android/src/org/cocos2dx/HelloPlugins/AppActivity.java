@@ -25,11 +25,13 @@ package org.cocos2dx.HelloPlugins;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
+import org.cocos2dx.plugin.GooglePlayAgent;
 import org.cocos2dx.plugin.PluginWrapper;
-import org.cocos2dx.plugin.FacebookWrapper;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.google.games.utils.GameHelper;
 
 public class AppActivity extends Cocos2dxActivity {
     
@@ -40,7 +42,8 @@ public class AppActivity extends Cocos2dxActivity {
         
         PluginWrapper.init(this);
         PluginWrapper.setGLSurfaceView(glSurfaceView);
-        FacebookWrapper.onCreate(this);
+        
+        GooglePlayAgent.getInstance().setup(this, GameHelper.CLIENT_GAMES | GameHelper.CLIENT_SNAPSHOT);
         return glSurfaceView;
     }
 
@@ -68,13 +71,12 @@ public class AppActivity extends Cocos2dxActivity {
 		{
 			super.onActivityResult(requestCode, resultCode, data);
 		}
-        FacebookWrapper.onAcitivityResult(requestCode, resultCode, data);
+//        FacebookWrapper.onAcitivityResult(requestCode, resultCode, data);
 	}
     
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        FacebookWrapper.onSaveInstanceState(outState);
     }
     
 }

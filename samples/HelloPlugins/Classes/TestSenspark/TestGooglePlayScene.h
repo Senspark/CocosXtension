@@ -53,7 +53,7 @@ public:
     
     void onUserCallback(int code, std::string& msg);
     void onSocialCallback(int code, std::string& msg);
-    void onDataCallback(int code, void* data, int64_t length);
+    void onDataCallback(int code, void* data, size_t length);
 
 private:
     GooglePlayProtocolUser*     _protocolGooglePlayUser;

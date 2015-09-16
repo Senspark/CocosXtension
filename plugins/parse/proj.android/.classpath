@@ -5,6 +5,7 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="/Users/ndpduc/GitRepo/plugin-x/publish/protocols/android/libPluginProtocol.jar"/>
+	<classpathentry kind="lib" path="sdk/bolts-android-1.2.1.jar"/>
+	<classpathentry kind="lib" path="sdk/Parse-1.10.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

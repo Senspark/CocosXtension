@@ -1,7 +1,5 @@
 package com.google.games.utils;
 
-import org.cocos2dx.libPluginGooglePlay.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -121,16 +119,13 @@ public class BaseGameUtils {
 
         switch (actResp) {
             case GamesActivityResultCodes.RESULT_APP_MISCONFIGURED:
-                errorDialog = makeSimpleDialog(activity,
-                        activity.getString(R.string.app_misconfigured));
+                errorDialog = makeSimpleDialog(activity, GameHelperUtils.getString(activity, GameHelperUtils.R_APP_MISCONFIGURED));
                 break;
             case GamesActivityResultCodes.RESULT_SIGN_IN_FAILED:
-                errorDialog = makeSimpleDialog(activity,
-                        activity.getString(R.string.sign_in_failed));
+                errorDialog = makeSimpleDialog(activity, GameHelperUtils.getString(activity, GameHelperUtils.R_SIGN_IN_FAILED));
                 break;
             case GamesActivityResultCodes.RESULT_LICENSE_FAILED:
-                errorDialog = makeSimpleDialog(activity,
-                        activity.getString(R.string.license_failed));
+                errorDialog = makeSimpleDialog(activity, GameHelperUtils.getString(activity, GameHelperUtils.R_LICENSE_FAILED));
                 break;
             default:
                 // No meaningful Activity response code, so generate default Google

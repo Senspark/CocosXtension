@@ -49,21 +49,18 @@
          <FileRef
             location = "group:plugins/twitter/proj.ios/PluginTwitter.xcodeproj">
          </FileRef>
-         <FileRef
-            location = "group:plugins/weibo/proj.ios/PluginWeibo.xcodeproj">
-         </FileRef>
       </Group>
       <Group
          location = "container:"
          name = "mixed">
          <FileRef
+            location = "group:plugins/google-play/proj.ios/PluginGooglePlay.xcodeproj">
+         </FileRef>
+         <FileRef
             location = "group:plugins/game-center/proj.ios/PluginGameCenter.xcodeproj">
          </FileRef>
          <FileRef
             location = "group:plugins/flurry/proj.ios/PluginFlurry.xcodeproj">
-         </FileRef>
-         <FileRef
-            location = "group:plugins/googleplay/proj.ios/PluginGooglePlay.xcodeproj">
          </FileRef>
       </Group>
       <FileRef

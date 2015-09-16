@@ -47,8 +47,9 @@ bool TestSenspark::init() {
 
     addTest("Social - Facebook", []() { pushScene(TestFacebook::scene()); });
     addTest("Social - Google Play", []() { pushScene(TestGooglePlay::scene()); });
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     addTest("Social - Game Center", []() { pushScene(TestGameCenter::scene()); });
-    
+#endif
     addTest("BaaS - Parse", []() { pushScene(TestParseBaaS::scene()); });
     
     return true;

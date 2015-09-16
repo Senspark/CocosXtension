@@ -97,8 +97,9 @@ void ProtocolSocial::configDeveloperInfo(TSocialDeveloperInfo devInfo)
     }
 }
 
-void ProtocolSocial::submitScore(const char* leadboardID, long score)
+void ProtocolSocial::submitScore(const char* leadboardID, int64_t score)
 {
+    PluginUtils::outputLog("ProtocolSocial", "Submit %l to leader board %s.", score, leadboardID);
     PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
     PluginJniMethodInfo t;
     if (PluginJniHelper::getMethodInfo(t
@@ -107,6 +108,7 @@ void ProtocolSocial::submitScore(const char* leadboardID, long score)
         , "(Ljava/lang/String;J)V"))
     {
         jstring strID = PluginUtils::getEnv()->NewStringUTF(leadboardID);
+        jlong jscore = (jlong) score;
 
         // invoke java method
         t.env->CallVoidMethod(pData->jobj, t.methodID, strID, score);
@@ -115,7 +117,7 @@ void ProtocolSocial::submitScore(const char* leadboardID, long score)
     }
 }
 
-void ProtocolSocial::submitScore(const char* leadboardID, long score, ProtocolSocialCallback cb)
+void ProtocolSocial::submitScore(const char* leadboardID, int64_t score, ProtocolSocialCallback cb)
 {
 	_callback = cb;
 	submitScore(leadboardID, score);

@@ -31,7 +31,7 @@ public interface InterfaceUser {
 	public void configDeveloperInfo(Hashtable<String, String> cpInfo);
 	public void login();
 	public void logout();
-	public boolean isLogined();
+	public boolean isLoggedIn();
 	public String getSessionID();
 	public void setDebugMode(boolean debug);
 	public String getSDKVersion();

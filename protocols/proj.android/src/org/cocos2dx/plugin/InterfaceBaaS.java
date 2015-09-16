@@ -3,7 +3,7 @@ package org.cocos2dx.plugin;
 import java.util.Hashtable;
 
 public interface InterfaceBaaS {
-	public final int PluginType = 6;
+	public final int PluginType = 8;
 	
     public void configDeveloperInfo(Hashtable<String, String> devInfo);
     public void signUp(Hashtable<String, String> userInfo);

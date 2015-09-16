@@ -113,13 +113,6 @@ bool TestFacebook::init()
     _protocolFacebookUser->setCallback(CC_CALLBACK_2(TestFacebook::onUserCallback, this));
     _protocolFacebookUser->setDebugMode(true);
     
-    _protocolGameCenterSocial = static_cast<GameCenterProtocolSocial*>(SensparkPluginManager::getInstance()->loadSocialPlugin(SocialPluginType::GAME_CENTER));
-    
-    assert(_protocolGameCenterSocial != nullptr);
-    
-    _protocolGameCenterSocial->configureSocial();
-    _protocolGameCenterSocial->setDebugMode(true);
-    
     
     return true;
 }
@@ -166,7 +159,8 @@ void TestFacebook::doAction(int tag) {
             FacebookProtocolUser::FBCallback callback = CC_CALLBACK_2(TestFacebook::onGraphRequestCallback, this);
             
             FacebookProtocolUser::FBParam param;
-            _protocolFacebookUser->graphRequest("me?fields=picture.type(square),name,id", param, callback);
+            param["fields"] = "picture.type(square),name,id";
+            _protocolFacebookUser->graphRequest("me", param, callback);
             _resultInfo->setString("Call graph request to query user info...");
             break;
         }

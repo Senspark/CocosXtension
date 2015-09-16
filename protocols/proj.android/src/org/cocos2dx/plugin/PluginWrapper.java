@@ -191,7 +191,7 @@ public class PluginWrapper {
         }
     }
     
-    private static String[] arrPlugins = {"PluginUser", "PluginShare", "PluginSocial", "PluginAds", "PluginAnalytics", "PluginIAP"};
+    private static String[] arrPlugins = {"PluginUser", "PluginShare", "PluginSocial", "PluginAds", "PluginAnalytics", "PluginIAP", "PluginBaaS", "PluginData"};
     
     public static Hashtable<String, String> getPluginConfigure()
     {

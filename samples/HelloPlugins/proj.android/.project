@@ -52,10 +52,5 @@
 			<type>2</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Classes</locationURI>
 		</link>
-		<link>
-			<name>plugin-x</name>
-			<type>2</type>
-			<locationURI>$%7BPARENT-3-PROJECT_LOC%7D/publish</locationURI>
-		</link>
 	</linkedResources>
 </projectDescription>

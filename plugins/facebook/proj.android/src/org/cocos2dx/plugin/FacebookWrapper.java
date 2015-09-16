@@ -14,7 +14,6 @@ public class FacebookWrapper {
 	public static void onCreate(Activity activity){
 		FacebookSdk.sdkInitialize(activity.getApplicationContext());
 		sCallbackManager = CallbackManager.Factory.create();
-		
 	}
 	
 	public static void onAcitivityResult(int requestCode, int resultCode, Intent data){

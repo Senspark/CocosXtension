@@ -39,7 +39,6 @@ public:
     
 private:
     FacebookProtocolUser* _protocolFacebookUser;
-    GameCenterProtocolSocial* _protocolGameCenterSocial;
     
     Label* _resultInfo;
     
