@@ -39,8 +39,8 @@
 /**
  @brief Developer information of Parse
  */
-#define PARSE_APPLICATION_ID    @"QT17zRDa4jKWU6yOFwsI0UsR3jZXZZwUDLmvE2OT"
-#define PARSE_CLIENT_KEY        @"hxB9QyV0ptmGpnEqVLawpaQtgY94eAHH6cwjKT7N"
+#define PARSE_APPLICATION_ID    "QT17zRDa4jKWU6yOFwsI0UsR3jZXZZwUDLmvE2OT"
+#define PARSE_CLIENT_KEY        "hxB9QyV0ptmGpnEqVLawpaQtgY94eAHH6cwjKT7N"
 
 /**
  @brief Developer information of flurry

@@ -39,7 +39,7 @@ static PFEventMenuItem s_PFMenuItem[] =
     {"logout", TAG_PF_LOGOUT},
     {"write object", TAG_PF_WRITE_OBJECT},
     {"read object", TAG_PF_READ_OBJECT},
-    {"update object", TAG_PF_READ_OBJECT},
+    {"update object", TAG_PF_UPDATE_OBJECT},
     {nullptr, 0},
 };
 
@@ -96,6 +96,10 @@ bool TestParseBaaS::init() {
     addChild(_resultInfo);
     
     _protocolBaaS = static_cast<ParseProtocolBaaS*>(SensparkPluginManager::getInstance()->loadBaaSPlugin(BaaSPluginType::PARSE));
+    TBaaSDeveloperInfo devInfo;
+    devInfo["ParseApplicationId"] = PARSE_APPLICATION_ID;
+    devInfo["ParseClientKey"] = PARSE_CLIENT_KEY;
+    _protocolBaaS->configDeveloperInfo(devInfo);
     
     return true;
 }
@@ -170,6 +174,7 @@ void TestParseBaaS::doAction(int tag) {
             if (_lastObjectId.length() <= 0) {
                 _resultInfo->setString("Please read an object.");
             } else {
+                _resultInfo->setString(StringUtils::format("Update object with id %s", _lastObjectId.c_str()));
                 Document doc;
                 doc.SetObject();
                 Document::AllocatorType &alloc = doc.GetAllocator();
@@ -184,6 +189,7 @@ void TestParseBaaS::doAction(int tag) {
                 
                 _protocolBaaS->updateObjectInBackground("testobject", _lastObjectId, buffer.GetString(), callback);
             }
+            break;
         }
         default:
             break;

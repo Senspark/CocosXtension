@@ -16,6 +16,7 @@ import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.LogOutCallback;
 import com.parse.Parse;
+import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -26,7 +27,7 @@ import com.parse.SignUpCallback;
 public class BaaSParse implements InterfaceBaaS {
 	private static final String LOG_TAG = "BaaSParse";
 	private static Activity mContext = null;
-//	private static boolean mDebug = false;
+	private static boolean mDebug = true;
 	private static BaaSParse mAdapter = null;
 	
 	public static final int RESULT_CODE_LoginSucceed = 0;
@@ -44,6 +45,12 @@ public class BaaSParse implements InterfaceBaaS {
 	public static final int RESULT_CODE_UpdateSucceed = 12;
 	public static final int RESULT_CODE_UpdateFailed = 13;
 	
+	public void logD(String msg) {
+		if (mDebug) {
+			Log.d(LOG_TAG, msg);
+		}
+	}
+	
 	public BaaSParse(Context context) {
 		mContext = (Activity) context;
 		mAdapter = this;
@@ -56,6 +63,7 @@ public class BaaSParse implements InterfaceBaaS {
 		
 		Parse.enableLocalDatastore(mContext);
 		Parse.initialize(mContext, appId, clientKey);
+		ParseAnalytics.trackAppOpenedInBackground(mContext.getIntent());
 	}
 
 	@Override
@@ -125,18 +133,30 @@ public class BaaSParse implements InterfaceBaaS {
 	public boolean isLoggedIn() {
 		return ParseUser.getCurrentUser() != null;
 	}
+	
+	private void updateParseObject(ParseObject parseObj, JSONObject jsonObj) throws JSONException {
+		for (Iterator<String> iter = jsonObj.keys(); iter.hasNext();) {
+			String key = iter.next();
+			logD("Key: " + key);
+			logD("Field: " + jsonObj.get(key).toString());
+			parseObj.put(key, jsonObj.get(key));
+		}
+	}
+	
+	private ParseObject convertJSONObject(String className, JSONObject jsonObj)  throws JSONException {
+		ParseObject parseObj = new ParseObject(className);
+		
+		updateParseObject(parseObj, jsonObj);
+		
+		return parseObj;
+	}
 
 	@Override
 	public void saveObjectInBackground(String className, String json) {
-		final ParseObject parseObj = new ParseObject(className);
 		try {
 			JSONObject jsonObj = new JSONObject(json);
-			for (Iterator<String> iter = jsonObj.keys(); iter.hasNext();) {
-				String key = iter.next();
-				
-				parseObj.add(key, jsonObj.get(key));
-			}
-			
+			final ParseObject parseObj = convertJSONObject(className, jsonObj);
+
 			parseObj.saveInBackground(new SaveCallback() {
 				@Override
 				public void done(ParseException e) {
@@ -157,14 +177,9 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public String saveObject(String className, String json) {
-		final ParseObject parseObj = new ParseObject(className);
 		try {
 			JSONObject jsonObj = new JSONObject(json);
-			for (Iterator<String> iter = jsonObj.keys(); iter.hasNext();) {
-				String key = iter.next();
-				
-				parseObj.add(key, jsonObj.get(key));
-			}
+		    ParseObject parseObj = convertJSONObject(className, jsonObj);
 			parseObj.save();
 			
 			Log.i(LOG_TAG, "Saving object successfully.");
@@ -242,11 +257,7 @@ public class BaaSParse implements InterfaceBaaS {
 				if (e == null) {
 					try {
 						JSONObject jsonObj = new JSONObject(jsonChanges);
-						
-						for (Iterator<String> iter = jsonObj.keys(); iter.hasNext();) {
-							String key = iter.next();
-							parseObj.put(key, jsonObj.get(key));
-						}
+						updateParseObject(parseObj, jsonObj);
 						
 						parseObj.saveInBackground(new SaveCallback() {
 							
@@ -254,7 +265,7 @@ public class BaaSParse implements InterfaceBaaS {
 							public void done(ParseException e) {
 								if (e == null) {
 									BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_RetrieveSucceed, parseObj.getObjectId());
-									Log.i(LOG_TAG, "Retrieve object successfully. ");
+									Log.i(LOG_TAG, "Update object successfully. ");
 								} else {
 									BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_UpdateFailed, makeErrorJsonString(e));
 									Log.i(LOG_TAG, "Error when saving object. " + e.getMessage());
@@ -278,13 +289,8 @@ public class BaaSParse implements InterfaceBaaS {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
 		try {
 			ParseObject parseObj = query.get(objId);
-			
 			JSONObject jsonObj = new JSONObject(jsonChanges);
-				
-			for (Iterator<String> iter = jsonObj.keys(); iter.hasNext();) {
-				String key = iter.next();
-				parseObj.put(key, jsonObj.get(key));
-			}
+			updateParseObject(parseObj, jsonObj);
 			
 			parseObj.save();
 			return parseObj.getObjectId();

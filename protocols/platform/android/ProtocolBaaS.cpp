@@ -130,10 +130,13 @@ bool ProtocolBaaS::isLoggedIn() {
 
     if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "isLoggedIn", "()Z")) {
 
-        t.env->CallBooleanMethod(pData->jobj, t.methodID);
+        jboolean ret = t.env->CallBooleanMethod(pData->jobj, t.methodID);
 
         t.env->DeleteLocalRef(t.classID);
+
+        return ret;
     }
+    return false;
 }
 
 void ProtocolBaaS::saveObjectInBackground(const std::string& className, const std::string& json) {

@@ -15,7 +15,7 @@
 	<classpathentry exported="true" kind="lib" path="/Users/ndpduc/GitRepo/plugin-x/publish/plugins/google-play/android/libGooglePlay.jar"/>
 	<classpathentry exported="true" kind="lib" path="/Users/ndpduc/GitRepo/plugin-x/publish/plugins/facebook/android/libPluginFacebook.jar"/>
 	<classpathentry exported="true" kind="lib" path="/Users/ndpduc/GitRepo/plugin-x/publish/protocols/android/libPluginProtocol.jar"/>
-	<classpathentry exported="true" kind="lib" path="/Users/ndpduc/GitRepo/plugin-x/publish/plugins/parse/android/libPluginParse.jar"/>
 	<classpathentry exported="true" kind="lib" path="/Users/ndpduc/GitRepo/plugin-x/publish/plugins/parse/android/Parse-1.10.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/ndpduc/GitRepo/plugin-x/publish/plugins/parse/android/libPluginParse.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
