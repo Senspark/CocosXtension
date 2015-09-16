@@ -42,7 +42,6 @@
 		95175C1D1B67997D0005CC3D /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175C1C1B67997D0005CC3D /* AddressBook.framework */; };
 		95175C1F1B6799A60005CC3D /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175C1E1B6799A60005CC3D /* AssetsLibrary.framework */; };
 		951D66B21B5658E50043A09E /* libPluginSenspark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 951D66B11B5658E50043A09E /* libPluginSenspark.a */; };
-		9520E0991B4693A000B7768B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95E352641B468BAE00C60173 /* libcocos2d iOS.a */; };
 		952260801B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9522607E1B5CA5D200A16FAB /* TestGoogleAnalyticsScene.cpp */; };
 		95245C091B60C978000EDF84 /* TestSensparkAdsScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95245C071B60C978000EDF84 /* TestSensparkAdsScene.cpp */; };
 		95245C191B60F8C5000EDF84 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C181B60F8C5000EDF84 /* EventKit.framework */; };
@@ -106,14 +105,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		95E352611B468BAE00C60173 /* PBXContainerItemProxy */ = {
+		2C0F29411BA95FD400856036 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FA848830182B3AE300858BDD /* cocos2d_libs.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 1551A33F158F2AB200E66CFE;
 			remoteInfo = "libcocos2d Mac";
 		};
-		95E352631B468BAE00C60173 /* PBXContainerItemProxy */ = {
+		2C0F29431BA95FD400856036 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FA848830182B3AE300858BDD /* cocos2d_libs.xcodeproj */;
 			proxyType = 2;
@@ -212,7 +211,7 @@
 		FA3D264A17867219009B234A /* TestIAPOnlineScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestIAPOnlineScene.cpp; sourceTree = "<group>"; };
 		FA3D264B17867219009B234A /* TestIAPOnlineScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestIAPOnlineScene.h; sourceTree = "<group>"; };
 		FA3D264C17867219009B234A /* Configs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Configs.h; path = ../Classes/Configs.h; sourceTree = "<group>"; };
-		FA848830182B3AE300858BDD /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = "../../../../../Frameworks/cocos2d-x-3.6/build/cocos2d_libs.xcodeproj"; sourceTree = "<group>"; };
+		FA848830182B3AE300858BDD /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = "../../../../../Frameworks/cocos2d-x/build/cocos2d_libs.xcodeproj"; sourceTree = "<group>"; };
 		FA848861182B3DEB00858BDD /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		FAD554D1177C131500968F54 /* TestAdsScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestAdsScene.cpp; sourceTree = "<group>"; };
 		FAD554D2177C131500968F54 /* TestAdsScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAdsScene.h; sourceTree = "<group>"; };
@@ -268,7 +267,6 @@
 				95094CE11B7C9FB500CEFD43 /* Bolts.framework in Frameworks */,
 				95EBD84F1B65E6C10004D448 /* GoogleMobileAds.framework in Frameworks */,
 				95245C191B60F8C5000EDF84 /* EventKit.framework in Frameworks */,
-				9520E0991B4693A000B7768B /* libcocos2d iOS.a in Frameworks */,
 				591A8D2419DF4DB700F71BFD /* libPluginFacebook.a in Frameworks */,
 				591A8D2519DF4DB700F71BFD /* libPluginFacebookAds.a in Frameworks */,
 				95C160391B5CF5FB00501400 /* CoreData.framework in Frameworks */,
@@ -454,6 +452,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		2C0F293D1BA95FD400856036 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2C0F29421BA95FD400856036 /* libcocos2d Mac.a */,
+				2C0F29441BA95FD400856036 /* libcocos2d iOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -498,15 +505,6 @@
 			);
 			name = TestSenspark;
 			path = ../Classes/TestSenspark;
-			sourceTree = "<group>";
-		};
-		95E3525D1B468BAE00C60173 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				95E352621B468BAE00C60173 /* libcocos2d Mac.a */,
-				95E352641B468BAE00C60173 /* libcocos2d iOS.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		FA3D264717867219009B234A /* TestIAPOnline */ = {
@@ -631,7 +629,7 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 95E3525D1B468BAE00C60173 /* Products */;
+					ProductGroup = 2C0F293D1BA95FD400856036 /* Products */;
 					ProjectRef = FA848830182B3AE300858BDD /* cocos2d_libs.xcodeproj */;
 				},
 			);
@@ -643,18 +641,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		95E352621B468BAE00C60173 /* libcocos2d Mac.a */ = {
+		2C0F29421BA95FD400856036 /* libcocos2d Mac.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libcocos2d Mac.a";
-			remoteRef = 95E352611B468BAE00C60173 /* PBXContainerItemProxy */;
+			remoteRef = 2C0F29411BA95FD400856036 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		95E352641B468BAE00C60173 /* libcocos2d iOS.a */ = {
+		2C0F29441BA95FD400856036 /* libcocos2d iOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libcocos2d iOS.a";
-			remoteRef = 95E352631B468BAE00C60173 /* PBXContainerItemProxy */;
+			remoteRef = 2C0F29431BA95FD400856036 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
