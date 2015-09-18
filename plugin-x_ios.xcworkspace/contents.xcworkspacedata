@@ -17,21 +17,18 @@
          <FileRef
             location = "group:plugins/google-analytics/proj.ios/PluginGoogleAnalytics.xcodeproj">
          </FileRef>
-         <FileRef
-            location = "group:plugins/umeng/proj.ios/PluginUmeng.xcodeproj">
-         </FileRef>
       </Group>
       <Group
          location = "container:"
          name = "ads">
          <FileRef
+            location = "group:plugins/chartboost/proj.ios/PluginChartboost.xcodeproj">
+         </FileRef>
+         <FileRef
             location = "group:plugins/adcolony/proj.ios/PluginAdColony.xcodeproj">
          </FileRef>
          <FileRef
             location = "group:plugins/admob/proj.ios/PluginAdmob.xcodeproj">
-         </FileRef>
-         <FileRef
-            location = "group:/Users/ndpduc/GitRepo/plugin-x/plugins/chartboost/proj.ios/PluginChartboost.xcodeproj">
          </FileRef>
          <FileRef
             location = "group:plugins/facebookads/proj.ios/PluginFacebookAds.xcodeproj">

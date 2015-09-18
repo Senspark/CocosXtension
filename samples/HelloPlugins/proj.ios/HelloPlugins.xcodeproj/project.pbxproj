@@ -19,6 +19,9 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		2C2619C41BABCA0C007C4980 /* libPluginAdColony.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2619C31BABCA0C007C4980 /* libPluginAdColony.a */; };
+		2C2619C61BABCA10007C4980 /* libPluginChartboost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2619C51BABCA10007C4980 /* libPluginChartboost.a */; };
+		2C2619C71BABCA15007C4980 /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C0F29441BA95FD400856036 /* libcocos2d iOS.a */; };
 		591A8D2419DF4DB700F71BFD /* libPluginFacebook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 591A8D2219DF4DB700F71BFD /* libPluginFacebook.a */; };
 		591A8D2519DF4DB700F71BFD /* libPluginFacebookAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 591A8D2319DF4DB700F71BFD /* libPluginFacebookAds.a */; };
 		592A55791964AD7D008E4BC7 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 592A55781964AD7D008E4BC7 /* GameController.framework */; };
@@ -47,8 +50,6 @@
 		95245C191B60F8C5000EDF84 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C181B60F8C5000EDF84 /* EventKit.framework */; };
 		95245C1B1B60F8D5000EDF84 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */; };
 		95245C1D1B60F8F2000EDF84 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */; };
-		953F8D2D1B68915300517E1B /* GooglePlus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 953F8D2B1B68915300517E1B /* GooglePlus.bundle */; };
-		953F8D2E1B68915300517E1B /* gpg.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 953F8D2C1B68915300517E1B /* gpg.bundle */; };
 		957D746E1B73596B004D06A0 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 957D746D1B73596B004D06A0 /* GameKit.framework */; };
 		95B098251B58DBB400EAC5AB /* libPluginAdmob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD554ED177C16A100968F54 /* libPluginAdmob.a */; };
 		95B098281B58DC9800EAC5AB /* TestSenspark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B098261B58DC9800EAC5AB /* TestSenspark.cpp */; };
@@ -85,8 +86,6 @@
 		FAD554F4177C16A100968F54 /* libPluginFlurry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD554EE177C16A100968F54 /* libPluginFlurry.a */; };
 		FAD554F5177C16A100968F54 /* libPluginProtocol.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD554EF177C16A100968F54 /* libPluginProtocol.a */; };
 		FAD554F6177C16A100968F54 /* libPluginTwitter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD554F0177C16A100968F54 /* libPluginTwitter.a */; };
-		FAD554F7177C16A100968F54 /* libPluginUmeng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD554F1177C16A100968F54 /* libPluginUmeng.a */; };
-		FAD554F8177C16A100968F54 /* libPluginWeibo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD554F2177C16A100968F54 /* libPluginWeibo.a */; };
 		FAD554FD177C16DF00968F54 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD554FC177C16DF00968F54 /* MessageUI.framework */; };
 		FAD554FF177C16E700968F54 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD554FE177C16E700968F54 /* MediaPlayer.framework */; };
 		FAD55501177C16F100968F54 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD55500177C16F100968F54 /* SystemConfiguration.framework */; };
@@ -142,6 +141,8 @@
 		1D6058910D05DD3D006BFB54 /* HelloPlugins.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloPlugins.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		2C2619C31BABCA0C007C4980 /* libPluginAdColony.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPluginAdColony.a; path = ../../../plugins/adcolony/proj.ios/build/Debug/libPluginAdColony.a; sourceTree = "<group>"; };
+		2C2619C51BABCA10007C4980 /* libPluginChartboost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPluginChartboost.a; path = ../../../plugins/chartboost/proj.ios/build/Debug/libPluginChartboost.a; sourceTree = "<group>"; };
 		591A8D2219DF4DB700F71BFD /* libPluginFacebook.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPluginFacebook.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		591A8D2319DF4DB700F71BFD /* libPluginFacebookAds.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPluginFacebookAds.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		592A55781964AD7D008E4BC7 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
@@ -174,8 +175,6 @@
 		95245C1A1B60F8D5000EDF84 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		95245C1C1B60F8F2000EDF84 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		9525AF9E1B67284300CBF477 /* TestGooglePlayScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestGooglePlayScene.h; sourceTree = "<group>"; };
-		953F8D2B1B68915300517E1B /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlus.bundle; path = ../../../plugins/googleplay/platform/ios/GooglePlus.bundle; sourceTree = "<group>"; };
-		953F8D2C1B68915300517E1B /* gpg.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = gpg.bundle; path = ../../../plugins/googleplay/platform/ios/gpg.bundle; sourceTree = "<group>"; };
 		957D746D1B73596B004D06A0 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		95B098261B58DC9800EAC5AB /* TestSenspark.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestSenspark.cpp; sourceTree = "<group>"; };
 		95B098271B58DC9800EAC5AB /* TestSenspark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestSenspark.h; sourceTree = "<group>"; };
@@ -255,6 +254,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C2619C71BABCA15007C4980 /* libcocos2d iOS.a in Frameworks */,
+				2C2619C61BABCA10007C4980 /* libPluginChartboost.a in Frameworks */,
+				2C2619C41BABCA0C007C4980 /* libPluginAdColony.a in Frameworks */,
 				9507EB681B7DAC5E009FEF7E /* libPluginParse.a in Frameworks */,
 				957D746E1B73596B004D06A0 /* GameKit.framework in Frameworks */,
 				95088B571B6FC6BA002095FF /* CoreLocation.framework in Frameworks */,
@@ -299,11 +301,9 @@
 				95B098251B58DBB400EAC5AB /* libPluginAdmob.a in Frameworks */,
 				FAD554F5177C16A100968F54 /* libPluginProtocol.a in Frameworks */,
 				FAD554F6177C16A100968F54 /* libPluginTwitter.a in Frameworks */,
-				FAD554F7177C16A100968F54 /* libPluginUmeng.a in Frameworks */,
 				95175C1B1B67988D0005CC3D /* GoogleOpenSource.framework in Frameworks */,
 				95175B571B6796DE0005CC3D /* gpg.framework in Frameworks */,
 				95175C191B6798870005CC3D /* GooglePlus.framework in Frameworks */,
-				FAD554F8177C16A100968F54 /* libPluginWeibo.a in Frameworks */,
 				95C160371B5CF5DA00501400 /* libsqlite3.dylib in Frameworks */,
 				BF1712461292920000B8313A /* libxml2.dylib in Frameworks */,
 				BF1712471292920000B8313A /* libz.dylib in Frameworks */,
@@ -316,8 +316,6 @@
 		080E96DDFE201D6D7F000001 /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				953F8D2B1B68915300517E1B /* GooglePlus.bundle */,
-				953F8D2C1B68915300517E1B /* gpg.bundle */,
 				1AC3624216D4A1E8000847F2 /* AppController.h */,
 				1AC3624316D4A1E8000847F2 /* AppController.mm */,
 				D4F9F37B12E54555005CA6D2 /* Info.plist */,
@@ -396,6 +394,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2C2619C51BABCA10007C4980 /* libPluginChartboost.a */,
+				2C2619C31BABCA0C007C4980 /* libPluginAdColony.a */,
 				9507EB671B7DAC5E009FEF7E /* libPluginParse.a */,
 				95094CE21B7D916500CEFD43 /* Parse.framework */,
 				95094CE01B7C9FB500CEFD43 /* Bolts.framework */,
@@ -662,9 +662,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				953F8D2E1B68915300517E1B /* gpg.bundle in Resources */,
 				7855E0E1153FEF240059DD9A /* Default.png in Resources */,
-				953F8D2D1B68915300517E1B /* GooglePlus.bundle in Resources */,
 				D4EF949A15BD2D8B00D803EB /* Icon-57.png in Resources */,
 				D4EF949C15BD2D8E00D803EB /* Icon-114.png in Resources */,
 				95B0982F1B59113500EAC5AB /* fonts in Resources */,
@@ -734,10 +732,10 @@
 					"$(SRCROOT)/../../../plugins/facebookads/proj.ios",
 					"$(SRCROOT)/../../../plugins/facebook/proj.ios",
 					"$(SRCROOT)/../../../plugins/admob/proj.ios/Admob",
-					"$(SRCROOT)/../../../plugins/googleplay/platform/ios",
+					"$(SRCROOT)/../../../plugins/google-play/platform/ios",
 					"$(SRCROOT)/../../../plugins/facebook/proj.ios",
+					"$(SRCROOT)/../../../plugins/parse/proj.ios/parse-library-1.8.0",
 					"$(PROJECT_DIR)",
-					"/Users/ndpduc/GitRepo/plugin-x/plugins/parse/proj.ios/parse-library-1.8.0",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -755,7 +753,10 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					"/Users/nikelarteta/GitRepo/plugin-x/plugins/adcolony/proj.ios/build/Debug",
+					"/Users/nikelarteta/GitRepo/plugin-x/plugins/chartboost/proj.ios/build/Debug",
+				);
 				OTHER_CFLAGS = "-O2";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = HelloPlugins;
@@ -779,10 +780,10 @@
 					"$(SRCROOT)/../../../plugins/facebookads/proj.ios",
 					"$(SRCROOT)/../../../plugins/facebook/proj.ios",
 					"$(SRCROOT)/../../../plugins/admob/proj.ios/Admob",
-					"$(SRCROOT)/../../../plugins/googleplay/platform/ios",
+					"$(SRCROOT)/../../../plugins/google-play/platform/ios",
 					"$(SRCROOT)/../../../plugins/facebook/proj.ios",
+					"$(SRCROOT)/../../../plugins/parse/proj.ios/parse-library-1.8.0",
 					"$(PROJECT_DIR)",
-					"/Users/ndpduc/GitRepo/plugin-x/plugins/parse/proj.ios/parse-library-1.8.0",
 				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -798,7 +799,10 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					"/Users/nikelarteta/GitRepo/plugin-x/plugins/adcolony/proj.ios/build/Debug",
+					"/Users/nikelarteta/GitRepo/plugin-x/plugins/chartboost/proj.ios/build/Debug",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = HelloPlugins;
 				SDKROOT = iphoneos;
