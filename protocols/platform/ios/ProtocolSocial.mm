@@ -57,7 +57,7 @@ void ProtocolSocial::configDeveloperInfo(TSocialDeveloperInfo devInfo)
     }
 }
     
-void ProtocolSocial::submitScore(const char* leadboardID, long score)
+void ProtocolSocial::submitScore(const char* leadboardID, int64_t score)
 {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != NULL);
@@ -70,7 +70,7 @@ void ProtocolSocial::submitScore(const char* leadboardID, long score)
         [curObj submitScore:pID withScore:score];
     }
 }
-    void ProtocolSocial::submitScore(const char* leadboardID, long score, ProtocolSocialCallback callback)
+    void ProtocolSocial::submitScore(const char* leadboardID, int64_t score, ProtocolSocialCallback callback)
     {
         PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
         assert(pData != NULL);

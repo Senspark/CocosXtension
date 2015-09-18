@@ -25,7 +25,7 @@ THE SOFTWARE.
 @protocol InterfaceSocial <NSObject>
 
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
-- (void) submitScore: (NSString*) leaderboardID withScore: (long) score;
+- (void) submitScore: (NSString*) leaderboardID withScore: (int64_t) score;
 - (void) showLeaderboard: (NSString*) leaderboardID;
 - (void) unlockAchievement: (NSMutableDictionary*) achInfo;
 - (void) showAchievements;
