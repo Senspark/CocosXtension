@@ -1,2 +1,6 @@
 language: cpp
 
+branches:
+  only:
+    - v3
+
