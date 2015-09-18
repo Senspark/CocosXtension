@@ -26,7 +26,12 @@ void GooglePlayProtocolData::configure(const std::string& clientId) {
     configDeveloperInfo(devInfo);
 }
 
-void GooglePlayProtocolData::showSnapshotList() {
+void GooglePlayProtocolData::showSnapshotList(const std::string& title, bool allowAdd, bool allowDelete, int maxSlots) {
+    setSnapshotListTitle(title);
+    setAllowCreateForSnapshotListLauncher(allowAdd);
+    setAllowDeleteForSnapshotListLauncher(allowDelete);
+    setMaxSaveSlots(maxSlots);
+
     callFuncWithParam("presentSnapshotList", nullptr);
 }
 
