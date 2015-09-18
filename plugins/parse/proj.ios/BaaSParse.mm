@@ -22,6 +22,7 @@ using namespace cocos2d::plugin;
 {
     NSString* appId = [devInfo objectForKey:@"ParseApplicationId"];
     NSString* clientKey = [devInfo objectForKey:@"ParseClientKey"];
+    [Parse enableLocalDatastore];
     [Parse setApplicationId:appId clientKey:clientKey];
 }
 
