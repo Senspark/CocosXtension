@@ -8,9 +8,9 @@
 
 #include "TestParseScene.h"
 #include "ProtocolBaaS.h"
-#include "json/rapidjson.h"
-#include "json/stringbuffer.h"
-#include "json/writer.h"
+#include "rapidjson/rapidjson.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -26,6 +26,13 @@ enum {
     TAG_PF_WRITE_OBJECT,
     TAG_PF_READ_OBJECT,
     TAG_PF_UPDATE_OBJECT,
+    TAG_PF_DELETE_OBJECT,
+    TAG_PF_FETCH_CONFIG,
+    TAG_PF_GET_BOOL_CONFIG,
+    TAG_PF_GET_INT_CONFIG,
+    TAG_PF_GET_DOUBLE_CONFIG,
+    TAG_PF_GET_LONG_CONFIG,
+    TAG_PF_GET_STRING_CONFIG,
 };
 
 struct PFEventMenuItem {
@@ -40,6 +47,14 @@ static PFEventMenuItem s_PFMenuItem[] =
     {"write object", TAG_PF_WRITE_OBJECT},
     {"read object", TAG_PF_READ_OBJECT},
     {"update object", TAG_PF_UPDATE_OBJECT},
+    {"delete object", TAG_PF_DELETE_OBJECT},
+    {"fetch config", TAG_PF_FETCH_CONFIG},
+    {"get bool config", TAG_PF_GET_BOOL_CONFIG},
+    {"get int config", TAG_PF_GET_INT_CONFIG},
+    {"get double config", TAG_PF_GET_DOUBLE_CONFIG},
+    {"get long config", TAG_PF_GET_LONG_CONFIG},
+    {"get string config", TAG_PF_GET_STRING_CONFIG},
+
     {nullptr, 0},
 };
 
@@ -147,10 +162,10 @@ void TestParseBaaS::doAction(int tag) {
             int data = rand() % 100;
             
             string name = StringUtils::format("TestObject%d", data).c_str();
-            
-            doc.AddMember("name", name.c_str(), alloc);
-            doc.AddMember("data",  data, alloc);
-            
+
+            doc.AddMember("name", rapidjson::Value(name.c_str(),alloc), alloc);
+            doc.AddMember("data",   data, alloc);
+
             StringBuffer buffer;
             Writer<StringBuffer, UTF8<> > writer(buffer);
             doc.Accept(writer);
@@ -159,7 +174,7 @@ void TestParseBaaS::doAction(int tag) {
             
             _resultInfo->setString(StringUtils::format("Parse: writing object... %s", sss.c_str()));
             _protocolBaaS->saveObjectInBackground("testobject", buffer.GetString(), callback);
-            
+
             break;
         }
         case TAG_PF_READ_OBJECT: {
@@ -191,6 +206,40 @@ void TestParseBaaS::doAction(int tag) {
             }
             break;
         }
+        case TAG_PF_DELETE_OBJECT:
+            if (_lastObjectId.length() <= 0) {
+                _resultInfo->setString("Please create an object to delete");
+            } else {
+                _resultInfo->setString(StringUtils::format("Delete object with id %s", _lastObjectId.c_str()));
+                _protocolBaaS->deleteObjectInBackground("testobject", _lastObjectId);
+            }
+            break;
+
+        case TAG_PF_FETCH_CONFIG:
+            _resultInfo->setString(StringUtils::format("Fetch config from server"));
+            _protocolBaaS->fetchConfigInBackground(callback);
+            break;
+        case TAG_PF_GET_BOOL_CONFIG:
+            _resultInfo->setString(StringUtils::format("Get bool config from server"));
+            _protocolBaaS->getBoolConfig("", callback);
+            break;
+        case TAG_PF_GET_INT_CONFIG:
+            _resultInfo->setString(StringUtils::format("Get int config from server"));
+            _protocolBaaS->getIntegerConfig("", callback);
+            break;
+        case TAG_PF_GET_DOUBLE_CONFIG:
+            _resultInfo->setString(StringUtils::format("Get double config from server"));
+            _protocolBaaS->getDoubleConfig("", callback);
+            break;
+        case TAG_PF_GET_LONG_CONFIG:
+            _resultInfo->setString(StringUtils::format("Get long config from server"));
+            _protocolBaaS->getLongConfig("", callback);
+            break;
+        case TAG_PF_GET_STRING_CONFIG:
+            _resultInfo->setString(StringUtils::format("Get string config from server"));
+            _protocolBaaS->getStringConfig("welcomeMessage", callback);
+            break;
+
         default:
             break;
     }
@@ -219,35 +268,58 @@ void TestParseBaaS::onParseCallback(int ret, const std::string &result) {
         case BaaSActionResultCode::kLogoutFailed:
             _resultInfo->setString(result);
             break;
-        case BaaSActionResultCode::kSaveSucceed: {
+        case BaaSActionResultCode::kSaveSucceed:
             _lastObjectId = result;
             _resultInfo->setString(result.c_str());
             break;
-        }
-        case BaaSActionResultCode::kSaveFailed: {
+        case BaaSActionResultCode::kSaveFailed:
             _resultInfo->setString(result.c_str());
             break;
-        }
-        case BaaSActionResultCode::kRetrieveSucceed: {
+        case BaaSActionResultCode::kRetrieveSucceed:
             log("%s\n", result.c_str());
             _resultInfo->setString(result);
             break;
-        }
-        case BaaSActionResultCode::kRetrieveFailed: {
+        case BaaSActionResultCode::kRetrieveFailed:
             log("%s\n", result.c_str());
             _resultInfo->setString(result);
             break;
-        }
-        case BaaSActionResultCode::kUpdateFailed: {
+        case BaaSActionResultCode::kUpdateFailed:
             log("%s\n", result.c_str());
             _resultInfo->setString(result);
             break;
-        }
-        case BaaSActionResultCode::kUpdateSucceed: {
+        case BaaSActionResultCode::kUpdateSucceed:
             log("%s\n", result.c_str());
             _resultInfo->setString(_protocolBaaS->getObject("testobject", _lastObjectId));
             break;
-        }
+        case BaaSActionResultCode::kDeleteFailed:
+            log("%s\n", result.c_str());
+            _resultInfo->setString(result);
+            break;
+        case BaaSActionResultCode::kDeleteSucceed:
+            log("%s\n", result.c_str());
+            _resultInfo->setString(StringUtils::format("Delete successfully %s", _lastObjectId.c_str()));
+            break;
+        case BaaSActionResultCode::kFetchConfigSucceed:
+            _resultInfo->setString("Fetch config from server");
+            break;
+        case BaaSActionResultCode::kFetchConfigFailed:
+            _resultInfo->setString("Get Config fail, use local config instead");
+            break;
+        case BaaSActionResultCode::kGetBoolConfig:
+            _resultInfo->setString(result);
+            break;
+        case BaaSActionResultCode::kGetIntConfig:
+            _resultInfo->setString(result);
+            break;
+        case BaaSActionResultCode::kGetDoubleConfig:
+            _resultInfo->setString(result);
+            break;
+        case BaaSActionResultCode::kGetLongConfig:
+            _resultInfo->setString(result);
+            break;
+        case BaaSActionResultCode::kGetStringConfig:
+            _resultInfo->setString(result);
+            break;
         default:
             break;
     }
