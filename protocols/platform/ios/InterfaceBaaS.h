@@ -28,6 +28,16 @@
 - (void) updateObjectInBackground: (NSString*) className withId: (NSString*) objId withParams: (NSDictionary*) params;
 - (NSString*) updateObject: (NSString*) className withId: (NSString*) objId withParams: (NSDictionary*) params;
 
+- (void) deleteObjectInBackground: (NSString*) className withId: (NSString*) objId;
+- (NSString*) deleteObject: (NSString*) className withId: (NSString*) objId;
+
+- (void) fetchConfigInBackground;
+- (BOOL) getBoolConfig: (NSString*) param;
+- (int)  getIntegerConfig: (NSString*) param;
+- (double) getDoubleConfig: (NSString*) param;
+- (long) getLongConfig: (NSString*) param;
+- (NSString*) getStringConfig: (NSString*) param;
+
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;
 

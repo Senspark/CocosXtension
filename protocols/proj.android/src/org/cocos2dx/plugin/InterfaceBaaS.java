@@ -12,8 +12,20 @@ public interface InterfaceBaaS {
     public boolean isLoggedIn();
     public void saveObjectInBackground(String className, String json);
     public String saveObject(String className, String json);
+  
     public void getObjectInBackground(String className, String objId);
     public String getObject(String className, String objId);
+    
     public void updateObjectInBackground(String className, String objId, String jsonChanges);
     public String updateObject(String className, String objId, String jsonChanges);
+    
+    public void deleteObjectInBackground(String className, String objId);
+    public String deleteObject(String className, String objId);
+    
+    public void fetchConfigInBackground();
+    public boolean getBoolConfig(String param);
+    public int getIntegerConfig(String param);
+    public double getDoubleConfig(String param);
+    public long getLongConfig(String param);
+    public String getStringConfig(String param);
 }

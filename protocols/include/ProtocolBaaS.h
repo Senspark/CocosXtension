@@ -37,6 +37,15 @@ namespace cocos2d { namespace plugin {
         
         kUpdateSucceed,
         kUpdateFailed,
+
+        kFetchConfigSucceed,
+        kFetchConfigFailed,
+
+        kGetBoolConfig,
+        kGetIntConfig,
+        kGetDoubleConfig,
+        kGetLongConfig,
+        kGetStringConfig
     };
     
     typedef std::map<std::string, std::string> TBaaSDeveloperInfo;
@@ -81,7 +90,22 @@ namespace cocos2d { namespace plugin {
         void updateObjectInBackground(const std::string& className, const std::string& objId, const std::string& jSonChanges, ProtocolBaaSCallback& cb);
         
         const char* updateObject(const std::string& className, const std::string& objId, const std::string& jsonChanges);
-        
+
+        void deleteObjectInBackground(const std::string& className, const std::string& objId);
+        void deleteObjectInBackground(const std::string& className, const std::string& objId, ProtocolBaaSCallback& cb);
+
+        const char* deleteObject(const std::string& className, const std::string& objId);
+
+        /**
+         * Return cached config.
+         */
+        void fetchConfigInBackground(ProtocolBaaSCallback& cb);
+        bool getBoolConfig(const std::string& param, ProtocolBaaSCallback& cb);
+        int getIntegerConfig(const std::string& param, ProtocolBaaSCallback& cb);
+        double getDoubleConfig(const std::string& param, ProtocolBaaSCallback& cb);
+        long getLongConfig(const std::string& param, ProtocolBaaSCallback& cb);
+        const char* getStringConfig(const std::string& param, ProtocolBaaSCallback& cb);
+
         /*
          @deprecated
          @brief set login callback function

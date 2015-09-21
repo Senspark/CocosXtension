@@ -12,11 +12,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.parse.ConfigCallback;
+import com.parse.DeleteCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.LogOutCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
+import com.parse.ParseConfig;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -26,24 +29,32 @@ import com.parse.SignUpCallback;
 
 public class BaaSParse implements InterfaceBaaS {
 	private static final String LOG_TAG = "BaaSParse";
-	private static Activity mContext = null;
-	private static boolean mDebug = true;
-	private static BaaSParse mAdapter = null;
+	private static Activity mContext 	= null;
+	private static boolean mDebug 		= true;
+	private static BaaSParse mAdapter 	= null;
+	private static ParseConfig mCurrentConfig = null;
 	
-	public static final int RESULT_CODE_LoginSucceed = 0;
-	public static final int RESULT_CODE_LoginFailed = 1;
-	public static final int RESULT_CODE_LogoutSucceed = 2;
-	public static final int RESULT_CODE_LogoutFailed = 3;
-	public static final int RESULT_CODE_SignUpSucceed = 4;
-	public static final int RESULT_CODE_SignUpFailed = 5;
-	public static final int RESULT_CODE_SaveSucceed = 6;
-	public static final int RESULT_CODE_SaveFailed = 7;
-	public static final int RESULT_CODE_RetrieveSucceed = 8;
-	public static final int RESULT_CODE_RetrieveFailed = 9;
-	public static final int RESULT_CODE_DeleteSucceed = 10;
-	public static final int RESULT_CODE_DeleteFailed = 11;
-	public static final int RESULT_CODE_UpdateSucceed = 12;
-	public static final int RESULT_CODE_UpdateFailed = 13;
+	public static final int RESULT_CODE_LoginSucceed 		= 0;
+	public static final int RESULT_CODE_LoginFailed 		= 1;
+	public static final int RESULT_CODE_LogoutSucceed 		= 2;
+	public static final int RESULT_CODE_LogoutFailed		= 3;
+	public static final int RESULT_CODE_SignUpSucceed 		= 4;
+	public static final int RESULT_CODE_SignUpFailed 		= 5;
+	public static final int RESULT_CODE_SaveSucceed 		= 6;
+	public static final int RESULT_CODE_SaveFailed 			= 7;
+	public static final int RESULT_CODE_RetrieveSucceed 	= 8;
+	public static final int RESULT_CODE_RetrieveFailed 		= 9;
+	public static final int RESULT_CODE_DeleteSucceed 		= 10;
+	public static final int RESULT_CODE_DeleteFailed 		= 11;
+	public static final int RESULT_CODE_UpdateSucceed 		= 12;
+	public static final int RESULT_CODE_UpdateFailed 		= 13;
+	public static final int RESULT_CODE_FetchConfigSucceed	= 14;
+	public static final int RESULT_CODE_FetchConfigFailed 	= 15;
+	public static final int RESULT_CODE_GetBoolConfig		= 16;
+	public static final int RESULT_CODE_GetIntConfig		= 17;
+	public static final int RESULT_CODE_GetDoubleConfig		= 18;
+	public static final int RESULT_CODE_GetLongConfig		= 19;
+	public static final int RESULT_CODE_GetStringConfig		= 20;
 	
 	public void logD(String msg) {
 		if (mDebug) {
@@ -64,6 +75,8 @@ public class BaaSParse implements InterfaceBaaS {
 		Parse.enableLocalDatastore(mContext);
 		Parse.initialize(mContext, appId, clientKey);
 		ParseAnalytics.trackAppOpenedInBackground(mContext.getIntent());
+		
+		mCurrentConfig = ParseConfig.getCurrentConfig();
 	}
 
 	@Override
@@ -303,6 +316,71 @@ public class BaaSParse implements InterfaceBaaS {
 		
 		return null;
 	}
+	
+	@Override
+	public void deleteObjectInBackground(String className, String objId) {
+		ParseQuery<ParseObject>	query = ParseQuery.getQuery(className);
+
+		query.getInBackground(objId, new GetCallback<ParseObject>() {
+			@Override
+			public void done(final ParseObject parseObj, ParseException e) {
+				if (e == null) {
+					
+					parseObj.deleteInBackground(new DeleteCallback() {
+						
+						@Override
+						public void done(ParseException arg0) {
+							if (arg0 == null) {
+								Log.i("Parse", "Delete object in background successfully");
+								BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_DeleteSucceed, null);
+
+							} else {
+								Log.e("Parse", "Delete object in background failed with error: " + arg0);
+								BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_DeleteFailed, makeErrorJsonString(arg0));
+							}
+						}
+					});
+
+				} else {
+					Log.e("Parse", "Cannot find object for deleting");
+					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_DeleteFailed, makeErrorJsonString(e));
+				}
+			}
+		});
+	}
+	
+	@Override
+	public String deleteObject(String className, String objId) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
+	 	try {
+			ParseObject parseObj = query.get(objId);
+			parseObj.deleteEventually();
+			Log.i("Parse", "Delete object successfully");
+			return "Delete object successfully";
+		} catch (ParseException e) {
+			Log.e(LOG_TAG, "Error when geting parse object. " + e.getMessage());
+		}
+		return "Delete object failed";
+	}
+	
+	@Override
+	public void fetchConfigInBackground() {
+		ParseConfig.getInBackground(new ConfigCallback() {
+			
+			@Override
+			public void done(ParseConfig config, ParseException e) {
+				if (config != null && e == null) {
+					Log.i("Parse", "Fetch config from server successfully");
+					mCurrentConfig = config;
+					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_FetchConfigSucceed, null);
+				} else {
+					Log.e("Parse", "Fetch config from server failed. Use current config instead");
+					mCurrentConfig = ParseConfig.getCurrentConfig();
+					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_FetchConfigFailed, makeErrorJsonString(e));
+				}
+			}
+		});
+	}
 
 	public static String makeErrorJsonString(ParseException e) {
 		if (e != null) {
@@ -321,5 +399,40 @@ public class BaaSParse implements InterfaceBaaS {
 		}
 		
 		return null;
+	}
+
+	@Override
+	public boolean getBoolConfig(String param) {
+		boolean ret = mCurrentConfig.getBoolean(param, false);
+		Log.i("Parse", "Parse Config >>> Get bool: "+ ret);
+		return ret;
+	}
+
+	@Override
+	public int getIntegerConfig(String param) {
+		int ret = mCurrentConfig.getInt(param, 0);
+		Log.i("Parse", "Parse Config >>> Get Integer: "+ ret);
+		return ret;
+	}
+
+	@Override
+	public double getDoubleConfig(String param) {
+		double ret = mCurrentConfig.getDouble(param, 0);
+		Log.i("Parse", "Parse Config >>> Get Double: "+ ret);
+		return ret;
+	}
+
+	@Override
+	public long getLongConfig(String param) {
+		long ret = mCurrentConfig.getLong(param, 0);
+		Log.i("Parse", "Parse Config >>> Get Long: "+ ret);
+		return ret;
+	}
+
+	@Override
+	public String getStringConfig(String param) {
+		String ret = mCurrentConfig.getString(param, "defaultString");
+		Log.i("Parse", "Parse Config >>> Get String: "+ ret);
+		return ret;
 	}
 }

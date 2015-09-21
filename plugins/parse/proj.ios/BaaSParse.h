@@ -8,9 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "InterfaceBaaS.h"
+#import <Parse/Parse.h>
 
 @interface BaaSParse : NSObject<InterfaceBaaS>
 {
+    PFConfig* _currentConfig;
 }
 
 - (void) configDeveloperInfo:(NSMutableDictionary *)devInfo;
@@ -29,6 +31,13 @@
 
 - (void) deleteObjectInBackground: (NSString*) className withId: (NSString*) objId;
 - (void) deleteObject: (NSString*) className withId: (NSString*) objId;
+
+- (void) fetchConfigInBackground;
+- (BOOL) getBoolConfig: (NSString*) param;
+- (int)  getIntegerConfig: (NSString*) param;
+- (double) getDoubleConfig: (NSString*) param;
+- (long) getLongConfig: (NSString*) param;
+- (NSString*) getStringConfig: (NSString*) param;
 
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;

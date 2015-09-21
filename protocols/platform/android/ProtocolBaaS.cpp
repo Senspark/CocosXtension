@@ -271,4 +271,139 @@ const char* ProtocolBaaS::updateObject(const std::string& className, const std::
     return nullptr;
 }
 
+void ProtocolBaaS::deleteObjectInBackground(const std::string& className, const std::string& objId, ProtocolBaaSCallback& cb) {
+	setCallback(cb);
+	deleteObjectInBackground(className, objId);
+}
+
+void ProtocolBaaS::deleteObjectInBackground(const std::string& className, const std::string& objId) {
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
+
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "deleteObjectInBackground", "(Ljava/lang/String;Ljava/lang/String;)V")) {
+		jstring jclass_name = t.env->NewStringUTF(className.c_str());
+		jstring jobject_id = t.env->NewStringUTF(objId.c_str());
+
+		t.env->CallVoidMethod(pData->jobj, t.methodID, jclass_name, jobject_id);
+
+		t.env->DeleteLocalRef(jclass_name);
+		t.env->DeleteLocalRef(jobject_id);
+		t.env->DeleteLocalRef(t.classID);
+	}
+}
+
+const char* ProtocolBaaS::deleteObject(const std::string& className, const std::string& objId) {
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
+
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "deleteObject", "(Ljava/lang/String;Ljava/lang/String;)V")) {
+		jstring jclass_name = t.env->NewStringUTF(className.c_str());
+		jstring jobject_id = t.env->NewStringUTF(objId.c_str());
+
+		jobject jret_id = t.env->CallObjectMethod(pData->jobj, t.methodID, jclass_name, jobject_id);
+		const char* ret_id = t.env->GetStringUTFChars((jstring)jret_id, nullptr);
+
+		t.env->DeleteLocalRef(jclass_name);
+		t.env->DeleteLocalRef(jobject_id);
+		t.env->DeleteLocalRef(t.classID);
+
+		return ret_id;
+	}
+
+	return nullptr;
+}
+
+void ProtocolBaaS::fetchConfigInBackground(ProtocolBaaSCallback& cb) {
+	setCallback(cb);
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "fetchConfigInBackground", "()V")) {
+		t.env->CallVoidMethod(pData->jobj, t.methodID);
+		t.env->DeleteLocalRef(t.classID);
+	}
+}
+
+bool ProtocolBaaS::getBoolConfig(const std::string& param, ProtocolBaaSCallback& cb) {
+	setCallback(cb);
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "getBoolConfig", "(Ljava/lang/String;)Z")) {
+		jstring jparam = t.env->NewStringUTF(param.c_str());
+		jboolean ret = t.env->CallStaticBooleanMethod(t.classID, t.methodID, jparam);
+
+		t.env->DeleteLocalRef(jparam);
+		t.env->DeleteLocalRef(t.classID);
+
+		return ret;
+	}
+	return false;
+}
+
+int ProtocolBaaS::getIntegerConfig(const std::string& param, ProtocolBaaSCallback& cb) {
+	setCallback(cb);
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "getIntegerConfig", "(Ljava/lang/String;)I")) {
+		jstring jparam = t.env->NewStringUTF(param.c_str());
+		jint ret = t.env->CallStaticIntMethod(t.classID, t.methodID, jparam);
+
+		t.env->DeleteLocalRef(jparam);
+		t.env->DeleteLocalRef(t.classID);
+
+		return ret;
+	}
+	return 0;
+}
+
+double ProtocolBaaS::getDoubleConfig(const std::string& param, ProtocolBaaSCallback& cb) {
+	setCallback(cb);
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "getDoubleConfig", "(Ljava/lang/String;)D")) {
+		jstring jparam = t.env->NewStringUTF(param.c_str());
+		jdouble ret = t.env->CallStaticDoubleMethod(t.classID, t.methodID, jparam);
+
+		t.env->DeleteLocalRef(jparam);
+		t.env->DeleteLocalRef(t.classID);
+
+		return ret;
+	}
+	return 0;
+}
+
+long ProtocolBaaS::getLongConfig(const std::string& param, ProtocolBaaSCallback& cb) {
+	setCallback(cb);
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "getIntegerConfig", "(Ljava/lang/String;)J")) {
+		jstring jparam = t.env->NewStringUTF(param.c_str());
+		jlong ret = t.env->CallStaticLongMethod(t.classID, t.methodID, jparam);
+
+		t.env->DeleteLocalRef(jparam);
+		t.env->DeleteLocalRef(t.classID);
+
+		return ret;
+	}
+	return 0;
+}
+
+const char* ProtocolBaaS::getStringConfig(const std::string& param, ProtocolBaaSCallback& cb) {
+	setCallback(cb);
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
+
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "getStringConfig", "(Ljava/lang/String;)Ljava/lang/String;")) {
+		jstring jparam = t.env->NewStringUTF(param.c_str());
+
+		jobject jret_id = t.env->CallObjectMethod(pData->jobj, t.methodID, jparam);
+		const char* ret_id = t.env->GetStringUTFChars((jstring)jret_id, nullptr);
+
+		t.env->DeleteLocalRef(jparam);
+		t.env->DeleteLocalRef(t.classID);
+
+		return ret_id;
+	}
+	return nullptr;
+}
+
 }}
