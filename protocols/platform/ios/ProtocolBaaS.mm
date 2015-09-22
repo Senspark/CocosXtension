@@ -262,8 +262,7 @@ void ProtocolBaaS::fetchConfigInBackground(ProtocolBaaSCallback& cb) {
     }
 }
 
-bool ProtocolBaaS::getBoolConfig(const std::string &param,ProtocolBaaSCallback& cb) {
-    setCallback(cb);
+bool ProtocolBaaS::getBoolConfig(const std::string &param) {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
 
@@ -275,8 +274,7 @@ bool ProtocolBaaS::getBoolConfig(const std::string &param,ProtocolBaaSCallback& 
     return false;
 }
 
-int ProtocolBaaS::getIntegerConfig(const std::string &param, ProtocolBaaSCallback& cb) {
-    setCallback(cb);
+int ProtocolBaaS::getIntegerConfig(const std::string &param) {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
 
@@ -288,8 +286,7 @@ int ProtocolBaaS::getIntegerConfig(const std::string &param, ProtocolBaaSCallbac
     return 0;
 }
 
-double ProtocolBaaS::getDoubleConfig(const std::string &param, ProtocolBaaSCallback& cb) {
-    setCallback(cb);
+double ProtocolBaaS::getDoubleConfig(const std::string &param) {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
 
@@ -301,8 +298,7 @@ double ProtocolBaaS::getDoubleConfig(const std::string &param, ProtocolBaaSCallb
     return 0;
 }
 
-long ProtocolBaaS::getLongConfig(const std::string &param, ProtocolBaaSCallback& cb) {
-    setCallback(cb);
+long ProtocolBaaS::getLongConfig(const std::string &param) {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
 
@@ -314,8 +310,7 @@ long ProtocolBaaS::getLongConfig(const std::string &param, ProtocolBaaSCallback&
     return 0;
 }
 
-const char* ProtocolBaaS::getStringConfig(const std::string &param, ProtocolBaaSCallback& cb) {
-    setCallback(cb);
+const char* ProtocolBaaS::getStringConfig(const std::string &param) {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
 

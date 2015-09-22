@@ -284,6 +284,7 @@ static BOOL sIsSet = false;
     NSString* msg = [NSString stringWithFormat:@"Get bool config: %d", ret];
 
     [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kGetBoolConfig andMsg:msg];
+    NSLog(@"%@", msg);
     return ret;
 }
 
@@ -292,6 +293,7 @@ static BOOL sIsSet = false;
     NSString* msg = [NSString stringWithFormat:@"Get int config: %d", ret];
 
     [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kGetIntConfig andMsg:msg];
+    NSLog(@"%@", msg);
     return ret;
 }
 
@@ -300,6 +302,7 @@ static BOOL sIsSet = false;
     NSString* msg = [NSString stringWithFormat:@"Get double config: %f", ret];
 
     [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kGetDoubleConfig andMsg:msg];
+    NSLog(@"%@", msg);
     return ret;
 }
 
@@ -308,6 +311,7 @@ static BOOL sIsSet = false;
     NSString* msg = [NSString stringWithFormat:@"Get long config: %ld", ret];
 
     [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kGetLongConfig andMsg:msg];
+    NSLog(@"%@", msg);
     return ret;
 }
 
@@ -316,6 +320,7 @@ static BOOL sIsSet = false;
     NSString* msg = [NSString stringWithFormat:@"Get string config: %@", ret];
 
     [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kGetStringConfig andMsg:msg];
+    NSLog(@"%@", msg);
     return ret;
 }
 

@@ -221,23 +221,23 @@ void TestParseBaaS::doAction(int tag) {
             break;
         case TAG_PF_GET_BOOL_CONFIG:
             _resultInfo->setString(StringUtils::format("Get bool config from server"));
-            _protocolBaaS->getBoolConfig("", callback);
+            _protocolBaaS->getBoolConfig("");
             break;
         case TAG_PF_GET_INT_CONFIG:
             _resultInfo->setString(StringUtils::format("Get int config from server"));
-            _protocolBaaS->getIntegerConfig("", callback);
+            _protocolBaaS->getIntegerConfig("");
             break;
         case TAG_PF_GET_DOUBLE_CONFIG:
             _resultInfo->setString(StringUtils::format("Get double config from server"));
-            _protocolBaaS->getDoubleConfig("", callback);
+            _protocolBaaS->getDoubleConfig("");
             break;
         case TAG_PF_GET_LONG_CONFIG:
             _resultInfo->setString(StringUtils::format("Get long config from server"));
-            _protocolBaaS->getLongConfig("", callback);
+            _protocolBaaS->getLongConfig("");
             break;
         case TAG_PF_GET_STRING_CONFIG:
             _resultInfo->setString(StringUtils::format("Get string config from server"));
-            _protocolBaaS->getStringConfig("welcomeMessage", callback);
+            _protocolBaaS->getStringConfig("welcomeMessage");
             break;
 
         default:

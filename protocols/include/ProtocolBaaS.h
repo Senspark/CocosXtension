@@ -100,11 +100,11 @@ namespace cocos2d { namespace plugin {
          * Return cached config.
          */
         void fetchConfigInBackground(ProtocolBaaSCallback& cb);
-        bool getBoolConfig(const std::string& param, ProtocolBaaSCallback& cb);
-        int getIntegerConfig(const std::string& param, ProtocolBaaSCallback& cb);
-        double getDoubleConfig(const std::string& param, ProtocolBaaSCallback& cb);
-        long getLongConfig(const std::string& param, ProtocolBaaSCallback& cb);
-        const char* getStringConfig(const std::string& param, ProtocolBaaSCallback& cb);
+        bool getBoolConfig(const std::string& param);
+        int getIntegerConfig(const std::string& param);
+        double getDoubleConfig(const std::string& param);
+        long getLongConfig(const std::string& param);
+        const char* getStringConfig(const std::string& param);
 
         /*
          @deprecated
