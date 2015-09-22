@@ -323,8 +323,7 @@ void ProtocolBaaS::fetchConfigInBackground(ProtocolBaaSCallback& cb) {
 	}
 }
 
-bool ProtocolBaaS::getBoolConfig(const std::string& param, ProtocolBaaSCallback& cb) {
-	setCallback(cb);
+bool ProtocolBaaS::getBoolConfig(const std::string& param) {
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
 	PluginJniMethodInfo t;
 	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "getBoolConfig", "(Ljava/lang/String;)Z")) {
@@ -339,8 +338,7 @@ bool ProtocolBaaS::getBoolConfig(const std::string& param, ProtocolBaaSCallback&
 	return false;
 }
 
-int ProtocolBaaS::getIntegerConfig(const std::string& param, ProtocolBaaSCallback& cb) {
-	setCallback(cb);
+int ProtocolBaaS::getIntegerConfig(const std::string& param) {
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
 	PluginJniMethodInfo t;
 	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "getIntegerConfig", "(Ljava/lang/String;)I")) {
@@ -355,8 +353,7 @@ int ProtocolBaaS::getIntegerConfig(const std::string& param, ProtocolBaaSCallbac
 	return 0;
 }
 
-double ProtocolBaaS::getDoubleConfig(const std::string& param, ProtocolBaaSCallback& cb) {
-	setCallback(cb);
+double ProtocolBaaS::getDoubleConfig(const std::string& param) {
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
 	PluginJniMethodInfo t;
 	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "getDoubleConfig", "(Ljava/lang/String;)D")) {
@@ -371,8 +368,7 @@ double ProtocolBaaS::getDoubleConfig(const std::string& param, ProtocolBaaSCallb
 	return 0;
 }
 
-long ProtocolBaaS::getLongConfig(const std::string& param, ProtocolBaaSCallback& cb) {
-	setCallback(cb);
+long ProtocolBaaS::getLongConfig(const std::string& param) {
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
 	PluginJniMethodInfo t;
 	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "getIntegerConfig", "(Ljava/lang/String;)J")) {
@@ -387,8 +383,7 @@ long ProtocolBaaS::getLongConfig(const std::string& param, ProtocolBaaSCallback&
 	return 0;
 }
 
-const char* ProtocolBaaS::getStringConfig(const std::string& param, ProtocolBaaSCallback& cb) {
-	setCallback(cb);
+const char* ProtocolBaaS::getStringConfig(const std::string& param) {
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
 	PluginJniMethodInfo t;
 

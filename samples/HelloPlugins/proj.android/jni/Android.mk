@@ -58,7 +58,9 @@ LOCAL_WHOLE_STATIC_LIBRARIES += PluginSensparkStatic
 
 include $(BUILD_SHARED_LIBRARY)
 
+$(call import-module,ui)
 $(call import-module,protocols/android)
 $(call import-module,plugins/senspark/android)
-$(call import-module,cocos)
+#$(call import-module,cocos)
 $(call import-module,extensions)
+$(call import-module,.)

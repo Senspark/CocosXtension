@@ -372,7 +372,7 @@ public class BaaSParse implements InterfaceBaaS {
 				if (config != null && e == null) {
 					Log.i("Parse", "Fetch config from server successfully");
 					mCurrentConfig = config;
-					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_FetchConfigSucceed, null);
+					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_FetchConfigSucceed, "Fetch config from server successfully");
 				} else {
 					Log.e("Parse", "Fetch config from server failed. Use current config instead");
 					mCurrentConfig = ParseConfig.getCurrentConfig();
