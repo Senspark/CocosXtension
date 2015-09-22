@@ -56,7 +56,7 @@ LOCAL_WHOLE_STATIC_LIBRARIES += cocos_extension_static
 LOCAL_WHOLE_STATIC_LIBRARIES += PluginProtocolStatic
 LOCAL_WHOLE_STATIC_LIBRARIES += PluginSensparkStatic
 
-include $(BUILD_SHARED_LIBRARY)$
+include $(BUILD_SHARED_LIBRARY)
 
 $(call import-module,protocols/android)
 $(call import-module,plugins/senspark/android)
