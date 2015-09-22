@@ -8,9 +8,9 @@
 
 #include "TestParseScene.h"
 #include "ProtocolBaaS.h"
-#include "rapidjson/rapidjson.h"
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/writer.h"
+#include "json/rapidjson.h"
+#include "json/stringbuffer.h"
+#include "json/writer.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -163,7 +163,10 @@ void TestParseBaaS::doAction(int tag) {
             
             string name = StringUtils::format("TestObject%d", data).c_str();
 
-            doc.AddMember("name", rapidjson::Value(name.c_str(),alloc), alloc);
+            rapidjson::Value nameValue(kStringType);
+            nameValue.SetString(name.c_str(), alloc);
+
+            doc.AddMember("name", nameValue, alloc);
             doc.AddMember("data",   data, alloc);
 
             StringBuffer buffer;
