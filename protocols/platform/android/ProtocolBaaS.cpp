@@ -401,4 +401,22 @@ const char* ProtocolBaaS::getStringConfig(const std::string& param) {
 	return nullptr;
 }
 
+const char* ProtocolBaaS::getArrayConfig(const std::string& param) {
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
+
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "getArrayConfig", "(Ljava/lang/String;)Ljava/lang/String;")) {
+		jstring jparam = t.env->NewStringUTF(param.c_str());
+
+		jobject jret_id = t.env->CallObjectMethod(pData->jobj, t.methodID, jparam);
+		const char* ret_id = t.env->GetStringUTFChars((jstring)jret_id, nullptr);
+
+		t.env->DeleteLocalRef(jparam);
+		t.env->DeleteLocalRef(t.classID);
+
+		return ret_id;
+	}
+	return nullptr;
+}
+
 }}

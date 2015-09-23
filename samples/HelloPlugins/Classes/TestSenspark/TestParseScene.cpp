@@ -8,9 +8,9 @@
 
 #include "TestParseScene.h"
 #include "ProtocolBaaS.h"
-#include "json/rapidjson.h"
-#include "json/stringbuffer.h"
-#include "json/writer.h"
+#include "rapidjson/rapidjson.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -33,6 +33,7 @@ enum {
     TAG_PF_GET_DOUBLE_CONFIG,
     TAG_PF_GET_LONG_CONFIG,
     TAG_PF_GET_STRING_CONFIG,
+    TAG_PF_GET_ARRAY_CONFIG,
 };
 
 struct PFEventMenuItem {
@@ -54,6 +55,7 @@ static PFEventMenuItem s_PFMenuItem[] =
     {"get double config", TAG_PF_GET_DOUBLE_CONFIG},
     {"get long config", TAG_PF_GET_LONG_CONFIG},
     {"get string config", TAG_PF_GET_STRING_CONFIG},
+    {"get array config", TAG_PF_GET_ARRAY_CONFIG},
 
     {nullptr, 0},
 };
@@ -242,7 +244,11 @@ void TestParseBaaS::doAction(int tag) {
             _resultInfo->setString(StringUtils::format("Get string config from server"));
             _protocolBaaS->getStringConfig("welcomeMessage");
             break;
-
+        case TAG_PF_GET_ARRAY_CONFIG: {
+            _resultInfo->setString(StringUtils::format("Get array config from server"));
+            const char* ret = _protocolBaaS->getArrayConfig("app_start_interstitial_ad_order");
+            log("Array received: %s", ret);
+        }
         default:
             break;
     }
@@ -303,25 +309,10 @@ void TestParseBaaS::onParseCallback(int ret, const std::string &result) {
             _resultInfo->setString(StringUtils::format("Delete successfully %s", _lastObjectId.c_str()));
             break;
         case BaaSActionResultCode::kFetchConfigSucceed:
-            _resultInfo->setString("Fetch config from server");
+            _resultInfo->setString(result);
             break;
         case BaaSActionResultCode::kFetchConfigFailed:
             _resultInfo->setString("Get Config fail, use local config instead");
-            break;
-        case BaaSActionResultCode::kGetBoolConfig:
-            _resultInfo->setString(result);
-            break;
-        case BaaSActionResultCode::kGetIntConfig:
-            _resultInfo->setString(result);
-            break;
-        case BaaSActionResultCode::kGetDoubleConfig:
-            _resultInfo->setString(result);
-            break;
-        case BaaSActionResultCode::kGetLongConfig:
-            _resultInfo->setString(result);
-            break;
-        case BaaSActionResultCode::kGetStringConfig:
-            _resultInfo->setString(result);
             break;
         default:
             break;

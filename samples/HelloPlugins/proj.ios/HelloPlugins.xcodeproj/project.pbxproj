@@ -19,8 +19,6 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
-		2C2619C41BABCA0C007C4980 /* libPluginAdColony.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2619C31BABCA0C007C4980 /* libPluginAdColony.a */; };
-		2C2619C61BABCA10007C4980 /* libPluginChartboost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2619C51BABCA10007C4980 /* libPluginChartboost.a */; };
 		2C2619C71BABCA15007C4980 /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C0F29441BA95FD400856036 /* libcocos2d iOS.a */; };
 		591A8D2419DF4DB700F71BFD /* libPluginFacebook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 591A8D2219DF4DB700F71BFD /* libPluginFacebook.a */; };
 		591A8D2519DF4DB700F71BFD /* libPluginFacebookAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 591A8D2319DF4DB700F71BFD /* libPluginFacebookAds.a */; };
@@ -141,8 +139,6 @@
 		1D6058910D05DD3D006BFB54 /* HelloPlugins.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloPlugins.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		2C2619C31BABCA0C007C4980 /* libPluginAdColony.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPluginAdColony.a; path = ../../../plugins/adcolony/proj.ios/build/Debug/libPluginAdColony.a; sourceTree = "<group>"; };
-		2C2619C51BABCA10007C4980 /* libPluginChartboost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPluginChartboost.a; path = ../../../plugins/chartboost/proj.ios/build/Debug/libPluginChartboost.a; sourceTree = "<group>"; };
 		591A8D2219DF4DB700F71BFD /* libPluginFacebook.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPluginFacebook.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		591A8D2319DF4DB700F71BFD /* libPluginFacebookAds.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPluginFacebookAds.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		592A55781964AD7D008E4BC7 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
@@ -255,8 +251,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C2619C71BABCA15007C4980 /* libcocos2d iOS.a in Frameworks */,
-				2C2619C61BABCA10007C4980 /* libPluginChartboost.a in Frameworks */,
-				2C2619C41BABCA0C007C4980 /* libPluginAdColony.a in Frameworks */,
 				9507EB681B7DAC5E009FEF7E /* libPluginParse.a in Frameworks */,
 				957D746E1B73596B004D06A0 /* GameKit.framework in Frameworks */,
 				95088B571B6FC6BA002095FF /* CoreLocation.framework in Frameworks */,
@@ -394,8 +388,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2C2619C51BABCA10007C4980 /* libPluginChartboost.a */,
-				2C2619C31BABCA0C007C4980 /* libPluginAdColony.a */,
 				9507EB671B7DAC5E009FEF7E /* libPluginParse.a */,
 				95094CE21B7D916500CEFD43 /* Parse.framework */,
 				95094CE01B7C9FB500CEFD43 /* Bolts.framework */,
@@ -728,6 +720,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../plugins/facebookads/proj.ios",
 					"$(SRCROOT)/../../../plugins/facebook/proj.ios",
@@ -776,6 +769,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../plugins/facebookads/proj.ios",
 					"$(SRCROOT)/../../../plugins/facebook/proj.ios",

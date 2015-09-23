@@ -28,4 +28,5 @@ public interface InterfaceBaaS {
     public double getDoubleConfig(String param);
     public long getLongConfig(String param);
     public String getStringConfig(String param);
+    public String getArrayConfig(String param);
 }

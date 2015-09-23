@@ -384,7 +384,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "$(COCOS2DX_ROOT)/cocos";
-				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Debug;
 		};
@@ -407,7 +406,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "$(COCOS2DX_ROOT)/cocos";
-				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Release;
 		};

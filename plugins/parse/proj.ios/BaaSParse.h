@@ -38,6 +38,7 @@
 - (double) getDoubleConfig: (NSString*) param;
 - (long) getLongConfig: (NSString*) param;
 - (NSString*) getStringConfig: (NSString*) param;
+- (NSArray*) getArrayConfig: (NSString*) param;
 
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;

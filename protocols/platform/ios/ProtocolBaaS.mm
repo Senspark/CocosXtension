@@ -322,3 +322,17 @@ const char* ProtocolBaaS::getStringConfig(const std::string &param) {
     return nullptr;
 }
 
+const char* ProtocolBaaS::getArrayConfig(const std::string &param) {
+    NSString* nsParam = [NSString stringWithUTF8String:param.c_str()];
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != nullptr);
+
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+        NSObject<InterfaceBaaS>* curObj = ocObj;
+        NSDictionary* nsDict = [curObj getArrayConfig:nsParam];
+        const char* ret = [[ParseUtils NSDictionaryToNSString:nsDict] UTF8String];
+        return ret;
+    }
+    return nullptr;
+}

@@ -40,12 +40,6 @@ namespace cocos2d { namespace plugin {
 
         kFetchConfigSucceed,
         kFetchConfigFailed,
-
-        kGetBoolConfig,
-        kGetIntConfig,
-        kGetDoubleConfig,
-        kGetLongConfig,
-        kGetStringConfig
     };
     
     typedef std::map<std::string, std::string> TBaaSDeveloperInfo;
@@ -105,6 +99,7 @@ namespace cocos2d { namespace plugin {
         double getDoubleConfig(const std::string& param);
         long getLongConfig(const std::string& param);
         const char* getStringConfig(const std::string& param);
+        const char* getArrayConfig(const std::string& param);
 
         /*
          @deprecated

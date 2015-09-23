@@ -283,7 +283,6 @@ static BOOL sIsSet = false;
     bool ret = [_currentConfig[param] boolValue];
     NSString* msg = [NSString stringWithFormat:@"Get bool config: %d", ret];
 
-    [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kGetBoolConfig andMsg:msg];
     NSLog(@"%@", msg);
     return ret;
 }
@@ -292,7 +291,6 @@ static BOOL sIsSet = false;
     int ret = (int)[_currentConfig[param] integerValue];
     NSString* msg = [NSString stringWithFormat:@"Get int config: %d", ret];
 
-    [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kGetIntConfig andMsg:msg];
     NSLog(@"%@", msg);
     return ret;
 }
@@ -301,7 +299,6 @@ static BOOL sIsSet = false;
     auto ret = [_currentConfig[param] doubleValue];
     NSString* msg = [NSString stringWithFormat:@"Get double config: %f", ret];
 
-    [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kGetDoubleConfig andMsg:msg];
     NSLog(@"%@", msg);
     return ret;
 }
@@ -310,7 +307,6 @@ static BOOL sIsSet = false;
     auto ret = [_currentConfig[param] longValue];
     NSString* msg = [NSString stringWithFormat:@"Get long config: %ld", ret];
 
-    [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kGetLongConfig andMsg:msg];
     NSLog(@"%@", msg);
     return ret;
 }
@@ -319,8 +315,15 @@ static BOOL sIsSet = false;
     NSString* ret = _currentConfig[param];
     NSString* msg = [NSString stringWithFormat:@"Get string config: %@", ret];
 
-    [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kGetStringConfig andMsg:msg];
     NSLog(@"%@", msg);
+    return ret;
+}
+
+- (NSDictionary*) getArrayConfig:(NSString *)param {
+    NSDictionary* ret = _currentConfig[param];
+    NSString* arr = [NSString stringWithFormat:@"Get array config: %@", ret];
+
+    NSLog(@"%@", arr);
     return ret;
 }
 

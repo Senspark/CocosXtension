@@ -435,4 +435,11 @@ public class BaaSParse implements InterfaceBaaS {
 		Log.i("Parse", "Parse Config >>> Get String: "+ ret);
 		return ret;
 	}
+	
+	@Override
+	public String getArrayConfig(String param) {
+		String ret = mCurrentConfig.getJSONArray(param).toString();
+		Log.i("Parse", "Parse Config >>> Get Array: "+ ret);
+		return ret;
+	}
 }
