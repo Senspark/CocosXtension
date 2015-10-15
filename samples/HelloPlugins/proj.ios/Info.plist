@@ -40,7 +40,7 @@
 			<string>com.senspark.cocos2dx.plugin.test</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb660747860721411</string>
+				<string>fb381078945367795</string>
 			</array>
 		</dict>
 		<dict>
@@ -57,55 +57,11 @@
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>FacebookAppID</key>
-	<string>660747860721411</string>
+	<string>381078945367795</string>
 	<key>FacebookDisplayName</key>
 	<string>Test Plugin</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fb</string>
-		<string>fbapi</string>
-		<string>fbapi20130214</string>
-		<string>fbapi20130410</string>
-		<string>fbapi20130702</string>
-		<string>fbapi20131010</string>
-		<string>fbapi20131219</string>
-		<string>fbapi20140410</string>
-		<string>fbapi20140116</string>
-		<string>fbapi20150313</string>
-		<string>fbapi20150629</string>
-		<string>fbauth</string>
-		<string>fbauth2</string>
-		<string>fb-messenger-api20140430</string>
-	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>akamaihd.net</key>
-			<dict>
-				<key>NSExceptionRequiresForwardSecrecy</key>
-				<false/>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-			</dict>
-			<key>facebook.com</key>
-			<dict>
-				<key>NSExceptionRequiresForwardSecrecy</key>
-				<false/>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-			</dict>
-			<key>fbcdn.net</key>
-			<dict>
-				<key>NSExceptionRequiresForwardSecrecy</key>
-				<false/>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-			</dict>
-		</dict>
-	</dict>
 	<key>UIAppFonts</key>
 	<array/>
 	<key>UISupportedInterfaceOrientations</key>
@@ -113,5 +69,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>
