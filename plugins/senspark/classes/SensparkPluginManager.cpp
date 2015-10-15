@@ -21,6 +21,7 @@ DEFINE_PLUGIN_LOADER_METHODS(Social);
 DEFINE_PLUGIN_LOADER_METHODS(IAP);
 DEFINE_PLUGIN_LOADER_METHODS(User);
 DEFINE_PLUGIN_LOADER_METHODS(BaaS);
+DEFINE_PLUGIN_LOADER_METHODS(Share);
 
 SensparkPluginManager::SensparkPluginManager(void)
 {
@@ -53,6 +54,9 @@ SensparkPluginManager::SensparkPluginManager(void)
     REGISTER_PLUGIN_NAME(UserPluginType, FACEBOOK, "UserFacebook");
     REGISTER_PLUGIN_NAME(UserPluginType, GAME_CENTER, "UserGameCenter");
     REGISTER_PLUGIN_NAME(UserPluginType, GOOGLE_PLAY, "UserGooglePlay");
+    
+    //------ Register Share Serice ------
+    REGISTER_PLUGIN_NAME(SharePluginType, FACEBOOK, "ShareFacebook");
 }
 
 SensparkPluginManager::~SensparkPluginManager(void)

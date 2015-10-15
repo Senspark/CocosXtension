@@ -31,6 +31,10 @@ enum class AdsPluginType {
     VUNGLE,
 };
 
+enum class SharePluginType {
+    FACEBOOK,
+};
+
 enum class SocialPluginType {
     FACEBOOK,
     GAME_CENTER,
@@ -92,6 +96,7 @@ REGISTER_PLUGIN_TYPE(BaaSPluginType);
 REGISTER_PLUGIN_TYPE(DataPluginType);
 REGISTER_PLUGIN_TYPE(IAPPluginType);
 REGISTER_PLUGIN_TYPE(SocialPluginType);
+REGISTER_PLUGIN_TYPE(SharePluginType);
 REGISTER_PLUGIN_TYPE(UserPluginType);
 
 class SensparkPluginManager {
@@ -107,6 +112,7 @@ public:
     DECLARE_PLUGIN_LOADER_METHODS(BaaS);
     DECLARE_PLUGIN_LOADER_METHODS(Data);
     DECLARE_PLUGIN_LOADER_METHODS(Social);
+    DECLARE_PLUGIN_LOADER_METHODS(Share);
     DECLARE_PLUGIN_LOADER_METHODS(IAP);
     DECLARE_PLUGIN_LOADER_METHODS(User);
     

@@ -37,6 +37,7 @@
  */
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
 - (void) share: (NSMutableDictionary*) shareInfo;
+
 //- (void) dialog: (NSMutableDictionary*) shareInfo;
 - (void) setDebugMode: (BOOL) debug;
 //- (void) appRequest:(NSMutableDictionary *)shareInfo;
