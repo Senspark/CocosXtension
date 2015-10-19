@@ -45,4 +45,8 @@
 - (NSString*) getPluginVersion;
 //- (BOOL) canPresentDialogWithParams:(NSMutableDictionary *)shareInfo;
 
+// invite facebook
+-(void) fetchInvitableFriendList;
+-(void) openInviteDialog:(NSMutableDictionary*) shareInfo;
+
 @end

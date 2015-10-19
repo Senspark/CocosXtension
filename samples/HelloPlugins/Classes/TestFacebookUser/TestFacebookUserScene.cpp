@@ -34,6 +34,7 @@ enum {
     TAG_FB_LOGIN_WITH_PERMISSION,
     TAG_FB_LOGOUT,
     TAG_FB_GETUID,
+    TAG_FB_GETUNAME,
     TAG_FB_GETTOKEN,
     TAG_FB_GETPERMISSIONS,
     TAG_FB_REQUEST_API,
@@ -53,6 +54,7 @@ static FBEventMenuItem s_FBMenuItem[] =
     {"loginWithPermission", TAG_FB_LOGIN_WITH_PERMISSION},
     {"logout", TAG_FB_LOGOUT},
     {"getUid", TAG_FB_GETUID},
+    {"getUserName", TAG_FB_GETUNAME},
     {"getToken", TAG_FB_GETTOKEN},
     {"getPermissions", TAG_FB_GETPERMISSIONS},
     {"request API", TAG_FB_REQUEST_API},
@@ -185,6 +187,15 @@ void TestFacebookUser::eventMenuCallback(Ref* sender)
             }
         }
         break;
+    case TAG_FB_GETUNAME:
+        {
+            if(FacebookAgent::getInstance()->isLoggedIn()){
+                callbackInfo->setString(FacebookAgent::getInstance()->getUserName());
+            }else{
+                callbackInfo->setString("User haven't been logged in");
+            }
+        }
+            break;
     case TAG_FB_GETTOKEN:
         {
             if (FacebookAgent::getInstance()->isLoggedIn())

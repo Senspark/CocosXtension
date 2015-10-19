@@ -30,6 +30,9 @@ typedef enum {
     kShareFail,
     kShareCancel,
     kShareTimeOut,
+    
+    kFetchInvitableFriendsSuccess,
+    
 } ShareResult;
 
 @interface ShareWrapper : NSObject

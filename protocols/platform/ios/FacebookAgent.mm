@@ -114,12 +114,16 @@ namespace cocos2d{namespace plugin{
         return  agentManager->getUserPlugin()->callStringFuncWithParam("getUserID", NULL);
     }
     
+    std::string FacebookAgent::getUserName(){
+        return agentManager->getUserPlugin()->callStringFuncWithParam("getUserName",NULL);
+    }
+    
     void FacebookAgent::dialog(FBParam& info, FBCallback cb)
     {
         auto sharePlugin = agentManager->getSharePlugin();
         sharePlugin->setCallback(cb);
         PluginParam params(info);
-        sharePlugin->callFuncWithParam("dialog", &params, NULL);
+        sharePlugin->callFuncWithParam("share", &params, NULL);
     }
     void FacebookAgent::webDialog(FBParam &info, FBCallback cb){
         auto sharePlugin = agentManager->getSharePlugin();
@@ -162,6 +166,19 @@ namespace cocos2d{namespace plugin{
         sharePlugin->setCallback(cb);
         PluginParam params(info);
         sharePlugin->callFuncWithParam("appRequest", &params, NULL);
+    }
+    
+    void FacebookAgent::fetchInvitableFriendsList(FBCallback cb){
+        auto sharePlugin = agentManager->getSharePlugin();
+        sharePlugin->setCallback(cb);
+        sharePlugin->callFuncWithParam("fetchInvitableFriendList",NULL,NULL);
+    }
+    
+    void FacebookAgent::openInviteDialog(FBParam &recipients,FBCallback cb){
+        auto sharePlugin = agentManager->getSharePlugin();
+        sharePlugin->setCallback(cb);
+        PluginParam params(recipients);
+        sharePlugin->callFuncWithParam("openInviteDialog",&params,NULL);
     }
     
     FacebookAgent::FBCallback FacebookAgent::getRequestCallback(int index)

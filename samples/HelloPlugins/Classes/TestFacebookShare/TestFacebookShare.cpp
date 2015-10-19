@@ -25,6 +25,7 @@ THE SOFTWARE.
 #include "PluginManager.h"
 #include "HelloWorldScene.h"
 #include "Configs.h"
+#include "../JsonUtils.h"
 
 using namespace cocos2d;
 using namespace cocos2d::plugin;
@@ -354,7 +355,7 @@ void TestFacebookShare::showSecondMenu(int menuTag)
         Point posBR = Point(origin.x + visibleSize.width, origin.y);
         
         secondMenu->removeAllChildren();
-        int top = 70;
+        int top = 80;
         
         switch (menuTag) {
             case TAG_FBS_LINK:
@@ -373,7 +374,7 @@ void TestFacebookShare::showSecondMenu(int menuTag)
                     for (int i = 0; i < sizeof(s_FBA_RequestMenuItem)/sizeof(s_FBA_RequestMenuItem[0]); i++) {
                         Label* label = Label::createWithSystemFont(s_FBA_RequestMenuItem[i].name.c_str(), "Arial", 24);
                         MenuItemLabel* menuItem = MenuItemLabel::create(label, CC_CALLBACK_1(TestFacebookShare::secondMenuCallback, this));
-                        menuItem->setPosition(Vec2(visibleSize.width / 3, visibleSize.height - top));
+                        menuItem->setPosition(Vec2(visibleSize.width / 4 - 150, visibleSize.height - top));
                         secondMenu->addChild(menuItem, 0, s_FBA_RequestMenuItem[i].tag);
                         top += 50;
                     }
@@ -485,9 +486,12 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
                 FacebookAgent::FBParam params;
                 params.insert(std::make_pair("message", "Cocos2d-x is a great game engine"));
                 params.insert(std::make_pair("title", "Cocos2d-x title"));
+                params.insert(std::make_pair("recipients", ""));
                 
-                FacebookAgent::getInstance()->appRequest(params, [=](int ret, std::string& msg){
-                    CCLOG("%s", msg.c_str());
+//                FacebookAgent::getInstance()->appRequest(params, [=](int ret, std::string& msg){
+//                    CCLOG("%s", msg.c_str());
+//                });
+                FacebookAgent::getInstance()->openInviteDialog(params, [=](int ret, std::string& msg){
                 });
             }
             break;
@@ -503,15 +507,40 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
                 });
             }
             break;
-        case TAG_FBSS_SLOF:
+        case TAG_FBSS_SLOF: //get list friends
             {
                 FacebookAgent::FBParam params;
-                params.insert(std::make_pair("message", "Cocos2d-x is a great game engine"));
-                params.insert(std::make_pair("title", "Cocos2d-x title"));
-                params.insert(std::make_pair("filters", "[{\"name\":\"company\", \"user_ids\":[\"100006738453912\",\"10204182777160522\"]}]"));
+                params.emplace("message", "Cocos2d-x is a great game engine");
+                params.emplace("title", "Cocos2d-x title");
+                params.emplace("filters", "([{\"name\":\"company\", \"user_ids\":[\"100006738453912\",\"10204182777160522\"]}]");
                 // android not support filters
-                FacebookAgent::getInstance()->appRequest(params, [=](int ret, std::string& msg){
-                    CCLOG("%s", msg.c_str());
+                FacebookAgent::getInstance()->fetchInvitableFriendsList([=](int ret, std::string& friends){
+                    ValueVector friendList = senspark::JsonUtils::parseValueVectorFromJsonContent(friends);
+                    CCLOG("friends list size : %ld",friendList.size());
+                    Menu* secondMenu = static_cast<Menu*>(getChildByTag(2));
+                    Size visibleSize = Director::getInstance()->getVisibleSize();
+                    int top = 20;
+                    for(int i=0; i<friendList.size(); i++){
+                        Value fr = friendList[i];
+                        auto&& map  = fr.asValueMap();
+                        auto&& id   = map.at("id").asString();
+                        auto&& name = map.at("name").asString();
+                        
+                        auto&& mapPicture = map.at("picture").asValueMap();
+                        auto&& mapDataPic = mapPicture.at("data").asValueMap();
+                        auto&& avatarUrl  = mapDataPic.at("url").asString();
+                        
+                        CCLOG("id : %s",id.c_str());
+                        CCLOG("name : %s",name.c_str());
+                        CCLOG("url : %s",avatarUrl.c_str());
+                        
+                        Label* label = Label::createWithSystemFont(name.c_str(), "Arial", 24);
+                        MenuItemLabel* menuItem = MenuItemLabel::create(label, CC_CALLBACK_1(TestFacebookShare::secondMenuCallback, this));
+                        menuItem->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - top));
+                        secondMenu->addChild(menuItem, 0, s_FBA_RequestMenuItem[i].tag);
+                        top += 50;
+                    }
+
                 });
             }
             break;

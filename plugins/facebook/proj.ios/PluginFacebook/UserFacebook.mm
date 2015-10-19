@@ -104,6 +104,11 @@ using namespace cocos2d::plugin;
     return [FBSDKAccessToken currentAccessToken].userID;
 }
 
+-(NSString*) getUserName{
+    NSLog(@"user name %@",[FBSDKProfile currentProfile].name);
+    return [FBSDKProfile currentProfile].name;
+}
+
 - (BOOL) isLoggedIn{
     return [FBSDKAccessToken currentAccessToken] ? YES : NO;
 }

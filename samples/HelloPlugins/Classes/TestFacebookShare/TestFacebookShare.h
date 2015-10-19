@@ -49,6 +49,11 @@ private:
     void secondMenuCallback(Ref* sender);
 private:
     cocos2d::Label* tipsLabel;
+    enum class typeRequest{
+        showInviteDialog = 1,
+        fetchInvitableFriends,
+        fetchPlayerFriends,
+    };
 };
 
 #endif // __TEST_FACEBOOK_USER_SCENE_H__

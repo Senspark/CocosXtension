@@ -66,6 +66,8 @@ static AppDelegate s_sharedApplication;
     
     app->run();
     
+    [FBSDKProfile enableUpdatesOnAccessTokenChange:true];
+    
     [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
 
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];

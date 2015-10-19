@@ -27,10 +27,11 @@
 #import <FBSDKShareKit/FBSDKShareKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "ParseUtils.h"
+#include <string>
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
-@interface ShareFacebook() <FBSDKSharingDelegate, FBSDKSharingDelegate>
+@interface ShareFacebook() <FBSDKSharingDelegate, FBSDKGameRequestDialogDelegate>
 
 @end
 
@@ -220,5 +221,88 @@
 - (void)sharerDidCancel:(id<FBSDKSharing>)sharer {
     [ShareWrapper onShareResult:self withRet:kShareCancel withMsg:@"User cancelled request"];
 }
+
+
+-(void)appRequest:(NSMutableDictionary*)requestInfo{
+    [self convertParamsToFBParams:requestInfo];
+    
+
+}
+
+#pragma mark - facebook invite
+
+
+-(void) fetchInvitableFriendList{
+    FBSDKGraphRequest* request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me/invitable_friends?limit=300"
+                                                                    parameters:nil
+                                                                    HTTPMethod:@"GET"];
+    [request startWithCompletionHandler:^(FBSDKGraphRequestConnection* connection, id result, NSError* error) {
+        if (result != nil) {
+            //result -> dictionary -> json string -> call callback (msg)
+            NSArray* friends = [result objectForKey:@"data"];
+            NSString* friendsList = @"";
+            friendsList = [friendsList stringByAppendingString:@"["];
+            
+            int ran;
+            if(friends.count>50){
+                unsigned ranLimit = friends.count-50;
+                ran = rand() % ranLimit;
+            }else{
+                ran = 0;
+            }
+            
+            for(int i=0; i<50; i++){
+                id obj = [friends objectAtIndex:ran];
+                NSString* friendJson = [ParseUtils NSDictionaryToNSString:obj];
+                friendsList = [friendsList stringByAppendingString:friendJson];
+                if(i < 49 && ran < friends.count-1){
+                  friendsList = [friendsList stringByAppendingString:@","];
+                }
+                if(ran >= friends.count-1){
+                    break;
+                }
+                ran++;
+            }
+            friendsList = [friendsList stringByAppendingString:@"]"];
+           // NSLog(@"list friends : %@",friendsList);
+            
+            [ShareWrapper onShareResult:self withRet:kFetchInvitableFriendsSuccess withMsg:friendsList];
+        } else {
+            NSLog(@"fetchInvitableFriendList error %@", error);
+        }
+    }];
+}
+
+-(void) openInviteDialog:(NSMutableDictionary*) shareInfo{
+    [self convertParamsToFBParams:shareInfo];
+    NSString *recipients = [shareInfo objectForKey:@"recipients"];
+    
+    FBSDKGameRequestDialog* gameRequestDialog   = [[FBSDKGameRequestDialog alloc] init];
+    FBSDKGameRequestContent* content            = [[FBSDKGameRequestContent alloc] init];
+    content.title                               = @"Invite friends";
+    content.message                             = @"send request to friends";
+    content.data                                = @"INVITE_FRIENDS";
+    content.recipients                          = [recipients componentsSeparatedByString:@","];
+    gameRequestDialog.content                   = content;
+    gameRequestDialog.delegate                  = self;
+    gameRequestDialog.frictionlessRequestsEnabled = YES;
+    [gameRequestDialog show];
+}
+
+/**
+ implement method
+ */
+- (void) gameRequestDialog:(FBSDKGameRequestDialog*) gameRequestDialog didCompleteWithResults:(NSDictionary*) results {
+    NSLog(@"data content request dialog %@",gameRequestDialog.content.data);
+}
+
+- (void) gameRequestDialog:(FBSDKGameRequestDialog*) gameRequestDialog didFailWithError:(NSError*) error {
+    
+}
+
+- (void) gameRequestDialogDidCancel:(FBSDKGameRequestDialog*) gameRequestDialog {
+    
+}
+
 
 @end
