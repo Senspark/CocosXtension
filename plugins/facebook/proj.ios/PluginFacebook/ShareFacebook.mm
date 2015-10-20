@@ -232,30 +232,43 @@
 #pragma mark - facebook invite
 
 
--(void) fetchInvitableFriendList{
+-(void) fetchInvitableFriendList:(NSMutableDictionary*) fetchInfo{
+    [self convertParamsToFBParams:fetchInfo];
+    NSString *nsLimit = [fetchInfo objectForKey:@"limit"];
+    
+    int limit;
+    if(nsLimit != nil){
+        limit = [nsLimit intValue];
+    }else{
+        limit = 50;
+    }
+    if(limit > 50){
+        limit = 50;
+    }
+    
     FBSDKGraphRequest* request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me/invitable_friends?limit=300"
                                                                     parameters:nil
                                                                     HTTPMethod:@"GET"];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection* connection, id result, NSError* error) {
-        if (result != nil) {
+        if (error == nil) {
             //result -> dictionary -> json string -> call callback (msg)
             NSArray* friends = [result objectForKey:@"data"];
             NSString* friendsList = @"";
             friendsList = [friendsList stringByAppendingString:@"["];
             
             int ran;
-            if(friends.count>50){
-                unsigned ranLimit = friends.count-50;
+            if(friends.count>limit){
+                unsigned ranLimit = friends.count-limit;
                 ran = rand() % ranLimit;
             }else{
                 ran = 0;
             }
             
-            for(int i=0; i<50; i++){
+            for(int i=0; i<limit; i++){
                 id obj = [friends objectAtIndex:ran];
                 NSString* friendJson = [ParseUtils NSDictionaryToNSString:obj];
                 friendsList = [friendsList stringByAppendingString:friendJson];
-                if(i < 49 && ran < friends.count-1){
+                if(i < (limit-1) && ran < friends.count-1){
                   friendsList = [friendsList stringByAppendingString:@","];
                 }
                 if(ran >= friends.count-1){
@@ -269,6 +282,7 @@
             [ShareWrapper onShareResult:self withRet:kFetchInvitableFriendsSuccess withMsg:friendsList];
         } else {
             NSLog(@"fetchInvitableFriendList error %@", error);
+            [ShareWrapper onShareResult:self withRet:kFetchInvitableFreindsFailed withMsg:@"fetch failed"];
         }
     }];
 }
@@ -290,18 +304,19 @@
 }
 
 /**
- implement method
+ implement request method
  */
 - (void) gameRequestDialog:(FBSDKGameRequestDialog*) gameRequestDialog didCompleteWithResults:(NSDictionary*) results {
     NSLog(@"data content request dialog %@",gameRequestDialog.content.data);
+    [ShareWrapper onShareResult:self withRet:kRequestSuccess withMsg:@"request success"];
 }
 
 - (void) gameRequestDialog:(FBSDKGameRequestDialog*) gameRequestDialog didFailWithError:(NSError*) error {
-    
+    [ShareWrapper onShareResult:self withRet:kRequestFailed withMsg:@"request failed"];
 }
 
 - (void) gameRequestDialogDidCancel:(FBSDKGameRequestDialog*) gameRequestDialog {
-    
+    [ShareWrapper onShareResult:self withRet:kRequestCancel withMsg:@"request cancel"];
 }
 
 

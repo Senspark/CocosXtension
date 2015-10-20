@@ -32,6 +32,11 @@ typedef enum {
     kShareTimeOut,
     
     kFetchInvitableFriendsSuccess,
+    kFetchInvitableFreindsFailed,
+    
+    kRequestSuccess,
+    kRequestCancel,
+    kRequestFailed,
     
 } ShareResult;
 

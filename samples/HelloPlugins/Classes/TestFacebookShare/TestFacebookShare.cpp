@@ -26,9 +26,11 @@ THE SOFTWARE.
 #include "HelloWorldScene.h"
 #include "Configs.h"
 #include "../JsonUtils.h"
+#include "SensparkPlugin.h"
 
 using namespace cocos2d;
 using namespace cocos2d::plugin;
+using namespace senspark;
 
 enum {
     TAG_FBS_LINK = 0,
@@ -488,10 +490,8 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
                 params.insert(std::make_pair("title", "Cocos2d-x title"));
                 params.insert(std::make_pair("recipients", ""));
                 
-//                FacebookAgent::getInstance()->appRequest(params, [=](int ret, std::string& msg){
-//                    CCLOG("%s", msg.c_str());
-//                });
-                FacebookAgent::getInstance()->openInviteDialog(params, [=](int ret, std::string& msg){
+                senspark::plugin::share::FacebookProtocolShare::getInstance()->openInviteDialog(params, [=](int ret, std::string& msg){
+                    CCLOG("invite request %s",msg.c_str());
                 });
             }
             break;
@@ -512,9 +512,9 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
                 FacebookAgent::FBParam params;
                 params.emplace("message", "Cocos2d-x is a great game engine");
                 params.emplace("title", "Cocos2d-x title");
-                params.emplace("filters", "([{\"name\":\"company\", \"user_ids\":[\"100006738453912\",\"10204182777160522\"]}]");
-                // android not support filters
-                FacebookAgent::getInstance()->fetchInvitableFriendsList([=](int ret, std::string& friends){
+                params.emplace("limit", "5");
+                senspark::plugin::share::FacebookProtocolShare::getInstance()->fetchInvitableFriendsList(params, [=](int ret, std::string& friends){
+                    
                     ValueVector friendList = senspark::JsonUtils::parseValueVectorFromJsonContent(friends);
                     CCLOG("friends list size : %ld",friendList.size());
                     Menu* secondMenu = static_cast<Menu*>(getChildByTag(2));
@@ -540,7 +540,7 @@ void TestFacebookShare::secondMenuCallback(Ref* sender)
                         secondMenu->addChild(menuItem, 0, s_FBA_RequestMenuItem[i].tag);
                         top += 50;
                     }
-
+                    
                 });
             }
             break;

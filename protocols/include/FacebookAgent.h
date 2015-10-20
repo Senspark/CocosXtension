@@ -116,17 +116,6 @@ public:
      @param cb callback of dialog
      */
     void appRequest(FBParam &info, FBCallback cb);
-    
-    /**
-     @brief fetch list friends not play game to invite play game
-     */
-    void fetchInvitableFriendsList(FBCallback cb);
-    
-    /**
-     @brief open invite facebook dialog
-     @param list id of friends
-     */
-    void openInviteDialog(FBParam &recipients,FBCallback cb);
 
 	/**
      @brief use Facebook Open Graph api

@@ -46,7 +46,7 @@
 //- (BOOL) canPresentDialogWithParams:(NSMutableDictionary *)shareInfo;
 
 // invite facebook
--(void) fetchInvitableFriendList;
--(void) openInviteDialog:(NSMutableDictionary*) shareInfo;
+-(void) fetchInvitableFriendList:(NSMutableDictionary*) fetchInfo ;
+-(void) openInviteDialog:(NSMutableDictionary*) dialogInfo;
 
 @end

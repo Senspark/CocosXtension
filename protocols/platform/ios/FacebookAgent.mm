@@ -168,19 +168,6 @@ namespace cocos2d{namespace plugin{
         sharePlugin->callFuncWithParam("appRequest", &params, NULL);
     }
     
-    void FacebookAgent::fetchInvitableFriendsList(FBCallback cb){
-        auto sharePlugin = agentManager->getSharePlugin();
-        sharePlugin->setCallback(cb);
-        sharePlugin->callFuncWithParam("fetchInvitableFriendList",NULL,NULL);
-    }
-    
-    void FacebookAgent::openInviteDialog(FBParam &recipients,FBCallback cb){
-        auto sharePlugin = agentManager->getSharePlugin();
-        sharePlugin->setCallback(cb);
-        PluginParam params(recipients);
-        sharePlugin->callFuncWithParam("openInviteDialog",&params,NULL);
-    }
-    
     FacebookAgent::FBCallback FacebookAgent::getRequestCallback(int index)
     {
         return requestCallbacks[index];
