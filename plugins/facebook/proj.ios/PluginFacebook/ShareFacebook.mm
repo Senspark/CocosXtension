@@ -252,32 +252,35 @@
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection* connection, id result, NSError* error) {
         if (error == nil) {
             //result -> dictionary -> json string -> call callback (msg)
-            NSArray* friends = [result objectForKey:@"data"];
             NSString* friendsList = @"";
-            friendsList = [friendsList stringByAppendingString:@"["];
-            
-            int ran;
-            if(friends.count>limit){
-                unsigned ranLimit = friends.count-limit;
-                ran = rand() % ranLimit;
-            }else{
-                ran = 0;
-            }
-            
-            for(int i=0; i<limit; i++){
-                id obj = [friends objectAtIndex:ran];
-                NSString* friendJson = [ParseUtils NSDictionaryToNSString:obj];
-                friendsList = [friendsList stringByAppendingString:friendJson];
-                if(i < (limit-1) && ran < friends.count-1){
-                  friendsList = [friendsList stringByAppendingString:@","];
+            NSArray* friends = [result objectForKey:@"data"];
+            if(friends.count>0){
+                
+                friendsList = [friendsList stringByAppendingString:@"["];
+                
+                int ran;
+                if(friends.count>limit){
+                    unsigned ranLimit = friends.count-limit;
+                    ran = rand() % ranLimit;
+                }else{
+                    ran = 0;
                 }
-                if(ran >= friends.count-1){
-                    break;
+                
+                for(int i=0; i<limit; i++){
+                    id obj = [friends objectAtIndex:ran];
+                    NSString* friendJson = [ParseUtils NSDictionaryToNSString:obj];
+                    friendsList = [friendsList stringByAppendingString:friendJson];
+                    if(i < (limit-1) && ran < friends.count-1){
+                        friendsList = [friendsList stringByAppendingString:@","];
+                    }
+                    if(ran >= friends.count-1){
+                        break;
+                    }
+                    ran++;
                 }
-                ran++;
+                friendsList = [friendsList stringByAppendingString:@"]"];
+                // NSLog(@"list friends : %@",friendsList);
             }
-            friendsList = [friendsList stringByAppendingString:@"]"];
-           // NSLog(@"list friends : %@",friendsList);
             
             [ShareWrapper onShareResult:self withRet:kFetchInvitableFriendsSuccess withMsg:friendsList];
         } else {
