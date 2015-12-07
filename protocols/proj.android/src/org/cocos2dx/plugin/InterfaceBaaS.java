@@ -13,6 +13,7 @@ public interface InterfaceBaaS {
     public void saveObjectInBackground(String className, String json);
     public String saveObject(String className, String json);
   
+    public void getObjectInBackgroundEqualTo(String equalTo, String className, String objId);
     public void getObjectInBackground(String className, String objId);
     public String getObject(String className, String objId);
     

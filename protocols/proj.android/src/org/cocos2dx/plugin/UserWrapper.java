@@ -28,6 +28,8 @@ public class UserWrapper {
     public static final int ACTION_RET_LOGIN_FAILED = 1;
     public static final int ACTION_RET_LOGOUT_SUCCEED = 2;
     public static final int ACTION_RET_LOGOUT_FAILED = 3;
+    public static final int ACTION_RET_SHARE_SUCCEED = 4;
+    public static final int ACTION_RET_SHARE_FAILED = 5;
     
     public static final int GRAPH_RET_SUCCESS = 0;
     public static final int GRAPH_RET_FAILED = 0;

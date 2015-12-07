@@ -141,6 +141,24 @@ const char* ProtocolBaaS::saveObject(const std::string& className, const std::st
 }
 
 #pragma mark - Get object
+void ProtocolBaaS::getObjectInBackgroundEqualTo(const std::string &equalTo, const std::string &className, const std::string &objId) {
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != nullptr);
+
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+        NSObject<InterfaceBaaS>* curObj = ocObj;
+        [curObj getObjectInBackgroundEqualTo:[NSString stringWithUTF8String:equalTo.c_str()]
+                               withClassName:[NSString stringWithUTF8String:className.c_str()]
+                                      withId:[NSString stringWithUTF8String:objId.c_str()]];
+    }
+}
+
+void ProtocolBaaS::getObjectInBackgroundEqualTo(const std::string &equalTo, const std::string &className, const std::string &objId, ProtocolBaaSCallback &cb) {
+    setCallback(cb);
+    getObjectInBackgroundEqualTo(equalTo, className, objId);
+}
+
 void ProtocolBaaS::getObjectInBackground(const std::string& className, const std::string& objId) {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);

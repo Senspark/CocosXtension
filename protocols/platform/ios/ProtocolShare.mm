@@ -110,4 +110,22 @@ void ProtocolShare::onShareResult(ShareResultCode ret, const char* msg)
     PluginUtilsIOS::outputLog("Share result of %s is : %d(%s)", this->getPluginName(), (int) ret, msg);
 }
 
+    void ProtocolShare::shareToGooglePlus(int32_t level, int64_t score, const std::string &urlToShare, const std::string &prefillText, const std::string &contentDeepLinkId, const std::string &deepLinkId, ProtocolShareCallback &cb) {
+        _callback = cb;
+        PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+        assert(pData != NULL);
+
+        id ocObj = pData->obj;
+        if ([ocObj conformsToProtocol:@protocol(InterfaceShare)]) {
+            NSObject<InterfaceShare>* curObj = ocObj;
+            [curObj shareToGooglePlus:level
+                            withScore:score
+                       withURLToShare:[NSString stringWithUTF8String:urlToShare.c_str()]
+                      withPreFillText:[NSString stringWithUTF8String:prefillText.c_str()]
+                withContentDeepLinkId:[NSString stringWithUTF8String:contentDeepLinkId.c_str()]
+                        andDeepLinkId:[NSString stringWithUTF8String:deepLinkId.c_str()]];
+        }
+    }
+
+
 }} // namespace cocos2d { namespace plugin {

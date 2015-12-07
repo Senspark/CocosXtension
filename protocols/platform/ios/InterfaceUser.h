@@ -33,4 +33,10 @@ THE SOFTWARE.
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;
 
+- (NSString*) getUserIdentifier;
+- (NSString*) getUserAvatarUrl;
+- (NSString*) getUserDisplayName;
+
+
+
 @end

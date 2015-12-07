@@ -208,6 +208,37 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 	
 	@Override
+	public void getObjectInBackgroundEqualTo(String equalTo, String className, String objId) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
+		query.whereEqualTo(equalTo, objId);
+		query.getInBackground(objId, new GetCallback<ParseObject>() {
+			
+			@Override
+			public void done(ParseObject obj, ParseException e) {
+				if (e == null) {
+					JSONObject jsonObj = new JSONObject();
+					
+					try {
+						for (String key : obj.keySet()) {
+							jsonObj.accumulate(key, obj.get(key));
+						}
+						
+						BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_RetrieveSucceed, jsonObj.toString());
+						Log.i(LOG_TAG, "Retrieve object successfully. ");
+					} catch (JSONException ex) {
+						BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_RetrieveFailed, null);
+						Log.i(LOG_TAG, "Error when converting parse object to json. " + ex.getMessage());
+					}
+ 					
+				} else {
+					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_RetrieveFailed, makeErrorJsonString(e));
+					Log.i(LOG_TAG, "Error when retrieve object. " + e.getMessage());
+				}
+			}
+		});
+	}
+	
+	@Override
 	public void getObjectInBackground(String className, String objId) {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
 		query.getInBackground(objId, new GetCallback<ParseObject>() {

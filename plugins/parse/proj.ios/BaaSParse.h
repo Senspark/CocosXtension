@@ -25,6 +25,7 @@
 
 - (void) getObjectInBackground: (NSString*) className withId: (NSString*) objId;
 - (NSDictionary*) getObject: (NSString*) className withId: (NSString*) objId;
+- (void) getObjectInBackgroundEqualTo: (NSString*) equalTo withClassName:(NSString*) className withId:(NSString*) objId;
 
 - (void) updateObjectInBackground: (NSString*) className withId: (NSString*) objId withParams: (NSDictionary*) params;
 - (NSString*) updateObject: (NSString*) className withId: (NSString*) objId withParams: (NSDictionary*) params;

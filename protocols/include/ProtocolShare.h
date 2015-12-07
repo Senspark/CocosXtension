@@ -113,6 +113,11 @@ public:
     */
     void onShareResult(ShareResultCode ret, const char* msg);
 
+
+    // ----- Sharing -----
+    void shareToGooglePlus(int32_t level, int64_t score, const std::string& urlToShare, const std::string& prefillText, const std::string& contentDeepLinkId, const std::string& deepLinkId, ProtocolShareCallback &cb);
+    void shareToGooglePlus(int32_t level, int64_t score, const std::string& urlToShare, const std::string& prefillText, const std::string& contentDeepLinkId, const std::string& deepLinkId);
+
 protected:
     ShareResultListener* _listener;
     ProtocolShareCallback _callback;

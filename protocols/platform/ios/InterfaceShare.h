@@ -30,4 +30,12 @@ THE SOFTWARE.
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;
 
+// ----- Sharing -----
+- (void) shareToGooglePlus:(int32_t) level
+                 withScore:(int64_t) score
+            withURLToShare:(NSString*)
+urlToShare withPreFillText:(NSString*)
+prefillText withContentDeepLinkId:(NSString*) contentDeepLinkId
+             andDeepLinkId:(NSString*) deepLinkId;
+
 @end

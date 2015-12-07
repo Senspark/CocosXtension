@@ -12,6 +12,7 @@
 #import <Foundation/Foundation.h>
 #import <InterfaceUser.h>
 
+
 @interface UserGooglePlay : NSObject <InterfaceUser> {
 //    std::unique_ptr<gpg::GameServices> _gameServices;
     NSString*   _clientID;
@@ -32,6 +33,10 @@
 - (NSString*) getPluginVersion;
 
 // ----- Interface of GooglePlayUser
+- (NSString*) getUserIdentifier;
+- (NSString*) getUserAvatarUrl;
+- (NSString*) getUserDisplayName;
+
 
 - (void) beginUserInitiatedSignIn;
 

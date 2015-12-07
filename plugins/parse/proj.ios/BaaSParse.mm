@@ -135,6 +135,18 @@ static BOOL sIsSet = false;
     return retDict;
 }
 
+- (void) getObjectInBackgroundEqualTo: (NSString*) equalTo withClassName:(NSString*) className withId:(NSString*) objId {
+    PFQuery* query = [PFQuery queryWithClassName:className];
+    [query whereKey:objId equalTo:equalTo];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+        if (object) {
+            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kRetrieveSucceed andMsg:@""];
+        } else {
+            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kRetrieveFailed andMsg:@""];
+        }
+    }];
+}
+
 - (void) getObjectInBackground: (NSString*) className withId: (NSString*) objId {
     PFQuery *query = [PFQuery queryWithClassName:className];
     [query getObjectInBackgroundWithId:objId block:^(PFObject *object,  NSError *error) {
