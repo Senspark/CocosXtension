@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 namespace cocos2d { namespace plugin {
 
-void ProtocolShare::configDeveloperInfo(TShareDeveloperInfo devInfo)
+void ProtocolShare::configDeveloperInfo(TShareInfo devInfo)
 {
     if (devInfo.empty())
     {

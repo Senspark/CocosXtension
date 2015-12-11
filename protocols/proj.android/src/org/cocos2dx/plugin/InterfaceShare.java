@@ -30,6 +30,7 @@ public interface InterfaceShare {
 
 	public void configDeveloperInfo(Hashtable<String, String> cpInfo);
 	public void share(Hashtable<String, String> cpInfo);
+	public void shareToGooglePlus(int level, long score, String urlToShare, String prefillText, String contentDeepLinkId, String deepLinkId);
 	public void setDebugMode(boolean debug);
 	public String getSDKVersion();
 	public String getPluginVersion();

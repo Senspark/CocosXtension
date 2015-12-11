@@ -70,7 +70,6 @@ namespace cocos2d { namespace plugin {
         void saveObjectInBackground(const std::string& className, const std::string& json, BaaSCallback& cb);
         
         const char* saveObject(const std::string& className, const std::string& json);
-        
 
         void getObjectInBackground(const std::string& className, const std::string& objId, BaaSCallback& cb);
         void getObjectsInBackground(const std::string& className, const std::vector<std::string>& objIds, BaaSCallback& cb);

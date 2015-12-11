@@ -195,7 +195,29 @@ void ProtocolBaaS::getObjectInBackground(const std::string& className, const std
         t.env->DeleteLocalRef(jobject_id);
         t.env->DeleteLocalRef(t.classID);
     }
+}
 
+void ProtocolBaaS::getObjectInBackgroundEqualTo(const std::string& equalTo, const std::string& className, const std::string& objId) {
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
+
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "getObjectInBackgroundEqualTo", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V")) {
+		jstring jequalTo 	= t.env->NewStringUTF(equalTo.c_str());
+		jstring jclass_name = t.env->NewStringUTF(className.c_str());
+		jstring jobject_id 	= t.env->NewStringUTF(objId.c_str());
+
+		t.env->CallVoidMethod(pData->jobj, t.methodID, jequalTo, jclass_name, jobject_id);
+
+		t.env->DeleteLocalRef(jequalTo);
+		t.env->DeleteLocalRef(jclass_name);
+		t.env->DeleteLocalRef(jobject_id);
+		t.env->DeleteLocalRef(t.classID);
+	}
+}
+
+void ProtocolBaaS::getObjectInBackgroundEqualTo(const std::string& equalTo, const std::string& className, const std::string& objId, ProtocolBaaSCallback& cb) {
+	setCallback(cb);
+	getObjectInBackgroundEqualTo(equalTo, className, objId);
 }
 
 void ProtocolBaaS::getObjectInBackground(const std::string& className, const std::string& objId, ProtocolBaaSCallback& cb) {

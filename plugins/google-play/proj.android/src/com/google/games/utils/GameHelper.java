@@ -177,7 +177,7 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
     ArrayList<GameRequest> mRequests;
 
     // Listener
-    GameHelperListener mListener = null;
+    private GameHelperListener mListener = null;
 
     // Should we start the flow to sign the user in automatically on startup? If
     // so, up to
@@ -318,7 +318,7 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
             logError(error);
             throw new IllegalStateException(error);
         }
-        mListener = listener;
+        setmListener(listener);
         debugLog("Setup: requested clients: " + mRequestedClients);
 
         if (mGoogleApiClientBuilder == null) {
@@ -626,11 +626,11 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
                 + (success ? "SUCCESS"
                 : mSignInFailureReason != null ? "FAILURE (error)"
                 : "FAILURE (no error)"));
-        if (mListener != null) {
+        if (getmListener() != null) {
             if (success) {
-                mListener.onSignInSucceeded();
+                getmListener().onSignInSucceeded();
             } else {
-                mListener.onSignInFailed();
+                getmListener().onSignInFailed();
             }
         }
     }
@@ -1068,4 +1068,12 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
         debugLog("Forcing mConnectOnStart=" + connectOnStart);
         mConnectOnStart = connectOnStart;
     }
+
+	public GameHelperListener getmListener() {
+		return mListener;
+	}
+
+	public void setmListener(GameHelperListener mListener) {
+		this.mListener = mListener;
+	}
 }

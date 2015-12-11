@@ -31,7 +31,6 @@ THE SOFTWARE.
 
 namespace cocos2d { namespace plugin {
 
-typedef std::map<std::string, std::string> TShareDeveloperInfo;
 typedef std::map<std::string, std::string> TShareInfo;
 
 typedef enum 
@@ -62,16 +61,8 @@ public:
     @warning Must invoke this interface before other interfaces.
              And invoked only once.
     */
-    void configDeveloperInfo(TShareDeveloperInfo devInfo);
+    void configDeveloperInfo(TShareInfo devInfo);
 
-    /**
-    @brief share information
-    @param info The info of share, contains key:
-            SharedText                	The text need to share
-            SharedImagePath				The full path of image file need to share (optinal)
-    @warning For different plugin, the parameter should have other keys to share.
-             Look at the manual of plugins.
-    */
     void share(TShareInfo &info, ShareCallback &cb);
 };
 

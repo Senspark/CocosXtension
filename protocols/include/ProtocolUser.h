@@ -128,6 +128,11 @@ public:
         return _callback;
     }
 
+    // ----- User Data -----
+    std::string getUserIdentifier();
+    std::string getUserAvatarUrl();
+    std::string getUserDisplayName();
+
 protected:
     UserActionListener* _listener;
     UserCallback _callback;

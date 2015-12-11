@@ -11,8 +11,8 @@
 
 #include <stdio.h>
 #include "cocos2d.h"
-#include "external/json/rapidjson.h"
-#include "external/json/document.h"
+#include "external/rapidjson/rapidjson.h"
+#include "external/rapidjson/document.h"
 
 USING_NS_CC;
 

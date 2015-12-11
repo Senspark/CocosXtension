@@ -10,6 +10,7 @@
 
 #import <gpg/GooglePlayGames.h>
 #import <GooglePlus/GooglePlus.h>
+#import <GoogleOpenSource/GoogleOpenSource.h>
 
 #import "UserWrapper.h"
 #import "ProtocolUser.h"
@@ -18,7 +19,7 @@
 
 using namespace cocos2d::plugin;
 
-@interface UserGooglePlay() <GPGStatusDelegate, GPGStatusDelegate>
+@interface UserGooglePlay() <GPGStatusDelegate, GPGStatusDelegate, GPPSignInDelegate>
 
 @end
 
@@ -29,17 +30,33 @@ using namespace cocos2d::plugin;
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo
 {
     _clientID = (NSString*) [cpInfo objectForKey:@"GoogleClientID"];
-    [GPGManager sharedInstance].statusDelegate = self;
-    [GPGManager sharedInstance].snapshotsEnabled = YES;
-    
-    [[GPGManager sharedInstance] signInWithClientID:_clientID silently:YES];
+
+    GPPSignIn *signIn = [GPPSignIn sharedInstance];
+    signIn.shouldFetchGooglePlusUser = YES;
+    signIn.shouldFetchGoogleUserEmail = YES;
+    signIn.shouldFetchGoogleUserID = YES;
+
+    // You previously set kClientId in the "Initialize the Google+ client" step
+    signIn.clientID = _clientID;
+
+    // Uncomment one of these two statements for the scope you chose in the previous step
+    signIn.scopes = @[ kGTLAuthScopePlusLogin ];  // "https://www.googleapis.com/auth/plus.login" scope
+
+    // Optional: declare signIn.actions, see "app activities"
+    signIn.delegate = self;
+
+    [signIn trySilentAuthentication];
+
+//    [GPGManager sharedInstance].statusDelegate = self;
+//    [GPGManager sharedInstance].snapshotsEnabled = YES;
+//    
+//    [[GPGManager sharedInstance] signInWithClientID:_clientID silently:YES];
 }
 
 - (void) login
 {
     if (_clientID) {
-        [GPGManager sharedInstance].snapshotsEnabled = YES;
-        [[GPGManager sharedInstance] signInWithClientID:_clientID silently:NO];
+        [[GPPSignIn sharedInstance] authenticate];
     } else {
         OUTPUT_LOG(@"No Client ID");
     }
@@ -47,12 +64,12 @@ using namespace cocos2d::plugin;
 
 - (void) logout
 {
-    [[GPGManager sharedInstance] signOut];
+    [[GPPSignIn sharedInstance] signOut];
 }
 
 - (BOOL) isLoggedIn
 {
-    return [[GPGManager sharedInstance] isSignedIn];
+    return [[GPPSignIn sharedInstance] hasAuthInKeychain];
 }
 
 - (NSString*) getSessionID
@@ -76,6 +93,17 @@ using namespace cocos2d::plugin;
 }
 
 #pragma mark - Interface User of GooglePlay
+- (NSString*) getUserAvatarUrl {
+    return [GPPSignIn sharedInstance].googlePlusUser.image.url;
+}
+
+- (NSString*) getUserIdentifier {
+    return [GPPSignIn sharedInstance].googlePlusUser.identifier;
+}
+
+- (NSString*) getUserDisplayName {
+    return [GPPSignIn sharedInstance].googlePlusUser.displayName;
+}
 
 - (void) beginUserInitiatedSignIn
 {
@@ -84,6 +112,14 @@ using namespace cocos2d::plugin;
 
 #pragma mark -
 #pragma mark Delegate
+-(void)finishedWithAuth:(GTMOAuth2Authentication *)auth
+                  error:(NSError *)error {
+    if (error) {
+        [UserWrapper onActionResult:self withRet:UserActionResultCode::kLoginFailed withMsg:@"[Google+] Login failed"];
+    } else {
+        [UserWrapper onActionResult:self withRet:UserActionResultCode::kLoginSucceed withMsg:@"[Google+] Login succeeded"];
+    }
+}
 
 - (void)didFinishGamesSignInWithError:(NSError *)error
 {

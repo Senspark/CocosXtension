@@ -33,6 +33,7 @@ enum class AdsPluginType {
 
 enum class SharePluginType {
     FACEBOOK,
+    GOOGLE_PLUS,
 };
 
 enum class SocialPluginType {

@@ -138,5 +138,17 @@ std::string ProtocolUser::getAccessToken()
 	return PluginUtils::callJavaStringFuncWithName(this, "getAccessToken");
 }
 
+std::string ProtocolUser::getUserAvatarUrl() {
+	return PluginUtils::callJavaStringFuncWithName(this, "getUserAvatarUrl");
+}
+
+std::string ProtocolUser::getUserDisplayName() {
+	return PluginUtils::callJavaStringFuncWithName(this, "getUserDisplayName");
+}
+
+std::string ProtocolUser::getUserIdentifier() {
+	return PluginUtils::callJavaStringFuncWithName(this, "getUserIdentifier");
+}
+
 }} // namespace cocos2d { namespace plugin {
 

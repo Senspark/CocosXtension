@@ -36,4 +36,8 @@ public interface InterfaceUser {
 	public void setDebugMode(boolean debug);
 	public String getSDKVersion();
 	public String getPluginVersion();
+	
+	public String getUserIdentifier();
+	public String getUserAvatarUrl();
+	public String getUserDisplayName();
 }

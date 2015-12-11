@@ -158,4 +158,30 @@ void ProtocolShare::onShareResult(ShareResultCode ret, const char* msg)
     PluginUtils::outputLog("ProtocolShare", "Share result is : %d(%s)", (int) ret, msg);
 }
 
+void ProtocolShare::shareToGooglePlus(int32_t level, int64_t score, const std::string& urlToShare, const std::string& prefillText, const std::string& contentDeepLinkId, const std::string& deepLinkId, ProtocolShareCallback &cb) {
+	setCallback(cb);
+	shareToGooglePlus(level, score, urlToShare, prefillText, contentDeepLinkId, deepLinkId);
+}
+
+void ProtocolShare::shareToGooglePlus(int32_t level, int64_t score, const std::string& urlToShare, const std::string& prefillText, const std::string& contentDeepLinkId, const std::string& deepLinkId) {
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
+
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "shareToGooglePlus", "(IJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V")) {
+		jstring jurlToShare			= t.env->NewStringUTF(urlToShare.c_str());
+		jstring jprefillText 		= t.env->NewStringUTF(prefillText.c_str());
+		jstring jcontentDeepLinkId 	= t.env->NewStringUTF(contentDeepLinkId.c_str());
+		jstring jdeepLinkId 		= t.env->NewStringUTF(deepLinkId.c_str());
+
+		t.env->CallVoidMethod(pData->jobj, t.methodID, level, score, jurlToShare, jprefillText, jcontentDeepLinkId, jdeepLinkId);
+
+		t.env->DeleteLocalRef(jurlToShare);
+		t.env->DeleteLocalRef(jprefillText);
+		t.env->DeleteLocalRef(jcontentDeepLinkId);
+		t.env->DeleteLocalRef(jdeepLinkId);
+		t.env->DeleteLocalRef(t.classID);
+	}
+
+}
+
 }} // namespace cocos2d { namespace plugin {
