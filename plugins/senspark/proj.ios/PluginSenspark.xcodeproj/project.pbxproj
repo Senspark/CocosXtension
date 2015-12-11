@@ -12,7 +12,6 @@
 		95376F631B86E83C001C62A5 /* ChartboostProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F521B86E83C001C62A5 /* ChartboostProtocolAds.mm */; };
 		95376F641B86E83C001C62A5 /* FacebookProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F531B86E83C001C62A5 /* FacebookProtocolAds.mm */; };
 		95376F651B86E83C001C62A5 /* FacebookProtocolShare.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F541B86E83C001C62A5 /* FacebookProtocolShare.mm */; };
-		95376F661B86E83C001C62A5 /* FacebookProtocolSocial.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F551B86E83C001C62A5 /* FacebookProtocolSocial.mm */; };
 		95376F671B86E83C001C62A5 /* FacebookProtocolUser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F561B86E83C001C62A5 /* FacebookProtocolUser.mm */; };
 		95376F681B86E83C001C62A5 /* FlurryProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F571B86E83C001C62A5 /* FlurryProtocolAds.mm */; };
 		95376F691B86E83C001C62A5 /* FlurryProtocolAnalytics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F581B86E83C001C62A5 /* FlurryProtocolAnalytics.mm */; };
@@ -37,7 +36,6 @@
 		95376F521B86E83C001C62A5 /* ChartboostProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChartboostProtocolAds.mm; sourceTree = "<group>"; };
 		95376F531B86E83C001C62A5 /* FacebookProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FacebookProtocolAds.mm; sourceTree = "<group>"; };
 		95376F541B86E83C001C62A5 /* FacebookProtocolShare.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FacebookProtocolShare.mm; sourceTree = "<group>"; };
-		95376F551B86E83C001C62A5 /* FacebookProtocolSocial.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FacebookProtocolSocial.mm; sourceTree = "<group>"; };
 		95376F561B86E83C001C62A5 /* FacebookProtocolUser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FacebookProtocolUser.mm; sourceTree = "<group>"; };
 		95376F571B86E83C001C62A5 /* FlurryProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FlurryProtocolAds.mm; sourceTree = "<group>"; };
 		95376F581B86E83C001C62A5 /* FlurryProtocolAnalytics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FlurryProtocolAnalytics.mm; sourceTree = "<group>"; };
@@ -145,9 +143,9 @@
 				95F034421B6B2BB100BD28F2 /* FlurryProtocolAds.h */,
 				95C954271B62207E0014047A /* VungleProtocolAds.h */,
 				957727881B78808000E532E6 /* GooglePlayProtocolData.h */,
-				95F0343B1B6B26E900BD28F2 /* FacebookProtocolSocial.h */,
 				95F034321B6B238200BD28F2 /* GameCenterProtocolSocial.h */,
 				95EBD89B1B664AD80004D448 /* GooglePlayProtocolSocial.h */,
+				95F0343B1B6B26E900BD28F2 /* FacebookProtocolSocial.h */,
 				95F0343E1B6B276E00BD28F2 /* FacebookProtocolShare.h */,
 				95F034381B6B267600BD28F2 /* FacebookProtocolUser.h */,
 				95F034351B6B25C100BD28F2 /* GameCenterProtocolUser.h */,
@@ -168,7 +166,6 @@
 				95376F521B86E83C001C62A5 /* ChartboostProtocolAds.mm */,
 				95376F531B86E83C001C62A5 /* FacebookProtocolAds.mm */,
 				95376F541B86E83C001C62A5 /* FacebookProtocolShare.mm */,
-				95376F551B86E83C001C62A5 /* FacebookProtocolSocial.mm */,
 				95376F561B86E83C001C62A5 /* FacebookProtocolUser.mm */,
 				95376F571B86E83C001C62A5 /* FlurryProtocolAds.mm */,
 				95376F581B86E83C001C62A5 /* FlurryProtocolAnalytics.mm */,
@@ -253,7 +250,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				95376F641B86E83C001C62A5 /* FacebookProtocolAds.mm in Sources */,
-				95376F661B86E83C001C62A5 /* FacebookProtocolSocial.mm in Sources */,
 				95376F671B86E83C001C62A5 /* FacebookProtocolUser.mm in Sources */,
 				95376F6E1B86E83C001C62A5 /* GooglePlayProtocolUser.mm in Sources */,
 				95376F6D1B86E83C001C62A5 /* GooglePlayProtocolSocial.mm in Sources */,
@@ -391,6 +387,7 @@
 					"$(COCOS2DX_ROOT)/external",
 					"$(COCOS2DX_ROOT)/extensions",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -420,6 +417,7 @@
 					"$(COCOS2DX_ROOT)/external",
 					"$(COCOS2DX_ROOT)/extensions",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;

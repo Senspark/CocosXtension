@@ -18,28 +18,28 @@
 
 NS_SENSPARK_PLUGIN_SHARE_BEGIN
 
+#define KEY_RECIPIENTS  "recipients"
+#define KEY_TITLE       "title"
+#define KEY_MESSAGE     "message"
+#define KEY_ACTION_TYPE "action-type"
+#define KEY_OBJECT_ID   "object-id"
+#define KEY_DATA        "data"
+
 class FacebookProtocolShare : public cocos2d::plugin::ProtocolShare
 {
 public:
     
-    static FacebookProtocolShare* getInstance();
-    
     typedef std::map<std::string, std::string> FBParam;
-    typedef std::function<void(int, std::string&)> FBCallback;
     
-    /**
-     @brief fetch list friends not play game to invite play game
-     @param info info fetch
-     @param cb callback of request
-     */
-    void fetchInvitableFriendsList(FBParam &info, FBCallback cb);
+    FacebookProtocolShare();
+    virtual ~FacebookProtocolShare();
     
-    /**
-     @brief open invite facebook dialog
-     @param info info dialog invite
-     @param cb callback of request
-     */
-    void openInviteDialog(FBParam &info, FBCallback cb);
+    void share(FBParam& info, FacebookProtocolShare::ShareCallback& callback);
+    
+    void openInviteDialog(FBParam &info, FacebookProtocolShare::ShareCallback& callback);
+    
+    void sendGameRequest(FBParam &info, FacebookProtocolShare::ShareCallback& callback);
+private:
 };
 
 NS_SENSPARK_PLUGIN_SHARE_END

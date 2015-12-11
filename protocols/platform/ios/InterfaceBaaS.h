@@ -14,33 +14,28 @@
 @protocol InterfaceBaaS <NSObject>
 
 - (void) configDeveloperInfo:(NSDictionary*) devInfo;
-- (void) signUpWithParams: (NSDictionary*) params ;
-- (void) loginWithUsername: (NSString*) username andPassword: (NSString*) password;
-- (void) logout;
-- (BOOL) isLoggedIn;
 
-- (void) saveObjectInBackground: (NSString*) className withParams: (NSDictionary*) obj;
+- (void) signUpWithParams: (NSDictionary*) params andCallbackID: (long) cbID;
+- (void) loginWithUsername: (NSString*) username andPassword: (NSString*) password andCallbackID: (long) cbID;
+- (void) logout: (long) cbID;
+- (BOOL) isLoggedIn;
+- (NSString*) getUserID;
+
+- (void) saveObjectInBackground: (NSString*) className withParams: (NSDictionary*) obj andCallbackID:(long) cbID;
 - (NSString*) saveObject: (NSString*) className withParams: (NSDictionary*) obj;
 
-- (void) getObjectInBackground: (NSString*) className withId: (NSString*) objId;
+- (void) getObjectInBackground: (NSString*) className withId: (NSString*) objId andCallbackID:(long) cbID;
+- (void) getObjectsInBackground: (NSString*) className withIds: (NSArray*) objIds andCallbackID:(long) cbID;
+
 - (NSDictionary*) getObject: (NSString*) className withId: (NSString*) objId;
 
-- (void) updateObjectInBackground: (NSString*) className withId: (NSString*) objId withParams: (NSDictionary*) params;
+- (void) findObjectsInBackground: (NSString*) className whereKey: (NSString*) key containedIn: (NSArray*) values    withCallbackID: (long) callbackId;
+
+- (void) updateObjectInBackground: (NSString*) className withId: (NSString*) objId withParams: (NSDictionary*) params andCallbackID:(long) cbID;
 - (NSString*) updateObject: (NSString*) className withId: (NSString*) objId withParams: (NSDictionary*) params;
 
-- (void) deleteObjectInBackground: (NSString*) className withId: (NSString*) objId;
-- (NSString*) deleteObject: (NSString*) className withId: (NSString*) objId;
-
-- (void) fetchConfigInBackground;
-- (BOOL) getBoolConfig: (NSString*) param;
-- (int)  getIntegerConfig: (NSString*) param;
-- (double) getDoubleConfig: (NSString*) param;
-- (long) getLongConfig: (NSString*) param;
-- (NSString*) getStringConfig: (NSString*) param;
-- (NSDictionary*) getArrayConfig: (NSString*) param;
-
-- (NSString*) getSDKVersion;
-- (NSString*) getPluginVersion;
+- (void) deleteObjectInBackground: (NSString*) className withId: (NSString*) objId andCallbackID:(long) cbID;
+- (BOOL) deleteObject: (NSString*) className withId: (NSString*) objId;
 
 @end
 

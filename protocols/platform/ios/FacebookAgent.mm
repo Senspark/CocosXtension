@@ -101,7 +101,7 @@ namespace cocos2d{namespace plugin{
     
     void FacebookAgent::share(FBParam& info, FBCallback cb)
     {
-        agentManager->getSharePlugin()->share(info, cb);
+//        agentManager->getSharePlugin()->share(info, cb);
     }
     
     std::string FacebookAgent::getPermissionList()
@@ -120,16 +120,16 @@ namespace cocos2d{namespace plugin{
     
     void FacebookAgent::dialog(FBParam& info, FBCallback cb)
     {
-        auto sharePlugin = agentManager->getSharePlugin();
-        sharePlugin->setCallback(cb);
-        PluginParam params(info);
-        sharePlugin->callFuncWithParam("share", &params, NULL);
+//        auto sharePlugin = agentManager->getSharePlugin();
+//        sharePlugin->setCallback(cb);
+//        PluginParam params(info);
+//        sharePlugin->callFuncWithParam("share", &params, NULL);
     }
     void FacebookAgent::webDialog(FBParam &info, FBCallback cb){
-        auto sharePlugin = agentManager->getSharePlugin();
-        sharePlugin->setCallback(cb);
-        PluginParam params(info);
-        sharePlugin->callFuncWithParam("webDialog", &params, NULL);
+//        auto sharePlugin = agentManager->getSharePlugin();
+//        sharePlugin->setCallback(cb);
+//        PluginParam params(info);
+//        sharePlugin->callFuncWithParam("webDialog", &params, NULL);
     }
     bool FacebookAgent::canPresentDialogWithParams(FBParam& info){
         PluginParam params(info);
@@ -162,10 +162,10 @@ namespace cocos2d{namespace plugin{
     
     void FacebookAgent::appRequest(FBParam& info, FBCallback cb)
     {
-        auto sharePlugin = agentManager->getSharePlugin();
-        sharePlugin->setCallback(cb);
-        PluginParam params(info);
-        sharePlugin->callFuncWithParam("appRequest", &params, NULL);
+//        auto sharePlugin = agentManager->getSharePlugin();
+//        sharePlugin->setCallback(cb);
+//        PluginParam params(info);
+//        sharePlugin->callFuncWithParam("appRequest", &params, NULL);
     }
     
     FacebookAgent::FBCallback FacebookAgent::getRequestCallback(int index)

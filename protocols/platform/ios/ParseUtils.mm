@@ -24,6 +24,10 @@
 
 
 #import "ParseUtils.h"
+#include <string>
+#include <map>
+
+using namespace std;
 
 @implementation ParseUtils
 + (id)NSStringToArrayOrNSDictionary:(NSString *)jsonData{
@@ -39,16 +43,34 @@
     
 }
 
++ (NSString*) NSArrayToNSString:(id) arr {
+    NSString *result = @"";
+    if (arr) {
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:arr
+                                                           options:0 // Pass 0 if you don't care about the readability of the generated string
+                                                             error:&error];
+        if (! jsonData) {
+            NSLog(@"Got an error: %@", error);
+        } else {
+            result = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        }
+    }
+    return result;
+}
+
 + (NSString *) NSDictionaryToNSString:(id)dic{
-    NSString *result = nil;
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic
-                                                       options:0 // Pass 0 if you don't care about the readability of the generated string
-                                                         error:&error];
-    if (! jsonData) {
-        NSLog(@"Got an error: %@", error);
-    } else {
-        result = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSString *result = @"";
+    if (dic) {
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic
+                                                           options:0 // Pass 0 if you don't care about the readability of the generated string
+                                                             error:&error];
+        if (! jsonData) {
+            NSLog(@"Got an error: %@", error);
+        } else {
+            result = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        }
     }
     return result;
 }
@@ -56,4 +78,14 @@
 +(NSString *)MakeJsonStringWithObject:(id) obj andKey:(NSString *)key {
     return [ParseUtils NSDictionaryToNSString:[NSDictionary dictionaryWithObject:obj forKey:key]];
 }
+
++ (map<string, string>) createMapFromDict: (NSDictionary*) paramDict {
+    map<string, string> ret;
+    if (paramDict != nil) {
+        for (NSString* key in [paramDict allKeys])
+            ret[[key UTF8String]] = [(NSString*) [paramDict objectForKey:key] UTF8String];
+    }
+    return ret;
+}
+
 @end

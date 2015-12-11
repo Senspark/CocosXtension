@@ -30,32 +30,31 @@ THE SOFTWARE.
 
 namespace cocos2d { namespace plugin {
 
-typedef std::map<std::string, std::string> TUserDeveloperInfo;
+typedef std::map<std::string, std::string> TUserInfo;
 
-typedef enum
-{
+enum class UserActionResultCode {
     kLoginSucceed = 0,
     kLoginFailed,
     kLogoutSucceed,
     kLogoutFailed,
-} UserActionResultCode;
+};
 
-typedef enum {
+enum class GraphResult {
     kGraphResultSuccess = 0,
     kGraphResultFail,
     kGraphResultCancel,
     kGraphResultTimeout,
-} GraphResult;
+};
 
-typedef enum {
-    kPermissionListSuccessd = 0,
+enum class PermissionListResult{
+    kPermissionListSuccess = 0,
     kPermissionListFailed = 0,
-} PermissionListResult;
+};
     
-typedef enum {
+enum class UserPermissionResult{
     kPermissionSucceed = 0,
     kPermissionFailed,
-} UserPermissionResult;
+};
     
 class ProtocolUser;
 class UserActionListener
@@ -70,8 +69,15 @@ public:
     ProtocolUser();
     virtual ~ProtocolUser();
 
-    typedef std::function<void(int, std::string&)> ProtocolUserCallback;
-
+    typedef std::function<void(int, std::string&)> UserCallback;
+    typedef struct __CallbackWrapper {
+        __CallbackWrapper(UserCallback& callback) {
+            fnPtr = callback;
+        }
+        
+        UserCallback fnPtr;
+    } CallbackWrapper;
+    
     /**
     @brief config the application info
     @param devInfo This parameter is the info of aplication,
@@ -79,19 +85,19 @@ public:
     @warning Must invoke this interface before other interfaces.
              And invoked only once.
     */
-    void configDeveloperInfo(TUserDeveloperInfo devInfo);
+    void configDeveloperInfo(TUserInfo devInfo);
 
     /**
      @brief User login
      */
     void login();
-    void login(ProtocolUserCallback &cb);
+    void login(UserCallback &cb);
 
     /**
      @brief User logout
      */
     void logout();
-    void logout(ProtocolUserCallback &cb);
+    void logout(UserCallback &cb);
 
     bool isLoggedIn();
     /**
@@ -106,27 +112,10 @@ public:
      */
     std::string getAccessToken();
 
-    /*
-     @deprecated
-     @brief set login callback function
-     */
-    CC_DEPRECATED_ATTRIBUTE inline void setActionListener(UserActionListener* listener)
-    {
-        _listener = listener;
-    }
-    /*
-     @deprecated
-     @brief get login callback function
-     */
-    CC_DEPRECATED_ATTRIBUTE inline UserActionListener* getActionListener()
-    {
-        return _listener;
-    }
-
     /**
      @brief set login callback function
      */
-    inline void setCallback(const ProtocolUserCallback &cb)
+    inline void setCallback(const UserCallback &cb)
     {
         _callback = cb;
     }
@@ -134,14 +123,14 @@ public:
     /**
      @brief get login callback function
      */
-    inline ProtocolUserCallback& getCallback()
+    inline UserCallback& getCallback()
     {
         return _callback;
     }
 
 protected:
     UserActionListener* _listener;
-    ProtocolUserCallback _callback;
+    UserCallback _callback;
 };
 
 }} // namespace cocos2d { namespace plugin {

@@ -209,6 +209,7 @@ void TestFacebook::onSocialCallback(int code, std::string &msg) {
 }
 
 void TestFacebook::onGraphRequestCallback(int code, std::string &result) {
+    
     log("code: %d, result: %s", code, result.c_str());
     _resultInfo->setString(result);
 }

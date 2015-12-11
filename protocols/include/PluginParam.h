@@ -37,6 +37,7 @@ class PluginParam
 public:
     PluginParam();
 	PluginParam(int nValue);
+    PluginParam(long lValue);
 	PluginParam(float fValue);
 	PluginParam(bool bValue);
 	PluginParam(const char* strValue);
@@ -45,6 +46,7 @@ public:
 	typedef enum{
 		kParamTypeNull = 0,
 		kParamTypeInt,
+        kParamTypeLong,
 		kParamTypeFloat,
 		kParamTypeBool,
 		kParamTypeString,
@@ -60,6 +62,10 @@ public:
 		return _intValue;
 	}
 
+    inline long getLongValue() {
+        return _longValue;
+    }
+    
 	inline float getFloatValue() {
 		return _floatValue;
 	}
@@ -86,10 +92,11 @@ private:
 
 private:
 	ParamType _type;
-
-	int _intValue;
-	float _floatValue;
-	bool _boolValue;
+    
+    long    _longValue;
+	int     _intValue;
+	float   _floatValue;
+	bool    _boolValue;
 	std::string _strValue;
 	std::map<std::string, PluginParam*> _mapValue;
 	StringMap _strMapValue;

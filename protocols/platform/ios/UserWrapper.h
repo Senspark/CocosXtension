@@ -34,9 +34,9 @@ THE SOFTWARE.
 
 + (void) onPermissionsResult:(id)obj withRet:(int)ret withMsg: (NSString *)msg;
 
-+ (void) onGraphRequestResultFrom:(id) obj withRet: (int) state result: (id) resultObj andCallback: (int) cbid;
++ (void) onGraphRequestResultFrom:(id) obj withRet: (int) state result: (id) resultObj andCallback: (long) cbid;
 
-+ (void) onGraphResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg withCallback:(int)cbid;
++ (void) onGraphResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg withCallback:(long)cbid;
 
 + (void)onPermissionListResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg;
 

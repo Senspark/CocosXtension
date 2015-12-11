@@ -92,6 +92,7 @@ PluginProtocol* PluginFactory::createPlugin(const char* name)
 		}
 
         id obj = [[NSClassFromString(className) alloc] init];
+        
         if (obj == nil) break;
 
         if ([obj conformsToProtocol:@protocol(InterfaceAds)]) {

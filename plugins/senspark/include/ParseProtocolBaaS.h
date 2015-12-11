@@ -12,14 +12,24 @@
 #include "ProtocolBaaS.h"
 #include "SensparkPluginMacros.h"
 #include <string>
+#include <map>
 
 NS_SENSPARK_PLUGIN_BAAS_BEGIN
 
 class ParseProtocolBaaS : public cocos2d::plugin::ProtocolBaaS
 {
 public:
-    ParseProtocolBaaS();
     virtual ~ParseProtocolBaaS();
+    
+    std::string getUserInfo();
+    std::string setUserInfo(const std::map<std::string, std::string>& changes);
+    void saveUserInfo(BaaSCallback& cb);
+    void fetchUserInfo(BaaSCallback& cb);
+    
+    void loginWithFacebookAccessToken(BaaSCallback& cb);
+    
+    void subcribeChannel(const std::string& channel);
+    void unsubcribeChannel(const std::string& channel);
 };
 
 NS_SENSPARK_PLUGIN_BAAS_END

@@ -28,25 +28,19 @@
 }
 
 @property BOOL debug;
-//@property (copy, nonatomic) NSMutableDictionary* mUserInfo;
 @property (copy, nonatomic) NSArray* permissions;
 
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
-- (void) login;
 - (void) loginWithReadPermissions:(NSString *)permissions;
 - (void) loginWithPublishPermissions:(NSString *)permissions;
-- (void) logout;
-- (BOOL) isLoggedIn;
+
 - (NSString*) getSessionID;
 - (NSString*) getUserID;
 - (NSString*) getUserName;
-- (void) setDebugMode: (BOOL) debug;
-- (NSString*) getSDKVersion;
-- (NSString*) getPluginVersion;
 - (NSString*) getAccessToken;
 - (NSString*) getPermissionList;
+
 - (void) graphRequestWithParams: (NSDictionary*) params;
-- (void) graphRequestWithGraphPath: (NSString*) graphPath parameters: (NSDictionary*) params callback: (int) cbid;
+- (void) graphRequestWithGraphPath: (NSString*) graphPath parameters: (NSDictionary*) params callback: (long) cbid;
 - (void) api: (NSDictionary*) params;
 
 @end

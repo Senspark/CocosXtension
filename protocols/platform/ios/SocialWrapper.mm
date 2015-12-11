@@ -30,6 +30,9 @@ using namespace cocos2d::plugin;
 
 @implementation SocialWrapper
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 + (void) onSocialResult:(id) obj withRet:(SocialResult) ret withMsg:(NSString*) msg
 {
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
@@ -50,6 +53,8 @@ using namespace cocos2d::plugin;
         PluginUtilsIOS::outputLog("Can't find the C++ object of the Social plugin");
     }
 }
+#pragma GCC diagnostic pop
+
 
 + (UIViewController *)getCurrentRootViewController {
     

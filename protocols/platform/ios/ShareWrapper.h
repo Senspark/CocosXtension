@@ -29,15 +29,7 @@ typedef enum {
     kShareSuccess = 0,
     kShareFail,
     kShareCancel,
-    kShareTimeOut,
-    
-    kFetchInvitableFriendsSuccess,
-    kFetchInvitableFreindsFailed,
-    
-    kRequestSuccess,
-    kRequestCancel,
-    kRequestFailed,
-    
+    kShareTimeOut,    
 } ShareResult;
 
 @interface ShareWrapper : NSObject
@@ -45,6 +37,7 @@ typedef enum {
     
 }
 
-+ (void) onShareResult:(id) obj withRet:(int) ret withMsg:(NSString*) msg;
++ (void) onShareResult:(id) obj withRet:(int) ret withContent: (NSDictionary*) content withMsg:(NSString*) msg andCallbackID: (long) callbackID;
+
 + (UIViewController *)getCurrentRootViewController;
 @end

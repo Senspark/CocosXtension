@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		051FF7BC192CE3CC00C43A06 /* IAPWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051FF7BB192CE3CC00C43A06 /* IAPWrapper.mm */; };
 		059B0A7E19864CE1004B06D4 /* FacebookAgent.mm in Sources */ = {isa = PBXBuildFile; fileRef = 059B0A7D19864CE1004B06D4 /* FacebookAgent.mm */; };
-		05AB25181988F62000D00E8E /* ParseUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 05AB25171988F62000D00E8E /* ParseUtils.m */; };
+		05AB25181988F62000D00E8E /* ParseUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05AB25171988F62000D00E8E /* ParseUtils.mm */; };
 		95094CCF1B7C96CF00CEFD43 /* ProtocolBaaS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95094CCE1B7C96CF00CEFD43 /* ProtocolBaaS.mm */; };
 		95AB235A1B7AFF2B002476CC /* DataWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95AB23591B7AFF2B002476CC /* DataWrapper.mm */; };
 		95CFAD871B818EB200E8C88C /* BaaSWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95CFAD861B818EB200E8C88C /* BaaSWrapper.mm */; };
@@ -52,7 +52,7 @@
 		059B0A79198649F0004B06D4 /* FacebookAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookAgent.h; sourceTree = "<group>"; };
 		059B0A7D19864CE1004B06D4 /* FacebookAgent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FacebookAgent.mm; sourceTree = "<group>"; };
 		05AB25161988F62000D00E8E /* ParseUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseUtils.h; sourceTree = "<group>"; };
-		05AB25171988F62000D00E8E /* ParseUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParseUtils.m; sourceTree = "<group>"; };
+		05AB25171988F62000D00E8E /* ParseUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ParseUtils.mm; sourceTree = "<group>"; };
 		95094CCC1B7C964800CEFD43 /* InterfaceBaaS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceBaaS.h; sourceTree = "<group>"; };
 		95094CCD1B7C96CF00CEFD43 /* ProtocolBaaS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProtocolBaaS.h; sourceTree = "<group>"; };
 		95094CCE1B7C96CF00CEFD43 /* ProtocolBaaS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ProtocolBaaS.mm; sourceTree = "<group>"; };
@@ -120,6 +120,92 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		955335561C153A03004DF6D1 /* baas */ = {
+			isa = PBXGroup;
+			children = (
+				95094CCC1B7C964800CEFD43 /* InterfaceBaaS.h */,
+				95094CCE1B7C96CF00CEFD43 /* ProtocolBaaS.mm */,
+				95CFAD851B818E6700E8C88C /* BaaSWrapper.h */,
+				95CFAD861B818EB200E8C88C /* BaaSWrapper.mm */,
+			);
+			name = baas;
+			sourceTree = "<group>";
+		};
+		955335571C153A1E004DF6D1 /* ads */ = {
+			isa = PBXGroup;
+			children = (
+				FADC44C8176EABCF00B2D5ED /* AdsWrapper.h */,
+				FA8CC21B1739E86E00464206 /* InterfaceAds.h */,
+				FA8CC205173894F000464206 /* ProtocolAds.mm */,
+				FADC44C9176EABCF00B2D5ED /* AdsWrapper.mm */,
+			);
+			name = ads;
+			sourceTree = "<group>";
+		};
+		955335581C153AA0004DF6D1 /* iap */ = {
+			isa = PBXGroup;
+			children = (
+				FA8CC207173894F000464206 /* ProtocolIAP.mm */,
+				051FF7BA192CE3CC00C43A06 /* IAPWrapper.h */,
+				051FF7BB192CE3CC00C43A06 /* IAPWrapper.mm */,
+				FA8CC21D1739E86E00464206 /* InterfaceIAP.h */,
+			);
+			name = iap;
+			sourceTree = "<group>";
+		};
+		955335591C153AF3004DF6D1 /* user */ = {
+			isa = PBXGroup;
+			children = (
+				FAD5551E177D1FA900968F54 /* UserWrapper.h */,
+				FAD5551F177D1FA900968F54 /* UserWrapper.mm */,
+				FAD5551C177D1FA900968F54 /* InterfaceUser.h */,
+				FAD5551D177D1FA900968F54 /* ProtocolUser.mm */,
+			);
+			name = user;
+			sourceTree = "<group>";
+		};
+		9553355A1C153AFE004DF6D1 /* analytics */ = {
+			isa = PBXGroup;
+			children = (
+				FA8CC21C1739E86E00464206 /* InterfaceAnalytics.h */,
+				FA8CC206173894F000464206 /* ProtocolAnalytics.mm */,
+			);
+			name = analytics;
+			sourceTree = "<group>";
+		};
+		9553355B1C153B07004DF6D1 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				95EBD8981B664A1F0004D448 /* ProtocolData.mm */,
+				95AB235B1B7AFF48002476CC /* DataWrapper.h */,
+				95AB23591B7AFF2B002476CC /* DataWrapper.mm */,
+				95EBD8971B6649FF0004D448 /* InterfaceData.h */,
+			);
+			name = data;
+			sourceTree = "<group>";
+		};
+		9553355C1C153B0D004DF6D1 /* social */ = {
+			isa = PBXGroup;
+			children = (
+				FADBF89A179E509500F59B1D /* SocialWrapper.mm */,
+				FADBF899179E509500F59B1D /* SocialWrapper.h */,
+				FADBF897179E509500F59B1D /* InterfaceSocial.h */,
+				FADBF898179E509500F59B1D /* ProtocolSocial.mm */,
+			);
+			name = social;
+			sourceTree = "<group>";
+		};
+		9553355D1C153B15004DF6D1 /* share */ = {
+			isa = PBXGroup;
+			children = (
+				FAC2A7F51777F8C200035D22 /* InterfaceShare.h */,
+				FAC2A7F61777F8C200035D22 /* ProtocolShare.mm */,
+				FAC2A7F81777F8C200035D22 /* ShareWrapper.mm */,
+				FAC2A7F71777F8C200035D22 /* ShareWrapper.h */,
+			);
+			name = share;
+			sourceTree = "<group>";
+		};
 		FA09A316168ADBC2008C1C7B = {
 			isa = PBXGroup;
 			children = (
@@ -174,43 +260,21 @@
 		FA0CB8B5168D3CC200E36B11 /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				FA8CC21B1739E86E00464206 /* InterfaceAds.h */,
-				FA8CC21C1739E86E00464206 /* InterfaceAnalytics.h */,
-				95094CCC1B7C964800CEFD43 /* InterfaceBaaS.h */,
-				95EBD8971B6649FF0004D448 /* InterfaceData.h */,
-				FA8CC21D1739E86E00464206 /* InterfaceIAP.h */,
-				FADBF897179E509500F59B1D /* InterfaceSocial.h */,
-				FAC2A7F51777F8C200035D22 /* InterfaceShare.h */,
-				FAD5551C177D1FA900968F54 /* InterfaceUser.h */,
-				FA8CC205173894F000464206 /* ProtocolAds.mm */,
-				FA8CC206173894F000464206 /* ProtocolAnalytics.mm */,
-				95EBD8981B664A1F0004D448 /* ProtocolData.mm */,
-				95094CCE1B7C96CF00CEFD43 /* ProtocolBaaS.mm */,
-				FA8CC207173894F000464206 /* ProtocolIAP.mm */,
-				FAC2A7F61777F8C200035D22 /* ProtocolShare.mm */,
-				FADBF898179E509500F59B1D /* ProtocolSocial.mm */,
-				FAD5551D177D1FA900968F54 /* ProtocolUser.mm */,
-				FADC44C8176EABCF00B2D5ED /* AdsWrapper.h */,
-				FADC44C9176EABCF00B2D5ED /* AdsWrapper.mm */,
-				95CFAD851B818E6700E8C88C /* BaaSWrapper.h */,
-				95CFAD861B818EB200E8C88C /* BaaSWrapper.mm */,
-				051FF7BA192CE3CC00C43A06 /* IAPWrapper.h */,
-				051FF7BB192CE3CC00C43A06 /* IAPWrapper.mm */,
-				FADBF899179E509500F59B1D /* SocialWrapper.h */,
-				FADBF89A179E509500F59B1D /* SocialWrapper.mm */,
-				95AB235B1B7AFF48002476CC /* DataWrapper.h */,
-				95AB23591B7AFF2B002476CC /* DataWrapper.mm */,
-				FAD5551E177D1FA900968F54 /* UserWrapper.h */,
-				FAD5551F177D1FA900968F54 /* UserWrapper.mm */,
-				FAC2A7F71777F8C200035D22 /* ShareWrapper.h */,
-				FAC2A7F81777F8C200035D22 /* ShareWrapper.mm */,
+				955335571C153A1E004DF6D1 /* ads */,
+				9553355A1C153AFE004DF6D1 /* analytics */,
+				955335561C153A03004DF6D1 /* baas */,
+				9553355B1C153B07004DF6D1 /* data */,
+				955335581C153AA0004DF6D1 /* iap */,
+				9553355D1C153B15004DF6D1 /* share */,
+				9553355C1C153B0D004DF6D1 /* social */,
+				955335591C153AF3004DF6D1 /* user */,
 				FAB6DFCD1755EF8E00C90D89 /* PluginOCMacros.h */,
 				FAB6DF991755D93600C90D89 /* PluginProtocol.mm */,
 				FAB6DF971755D82F00C90D89 /* PluginFactory.mm */,
 				FA8CC1E4173754CF00464206 /* PluginUtilsIOS.h */,
 				FA8CC1E5173754CF00464206 /* PluginUtilsIOS.mm */,
 				05AB25161988F62000D00E8E /* ParseUtils.h */,
-				05AB25171988F62000D00E8E /* ParseUtils.m */,
+				05AB25171988F62000D00E8E /* ParseUtils.mm */,
 				BA1BF841195A6FC100B47F4E /* AgentManager.mm */,
 				059B0A7D19864CE1004B06D4 /* FacebookAgent.mm */,
 			);
@@ -290,7 +354,7 @@
 				BA1BF842195A6FC100B47F4E /* AgentManager.mm in Sources */,
 				FADBF89B179E509500F59B1D /* ProtocolSocial.mm in Sources */,
 				95CFAD871B818EB200E8C88C /* BaaSWrapper.mm in Sources */,
-				05AB25181988F62000D00E8E /* ParseUtils.m in Sources */,
+				05AB25181988F62000D00E8E /* ParseUtils.mm in Sources */,
 				FADBF89C179E509500F59B1D /* SocialWrapper.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -328,7 +392,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -354,7 +418,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -382,6 +446,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "$(COCOS2DX_ROOT)/cocos";
 			};
@@ -404,6 +469,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "$(COCOS2DX_ROOT)/cocos";
 			};

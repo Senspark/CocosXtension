@@ -25,8 +25,17 @@
 
 #import <Foundation/Foundation.h>
 
+#include <string>
+#include <map>
+
+using namespace std;
+
 @interface ParseUtils : NSObject
+
 + (id) NSStringToArrayOrNSDictionary:(NSString *)jsonData;
++ (NSString *) NSArrayToNSString: (id) array;
 + (NSString *) NSDictionaryToNSString:(id)dic;
 + (NSString *) MakeJsonStringWithObject:(id) obj andKey:(NSString *)key;
++ (map<string, string>) createMapFromDict: (NSDictionary*) paramDict;
+
 @end

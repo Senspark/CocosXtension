@@ -40,10 +40,6 @@ using namespace cocos2d::plugin;
 @synthesize debug = __debug;
 @synthesize permissions = _permissions;
 
-//bool _isLogin = false;
-//NSString *_userId = @"";
-//NSString *_accessToken = @"";
-
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo{
 }
 
@@ -64,13 +60,13 @@ using namespace cocos2d::plugin;
 
 - (void) onLoginResult: (FBSDKLoginManagerLoginResult*) result error: (NSError*) error {
     if (error) {
-        [UserWrapper onActionResult:self withRet:kLoginFailed withMsg:@"Login facebook fail!"];
+        [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLoginFailed withMsg:@"Login facebook fail!"];
     } else if (result.isCancelled) {
-        [UserWrapper onActionResult:self withRet:kLoginFailed withMsg:@"Login facebook: user cancel"];
+        [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLoginFailed withMsg:@"Login facebook: user cancel"];
     } else if (result.declinedPermissions.count > 0) {
-        [UserWrapper onActionResult:self withRet:kLoginFailed withMsg:@"Permission declined"];
+        [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLoginFailed withMsg:@"Permission declined"];
     } else {
-        [UserWrapper onActionResult:self withRet:kLoginSucceed withMsg:@"Login facebook success"];
+        [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLoginSucceed withMsg:@"Login facebook success"];
     }
 }
 
@@ -94,9 +90,9 @@ using namespace cocos2d::plugin;
         [login logOut];
         [FBSDKAccessToken setCurrentAccessToken:nil];
         
-        [UserWrapper onActionResult:self withRet:kLogoutSucceed withMsg:@"Facebook logout"];
+        [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLogoutSucceed withMsg:@"Facebook logout"];
     } else {
-        [UserWrapper onActionResult:self withRet:kLogoutFailed withMsg:@"Not login yet."];
+        [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLogoutFailed withMsg:@"Not login yet."];
     }
 }
 
@@ -133,29 +129,29 @@ using namespace cocos2d::plugin;
 - (void) graphRequestWithParams:(NSDictionary *)params {
     NSString *graphPath = [params objectForKey:@"Param1"];
     NSDictionary* graphParams =[params objectForKey:@"Param2"];
-    int cbid = [[params objectForKey:@"Param3"] intValue];
+    long cbid = [[params objectForKey:@"Param3"] longValue];
     
     [self graphRequestWithGraphPath:graphPath parameters:graphParams callback:cbid];
 }
 
-- (void) graphRequestWithGraphPath: (NSString*) graphPath parameters: (NSDictionary*) params callback: (int) cbid {
+- (void) graphRequestWithGraphPath: (NSString*) graphPath parameters: (NSDictionary*) params callback: (long) cbid {
     if ([FBSDKAccessToken currentAccessToken]) {
         [[[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:params]
          startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
              if (!error) {
                  NSLog(@"Fetch facebook info:%@", result);
                  
-                 [UserWrapper onGraphRequestResultFrom:self withRet:kGraphResultSuccess result:result andCallback:cbid];
+                 [UserWrapper onGraphRequestResultFrom:self withRet: (int) GraphResult::kGraphResultSuccess result:result andCallback:cbid];
                  
              } else {
                  
                  NSLog(@"Fetch facebook info error: %@", error.description);
                  
-                 [UserWrapper onGraphRequestResultFrom:self withRet: kGraphResultFail result:result andCallback:cbid];
+                 [UserWrapper onGraphRequestResultFrom:self withRet: (int) GraphResult::kGraphResultFail result:result andCallback:cbid];
              }
          }];
     } else {
-        [UserWrapper onGraphRequestResultFrom:self withRet:kGraphResultFail result:nil andCallback:cbid];
+        [UserWrapper onGraphRequestResultFrom:self withRet: (int) GraphResult::kGraphResultFail result:nil andCallback:cbid];
     }
 }
 
@@ -164,7 +160,7 @@ using namespace cocos2d::plugin;
     int methodID = [[params objectForKey:@"Param2"] intValue];
     NSString * method = methodID == 0? @"GET":methodID == 1?@"POST":@"DELETE";
     NSDictionary *param = [params objectForKey:@"Param3"];
-    int cbId = [[params objectForKey:@"Param4"] intValue];
+    long cbId = [[params objectForKey:@"Param4"] longValue];
     
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:param HTTPMethod:method];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
@@ -173,14 +169,14 @@ using namespace cocos2d::plugin;
             NSString *msg = [ParseUtils NSDictionaryToNSString:(NSDictionary *)result];
             if(nil == msg){
                 NSString *msg = [ParseUtils MakeJsonStringWithObject:@"parse result failed" andKey:@"error_message"];
-                [UserWrapper onGraphResult:self withRet:kGraphResultFail withMsg:msg withCallback:cbId];
+                [UserWrapper onGraphResult:self withRet: (int) GraphResult::kGraphResultFail withMsg:msg withCallback:cbId];
             }else{
                 OUTPUT_LOG(@"success");
-                [UserWrapper onGraphResult:self withRet:kGraphResultSuccess withMsg:msg withCallback:cbId];
+                [UserWrapper onGraphResult:self withRet: (int) GraphResult::kGraphResultSuccess withMsg:msg withCallback:cbId];
             }
         }else{
             NSString *msg = [ParseUtils MakeJsonStringWithObject:error.description andKey:@"error_message"];
-            [UserWrapper onGraphResult:self withRet:kGraphResultFail withMsg:msg withCallback:cbId];
+            [UserWrapper onGraphResult:self withRet: (int) GraphResult::kGraphResultFail withMsg:msg withCallback:cbId];
             OUTPUT_LOG(@"error %@", error.description);
         }
     }];

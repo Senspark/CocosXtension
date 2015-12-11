@@ -11,11 +11,11 @@
 
 @interface BaaSWrapper : NSObject
 {
-    
 }
 
++ (void) onBaaSActionResult: (id)obj withReturnCode: (int)ret andReturnMsg: (NSString*) msg andCallbackID: (long) callbackID;
 
-+ (void) onActionResult:(id) obj withRet:(int) ret andMsg:(NSString*) jsonMsg;
++ (void) onBaaSActionResult: (id)obj withReturnCode: (int)ret andReturnObj: (id) returnObj andCallbackID: (long) callbackID;
 
 + (UIViewController *) getCurrentRootViewController;
 

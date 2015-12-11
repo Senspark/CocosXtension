@@ -10,35 +10,56 @@
 #import "BaaSWrapper.h"
 #import "ProtocolBaaS.h"
 #import "PluginUtilsIOS.h"
+#import "ParseUtils.h"
 
 using namespace cocos2d::plugin;
 
 @implementation BaaSWrapper
 
-+ (void) onActionResult:(id) obj withRet:(int) ret andMsg:(NSString*) msg;
-{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
++ (void) onBaaSActionResult: (id)obj withReturnCode: (int)ret andReturnMsg: (NSString*) msg andCallbackID: (long) callbackID {
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolBaaS* pBaaS = dynamic_cast<ProtocolBaaS*>(pPlugin);
-    if (pBaaS) {
-        BaaSActionListener* listener = pBaaS->getActionListener();
-        ProtocolBaaS::ProtocolBaaSCallback callback = pBaaS->getCallback();
-        const char* chMsg = [msg UTF8String];
-        if (NULL != listener)
-        {
-            listener->onActionResult(pBaaS, ret, chMsg);
-        }else if(callback){
-            std::string stdmsg = "";
-            if (chMsg)
-                stdmsg = chMsg;
-                
-            callback(ret, stdmsg);
-        }else{
-            PluginUtilsIOS::outputLog("Can't find the listener of plugin %s", pPlugin->getPluginName());
-        }
-    } else {
-        PluginUtilsIOS::outputLog("Can't find the C++ object of the User plugin");
+    if (pBaaS && callbackID) {
+
+        ProtocolBaaS::CallbackWrapper* wrapper = (ProtocolBaaS::CallbackWrapper*) callbackID;
+        
+        std::string stdmsg = [msg UTF8String] ? [msg UTF8String] : "";
+        
+        wrapper->fnPtr(ret, stdmsg);
+        delete wrapper;
+
     }
 }
+
++ (void) onBaaSActionResult:(id)obj withReturnCode:(int)ret andReturnObj:(id)returnObj andCallbackID:(long)callbackID {
+    
+    PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
+    ProtocolBaaS* pBaaS = dynamic_cast<ProtocolBaaS*>(pPlugin);
+    if (pBaaS && callbackID) {
+        ProtocolBaaS::CallbackWrapper* wrapper = (ProtocolBaaS::CallbackWrapper*) callbackID;
+        
+        NSString* msg = nil;
+        
+        if (returnObj != nil) {
+            if ([returnObj isKindOfClass:[NSDictionary class]]) {
+                msg = [ParseUtils NSDictionaryToNSString:returnObj];
+            } else if ([returnObj isKindOfClass:[NSArray class]]) {
+                msg = [ParseUtils NSArrayToNSString:returnObj];
+            }
+        }
+        
+        std::string stdmsg = [msg UTF8String] ? [msg UTF8String] : "";
+        
+        wrapper->fnPtr(ret, stdmsg);
+        delete wrapper;
+    }
+    
+}
+
+#pragma GCC diagnostic pop
 
 + (NSString*) makeErrorJsonString: (NSError*) error {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];

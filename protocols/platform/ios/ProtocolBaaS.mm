@@ -15,15 +15,7 @@
 
 using namespace cocos2d::plugin;
 
-ProtocolBaaS::ProtocolBaaS() : _listener(nullptr) {
-    
-}
-
-ProtocolBaaS::~ProtocolBaaS() {
-    
-}
-
-void ProtocolBaaS::configDeveloperInfo(TBaaSDeveloperInfo devInfo) {
+void ProtocolBaaS::configDeveloperInfo(TBaaSInfo devInfo) {
     if (devInfo.empty()) {
         PluginUtilsIOS::outputLog("The developer info is emty for %s!", this->getPluginName());
         return;
@@ -41,7 +33,8 @@ void ProtocolBaaS::configDeveloperInfo(TBaaSDeveloperInfo devInfo) {
 }
 
 #pragma mark - Sign up
-void ProtocolBaaS::signUp(std::map<std::string, std::string> userInfo) {
+void ProtocolBaaS::signUp(std::map<std::string, std::string> userInfo, BaaSCallback& cb) {
+    
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
     
@@ -52,47 +45,41 @@ void ProtocolBaaS::signUp(std::map<std::string, std::string> userInfo) {
         for (auto element : userInfo) {
             [pDict setObject:[NSString stringWithUTF8String:element.second.c_str()] forKey:[NSString stringWithUTF8String:element.first.c_str()]];
         }
-        [curObj signUpWithParams:pDict];
+        
+        CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
+        [curObj signUpWithParams:pDict andCallbackID:(long) cbWrapper];
     }
-}
-
-void ProtocolBaaS::signUp(std::map<std::string, std::string> userInfo, ProtocolBaaSCallback& cb) {
-    setCallback(cb);
-    signUp(userInfo);
 }
 
 #pragma mark - Login
-void ProtocolBaaS::login(const std::string& username, const std::string& password) {
+void ProtocolBaaS::login(const std::string& username, const std::string& password, BaaSCallback& cb) {
+    
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
     
     id ocObj = pData->obj;
     if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
         NSObject<InterfaceBaaS>* curObj = ocObj;
-        [curObj loginWithUsername:[NSString stringWithUTF8String:username.c_str()] andPassword:[NSString stringWithUTF8String:password.c_str()]];
+        
+        CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
+        
+        [curObj loginWithUsername:[NSString stringWithUTF8String:username.c_str()] andPassword:[NSString stringWithUTF8String:password.c_str()] andCallbackID:(long) cbWrapper];
     }
-}
-
-void ProtocolBaaS::login(const std::string& username, const std::string& password,ProtocolBaaSCallback& cb) {
-    setCallback(cb);
-    login(username, password);
 }
 
 #pragma mark - Logout
-void ProtocolBaaS::logout() {
+
+void ProtocolBaaS::logout(BaaSCallback& cb) {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
     
     id ocObj = pData->obj;
     if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
         NSObject<InterfaceBaaS>* curObj = ocObj;
-        [curObj logout];
+        
+        CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
+        [curObj logout:(long)cbWrapper];
     }
-}
-
-void ProtocolBaaS::logout(ProtocolBaaSCallback& cb) {
-    setCallback(cb);
-    logout();
 }
 
 bool ProtocolBaaS::isLoggedIn() {
@@ -108,8 +95,23 @@ bool ProtocolBaaS::isLoggedIn() {
     return false;
 }
 
+string ProtocolBaaS::getUserID() {
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != nullptr);
+    
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+        NSObject<InterfaceBaaS>* curObj = ocObj;
+        const char* userID = [[curObj getUserID] UTF8String];
+        return userID ? userID : "";
+    }
+    
+    return "";
+}
+
+
 #pragma mark - Save object
-void ProtocolBaaS::saveObjectInBackground(const std::string& className, const std::string& json) {
+void ProtocolBaaS::saveObjectInBackground(const std::string& className, const std::string& json, BaaSCallback& cb) {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
     
@@ -117,13 +119,11 @@ void ProtocolBaaS::saveObjectInBackground(const std::string& className, const st
     if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
         NSObject<InterfaceBaaS>* curObj = ocObj;
         NSDictionary* params = [ParseUtils NSStringToArrayOrNSDictionary:[NSString stringWithUTF8String:json.c_str()]];
-        [curObj saveObjectInBackground:[NSString stringWithUTF8String:className.c_str()] withParams:params];
+        
+        CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
+        
+        [curObj saveObjectInBackground:[NSString stringWithUTF8String:className.c_str()] withParams:params andCallbackID:(long)cbWrapper];
     }
-}
-
-void ProtocolBaaS::saveObjectInBackground(const std::string& className, const std::string& json, ProtocolBaaSCallback& cb) {
-    setCallback(cb);
-    saveObjectInBackground(className, json);
 }
 
 const char* ProtocolBaaS::saveObject(const std::string& className, const std::string& json) {
@@ -141,21 +141,37 @@ const char* ProtocolBaaS::saveObject(const std::string& className, const std::st
 }
 
 #pragma mark - Get object
-void ProtocolBaaS::getObjectInBackground(const std::string& className, const std::string& objId) {
+void ProtocolBaaS::getObjectInBackground(const std::string& className, const std::string& objId, BaaSCallback& cb) {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
     
     id ocObj = pData->obj;
     if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
         NSObject<InterfaceBaaS>* curObj = ocObj;
-        [curObj getObjectInBackground:[NSString stringWithUTF8String:className.c_str()] withId:[NSString stringWithUTF8String:objId.c_str()]];
+        
+        CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
+        
+        [curObj getObjectInBackground:[NSString stringWithUTF8String:className.c_str()] withId:[NSString stringWithUTF8String:objId.c_str()] andCallbackID:(long)cbWrapper];
     }
 }
 
-void ProtocolBaaS::getObjectInBackground(const std::string& className, const std::string& objId, ProtocolBaaSCallback& cb) {
+void ProtocolBaaS::getObjectsInBackground(const std::string& className, const std::vector<std::string>& objIds, BaaSCallback& cb) {
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != nullptr);
     
-    setCallback(cb);
-    getObjectInBackground(className, objId);
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+        NSObject<InterfaceBaaS>* curObj = ocObj;
+        
+        NSMutableArray* array = [[NSMutableArray alloc] init];
+        for (auto objId : objIds) {
+            [array addObject:[NSString stringWithUTF8String:objId.c_str()]];
+        }
+        
+        CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
+        
+        [curObj getObjectsInBackground:[NSString stringWithUTF8String:className.c_str()] withIds: array andCallbackID:(long) cbWrapper];
+    }
 }
 
 const char* ProtocolBaaS::getObject(const std::string& className, const std::string& objId) {
@@ -175,8 +191,28 @@ const char* ProtocolBaaS::getObject(const std::string& className, const std::str
     return nullptr;
 }
 
+void ProtocolBaaS::findObjectsInBackground(const std::string& className, const std::string& key, const std::vector<std::string>& values, BaaSCallback& cb) {
+    
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != nullptr);
+    
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+        NSObject<InterfaceBaaS>* curObj = ocObj;
+        
+        NSMutableArray* array = [[NSMutableArray alloc] init];
+        for (auto value : values) {
+            [array addObject:[NSString stringWithUTF8String:value.c_str()]];
+        }
+        
+        CallbackWrapper *callback = new CallbackWrapper(cb);
+        
+        [curObj findObjectsInBackground:[NSString stringWithUTF8String:className.c_str()] whereKey:[NSString stringWithUTF8String:key.c_str()] containedIn:array withCallbackID:(long)callback];
+    }
+}
+
 #pragma mark - Update object
-void ProtocolBaaS::updateObjectInBackground(const std::string& className, const std::string& objId, const std::string& jsonChanges) {
+void ProtocolBaaS::updateObjectInBackground(const std::string& className, const std::string& objId, const std::string& jsonChanges, BaaSCallback& cb) {
     
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
@@ -187,14 +223,11 @@ void ProtocolBaaS::updateObjectInBackground(const std::string& className, const 
         
         NSDictionary* params = [ParseUtils NSStringToArrayOrNSDictionary:[NSString stringWithUTF8String:jsonChanges.c_str()]];
         
-        [curObj updateObjectInBackground:[NSString stringWithUTF8String:className.c_str()] withId:[NSString stringWithUTF8String:objId.c_str()] withParams:params];
+        CallbackWrapper *callback = new CallbackWrapper(cb);
+        
+        [curObj updateObjectInBackground:[NSString stringWithUTF8String:className.c_str()] withId:[NSString stringWithUTF8String:objId.c_str()] withParams:params andCallbackID:(long)callback];
     }
     
-}
-
-void ProtocolBaaS::updateObjectInBackground(const std::string& className, const std::string& objId, const std::string& jsonChanges, ProtocolBaaSCallback& cb) {
-    setCallback(cb);
-    updateObjectInBackground(className, objId, jsonChanges);
 }
 
 const char* ProtocolBaaS::updateObject(const std::string& className, const std::string& objId, const std::string& jsonChanges) {
@@ -215,7 +248,7 @@ const char* ProtocolBaaS::updateObject(const std::string& className, const std::
 }
 
 #pragma mark - Delete object
-void ProtocolBaaS::deleteObjectInBackground(const std::string& className, const std::string& objId) {
+void ProtocolBaaS::deleteObjectInBackground(const std::string& className, const std::string& objId, BaaSCallback& cb) {
 
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
@@ -224,17 +257,14 @@ void ProtocolBaaS::deleteObjectInBackground(const std::string& className, const 
     if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
         NSObject<InterfaceBaaS>* curObj = ocObj;
 
-        [curObj deleteObjectInBackground:[NSString stringWithUTF8String:className.c_str()] withId:[NSString stringWithUTF8String:objId.c_str()]];
+        CallbackWrapper *callback = new CallbackWrapper(cb);
+        
+        [curObj deleteObjectInBackground:[NSString stringWithUTF8String:className.c_str()] withId:[NSString stringWithUTF8String:objId.c_str()] andCallbackID:(long)callback];
     }
 
 }
 
-void ProtocolBaaS::deleteObjectInBackground(const std::string& className, const std::string& objId, ProtocolBaaSCallback& cb) {
-    setCallback(cb);
-    deleteObjectInBackground(className, objId);
-}
-
-const char* ProtocolBaaS::deleteObject(const std::string& className, const std::string& objId) {
+bool ProtocolBaaS::deleteObject(const std::string& className, const std::string& objId) {
 
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != nullptr);
@@ -243,96 +273,96 @@ const char* ProtocolBaaS::deleteObject(const std::string& className, const std::
     if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
         NSObject<InterfaceBaaS>* curObj = ocObj;
 
-        return [[curObj deleteObject:[NSString stringWithUTF8String:className.c_str()] withId:[NSString stringWithUTF8String:objId.c_str()]] UTF8String];
+        return [curObj deleteObject:[NSString stringWithUTF8String:className.c_str()] withId:[NSString stringWithUTF8String:objId.c_str()]];
     }
 
-    return nullptr;
+    return false;
 }
 
 #pragma mark - Get Parse Config
-void ProtocolBaaS::fetchConfigInBackground(ProtocolBaaSCallback& cb) {
-    setCallback(cb);
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-        [curObj fetchConfigInBackground];
-    }
+void ProtocolBaaS::fetchConfigInBackground(BaaSCallback& cb) {
+//    setCallback(cb);
+//    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+//    assert(pData != nullptr);
+//    
+//    id ocObj = pData->obj;
+//    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+//        NSObject<InterfaceBaaS>* curObj = ocObj;
+//        [curObj fetchConfigInBackground];
+//    }
 }
 
 bool ProtocolBaaS::getBoolConfig(const std::string &param) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-        return [curObj getBoolConfig:[NSString stringWithUTF8String:param.c_str()]];
-    }
+//    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+//    assert(pData != nullptr);
+//
+//    id ocObj = pData->obj;
+//    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+//        NSObject<InterfaceBaaS>* curObj = ocObj;
+//        return [curObj getBoolConfig:[NSString stringWithUTF8String:param.c_str()]];
+//    }
     return false;
 }
 
 int ProtocolBaaS::getIntegerConfig(const std::string &param) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-        return [curObj getIntegerConfig:[NSString stringWithUTF8String:param.c_str()]];
-    }
+//    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+//    assert(pData != nullptr);
+//
+//    id ocObj = pData->obj;
+//    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+//        NSObject<InterfaceBaaS>* curObj = ocObj;
+//        return [curObj getIntegerConfig:[NSString stringWithUTF8String:param.c_str()]];
+//    }
     return 0;
 }
 
 double ProtocolBaaS::getDoubleConfig(const std::string &param) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-        return [curObj getDoubleConfig:[NSString stringWithUTF8String:param.c_str()]];
-    }
+//    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+//    assert(pData != nullptr);
+//
+//    id ocObj = pData->obj;
+//    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+//        NSObject<InterfaceBaaS>* curObj = ocObj;
+//        return [curObj getDoubleConfig:[NSString stringWithUTF8String:param.c_str()]];
+//    }
     return 0;
 }
 
 long ProtocolBaaS::getLongConfig(const std::string &param) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-        return [curObj getLongConfig:[NSString stringWithUTF8String:param.c_str()]];
-    }
+//    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+//    assert(pData != nullptr);
+//
+//    id ocObj = pData->obj;
+//    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+//        NSObject<InterfaceBaaS>* curObj = ocObj;
+//        return [curObj getLongConfig:[NSString stringWithUTF8String:param.c_str()]];
+//    }
     return 0;
 }
 
 const char* ProtocolBaaS::getStringConfig(const std::string &param) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-        return [[curObj getStringConfig:[NSString stringWithUTF8String:param.c_str()]] UTF8String];
-    }
+//    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+//    assert(pData != nullptr);
+//
+//    id ocObj = pData->obj;
+//    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+//        NSObject<InterfaceBaaS>* curObj = ocObj;
+//        return [[curObj getStringConfig:[NSString stringWithUTF8String:param.c_str()]] UTF8String];
+//    }
     return nullptr;
 }
 
 const char* ProtocolBaaS::getArrayConfig(const std::string &param) {
-    NSString* nsParam = [NSString stringWithUTF8String:param.c_str()];
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-        NSDictionary* nsDict = [curObj getArrayConfig:nsParam];
-        const char* ret = [[ParseUtils NSDictionaryToNSString:nsDict] UTF8String];
-        return ret;
-    }
+//    NSString* nsParam = [NSString stringWithUTF8String:param.c_str()];
+//    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+//    assert(pData != nullptr);
+//
+//    id ocObj = pData->obj;
+//    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+//        NSObject<InterfaceBaaS>* curObj = ocObj;
+//        NSDictionary* nsDict = [curObj getArrayConfig:nsParam];
+//        const char* ret = [[ParseUtils NSDictionaryToNSString:nsDict] UTF8String];
+//        return ret;
+//    }
     return nullptr;
 }

@@ -40,22 +40,21 @@ typedef enum
     kShareFail,
     kShareCancel,
     kShareTimeOut,
+    
 } ShareResultCode;
-
-class ShareResultListener
-{
-public:
-    virtual void onShareResult(ShareResultCode ret, const char* msg) = 0;
-};
 
 class ProtocolShare : public PluginProtocol
 {
 public:
-	ProtocolShare();
-	virtual ~ProtocolShare();
-    
-    typedef std::function<void(int, std::string&)> ProtocolShareCallback;
+    typedef std::function<void(int, const std::map<std::string, std::string>& content, const std::string& msg)> ShareCallback;
 
+    typedef struct __CallbackWrapper {
+        __CallbackWrapper(ShareCallback& cb) {
+            fnPtr = cb;
+        }
+        
+        ShareCallback fnPtr;
+    } CallbackWrapper;
     /**
     @brief config the share developer info
     @param devInfo This parameter is the info of developer,
@@ -73,49 +72,7 @@ public:
     @warning For different plugin, the parameter should have other keys to share.
              Look at the manual of plugins.
     */
-    void share(TShareInfo info);
-    void share(TShareInfo &info, ProtocolShareCallback &cb);
-
-    /**
-    @deprecated
-    @breif set the result listener
-    @param pListener The callback object for share result
-    @wraning Must invoke this interface before share
-    */
-    CC_DEPRECATED_ATTRIBUTE void setResultListener(ShareResultListener* pListener);
-    
-    /**
-     @deprecated
-     @breif get the result listener
-     @return The callback object for share result
-     @wraning Must invoke this interface before share
-     */
-    CC_DEPRECATED_ATTRIBUTE ShareResultListener* getResultListener();
-    
-    /**
-     @brief set login callback function
-     */
-    inline void setCallback(const ProtocolShareCallback &cb)
-    {
-        _callback = cb;
-    }
-    
-    /**
-     @brief get login callback function
-     */
-    inline ProtocolShareCallback getCallback()
-    {
-        return _callback;
-    }
-
-    /**
-    @brief share result callback
-    */
-    void onShareResult(ShareResultCode ret, const char* msg);
-
-protected:
-    ShareResultListener* _listener;
-    ProtocolShareCallback _callback;
+    void share(TShareInfo &info, ShareCallback &cb);
 };
 
 }} // namespace cocos2d { namespace plugin {

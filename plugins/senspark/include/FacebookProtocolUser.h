@@ -10,7 +10,6 @@
 #define PluginSenspark_FacebookProtocolUser_h
 
 #include "ProtocolUser.h"
-#include "FacebookAgent.h"
 #include "SensparkPluginMacros.h"
 #include <string>
 
@@ -19,23 +18,29 @@ NS_SENSPARK_PLUGIN_USER_BEGIN
 class FacebookProtocolUser : public cocos2d::plugin::ProtocolUser
 {
 public:
-    typedef cocos2d::plugin::FacebookAgent::FBParam FBParam;
-    typedef cocos2d::plugin::FacebookAgent::FBCallback FBCallback;
+    enum class HttpMethod{
+        GET = 0,
+        POST,
+        DELETE
+    };
+    
+    typedef std::map<std::string, std::string> FBParam;
     
     FacebookProtocolUser();
     virtual ~FacebookProtocolUser();
     
     void configureUser();
     void loginWithReadPermissions(const std::string& permissions);
-    void loginWithReadPermissions(const std::string& permissions, FacebookProtocolUser::ProtocolUserCallback& cb);
+    void loginWithReadPermissions(const std::string& permissions, FacebookProtocolUser::UserCallback& cb);
     
     void loginWithPublishPermissions(const std::string& permissions);
-    void loginWithPublishPermissions(const std::string& permissions, FacebookProtocolUser::ProtocolUserCallback& cb);
+    void loginWithPublishPermissions(const std::string& permissions, FacebookProtocolUser::UserCallback& cb);
 
     
     std::string getUserID();
-    void graphRequest(const std::string& graphPath, const FBParam& param, FBCallback& callback);
-    void api(const std::string& graphPath, int method, const FBParam& param, FBCallback& callback);
+    void graphRequest(const std::string& graphPath, const FBParam& param, FacebookProtocolUser::UserCallback& callback);
+    void api(const std::string& graphPath, HttpMethod method, const FBParam& param, FacebookProtocolUser::UserCallback& callback);
+
 };
 
 NS_SENSPARK_PLUGIN_USER_END

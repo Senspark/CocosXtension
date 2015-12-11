@@ -8,30 +8,46 @@
 
 #import <Foundation/Foundation.h>
 #include "FacebookProtocolShare.h"
-#include "AgentManager.h"
+#include "PluginUtilsIOS.h"
 
-NS_SENSPARK_PLUGIN_SHARE_BEGIN
-static FacebookProtocolShare* s_sharedFacebookProtocolShare = nullptr;
+#define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
-FacebookProtocolShare* FacebookProtocolShare::getInstance(){
-    if(nullptr == s_sharedFacebookProtocolShare){
-        s_sharedFacebookProtocolShare = new (std::nothrow)FacebookProtocolShare();
-    }
-    return s_sharedFacebookProtocolShare;
+USING_NS_SENSPARK_PLUGIN_SHARE;
+using namespace cocos2d::plugin;
+
+FacebookProtocolShare::FacebookProtocolShare() {
+    
 }
 
-void FacebookProtocolShare::fetchInvitableFriendsList(FBParam &info, FBCallback cb){
-    auto sharePlugin = cocos2d::plugin::AgentManager::getInstance()->getSharePlugin();
-    sharePlugin->setCallback(cb);
-    cocos2d::plugin::PluginParam params(info);
-    sharePlugin->callFuncWithParam("fetchInvitableFriendList", &params, NULL);
+FacebookProtocolShare::~FacebookProtocolShare() {
+    PluginUtilsIOS::erasePluginOCData(this);
 }
 
-void FacebookProtocolShare::openInviteDialog(FBParam &info, FBCallback cb){
-    auto sharePlugin = cocos2d::plugin::AgentManager::getInstance()->getSharePlugin();
-    sharePlugin->setCallback(cb);
-    cocos2d::plugin::PluginParam params(info);
-    sharePlugin->callFuncWithParam("openInviteDialog", &params, NULL);
+
+void FacebookProtocolShare::share(FBParam &info, FacebookProtocolShare::ShareCallback& callback) {
+    FacebookProtocolShare::CallbackWrapper* wrapper = new FacebookProtocolShare::CallbackWrapper(callback);
+    
+    PluginParam params(info);
+    PluginParam callbackID((long)wrapper);
+    
+    callFuncWithParam("share", &params, &callbackID, nullptr);
 }
 
-NS_SENSPARK_PLUGIN_SHARE_END
+void FacebookProtocolShare::openInviteDialog(FBParam &info, FacebookProtocolShare::ShareCallback& callback){
+    FacebookProtocolShare::CallbackWrapper* wrapper = new FacebookProtocolShare::CallbackWrapper(callback);
+    
+    PluginParam params(info);
+    PluginParam callbackID((long)wrapper);
+    
+    callFuncWithParam("openInviteDialog", &params, &callbackID, nullptr);
+}
+
+void FacebookProtocolShare::sendGameRequest(FBParam &info, FacebookProtocolShare::ShareCallback& callback) {
+    FacebookProtocolShare::CallbackWrapper* wrapper = new FacebookProtocolShare::CallbackWrapper(callback);
+    
+    PluginParam params(info);
+    PluginParam callbackID((long)wrapper);
+    
+    callFuncWithParam("sendGameRequest", &params, &callbackID, nullptr);
+}
+

@@ -27,15 +27,6 @@ THE SOFTWARE.
 
 namespace cocos2d { namespace plugin {
 
-ProtocolShare::ProtocolShare()
-: _listener(NULL)
-{
-}
-
-ProtocolShare::~ProtocolShare()
-{
-}
-
 void ProtocolShare::configDeveloperInfo(TShareDeveloperInfo devInfo)
 {
     if (devInfo.empty())
@@ -57,57 +48,21 @@ void ProtocolShare::configDeveloperInfo(TShareDeveloperInfo devInfo)
     }
 }
 
-void ProtocolShare::share(TShareInfo info)
+void ProtocolShare::share(TShareInfo &info, ShareCallback& cb)
 {
-    if (info.empty())
-    {
-        if (NULL != _listener)
-        {
-            onShareResult(kShareFail, "Share info error");
-        }
-        PluginUtilsIOS::outputLog("The Share info of %s is empty!", this->getPluginName());
-        return;
-    }
-    else
-    {
-        PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-        assert(pData != NULL);
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != NULL);
+    
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceShare)]) {
+        NSObject<InterfaceShare>* curObj = ocObj;
+        NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&info);
         
-        id ocObj = pData->obj;
-        if ([ocObj conformsToProtocol:@protocol(InterfaceShare)]) {
-            NSObject<InterfaceShare>* curObj = ocObj;
-            NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&info);
-            [curObj share:pDict];
-        }
+        CallbackWrapper *wrapper = new CallbackWrapper(cb);
+        
+        [curObj share:pDict withCallback:(long)wrapper];
     }
-}
-
-void ProtocolShare::share(TShareInfo &info,ProtocolShareCallback &cb)
-{
-    setCallback(cb);
-    share(info);
-}
-void ProtocolShare::setResultListener(ShareResultListener* pListener)
-{
-	_listener = pListener;
 }
     
-ShareResultListener* ProtocolShare::getResultListener()
-{
-    return _listener;
-}
-
-void ProtocolShare::onShareResult(ShareResultCode ret, const char* msg)
-{
-    if (_listener)
-    {
-    	_listener->onShareResult(ret, msg);
-    }
-    else
-    {
-        PluginUtilsIOS::outputLog("Share result listener of %s is null!", this->getPluginName());
-    }
-    PluginUtilsIOS::outputLog("Share result of %s is : %d(%s)", this->getPluginName(), (int) ret, msg);
-}
-
-}} // namespace cocos2d { namespace plugin {
+}}
+ // namespace cocos2d { namespace plugin {

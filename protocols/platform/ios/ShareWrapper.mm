@@ -25,34 +25,33 @@ THE SOFTWARE.
 #import "ShareWrapper.h"
 #include "PluginUtilsIOS.h"
 #include "ProtocolShare.h"
+#include "ParseUtils.h"
 
 using namespace cocos2d::plugin;
 
 @implementation ShareWrapper
 
-+ (void) onShareResult:(id) obj withRet:(int) ret withMsg:(NSString*) msg
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
++ (void) onShareResult:(id) obj withRet:(int) ret withContent: (NSDictionary*) content withMsg:(NSString*) msg andCallbackID:(long)callbackID
 {
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolShare* pShare = dynamic_cast<ProtocolShare*>(pPlugin);
     if (pShare) {
-        ShareResultListener* listener = pShare->getResultListener();
-        ProtocolShare::ProtocolShareCallback callback = pShare->getCallback();
-        const char* chMsg = [msg UTF8String];
-        if (NULL != listener)
-        {
-            ShareResultCode cRet = (ShareResultCode) ret;
-            listener->onShareResult(cRet, chMsg);
-        }else if (callback)
-        {
-            std::string stdmsg(chMsg);
-            callback(ret, stdmsg);
-        }else{
-            PluginUtilsIOS::outputLog("Can't find the listener of plugin %s", pPlugin->getPluginName());
-        }
+        ProtocolShare::CallbackWrapper* wrapper = (ProtocolShare::CallbackWrapper*) callbackID;
+        
+        map<string, string> mapContent = [ParseUtils createMapFromDict:content];
+        
+        string strMsg = msg != nil ? [msg UTF8String] : "";
+        
+        wrapper->fnPtr(ret, mapContent, strMsg);
+        
+        delete wrapper;
     } else {
         PluginUtilsIOS::outputLog("Can't find the C++ object of the Share plugin");
     }
 }
+#pragma GCC diagnostic pop
 
 + (UIViewController *)getCurrentRootViewController;
 {

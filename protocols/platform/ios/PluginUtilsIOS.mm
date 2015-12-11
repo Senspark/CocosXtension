@@ -80,6 +80,9 @@ id PluginUtilsIOS::getOCObjFromParam(PluginParam* param)
         case PluginParam::kParamTypeInt:
             obj = [NSNumber numberWithInt:param->getIntValue()];
             break;
+        case PluginParam::kParamTypeLong:
+            obj = [NSNumber numberWithLong:param->getLongValue()];
+            break;
         case PluginParam::kParamTypeFloat:
             obj = [NSNumber numberWithFloat:param->getFloatValue()];
             break;
@@ -162,6 +165,7 @@ NSMutableDictionary* PluginUtilsIOS::createDictFromMap(std::map<std::string, std
     
     return dict;
 }
+    
 void PluginUtilsIOS::callOCFunctionWithName_oneParam(PluginProtocol* pPlugin, const char* funcName, id param)
 {
     return_if_fails(funcName != NULL && strlen(funcName) > 0);

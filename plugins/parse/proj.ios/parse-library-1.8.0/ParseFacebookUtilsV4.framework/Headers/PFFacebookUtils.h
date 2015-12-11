@@ -9,7 +9,6 @@
 #import <Bolts/BFTask.h>
 
 #import <FBSDKCoreKit/FBSDKAccessToken.h>
-
 #import <FBSDKLoginKit/FBSDKLoginManager.h>
 
 #import <Parse/PFConstants.h>

@@ -36,7 +36,7 @@ ProtocolUser::~ProtocolUser()
 {
 }
 
-void ProtocolUser::configDeveloperInfo(TUserDeveloperInfo devInfo)
+void ProtocolUser::configDeveloperInfo(TUserInfo devInfo)
 {
     if (devInfo.empty())
     {
@@ -62,7 +62,7 @@ void ProtocolUser::login()
     PluginUtilsIOS::callOCFunctionWithName(this, "login");
 }
     
-void ProtocolUser::login(ProtocolUserCallback &cb)
+void ProtocolUser::login(UserCallback &cb)
 {
     _callback = cb;
     ProtocolUser::login();
@@ -73,7 +73,7 @@ void ProtocolUser::logout()
     PluginUtilsIOS::callOCFunctionWithName(this, "logout");
 }
     
-void ProtocolUser::logout(ProtocolUserCallback &cb)
+void ProtocolUser::logout(UserCallback &cb)
 {
     _callback = cb;
     ProtocolUser::logout();

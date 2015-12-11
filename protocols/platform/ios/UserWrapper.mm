@@ -25,7 +25,6 @@ THE SOFTWARE.
 #import "UserWrapper.h"
 #include "PluginUtilsIOS.h"
 #include "ProtocolUser.h"
-#include "FacebookAgent.h"
 #include "ParseUtils.h"
 
 using namespace cocos2d::plugin;
@@ -33,55 +32,15 @@ using namespace std;
 
 @implementation UserWrapper
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 + (void) onActionResult:(id) obj withRet:(int) ret withMsg:(NSString*) msg
 {
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolUser* pUser = dynamic_cast<ProtocolUser*>(pPlugin);
     if (pUser) {
-        UserActionListener* listener = pUser->getActionListener();
-        ProtocolUser::ProtocolUserCallback callback = pUser->getCallback();
-        const char* chMsg = [msg UTF8String];
-        if (NULL != listener)
-        {
-            listener->onActionResult(pUser, (UserActionResultCode) ret, chMsg);
-        }else if(callback){
-            std::string stdmsg(chMsg);
-            callback((UserActionResultCode) ret, stdmsg);
-        }else{
-            PluginUtilsIOS::outputLog("Can't find the listener of plugin %s", pPlugin->getPluginName());
-        }
-    } else {
-        PluginUtilsIOS::outputLog("Can't find the C++ object of the User plugin");
-    }
-}
-
-+ (void) onGraphRequestResultFrom:(id) obj withRet: (int) state result: (id) resultObj andCallback: (int) cbid {
-    FacebookAgent::FBCallback callback = FacebookAgent::getInstance()->getRequestCallback(cbid);
-    
-    if (callback ) {
-        std::string result = [[ParseUtils NSDictionaryToNSString:resultObj] UTF8String];
-        callback((int) state, result);
-    } else {
-        PluginUtilsIOS::outputLog("can't find the C++ object of the callback");
-    }
-}
-
-+ (void) onGraphResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg withCallback:(int)cbid{
-    const char* chMsg = [msg UTF8String];
-    FacebookAgent::FBCallback callback = FacebookAgent::getInstance()->getRequestCallback(cbid);
-    if(callback){
-        std::string stdmsg(chMsg);
-        callback((GraphResult) ret, stdmsg);
-    }else{
-        PluginUtilsIOS::outputLog("an't find the C++ object of the requestCallback");
-    }
-}
-
-+ (void) onPermissionsResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg{
-    PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
-    ProtocolUser* pUser = dynamic_cast<ProtocolUser*>(pPlugin);
-    if (pUser) {
-        ProtocolUser::ProtocolUserCallback callback = pUser->getCallback();
+        ProtocolUser::UserCallback callback = pUser->getCallback();
         const char* chMsg = [msg UTF8String];
         if(callback){
             std::string stdmsg(chMsg);
@@ -93,11 +52,55 @@ using namespace std;
         PluginUtilsIOS::outputLog("Can't find the C++ object of the User plugin");
     }
 }
+#pragma GCC diagnostic pop
+
++ (void) onGraphRequestResultFrom:(id) obj withRet: (int) state result: (id) resultObj andCallback: (long) cbid {
+    
+    if (cbid ) {
+        ProtocolUser::CallbackWrapper *wrapper = (ProtocolUser::CallbackWrapper*) cbid;
+        
+        std::string result = [[ParseUtils NSDictionaryToNSString:resultObj] UTF8String];
+        wrapper->fnPtr((int) state, result);
+        delete wrapper;
+    } else {
+        PluginUtilsIOS::outputLog("can't find the C++ object of the callback");
+    }
+}
+
++ (void) onGraphResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg withCallback:(long)cbid{
+    if(cbid){
+        ProtocolUser::CallbackWrapper *wrapper = (ProtocolUser::CallbackWrapper*) cbid;
+        
+        std::string strmsg = msg ? [msg UTF8String] : "";
+        wrapper->fnPtr(ret, strmsg);
+        delete wrapper;
+    }else{
+        PluginUtilsIOS::outputLog("an't find the C++ object of the requestCallback");
+    }
+}
+
++ (void) onPermissionsResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg{
+    PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
+    ProtocolUser* pUser = dynamic_cast<ProtocolUser*>(pPlugin);
+    if (pUser) {
+        ProtocolUser::UserCallback callback = pUser->getCallback();
+        const char* chMsg = [msg UTF8String];
+        if(callback){
+            std::string stdmsg(chMsg);
+            callback(ret, stdmsg);
+        }else{
+            PluginUtilsIOS::outputLog("Can't find the listener of plugin %s", pPlugin->getPluginName());
+        }
+    } else {
+        PluginUtilsIOS::outputLog("Can't find the C++ object of the User plugin");
+    }
+}
+
 + (void)onPermissionListResult:(id)obj withRet:(int)ret withMsg:(NSString *)msg{
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolUser* pUser = dynamic_cast<ProtocolUser*>(pPlugin);
     if (pUser) {
-        ProtocolUser::ProtocolUserCallback callback = pUser->getCallback();
+        ProtocolUser::UserCallback callback = pUser->getCallback();
         const char* chMsg = [msg UTF8String];
         if(callback){
             std::string stdmsg(chMsg);

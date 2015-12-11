@@ -14,6 +14,8 @@ using namespace cocos2d::plugin;
 
 @implementation DataWrapper
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 + (void) onDataResult:(id)obj withRet:(DataActionResultCode)ret withData:(NSData*) data {
     
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
@@ -33,6 +35,8 @@ using namespace cocos2d::plugin;
         PluginUtilsIOS::outputLog("Can't find the C++ object of the Data plugin");
     }
 }
+#pragma GCC diagnostic pop
+
 
 + (UIViewController *)getCurrentRootViewController {
     

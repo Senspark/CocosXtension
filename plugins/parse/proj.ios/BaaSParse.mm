@@ -20,7 +20,6 @@ static BOOL sIsSet = false;
 
 - (void) configDeveloperInfo:(NSMutableDictionary *)devInfo
 {
-
     if (!sIsSet) {
         [Parse enableLocalDatastore];
     }
@@ -35,7 +34,7 @@ static BOOL sIsSet = false;
     sIsSet = true;
 }
 
-- (void) signUpWithParams:(NSDictionary *)params
+- (void) signUpWithParams:(NSDictionary *)params andCallbackID:(long) cbID
 {
     PFUser* user = [PFUser user];
     user.username = [params objectForKey:@"username"];
@@ -51,42 +50,58 @@ static BOOL sIsSet = false;
     
     [user signUpInBackgroundWithBlock:^(BOOL succeed, NSError *error) {
         if (!error) {
-            
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kSignUpSucceed andMsg:[BaaSWrapper makeErrorJsonString:error]];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode: (int)BaaSActionResultCode::kSignUpSucceed andReturnMsg:[self getUserInfo] andCallbackID:cbID];
+
             NSLog(@"Hooray! Let them use the app now.");
 
         } else {
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kSignUpFailed andMsg:[BaaSWrapper makeErrorJsonString:error]];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kSignUpFailed andReturnMsg: [BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];
             
             NSLog(@"Error: %@", [error userInfo][@"error"]);
         }
     }];
 }
 
-- (void) loginWithUsername:(NSString *)username andPassword:(NSString *)password
+- (void) loginWithFacebookAccessToken: (NSNumber*) callbackID {
+    [PFFacebookUtils logInInBackgroundWithAccessToken:[FBSDKAccessToken currentAccessToken] block:^(PFUser * _Nullable user, NSError * _Nullable error) {
+        
+        long cbID = callbackID ? [callbackID longValue] : 0;
+        
+        if (user) {
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kLoginSucceed andReturnMsg:[self getUserInfo] andCallbackID:cbID];
+        } else {
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kLoginFailed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];
+            
+            NSLog(@"Error when logging in. %@", [error userInfo][@"error"]);
+        }
+        
+    }];
+}
+
+- (void) loginWithUsername:(NSString *)username andPassword:(NSString *)password andCallbackID: (long) cbID
 {
     [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser *user, NSError* error) {
         if (user) {
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kLoginSucceed andMsg:[BaaSWrapper makeErrorJsonString:error]];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kLoginSucceed andReturnMsg:[self getUserInfo] andCallbackID:cbID];
             
             NSLog(@"Login successfully.");
         } else {
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kLogoutFailed andMsg:[BaaSWrapper makeErrorJsonString:error]];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kLoginFailed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];
             
             NSLog(@"Error when logging in. %@", [error userInfo][@"error"]);
         }
     }];
 }
 
-- (void) logout
+- (void) logout: (long) cbID
 {
     [PFUser logOutInBackgroundWithBlock:^(NSError* error) {
         if (error) {
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kLogoutSucceed andMsg:[BaaSWrapper makeErrorJsonString:error]];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kLogoutSucceed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];
             
             NSLog(@"Logout error.");
         } else {
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kLogoutFailed andMsg:[BaaSWrapper makeErrorJsonString:error]];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kLogoutFailed andReturnMsg:@"" andCallbackID:cbID];
             
             NSLog(@"Logout successfully.");
         }
@@ -98,20 +113,75 @@ static BOOL sIsSet = false;
     return [PFUser currentUser] != nil;
 }
 
-- (void) saveObjectInBackground:(NSString *)className withParams:(NSDictionary*) obj {
+- (void) saveObjectInBackground:(NSString *)className withParams:(NSDictionary*) obj andCallbackID:(long) cbID {
     PFObject* parseObj = [PFObject objectWithClassName:className dictionary:obj];
     
     [parseObj saveInBackgroundWithBlock:^(BOOL succeed, NSError* error) {
         if (succeed) {
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kSaveSucceed andMsg:parseObj.objectId];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kSaveSucceed andReturnObj:[BaaSParse convertPFObjectToDictionary:parseObj] andCallbackID:cbID];
             
             NSLog(@"Save object successful.");
         } else {
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kSaveFailed andMsg:[BaaSWrapper makeErrorJsonString:error]];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kSaveFailed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];
             
-            NSLog(@"Error when saving object. Error: %@", error.description);
+            NSLog(@"Error when saving object. Error: %@", [BaaSWrapper makeErrorJsonString:error]);
         }
     }];
+}
+
+- (NSString*) getUserID {
+    return [PFUser currentUser].objectId;
+}
+
+- (NSString*) getUserInfo {
+
+    return [ParseUtils NSDictionaryToNSString:[BaaSParse convertPFUserToDictionary:[PFUser currentUser]]];
+}
+
+- (NSString*) setUserInfo: (NSDictionary*) params {
+    PFUser* parseUser = [PFUser currentUser];
+    
+    if (parseUser) {
+        for (NSString* key in [params keyEnumerator]) {
+            parseUser[key] = [params objectForKey:key];
+        }
+        
+        return [self getUserInfo];
+    }
+    
+    return @"";
+}
+
+- (void) saveUserInfo: (NSNumber*) cbID {
+    long cb = cbID ? [cbID longValue] : 0;
+    PFUser* parseUser = [PFUser currentUser];
+    if (parseUser) {
+        [parseUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded) {
+                [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kSaveSucceed andReturnObj:[BaaSParse convertPFUserToDictionary:parseUser] andCallbackID:cb];
+            } else {
+                [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kSaveFailed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cb];
+            }
+        }];
+    } else {
+        [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kSaveFailed andReturnMsg:@"" andCallbackID:cb];
+    }
+}
+
+- (void) fetchUserInfo: (NSNumber*) cbID {
+    long cb = cbID ? [cbID longValue] : 0;
+    PFUser* parseUser = [PFUser currentUser];
+    if (parseUser) {
+        [parseUser fetchInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+            if (object) {
+                [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveSucceed andReturnObj:[BaaSParse convertPFUserToDictionary:parseUser] andCallbackID:cb];
+            } else {
+                [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveFailed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cb];
+            }
+        }];
+    } else {
+        [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kSaveFailed andReturnMsg:@"" andCallbackID:cb];
+    }
 }
 
 - (NSString*) saveObject:(NSString *)className withParams:(NSDictionary *)obj {
@@ -125,30 +195,69 @@ static BOOL sIsSet = false;
     return nil;
 }
 
-+ (NSDictionary*) convertToDictionary: (PFObject*) object {
-    NSArray * allKeys = [object allKeys];
-    NSMutableDictionary * retDict = [[NSMutableDictionary alloc] init];
-
-    for (NSString * key in allKeys) {
-        [retDict setObject:[object objectForKey:key] forKey:key];
++ (NSMutableDictionary*) convertPFObjectToDictionary: (PFObject*) object {
+    if (object) {
+        NSArray * allKeys = [object allKeys];
+        NSMutableDictionary * objectDict = [[NSMutableDictionary alloc] init];
+        
+        for (NSString * key in allKeys) {
+            [objectDict setObject:[object objectForKey:key] forKey:key];
+        }
+        
+        [objectDict setObject:[NSNumber numberWithDouble:[object.createdAt timeIntervalSince1970]] forKey:@"createdAt"];
+        [objectDict setObject:[NSNumber numberWithDouble:[object.updatedAt timeIntervalSince1970]] forKey:@"updatedAt"];
+        
+        return objectDict;
     }
-    return retDict;
+    return nil;
 }
 
-- (void) getObjectInBackground: (NSString*) className withId: (NSString*) objId {
++ (NSMutableDictionary*) convertPFUserToDictionary: (PFUser*) user {
+    NSMutableDictionary* userDict = [BaaSParse convertPFObjectToDictionary:user];
+    
+    if (userDict) {
+        [userDict setObject:[NSNumber numberWithBool:user.isNew] forKey:@"isNew"];
+        
+        return userDict;
+    }
+    return nil;
+}
+
+- (void) getObjectInBackground: (NSString*) className withId: (NSString*) objId andCallbackID:(long) cbID {
     PFQuery *query = [PFQuery queryWithClassName:className];
     [query getObjectInBackgroundWithId:objId block:^(PFObject *object,  NSError *error) {
         if (object) {
             
-            
-            NSString *result = [ParseUtils NSDictionaryToNSString: [BaaSParse convertToDictionary:object]];
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kRetrieveSucceed andMsg:result];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveSucceed andReturnObj:[BaaSParse convertPFObjectToDictionary:object] andCallbackID:cbID];
             
             NSLog(@"Retrieve object successfully.");
         } else {
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kRetrieveFailed andMsg:[BaaSWrapper makeErrorJsonString:error]];
+            
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveFailed andReturnObj:nil andCallbackID:cbID];
             
             NSLog(@"Retrieve object fail.");
+        }
+    }];
+}
+
+- (void) getObjectsInBackground: (NSString*) className withIds:(NSArray *)objIds andCallbackID:(long) cbID {
+    PFQuery *query = [PFQuery queryWithClassName:className];
+    [query whereKey:@"objectId" containedIn:objIds];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        if (error) {
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveFailed andReturnObj:nil andCallbackID:cbID];
+            
+            NSLog(@"Retrieve object fail.");
+        } else {
+            NSMutableArray* objArr = [[NSMutableArray alloc] init];
+            for (PFObject* obj : objects) {
+                [objArr addObject:[BaaSParse convertPFObjectToDictionary:obj]];
+            }
+            
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveSucceed andReturnObj:objArr andCallbackID:cbID];
+
+            NSLog(@"Retrieve object successfully.");
         }
     }];
 }
@@ -164,19 +273,44 @@ static BOOL sIsSet = false;
     
     NSLog(@"Retrieve object successfully.");
     
-    return [BaaSParse convertToDictionary:object];
+    return [BaaSParse convertPFObjectToDictionary:object];
 }
 
-- (void) updateObjectInBackground:(NSString *)className withId:(NSString *)objId withParams:(NSDictionary *)params {
+- (void) findObjectsInBackground: (NSString*) className whereKey: (NSString*) key containedIn: (NSArray*) values  withCallbackID:(long)callbackId {
+    
+    PFQuery *query = [PFQuery queryWithClassName:className];
+    [query whereKey:key containedIn:values];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        if (error) {
+            [BaaSWrapper onBaaSActionResult:self withReturnCode: (int) BaaSActionResultCode::kRetrieveFailed andReturnMsg: [BaaSWrapper makeErrorJsonString:error] andCallbackID:callbackId];
+            
+            NSLog(@"Retrieve object fail.");
+        } else {
+            NSMutableArray* objArr = [[NSMutableArray alloc] init];
+            for (PFObject* obj : objects) {
+                [objArr addObject:[BaaSParse convertPFObjectToDictionary:obj]];
+            }
+            
+            NSString *result = [ParseUtils NSArrayToNSString:objArr];
+            
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveSucceed andReturnMsg:result andCallbackID:callbackId];
+            
+            NSLog(@"Retrieve object successfully.");
+        }
+    }];
+}
+
+- (void) updateObjectInBackground:(NSString *)className withId:(NSString *)objId withParams:(NSDictionary *)params andCallbackID:(long) cbID {
     
     PFQuery *query = [PFQuery queryWithClassName:className];
     
     // Retrieve the object by id
     [query getObjectInBackgroundWithId:objId block:^(PFObject *object, NSError *error) {
         if (error) {
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kUpdateFailed andMsg:[BaaSWrapper makeErrorJsonString:error]];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode: (int) BaaSActionResultCode::kUpdateFailed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];
             
-            NSLog(@"Update object fail when retrieving data. Error: %@", error.description);
+            NSLog(@"Update object fail when retrieving data. Error: %@", [BaaSWrapper makeErrorJsonString:error]);
         }
         
         for (NSString* key in [params keyEnumerator]) {
@@ -185,11 +319,11 @@ static BOOL sIsSet = false;
         
         [object saveInBackgroundWithBlock:^(BOOL succeed, NSError* error) {
             if (succeed) {
-                [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kUpdateSucceed andMsg:object.objectId];
+                [BaaSWrapper onBaaSActionResult:self withReturnCode: (int) BaaSActionResultCode::kUpdateSucceed andReturnMsg:object.objectId  andCallbackID:cbID];
                 
                 NSLog(@"Update object succesffully.");
             } else {
-                [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kUpdateFailed andMsg:[BaaSWrapper makeErrorJsonString:error]];
+                [BaaSWrapper onBaaSActionResult:self withReturnCode: (int) BaaSActionResultCode::kUpdateFailed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];;
                 
                 NSLog(@"Update object fail when saving data.");
             }
@@ -222,13 +356,14 @@ static BOOL sIsSet = false;
     return nil;
 }
 
-- (void) deleteObject: (NSString*) className withId: (NSString*) objId {
+- (BOOL) deleteObject: (NSString*) className withId: (NSString*) objId {
     PFQuery* query = [PFQuery queryWithClassName:className];
 
     PFObject *object = [query getObjectWithId:objId];
-
+    BOOL ret = false;
+    
     if (object) {
-        BOOL ret = [object delete];
+        ret = [object delete];
         if (ret) {
             NSLog(@"Delete object successfully");
         } else {
@@ -237,42 +372,47 @@ static BOOL sIsSet = false;
     } else {
         NSLog(@"Object not found");
     }
+    
+    return ret;
 }
 
-- (void) deleteObjectInBackground: (NSString*) className withId: (NSString*) objId {
+- (void) deleteObjectInBackground: (NSString*) className withId: (NSString*) objId andCallbackID:(long) cbID {
     PFQuery* query = [PFQuery queryWithClassName:className];
 
     [query getObjectInBackgroundWithId:objId block:^(PFObject* object, NSError* error) {
         if (object && error == nil) {
             [object deleteInBackgroundWithBlock:^(BOOL succeed, NSError* error2) {
                 if (succeed && error2 == nil) {
-                    [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kDeleteSucceed andMsg:object.objectId];
+                    [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kDeleteSucceed andReturnMsg:object.objectId andCallbackID:cbID];
 
                     NSLog(@"Delete object successfully with ID: %@ ", objId);
                 } else {
-                    [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kDeleteFailed andMsg:[BaaSWrapper makeErrorJsonString:error]];
+                    [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kDeleteFailed andReturnMsg:error2.description andCallbackID:cbID];
                     
                     NSLog(@"Delete object failed with ID: %@", objId);
                 }
             }];
         } else {
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kDeleteFailed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];
+            
             NSLog(@"Object not found");
         }
     }];
 }
 
-- (void) fetchConfigInBackground {
+- (void) fetchConfigInBackground:(long) cbID{
     [PFConfig getConfigInBackgroundWithBlock:^(PFConfig *config, NSError *error) {
         if (!error) {
             _currentConfig = config;
 
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kFetchConfigSucceed andMsg:@"Fetch successfully"];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kFetchConfigSucceed andReturnMsg:@"Fetch successfully" andCallbackID:cbID];
+            
 
             NSLog(@"Yay! Config was fetched from the server.");
         } else {
             _currentConfig = [PFConfig currentConfig];
 
-            [BaaSWrapper onActionResult:self withRet:(int)BaaSActionResultCode::kFetchConfigFailed andMsg:@"Fetch failed, use locally."];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kFetchConfigFailed andReturnMsg:@"Fetch failed, use locally." andCallbackID:cbID];
 
             NSLog(@"Failed to fetch. Using Cached Config.");
         }
@@ -325,17 +465,6 @@ static BOOL sIsSet = false;
 
     NSLog(@"%@", arr);
     return ret;
-}
-
-- (NSDictionary*) getUserInfo {
-    PFUser* pfUser = [PFUser currentUser];
-    if (pfUser) {
-    
-        return [BaaSParse convertToDictionary:pfUser];
-    
-    }
-    
-    return nil;
 }
 
 - (NSString*) getSDKVersion

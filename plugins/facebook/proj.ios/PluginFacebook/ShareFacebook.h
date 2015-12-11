@@ -26,27 +26,16 @@
 
 @interface ShareFacebook : NSObject <InterfaceShare>
 {
-    
+    NSMutableDictionary* _contentMap;
 }
 
 @property BOOL debug;
-@property (copy, nonatomic) NSMutableDictionary* mShareInfo;
 
 /**
  * @brief interfaces of protocol : InterfaceShare
  */
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
-- (void) share: (NSMutableDictionary*) shareInfo;
 
-//- (void) dialog: (NSMutableDictionary*) shareInfo;
-- (void) setDebugMode: (BOOL) debug;
-//- (void) appRequest:(NSMutableDictionary *)shareInfo;
-- (NSString*) getSDKVersion;
-- (NSString*) getPluginVersion;
-//- (BOOL) canPresentDialogWithParams:(NSMutableDictionary *)shareInfo;
-
-// invite facebook
--(void) fetchInvitableFriendList:(NSMutableDictionary*) fetchInfo ;
--(void) openInviteDialog:(NSMutableDictionary*) dialogInfo;
+-(void) openInviteDialog:(NSDictionary*) params;
+-(void) sendGameRequest:(NSDictionary*) params;
 
 @end

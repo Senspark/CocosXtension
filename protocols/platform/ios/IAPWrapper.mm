@@ -48,6 +48,9 @@ using namespace cocos2d::plugin;
         PluginUtilsIOS::outputLog("Can't find the C++ object of the IAP plugin");
     }
 }
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +(void) onRequestProduct:(id)obj withRet:(ProductRequest) ret withProducts:(NSArray *)products{
     PluginProtocol* plugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolIAP* iapPlugin = dynamic_cast<ProtocolIAP*>(plugin);
@@ -82,4 +85,6 @@ using namespace cocos2d::plugin;
         PluginUtilsIOS::outputLog("Can't find the C++ object of the IAP plugin");
     }
 }
+#pragma GCC diagnostic pop
+
 @end

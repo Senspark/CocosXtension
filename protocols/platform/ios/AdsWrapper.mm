@@ -30,6 +30,8 @@ using namespace cocos2d::plugin;
 
 @implementation AdsWrapper
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 + (void) onAdsResult:(id) obj withRet:(AdsResult) ret withMsg:(NSString*) msg
 {
     PluginProtocol* plugin = PluginUtilsIOS::getPluginPtr(obj);
@@ -65,6 +67,8 @@ using namespace cocos2d::plugin;
         PluginUtilsIOS::outputLog("Can't find the C++ object of the ads plugin");
     }
 }
+#pragma GCC diagnostic pop
+
 
 + (NSString*)buildVersion
 {
