@@ -16,7 +16,7 @@
 
 using namespace cocos2d::plugin;
 
-@interface ShareGooglePlus() <GPPDeepLinkDelegate,GPPShareDelegate>
+@interface ShareGooglePlus()
 
 @end
 
@@ -27,13 +27,19 @@ using namespace cocos2d::plugin;
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo
 {
     // init G+
-    [GPPDeepLink setDelegate:self];
+    [GPPDeepLink setDelegate: ShareGooglePlusDelegate.self];
     [GPPDeepLink readDeepLinkAfterInstall];
 }
 
-- (void)shareToGooglePlus:(int32_t)level withScore:(int64_t)score withURLToShare:(NSString *)urlToShare withPreFillText:(NSString *)prefillText withContentDeepLinkId:(NSString *)contentDeepLinkId andDeepLinkId:(NSString *)deepLinkId
-{
-    [GPPShare sharedInstance].delegate = self; //set delegate for GPPShare
+- (void) share:(NSMutableDictionary *)shareInfo withCallback:(long)cbID {
+    id delegate = [[ShareGooglePlusDelegate alloc] initWithCallbackID:cbID];
+
+    NSString* urlToShare        = (NSString*) [shareInfo objectForKey:@"urlToShare"];
+    NSString* prefillText       = (NSString*) [shareInfo objectForKey:@"prefillText"];
+    NSString* deepLinkId        = (NSString*) [shareInfo objectForKey:@"deepLinkId"];
+    NSString* contentDeepLinkId = (NSString*) [shareInfo objectForKey:@"contentDeepLinkId"];
+
+    [GPPShare sharedInstance].delegate = delegate; //set delegate for GPPShare
     id<GPPNativeShareBuilder> shareBuilder = [[GPPShare sharedInstance] nativeShareDialog];
 
     [shareBuilder setURLToShare:[NSURL URLWithString:urlToShare]];
@@ -68,19 +74,37 @@ using namespace cocos2d::plugin;
     return @"0.1.0";
 }
 
+@end
+
+@interface ShareGooglePlusDelegate() <GPPDeepLinkDelegate, GPPShareDelegate>
+@end
+
+@implementation ShareGooglePlusDelegate
+
+@synthesize callbackID = _callbackID;
+
 #pragma mark -
 #pragma mark Delegate
+- (id) initWithCallbackID: (long) cbID {
+    _callbackID = 0;
+    if (self = [super init]) {
+        _callbackID = cbID;
+        return self;
+    }
+    _callbackID = 0;
+    return nil;
+}
+
 - (void)finishedSharingWithError:(NSError *)error {
     if (!error) {
-        [ShareWrapper onShareResult:self withRet:ShareResultCode::kShareSuccess withMsg:@"[Google+] Share succeeded"];
+        [ShareWrapper onShareResult:self withRet:(int) ShareResultCode::kShareSuccess withContent:nil withMsg:@"[Google+] Share succeeded" andCallbackID: _callbackID];
     } else {
-        [ShareWrapper onShareResult:self withRet:ShareResultCode::kShareFail withMsg:@"[Google+] Share failed"];
+        [ShareWrapper onShareResult:self withRet:(int) ShareResultCode::kShareFail withContent:nil withMsg:@"[Google+] Share failed" andCallbackID: _callbackID];
     }
 }
 
 - (void)didReceiveDeepLink: (GPPDeepLink *)deepLink {
     NSLog(@"deepLinkID = %@", [deepLink deepLinkID]);
 }
-
 
 @end

@@ -191,6 +191,21 @@ const char* ProtocolBaaS::getObject(const std::string& className, const std::str
     return nullptr;
 }
 
+void ProtocolBaaS::findObjectInBackground(const std::string& className, const std::string& key, const std::string value, BaaSCallback& cb) {
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != nullptr);
+
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+        NSObject<InterfaceBaaS>* curObj = ocObj;
+
+        CallbackWrapper *callback = new CallbackWrapper(cb);
+
+        [curObj findObjectInBackground:[NSString stringWithUTF8String:className.c_str()] whereKey:[NSString stringWithUTF8String:key.c_str()]
+                               equalTo:[NSString stringWithUTF8String:value.c_str()] withCallbackID:(long)callback];
+    }
+}
+
 void ProtocolBaaS::findObjectsInBackground(const std::string& className, const std::string& key, const std::vector<std::string>& values, BaaSCallback& cb) {
     
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);

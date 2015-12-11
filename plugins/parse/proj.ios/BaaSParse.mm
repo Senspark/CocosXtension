@@ -301,6 +301,22 @@ static BOOL sIsSet = false;
     }];
 }
 
+
+- (void) findObjectInBackground: (NSString*) className whereKey: (NSString*) key equalTo: (NSString*) value    withCallbackID: (long) callbackId {
+    PFQuery* query = [PFQuery queryWithClassName:className];
+    [query whereKey:key equalTo:value];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+        if (!error) {
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int) BaaSActionResultCode::kRetrieveSucceed andReturnMsg:@"" andCallbackID:callbackId];
+            NSLog(@"Retrieve object successfully.");
+        } else {
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int) BaaSActionResultCode::kRetrieveFailed andReturnMsg:@"" andCallbackID:callbackId];
+            NSLog(@"Retrieve object fail.");
+        }
+    }];
+}
+
+
 - (void) updateObjectInBackground:(NSString *)className withId:(NSString *)objId withParams:(NSDictionary *)params andCallbackID:(long) cbID {
     
     PFQuery *query = [PFQuery queryWithClassName:className];

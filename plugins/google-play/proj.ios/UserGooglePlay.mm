@@ -97,7 +97,7 @@ using namespace cocos2d::plugin;
     return [GPPSignIn sharedInstance].googlePlusUser.image.url;
 }
 
-- (NSString*) getUserIdentifier {
+- (NSString*) getUserID {
     return [GPPSignIn sharedInstance].googlePlusUser.identifier;
 }
 
@@ -115,9 +115,9 @@ using namespace cocos2d::plugin;
 -(void)finishedWithAuth:(GTMOAuth2Authentication *)auth
                   error:(NSError *)error {
     if (error) {
-        [UserWrapper onActionResult:self withRet:UserActionResultCode::kLoginFailed withMsg:@"[Google+] Login failed"];
+        [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLoginFailed withMsg:@"[Google+] Login failed"];
     } else {
-        [UserWrapper onActionResult:self withRet:UserActionResultCode::kLoginSucceed withMsg:@"[Google+] Login succeeded"];
+        [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLoginSucceed withMsg:@"[Google+] Login succeeded"];
     }
 }
 
@@ -125,10 +125,10 @@ using namespace cocos2d::plugin;
 {
     if (error) {
         NSLog(@"Received an error while signing in %@", [error localizedDescription]);
-        [UserWrapper onActionResult:self withRet:kLoginFailed withMsg:@"Google Play: login failed"];
+        [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLoginFailed withMsg:@"Google Play: login failed"];
     } else {
         NSLog(@"Signed in!");
-        [UserWrapper onActionResult:self withRet:kLoginSucceed withMsg:@"Google Play: login successful"];
+        [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLoginSucceed withMsg:@"Google Play: login successful"];
     }
 }
 
@@ -136,10 +136,10 @@ using namespace cocos2d::plugin;
 {
     if (error) {
         NSLog(@"Received an error while signing out %@", [error localizedDescription]);
-        [UserWrapper onActionResult:self withRet:kLogoutFailed withMsg:@"Google Play: logout failed"];
+        [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLogoutFailed withMsg:@"Google Play: logout failed"];
     } else {
         NSLog(@"Signed out!");
-        [UserWrapper onActionResult:self withRet:kLogoutSucceed withMsg:@"Google Play: logout successful"];
+        [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLogoutSucceed withMsg:@"Google Play: logout successful"];
     }
 }
 

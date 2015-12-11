@@ -26,8 +26,13 @@ class GooglePlayProtocolUser : public cocos2d::plugin::ProtocolUser
 public:
     GooglePlayProtocolUser();
     virtual ~GooglePlayProtocolUser();
-    
+
     void configureUser(const std::string& appId);
+
+    std::string getUserID();
+    std::string getUserAvatarUrl();
+    std::string getUserDisplayName();
+
 };
 
 NS_SENSPARK_PLUGIN_USER_END

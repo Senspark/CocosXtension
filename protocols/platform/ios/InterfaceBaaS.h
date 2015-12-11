@@ -29,6 +29,7 @@
 
 - (NSDictionary*) getObject: (NSString*) className withId: (NSString*) objId;
 
+- (void) findObjectInBackground: (NSString*) className whereKey: (NSString*) key equalTo: (NSString*) value    withCallbackID: (long) callbackId;
 - (void) findObjectsInBackground: (NSString*) className whereKey: (NSString*) key containedIn: (NSArray*) values    withCallbackID: (long) callbackId;
 
 - (void) updateObjectInBackground: (NSString*) className withId: (NSString*) objId withParams: (NSDictionary*) params andCallbackID:(long) cbID;

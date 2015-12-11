@@ -80,6 +80,7 @@ public class UserGooglePlay implements InterfaceUser, PluginListener, GoogleApiC
 			@Override
 			public void run() {			
 				mGameHelper.setup(mGameHelperListener);
+				mGameHelper.setMaxAutoSignInAttempts(0);
 				setDebugMode(bDebug);
 			}
 		});
@@ -100,7 +101,6 @@ public class UserGooglePlay implements InterfaceUser, PluginListener, GoogleApiC
 	public void logout() {
 		if (mGameHelper != null) {
 			mGameHelper.signOut();
-			mGameHelper.setmListener(null);
 			LogD("Signed out");
 			UserWrapper.onActionResult(mUserGooglePlay, UserWrapper.ACTION_RET_LOGOUT_SUCCEED, "Google Play: logout successful.");
 		} else {

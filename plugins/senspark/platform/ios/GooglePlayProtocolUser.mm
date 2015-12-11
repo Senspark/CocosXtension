@@ -28,3 +28,16 @@ void GooglePlayProtocolUser::configureUser(const std::string &appId) {
     devInfo["GoogleClientID"] = appId;
     configDeveloperInfo(devInfo);
 }
+
+std::string GooglePlayProtocolUser::getUserID() {
+    return callStringFuncWithParam("getUserID", NULL);
+}
+
+std::string GooglePlayProtocolUser::getUserAvatarUrl() {
+    return callStringFuncWithParam("getUserAvatarUrl", NULL);
+}
+
+std::string GooglePlayProtocolUser::getUserDisplayName() {
+    return callStringFuncWithParam("getUserDisplayName", NULL);
+}
+

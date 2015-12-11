@@ -14,26 +14,13 @@
 
 
 @interface UserGooglePlay : NSObject <InterfaceUser> {
-//    std::unique_ptr<gpg::GameServices> _gameServices;
     NSString*   _clientID;
-//    BOOL        _silentlySigningIn;
 }
 
 @property BOOL debug;
-//@property (copy, nonatomic) NSMutableDictionary* _userInfo;
-
-// ----- Interface User ------
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
-- (void) login;
-- (void) logout;
-- (BOOL) isLoggedIn;
-- (NSString*) getSessionID;
-- (void) setDebugMode: (BOOL) debug;
-- (NSString*) getSDKVersion;
-- (NSString*) getPluginVersion;
 
 // ----- Interface of GooglePlayUser
-- (NSString*) getUserIdentifier;
+- (NSString*) getUserID;
 - (NSString*) getUserAvatarUrl;
 - (NSString*) getUserDisplayName;
 

@@ -23,16 +23,25 @@
  * @brief interfaces of protocol : InterfaceShare
  */
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
-- (void) shareToGooglePlus:(int32_t)level withScore:(int64_t)score withURLToShare:(NSString *)urlToShare withPreFillText:(NSString *)prefillText withContentDeepLinkId:(NSString *)contentDeepLinkId andDeepLinkId:(NSString *)deepLinkId;
+//- (void) shareToGooglePlus:(int32_t)level withScore:(int64_t)score withURLToShare:(NSString *)urlToShare withPreFillText:(NSString *)prefillText withContentDeepLinkId:(NSString *)contentDeepLinkId andDeepLinkId:(NSString *)deepLinkId;
 
-// ---- Delegate ---- 
-- (void)finishedSharingWithError:(NSError *)error;
-- (void)didReceiveDeepLink: (GPPDeepLink *)deepLink;
 
 - (void) setDebugMode: (BOOL) debug;
 
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;
+
+@end
+
+@interface ShareGooglePlusDelegate : NSObject  {}
+
+@property (assign) long callbackID;
+
+- (id) initWithCallbackID: (long) cbID;
+
+// ---- Delegate ----
+- (void)finishedSharingWithError:(NSError *)error;
+- (void)didReceiveDeepLink: (GPPDeepLink *)deepLink;
 
 @end
 

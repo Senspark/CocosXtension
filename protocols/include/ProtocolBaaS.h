@@ -73,7 +73,8 @@ namespace cocos2d { namespace plugin {
 
         void getObjectInBackground(const std::string& className, const std::string& objId, BaaSCallback& cb);
         void getObjectsInBackground(const std::string& className, const std::vector<std::string>& objIds, BaaSCallback& cb);
-        
+
+        void findObjectInBackground(const std::string& className, const std::string& key, const std::string value, BaaSCallback& cb);
         void findObjectsInBackground(const std::string& className, const std::string& key, const std::vector<std::string>& values, BaaSCallback& cb);
         
         const char* getObject(const std::string& className, const std::string& objId);
