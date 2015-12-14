@@ -26,6 +26,10 @@ public:
     void saveUserInfo(BaaSCallback& cb);
     void fetchUserInfo(BaaSCallback& cb);
     
+    std::string getInstallationInfo();
+    std::string setInstallationInfo(const std::map<std::string, std::string>& changes);
+    void saveInstallationInfo(BaaSCallback& cb);
+    
     void loginWithFacebookAccessToken(BaaSCallback& cb);
     
     void subcribeChannel(const std::string& channel);

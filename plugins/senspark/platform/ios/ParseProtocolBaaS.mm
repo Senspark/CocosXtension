@@ -44,6 +44,22 @@ void ParseProtocolBaaS::fetchUserInfo(BaaSCallback &cb) {
     callFuncWithParam("fetchUserInfo", &callbackParam, nullptr);
 }
 
+std::string ParseProtocolBaaS::getInstallationInfo() {
+    return callStringFuncWithParam("getInstallationInfo", nullptr);
+}
+
+std::string ParseProtocolBaaS::setInstallationInfo(const std::map<std::string, std::string>& changes) {
+    PluginParam params(changes);
+    
+    return callStringFuncWithParam("setInstallationInfo", &params, nullptr);
+}
+
+void ParseProtocolBaaS::saveInstallationInfo(BaaSCallback& cb) {
+    CallbackWrapper *wrapper = new CallbackWrapper(cb);
+    PluginParam callbackParam((long) wrapper);
+    callFuncWithParam("saveInstallationInfo", &callbackParam, nullptr);
+}
+
 void ParseProtocolBaaS::loginWithFacebookAccessToken(BaaSCallback& cb) {
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
     

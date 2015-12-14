@@ -34,4 +34,8 @@
 - (void)        saveUserInfo: (NSNumber*) cbID;
 - (void)        fetchUserInfo: (NSNumber*) cbID;
 
+- (NSString*)   getInstallationInfo;
+- (NSString*)   setInstallationInfo: (NSDictionary*) params;
+- (void)        saveInstallationInfo: (NSNumber*) cbID;
+
 @end

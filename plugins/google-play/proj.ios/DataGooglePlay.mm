@@ -103,7 +103,7 @@ using namespace cocos2d::plugin;
     return [DataGooglePlay convertSnapshotMetadataToDictionary:_conflictingSnapshotBase];
 }
 
-- (NSDictionary*) getConflictingSnapshotRemote {
+- (NSDictionary*) getConflictingMetadataRemote {
     return [DataGooglePlay convertSnapshotMetadataToDictionary:_conflictingSnapshotRemote];
 }
 

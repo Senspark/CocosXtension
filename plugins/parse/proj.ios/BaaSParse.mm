@@ -134,7 +134,6 @@ static BOOL sIsSet = false;
 }
 
 - (NSString*) getUserInfo {
-
     return [ParseUtils NSDictionaryToNSString:[BaaSParse convertPFUserToDictionary:[PFUser currentUser]]];
 }
 
@@ -183,6 +182,42 @@ static BOOL sIsSet = false;
         [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kSaveFailed andReturnMsg:@"" andCallbackID:cb];
     }
 }
+
+- (NSString*) getInstallationInfo {
+    return [ParseUtils NSDictionaryToNSString:[BaaSParse convertPFObjectToDictionary:[PFInstallation currentInstallation]]];
+}
+
+- (NSString*) setInstallationInfo:(NSDictionary *)params {
+    PFInstallation* installation = [PFInstallation currentInstallation];
+    
+    if (installation) {
+        for (NSString* key in [params keyEnumerator]) {
+            installation[key] = [params objectForKey:key];
+        }
+        
+        return [self getInstallationInfo];
+    }
+    
+    return @"";
+}
+
+- (void) saveInstallationInfo:(NSNumber *)cbID {
+    long cb = cbID ? [cbID longValue] : 0;
+    PFInstallation* parseInstall = [PFInstallation currentInstallation];
+    
+    if (parseInstall) {
+        [parseInstall saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded) {
+                [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kSaveSucceed andReturnObj:[BaaSParse convertPFObjectToDictionary:parseInstall] andCallbackID:cb];
+            } else {
+                [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kSaveFailed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cb];
+            }
+        }];
+    } else {
+        [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kSaveFailed andReturnMsg:@"" andCallbackID:cb];
+    }
+}
+
 
 - (NSString*) saveObject:(NSString *)className withParams:(NSDictionary *)obj {
     PFObject* parseObj = [PFObject objectWithClassName:className dictionary:obj];
