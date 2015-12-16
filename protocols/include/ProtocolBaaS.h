@@ -41,7 +41,7 @@ namespace cocos2d { namespace plugin {
         kFetchConfigSucceed,
         kFetchConfigFailed,
     };
-    
+
     typedef std::map<std::string, std::string> TBaaSInfo;
     
     class ProtocolBaaS : public PluginProtocol {
@@ -96,7 +96,24 @@ namespace cocos2d { namespace plugin {
         long    getLongConfig(const std::string& param);
         const char* getStringConfig(const std::string& param);
         const char* getArrayConfig(const std::string& param);
-        
+
+        /**
+         @brief set login callback function
+         */
+        inline void setCallback(const BaaSCallback &cb)
+        {
+            _callback = cb;
+        }
+
+        /**
+         @brief get login callback function
+         */
+        inline BaaSCallback& getCallback()
+        {
+            return _callback;
+        }
+    protected:
+        BaaSCallback _callback;
     };
 }}
 

@@ -28,7 +28,6 @@
 namespace cocos2d { namespace plugin {
 
     ProtocolUser::ProtocolUser()
-    : _listener(NULL)
     {
     }
     

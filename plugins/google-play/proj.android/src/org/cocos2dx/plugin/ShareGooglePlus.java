@@ -5,25 +5,16 @@ import java.util.Hashtable;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusShare;
 import com.google.games.utils.GameHelper;
 
 public class ShareGooglePlus implements InterfaceShare, PluginListener {
 	protected static final String LOG_TAG = "ShareGooglePlus";
 	
-	protected Activity mContext;
+	protected static Activity mContext;
 	protected ShareGooglePlus mShareGooglePlus;
 	protected GameHelper mGameHelper;
 	protected boolean bDebug = true;
@@ -119,8 +110,7 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
 		return true;
 	}
 
-	@Override
-	public void shareToGooglePlus(int level, long score, String urlToShare, String prefillText, String contentDeepLinkId, String deepLinkId) {
+	public static void shareToGooglePlus(String urlToShare, String prefillText, String contentDeepLinkId, String deepLinkId) {
 		// TODO Auto-generated method stub
 		PlusShare.Builder builder = new PlusShare.Builder(mContext);
         // Set call-to-action metadata.
@@ -136,14 +126,19 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
         builder.setContentDeepLinkId("/url/gmci");
 
         // Set the share text.
-        String text = "Wow! I just completed level " + level + " and had $" + score + ", try to beat that! Download this game";
-        builder.setText(text);
+        
+        builder.setText(prefillText);
         ((Activity) mContext).startActivityForResult(builder.getIntent(), RC_SHARE_G_PLUS);
 	}
 
 	@Override
 	public void share(Hashtable<String, String> cpInfo) {
-		// TODO Auto-generated method stub
+		String urlToShare 			= cpInfo.get("urlToShare");
+		String prefillText 			= cpInfo.get("prefillText");
+		String deepLinkId 			= cpInfo.get("deepLinkId");
+		String contentDeepLinkId 	= cpInfo.get("contentDeepLinkId");
+		
+		shareToGooglePlus(urlToShare, prefillText, contentDeepLinkId, deepLinkId);
 		
 	}
 }

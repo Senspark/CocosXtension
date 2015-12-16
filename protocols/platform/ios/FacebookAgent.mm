@@ -1,5 +1,5 @@
 #include "AgentManager.h"
-#include "FacebookAgent.h"
+
 namespace cocos2d{namespace plugin{
     
     static FacebookAgent* s_sharedFacebookAgent = nullptr;

@@ -22,8 +22,20 @@ GooglePlayProtocolUser::~GooglePlayProtocolUser() {
 }
 
 void GooglePlayProtocolUser::configureUser(const std::string& appId) {
-    TUserDeveloperInfo devInfo;
+    TUserInfo devInfo;
     devInfo["GoogleClientID"] = appId;
 
     configDeveloperInfo(devInfo);
+}
+
+std::string GooglePlayProtocolUser::getUserAvatarUrl() {
+	return PluginUtils::callJavaStringFuncWithName(this, "getUserAvatarUrl");
+}
+
+std::string GooglePlayProtocolUser::getUserDisplayName() {
+	return PluginUtils::callJavaStringFuncWithName(this, "getUserDisplayName");
+}
+
+std::string GooglePlayProtocolUser::getUserID() {
+	return PluginUtils::callJavaStringFuncWithName(this, "getUserID");
 }

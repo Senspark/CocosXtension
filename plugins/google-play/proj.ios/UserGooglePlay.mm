@@ -7,11 +7,6 @@
 //
 
 #import "UserGooglePlay.h"
-
-#import <gpg/GooglePlayGames.h>
-#import <GooglePlus/GooglePlus.h>
-#import <GoogleOpenSource/GoogleOpenSource.h>
-
 #import "UserWrapper.h"
 #import "ProtocolUser.h"
 
@@ -43,7 +38,8 @@ using namespace cocos2d::plugin;
     signIn.scopes = @[ kGTLAuthScopePlusLogin ];  // "https://www.googleapis.com/auth/plus.login" scope
 
     // Optional: declare signIn.actions, see "app activities"
-    signIn.delegate = self;
+    id delegate = self;
+    signIn.delegate = delegate;
 
     [signIn trySilentAuthentication];
 
@@ -109,6 +105,8 @@ using namespace cocos2d::plugin;
 {
     [self login];
 }
+
+
 
 #pragma mark -
 #pragma mark Delegate

@@ -25,7 +25,7 @@ THE SOFTWARE.
 @protocol InterfaceShare <NSObject>
 
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
-- (void) share: (NSMutableDictionary*) shareInfo withCallback: (long) cbID;
+- (void) share: (NSMutableDictionary*) shareInfo;
 - (void) setDebugMode: (BOOL) debug;
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;

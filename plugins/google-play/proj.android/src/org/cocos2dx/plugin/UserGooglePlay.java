@@ -217,7 +217,7 @@ public class UserGooglePlay implements InterfaceUser, PluginListener, GoogleApiC
 	}
 
 	@Override
-	public String getUserIdentifier() {
+	public String getUserID() {
 		return Plus.PeopleApi.getCurrentPerson(mGameHelper.getApiClient()).getId();
 	}
 

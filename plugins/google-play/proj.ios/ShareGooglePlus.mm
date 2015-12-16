@@ -16,7 +16,7 @@
 
 using namespace cocos2d::plugin;
 
-@interface ShareGooglePlus()
+@interface ShareGooglePlus() <GPPDeepLinkDelegate, GPPShareDelegate>
 
 @end
 
@@ -27,19 +27,18 @@ using namespace cocos2d::plugin;
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo
 {
     // init G+
-    [GPPDeepLink setDelegate: ShareGooglePlusDelegate.self];
+    [GPPDeepLink setDelegate: self];
     [GPPDeepLink readDeepLinkAfterInstall];
 }
 
-- (void) share:(NSMutableDictionary *)shareInfo withCallback:(long)cbID {
-    id delegate = [[ShareGooglePlusDelegate alloc] initWithCallbackID:cbID];
+- (void) share:(NSMutableDictionary *)shareInfo {
 
     NSString* urlToShare        = (NSString*) [shareInfo objectForKey:@"urlToShare"];
     NSString* prefillText       = (NSString*) [shareInfo objectForKey:@"prefillText"];
     NSString* deepLinkId        = (NSString*) [shareInfo objectForKey:@"deepLinkId"];
     NSString* contentDeepLinkId = (NSString*) [shareInfo objectForKey:@"contentDeepLinkId"];
 
-    [GPPShare sharedInstance].delegate = delegate; //set delegate for GPPShare
+    [[GPPShare sharedInstance] setDelegate: self]; //set delegate for GPPShare
     id<GPPNativeShareBuilder> shareBuilder = [[GPPShare sharedInstance] nativeShareDialog];
 
     [shareBuilder setURLToShare:[NSURL URLWithString:urlToShare]];
@@ -74,32 +73,15 @@ using namespace cocos2d::plugin;
     return @"0.1.0";
 }
 
-@end
 
-@interface ShareGooglePlusDelegate() <GPPDeepLinkDelegate, GPPShareDelegate>
-@end
-
-@implementation ShareGooglePlusDelegate
-
-@synthesize callbackID = _callbackID;
 
 #pragma mark -
 #pragma mark Delegate
-- (id) initWithCallbackID: (long) cbID {
-    _callbackID = 0;
-    if (self = [super init]) {
-        _callbackID = cbID;
-        return self;
-    }
-    _callbackID = 0;
-    return nil;
-}
-
 - (void)finishedSharingWithError:(NSError *)error {
     if (!error) {
-        [ShareWrapper onShareResult:self withRet:(int) ShareResultCode::kShareSuccess withContent:nil withMsg:@"[Google+] Share succeeded" andCallbackID: _callbackID];
+        [ShareWrapper onShareResult:self withRet:(int) ShareResultCode::kShareSuccess withContent:nil withMsg:@"[Google+] Share succeeded"];
     } else {
-        [ShareWrapper onShareResult:self withRet:(int) ShareResultCode::kShareFail withContent:nil withMsg:@"[Google+] Share failed" andCallbackID: _callbackID];
+        [ShareWrapper onShareResult:self withRet:(int) ShareResultCode::kShareFail withContent:nil withMsg:@"[Google+] Share failed"];
     }
 }
 

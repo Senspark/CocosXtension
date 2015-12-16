@@ -341,12 +341,12 @@ static BOOL sIsSet = false;
     PFQuery* query = [PFQuery queryWithClassName:className];
     [query whereKey:key equalTo:value];
     [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
-        if (!error) {
-            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int) BaaSActionResultCode::kRetrieveSucceed andReturnMsg:@"" andCallbackID:callbackId];
-            NSLog(@"Retrieve object successfully.");
-        } else {
+        if (error) {
             [BaaSWrapper onBaaSActionResult:self withReturnCode:(int) BaaSActionResultCode::kRetrieveFailed andReturnMsg:@"" andCallbackID:callbackId];
             NSLog(@"Retrieve object fail.");
+        } else {
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int) BaaSActionResultCode::kRetrieveSucceed andReturnMsg:@"" andCallbackID:callbackId];
+            NSLog(@"Retrieve object successfully.");
         }
     }];
 }

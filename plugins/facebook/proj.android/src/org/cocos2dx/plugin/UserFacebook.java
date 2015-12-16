@@ -156,7 +156,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	}
 
 	@Override
-	public void login() {
+	public void login(long callbackID) {
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
@@ -166,7 +166,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	}
 
 	@Override
-	public void logout() {
+	public void logout(long callbackID) {
 		if (mAccessToken != null) {
 			LoginManager.getInstance().logOut();
 			mAccessToken = null;
@@ -180,12 +180,24 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 		}
 	}
 
+	@Override
 	public String getUserID() {
 		if (mAccessToken != null)
 			return mAccessToken.getUserId();
 		return null;
 	}
 
+	@Override
+	public String getUserAvatarUrl() {
+		return null;
+	}
+	
+	@Override
+	public String getUserDisplayName() {
+		return null;
+	}
+	
+	@Override
 	public boolean isLoggedIn() {
 		return isLoggedIn;
 	}
@@ -233,7 +245,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	}
 
 	public void graphRequest(final String graphPath, final JSONObject params,
-			final int nativeCallback) {
+			final long nativeCallback) {
 		PluginWrapper.runOnMainThread(new Runnable() {
 
 			@Override
@@ -297,7 +309,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 		try {
 			String graphPath = info.getString("Param1");
 			JSONObject jsonParameters = info.getJSONObject("Param2");
-			int nativeCallback = info.getInt("Param3");
+			long nativeCallback = info.getLong("Param3");
 
 			graphRequest(graphPath, jsonParameters, nativeCallback);
 		} catch (JSONException ex) {
@@ -306,7 +318,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	}
 
 	public void request(final String graphPath, final int method,
-			final JSONObject jsonParams, final int nativeCallback) {
+			final JSONObject jsonParams, final long nativeCallback) {
 		PluginWrapper.runOnMainThread(new Runnable() {
 
 			@Override
@@ -371,7 +383,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 			String graphPath = info.getString("Param1");
 			int method = info.getInt("Param2");
 			JSONObject jsonParameters = info.getJSONObject("Param3");
-			int nativeCallback = info.getInt("Param4");
+			long nativeCallback = info.getLong("Param4");
 
 			request(graphPath, method, jsonParameters, nativeCallback);
 		} catch (JSONException ex) {
@@ -379,7 +391,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 		}
 	}
 
-	private native void nativeRequestCallback(int ret, String msg, int cbIndex);
+	private native void nativeRequestCallback(int ret, String msg, long cbID);
 
 	@Override
 	public void onStart() {
