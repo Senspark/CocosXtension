@@ -30,12 +30,12 @@
 - (NSString*)   getPluginVersion;
 
 - (NSString*)   getUserInfo;
-- (NSString*)   setUserInfo: (NSDictionary*) params;
+- (NSString*)   setUserInfo: (NSString*) params;
 - (void)        saveUserInfo: (NSNumber*) cbID;
 - (void)        fetchUserInfo: (NSNumber*) cbID;
 
 - (NSString*)   getInstallationInfo;
-- (NSString*)   setInstallationInfo: (NSDictionary*) params;
+- (NSString*)   setInstallationInfo: (NSString*) params;
 - (void)        saveInstallationInfo: (NSNumber*) cbID;
 
 @end

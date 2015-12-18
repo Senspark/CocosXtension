@@ -137,7 +137,8 @@ static BOOL sIsSet = false;
     return [ParseUtils NSDictionaryToNSString:[BaaSParse convertPFUserToDictionary:[PFUser currentUser]]];
 }
 
-- (NSString*) setUserInfo: (NSDictionary*) params {
+- (NSString*) setUserInfo: (NSString*) jsonChanges {
+    NSDictionary* params = [ParseUtils NSStringToArrayOrNSDictionary:jsonChanges];
     PFUser* parseUser = [PFUser currentUser];
     
     if (parseUser) {
@@ -187,7 +188,9 @@ static BOOL sIsSet = false;
     return [ParseUtils NSDictionaryToNSString:[BaaSParse convertPFObjectToDictionary:[PFInstallation currentInstallation]]];
 }
 
-- (NSString*) setInstallationInfo:(NSDictionary *)params {
+- (NSString*) setInstallationInfo:(NSString *)json {
+    NSDictionary* params = [ParseUtils NSStringToArrayOrNSDictionary:json];
+    
     PFInstallation* installation = [PFInstallation currentInstallation];
     
     if (installation) {
