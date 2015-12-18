@@ -36,7 +36,6 @@ void FacebookProtocolUser::loginWithReadPermissions(const std::string &permissio
 
 void FacebookProtocolUser::loginWithReadPermissions(const std::string &permission, FacebookProtocolUser::UserCallback &cb) {
     
-    setCallback(cb);
     loginWithReadPermissions(permission);
 }
 
@@ -47,7 +46,6 @@ void FacebookProtocolUser::loginWithPublishPermissions(const std::string& permis
 
 void FacebookProtocolUser::loginWithPublishPermissions(const std::string& permissions, FacebookProtocolUser::UserCallback& cb) {
     
-    setCallback(cb);
     loginWithPublishPermissions(permissions);
 }
 
@@ -63,7 +61,7 @@ void FacebookProtocolUser::graphRequest(const std::string& graphPath, const FBPa
     CallbackWrapper *wrapper = new CallbackWrapper(callback);
     PluginParam cbID((long)wrapper);
     
-    callFuncWithParam("graphRequestWithParams", &pathParam, &paramsParam, &cbID, nullptr);
+    callFuncWithParam("graphRequest", &pathParam, &paramsParam, &cbID, nullptr);
 }
 
 void FacebookProtocolUser::api(const std::string &graphPath, HttpMethod method, const FBParam &params, FacebookProtocolUser::UserCallback &callback) {
@@ -74,5 +72,5 @@ void FacebookProtocolUser::api(const std::string &graphPath, HttpMethod method, 
     CallbackWrapper *wrapper = new CallbackWrapper(callback);
     PluginParam cbID((long)wrapper);
     
-    callFuncWithParam("api", &pathParam, &_method, &paramsParam, &cbID, NULL);
+    callFuncWithParam("request", &pathParam, &_method, &paramsParam, &cbID, NULL);
 }

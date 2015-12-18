@@ -12,6 +12,9 @@
 #import <Foundation/Foundation.h>
 #import <InterfaceUser.h>
 
+#import <gpg/GooglePlayGames.h>
+#import <GooglePlus/GooglePlus.h>
+#import <GoogleOpenSource/GoogleOpenSource.h>
 
 @interface UserGooglePlay : NSObject <InterfaceUser> {
     NSString*   _clientID;
@@ -27,6 +30,17 @@
 
 - (void) beginUserInitiatedSignIn;
 
+// ---- Delegate ----
+- (void)finishedWithAuth:(GTMOAuth2Authentication *)auth error:(NSError *)error;
+- (void)didFinishGamesSignInWithError:(NSError *)error;
+- (void)didFinishGamesSignOutWithError:(NSError *)error;
+- (void)didFinishGoogleAuthWithError:(NSError *)error;
+
+
 @end
+
+
+
+
 
 #endif

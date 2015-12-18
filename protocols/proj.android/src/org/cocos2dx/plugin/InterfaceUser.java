@@ -31,13 +31,14 @@ public interface InterfaceUser {
 	public void configDeveloperInfo(Hashtable<String, String> cpInfo);
 	public void login();
 	public void logout();
+	
 	public boolean isLoggedIn();
 	public String getSessionID();
+	public String getUserID();
+	public String getUserAvatarUrl();
+	public String getUserDisplayName();
+	
 	public void setDebugMode(boolean debug);
 	public String getSDKVersion();
 	public String getPluginVersion();
-	
-	public String getUserIdentifier();
-	public String getUserAvatarUrl();
-	public String getUserDisplayName();
 }

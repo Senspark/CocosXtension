@@ -80,7 +80,8 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 
 	@Override
-	public void signUp(Hashtable<String, String> userInfo) {
+	public void signUp(Hashtable<String, String> userInfo, long callbackID) {
+		final long cbID = callbackID;
 		ParseUser user = new ParseUser();
 		user.setUsername(userInfo.get("username"));
 		user.setPassword(userInfo.get("password"));
@@ -97,26 +98,27 @@ public class BaaSParse implements InterfaceBaaS {
 			public void done(ParseException e) {
 
 				if (e == null) {
-					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_SignUpSucceed, makeErrorJsonString(e));
+					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_SignUpSucceed, makeErrorJsonString(e), cbID);
 				} else {
-					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_SignUpFailed, makeErrorJsonString(e));
+					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_SignUpFailed, makeErrorJsonString(e), cbID);
 				}
 			}
 		});
 	}
 
 	@Override
-	public void login(String userName, String password) {
+	public void login(String userName, String password, long callbackID) {
+		final long cbID = callbackID;
 		ParseUser.logInInBackground(userName, password, new LogInCallback() {
 			
 			@Override
 			public void done(ParseUser user, ParseException e) {
 				if (e == null) {
-		            BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_LoginSucceed, makeErrorJsonString(e)); 
+		            BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_LoginSucceed, makeErrorJsonString(e), cbID); 
 		            
 		            Log.i(LOG_TAG, "Login successfully.");
 		        } else {
-		        	BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_LoginFailed, makeErrorJsonString(e));
+		        	BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_LoginFailed, makeErrorJsonString(e), cbID);
 		            
 		            Log.i(LOG_TAG, "Error when logging in. Error: " + e.getMessage());
 		        }
@@ -125,16 +127,17 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 
 	@Override
-	public void logout() {
+	public void logout(long callbackID) {
+		final long cbID = callbackID;
 		ParseUser.logOutInBackground(new LogOutCallback() {
 			@Override
 			public void done(ParseException e) {
 				if (e == null) {
-					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_LogoutSucceed, makeErrorJsonString(e));
+					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_LogoutSucceed, makeErrorJsonString(e), cbID);
 					
 					Log.i(LOG_TAG, "Logout successfully");
 				} else {
-					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_LogoutFailed, makeErrorJsonString(e));
+					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_LogoutFailed, makeErrorJsonString(e), cbID);
 					
 					Log.i(LOG_TAG, "Logout error.");
 				}
@@ -165,7 +168,8 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 
 	@Override
-	public void saveObjectInBackground(String className, String json) {
+	public void saveObjectInBackground(String className, String json, long callbackID) {
+		final long cbID = callbackID;
 		try {
 			JSONObject jsonObj = new JSONObject(json);
 			final ParseObject parseObj = convertJSONObject(className, jsonObj);
@@ -174,16 +178,16 @@ public class BaaSParse implements InterfaceBaaS {
 				@Override
 				public void done(ParseException e) {
 					if (e == null) {
-						BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_SaveSucceed, parseObj.getObjectId());
+						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_SaveSucceed, parseObj.getObjectId(), cbID);
 						Log.i(LOG_TAG, "Save object successfully.");
 					} else {
-						BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_SaveFailed, makeErrorJsonString(e));
+						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_SaveFailed, makeErrorJsonString(e), cbID);
 						Log.i(LOG_TAG, "Error when saving object. Error: " + e.getMessage());
 					}
 				}
 			});
 		} catch (JSONException ex) {
-			BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_SaveFailed, null);
+			BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_SaveFailed, null, cbID);
 			Log.i(LOG_TAG, "Error when parse json string.");
 		}
 	}
@@ -208,30 +212,31 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 	
 	@Override
-	public void getObjectInBackgroundEqualTo(String equalTo, String className, String objId) {
+	public void findObjectInBackground(String className, String whereKey, String equalTo, long callbackID) {
+		final long cbID = callbackID;
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
-		query.whereEqualTo(equalTo, objId);
-		query.getInBackground(objId, new GetCallback<ParseObject>() {
-			
+		query.whereEqualTo(whereKey, equalTo);
+		query.getFirstInBackground(new GetCallback<ParseObject>() {
+
 			@Override
 			public void done(ParseObject obj, ParseException e) {
 				if (e == null) {
 					JSONObject jsonObj = new JSONObject();
-					
+
 					try {
 						for (String key : obj.keySet()) {
 							jsonObj.accumulate(key, obj.get(key));
 						}
-						
-						BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_RetrieveSucceed, jsonObj.toString());
+
+						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveSucceed, jsonObj.toString(), cbID);
 						Log.i(LOG_TAG, "Retrieve object successfully. ");
 					} catch (JSONException ex) {
-						BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_RetrieveFailed, null);
+						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveFailed, null, cbID);
 						Log.i(LOG_TAG, "Error when converting parse object to json. " + ex.getMessage());
 					}
- 					
+
 				} else {
-					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_RetrieveFailed, makeErrorJsonString(e));
+					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveFailed, makeErrorJsonString(e), cbID);
 					Log.i(LOG_TAG, "Error when retrieve object. " + e.getMessage());
 				}
 			}
@@ -239,7 +244,8 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 	
 	@Override
-	public void getObjectInBackground(String className, String objId) {
+	public void getObjectInBackground(String className, String objId, long callbackID) {
+		final long cbID = callbackID;
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
 		query.getInBackground(objId, new GetCallback<ParseObject>() {
 			
@@ -253,15 +259,15 @@ public class BaaSParse implements InterfaceBaaS {
 							jsonObj.accumulate(key, obj.get(key));
 						}
 						
-						BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_RetrieveSucceed, jsonObj.toString());
+						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveSucceed, jsonObj.toString(), cbID);
 						Log.i(LOG_TAG, "Retrieve object successfully. ");
 					} catch (JSONException ex) {
-						BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_RetrieveFailed, null);
+						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveFailed, null, cbID);
 						Log.i(LOG_TAG, "Error when converting parse object to json. " + ex.getMessage());
 					}
  					
 				} else {
-					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_RetrieveFailed, makeErrorJsonString(e));
+					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveFailed, makeErrorJsonString(e), cbID);
 					Log.i(LOG_TAG, "Error when retrieve object. " + e.getMessage());
 				}
 			}
@@ -292,7 +298,8 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public void updateObjectInBackground(String className, String objId,
-			final String jsonChanges) {
+			final String jsonChanges, long callbackID) {
+		final long cbID = callbackID;
 		ParseQuery<ParseObject>	query = ParseQuery.getQuery(className);
 		
 		query.getInBackground(objId, new GetCallback<ParseObject>() {
@@ -308,20 +315,20 @@ public class BaaSParse implements InterfaceBaaS {
 							@Override
 							public void done(ParseException e) {
 								if (e == null) {
-									BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_RetrieveSucceed, parseObj.getObjectId());
+									BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveSucceed, parseObj.getObjectId(), cbID);
 									Log.i(LOG_TAG, "Update object successfully. ");
 								} else {
-									BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_UpdateFailed, makeErrorJsonString(e));
+									BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_UpdateFailed, makeErrorJsonString(e), cbID);
 									Log.i(LOG_TAG, "Error when saving object. " + e.getMessage());
 								}
 							}
 						});
 					} catch (JSONException ex) {
-						BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_RetrieveFailed, null);
+						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveFailed, null, cbID);
 						Log.i(LOG_TAG, "Error when converting parse object to json. " + ex.getMessage());
 					}
 				} else {
-					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_UpdateFailed, makeErrorJsonString(e));
+					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_UpdateFailed, makeErrorJsonString(e), cbID);
 				}
 			}
 		});
@@ -349,7 +356,8 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 	
 	@Override
-	public void deleteObjectInBackground(String className, String objId) {
+	public void deleteObjectInBackground(String className, String objId, long callbackID) {
+		final long cbID = callbackID;
 		ParseQuery<ParseObject>	query = ParseQuery.getQuery(className);
 
 		query.getInBackground(objId, new GetCallback<ParseObject>() {
@@ -363,18 +371,18 @@ public class BaaSParse implements InterfaceBaaS {
 						public void done(ParseException arg0) {
 							if (arg0 == null) {
 								Log.i("Parse", "Delete object in background successfully");
-								BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_DeleteSucceed, null);
+								BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_DeleteSucceed, null, cbID);
 
 							} else {
 								Log.e("Parse", "Delete object in background failed with error: " + arg0);
-								BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_DeleteFailed, makeErrorJsonString(arg0));
+								BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_DeleteFailed, makeErrorJsonString(arg0), cbID);
 							}
 						}
 					});
 
 				} else {
 					Log.e("Parse", "Cannot find object for deleting");
-					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_DeleteFailed, makeErrorJsonString(e));
+					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_DeleteFailed, makeErrorJsonString(e), cbID);
 				}
 			}
 		});
@@ -395,7 +403,10 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 	
 	@Override
-	public void fetchConfigInBackground() {
+	public void fetchConfigInBackground(long callbackID) {
+		final long cbID = callbackID;
+		
+		Log.i("BaaSParse", "Callback address: " + callbackID);
 		ParseConfig.getInBackground(new ConfigCallback() {
 			
 			@Override
@@ -403,11 +414,11 @@ public class BaaSParse implements InterfaceBaaS {
 				if (config != null && e == null) {
 					Log.i("Parse", "Fetch config from server successfully");
 					mCurrentConfig = config;
-					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_FetchConfigSucceed, "Fetch config from server successfully");
+					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_FetchConfigSucceed, "Fetch config from server successfully", cbID);
 				} else {
 					Log.e("Parse", "Fetch config from server failed. Use current config instead");
 					mCurrentConfig = ParseConfig.getCurrentConfig();
-					BaaSWrapper.onActionResult(mAdapter, RESULT_CODE_FetchConfigFailed, makeErrorJsonString(e));
+					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_FetchConfigFailed, makeErrorJsonString(e), cbID);
 				}
 			}
 		});

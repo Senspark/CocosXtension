@@ -1,11 +1,16 @@
 package org.cocos2dx.plugin;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.util.Log;
 
 public class BaaSWrapper {
-	public static void onActionResult(InterfaceBaaS adapter, int code, String result) {
+	public static void onBaaSActionResult(InterfaceBaaS adapter, int code, String result, long callbackID) {
 		final int curCode = code;
 		final String curResult = result;
 		final InterfaceBaaS curObj = adapter;
+		final long cbID = callbackID;
 		
 		PluginWrapper.runOnGLThread(new Runnable() {
 			
@@ -13,10 +18,11 @@ public class BaaSWrapper {
 			public void run() {
 				String name = curObj.getClass().getName();
 				name = name.replace('.', '/');
-				BaaSWrapper.nativeOnActionResult(name, curCode, curResult);
+				Log.i("BaaSWrapper", "Callback address >>> " + cbID);
+				BaaSWrapper.nativeOnBaaSActionResult(name, curCode, curResult, cbID);
 			}
 		});
 	}
 	
-	private native static void nativeOnActionResult(String className, int code, String result);
+	private native static void nativeOnBaaSActionResult(String className, int code, String result, long callbackID);
 }

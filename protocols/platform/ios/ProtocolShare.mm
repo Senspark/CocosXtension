@@ -58,9 +58,9 @@ void ProtocolShare::share(TShareInfo &info, ShareCallback& cb)
         NSObject<InterfaceShare>* curObj = ocObj;
         NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&info);
         
-        CallbackWrapper *wrapper = new CallbackWrapper(cb);
+        _callback = cb;
         
-        [curObj share:pDict withCallback:(long)wrapper];
+        [curObj share:pDict];
     }
 }
     

@@ -55,13 +55,6 @@ enum class UserPermissionResult{
     kPermissionSucceed = 0,
     kPermissionFailed,
 };
-    
-class ProtocolUser;
-class UserActionListener
-{
-public:
-    virtual void onActionResult(ProtocolUser* pPlugin, UserActionResultCode code, const char* msg) = 0;
-};
 
 class ProtocolUser : public PluginProtocol
 {
@@ -70,6 +63,7 @@ public:
     virtual ~ProtocolUser();
 
     typedef std::function<void(int, std::string&)> UserCallback;
+    
     typedef struct __CallbackWrapper {
         __CallbackWrapper(UserCallback& callback) {
             fnPtr = callback;
@@ -113,6 +107,16 @@ public:
     std::string getAccessToken();
 
     /**
+     * @brief get User ID
+     */
+    std::string getUserID();
+
+    std::string getAvatarUrl();
+
+    std::string getDisplayName();
+
+
+    /**
      @brief set login callback function
      */
     inline void setCallback(const UserCallback &cb)
@@ -129,7 +133,6 @@ public:
     }
 
 protected:
-    UserActionListener* _listener;
     UserCallback _callback;
 };
 
