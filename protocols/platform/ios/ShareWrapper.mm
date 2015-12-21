@@ -51,6 +51,23 @@ using namespace cocos2d::plugin;
         PluginUtilsIOS::outputLog("Can't find the C++ object of the Share plugin");
     }
 }
+
++ (void) onShareResult:(id) obj withRet:(int) ret withContent: (NSDictionary*) content withMsg:(NSString*) msg andCallbackID: (long) cbID {
+    PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
+    ProtocolShare* pShare = dynamic_cast<ProtocolShare*>(pPlugin);
+    if (pShare && cbID) {
+        ProtocolShare::CallbackWrapper* wrapper = (ProtocolShare::CallbackWrapper*) cbID;
+        
+        std::string stdmsg = msg ? [msg UTF8String] : "";
+        
+        wrapper->fnPtr(ret, [ParseUtils createMapFromDict:content], stdmsg);
+        
+        delete wrapper;
+    } else {
+        PluginUtilsIOS::outputLog("Can't find the C++ object of the Share plugin or listener.");
+    }
+}
+
 #pragma GCC diagnostic pop
 
 + (UIViewController *)getCurrentRootViewController;

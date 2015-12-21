@@ -22,12 +22,12 @@ public:
     virtual ~ParseProtocolBaaS();
     
     std::string getUserInfo();
-    std::string setUserInfo(const std::map<std::string, std::string>& changes);
+    std::string setUserInfo(const std::string& jsonChanges);
     void saveUserInfo(BaaSCallback& cb);
     void fetchUserInfo(BaaSCallback& cb);
     
     std::string getInstallationInfo();
-    std::string setInstallationInfo(const std::map<std::string, std::string>& changes);
+    std::string setInstallationInfo(const std::string& changes);
     void saveInstallationInfo(BaaSCallback& cb);
     
     void loginWithFacebookAccessToken(BaaSCallback& cb);

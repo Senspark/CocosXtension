@@ -22,8 +22,8 @@ std::string ParseProtocolBaaS::getUserInfo() {
     return callStringFuncWithParam("getUserInfo", nullptr);
 }
 
-std::string ParseProtocolBaaS::setUserInfo(const map<string, string> &changes) {
-    PluginParam params(changes);
+std::string ParseProtocolBaaS::setUserInfo(const std::string& jsonChanges) {
+    PluginParam params(jsonChanges.c_str());
     
     return callStringFuncWithParam("setUserInfo", &params, nullptr);
 }
@@ -48,8 +48,8 @@ std::string ParseProtocolBaaS::getInstallationInfo() {
     return callStringFuncWithParam("getInstallationInfo", nullptr);
 }
 
-std::string ParseProtocolBaaS::setInstallationInfo(const std::map<std::string, std::string>& changes) {
-    PluginParam params(changes);
+std::string ParseProtocolBaaS::setInstallationInfo(const std::string& changes) {
+    PluginParam params(changes.c_str());
     
     return callStringFuncWithParam("setInstallationInfo", &params, nullptr);
 }
