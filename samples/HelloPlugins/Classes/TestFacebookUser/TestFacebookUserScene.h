@@ -25,7 +25,6 @@ THE SOFTWARE.
 #define __TEST_FACEBOOK_USER_SCENE_H__
 
 #include "cocos2d.h"
-#include "FacebookAgent.h"
 
 class TestFacebookUser : public cocos2d::Layer
 {
