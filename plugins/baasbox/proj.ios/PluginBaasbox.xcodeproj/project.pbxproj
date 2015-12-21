@@ -1,0 +1,303 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		172487A31C27B580003E625B /* PluginBaasbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 172487A21C27B580003E625B /* PluginBaasbox.m */; };
+		172487B31C27B5E5003E625B /* BAAClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 172487A61C27B5E5003E625B /* BAAClient.m */; };
+		172487B41C27B5E5003E625B /* BAAFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 172487A81C27B5E5003E625B /* BAAFile.m */; };
+		172487B51C27B5E5003E625B /* BAAGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = 172487AA1C27B5E5003E625B /* BAAGlobals.m */; };
+		172487B61C27B5E5003E625B /* BAAMutableURLRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 172487AC1C27B5E5003E625B /* BAAMutableURLRequest.m */; };
+		172487B71C27B5E5003E625B /* BAAObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 172487AE1C27B5E5003E625B /* BAAObject.m */; };
+		172487B81C27B5E5003E625B /* BaasBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 172487B01C27B5E5003E625B /* BaasBox.m */; };
+		172487B91C27B5E5003E625B /* BAAUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 172487B21C27B5E5003E625B /* BAAUser.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1724878F1C27B3FF003E625B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		172487911C27B3FF003E625B /* libPluginBaasbox.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginBaasbox.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		172487A11C27B580003E625B /* PluginBaasbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginBaasbox.h; sourceTree = SOURCE_ROOT; };
+		172487A21C27B580003E625B /* PluginBaasbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PluginBaasbox.m; sourceTree = SOURCE_ROOT; };
+		172487A51C27B5E5003E625B /* BAAClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BAAClient.h; path = "baasbox-lib/BAAClient.h"; sourceTree = "<group>"; };
+		172487A61C27B5E5003E625B /* BAAClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BAAClient.m; path = "baasbox-lib/BAAClient.m"; sourceTree = "<group>"; };
+		172487A71C27B5E5003E625B /* BAAFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BAAFile.h; path = "baasbox-lib/BAAFile.h"; sourceTree = "<group>"; };
+		172487A81C27B5E5003E625B /* BAAFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BAAFile.m; path = "baasbox-lib/BAAFile.m"; sourceTree = "<group>"; };
+		172487A91C27B5E5003E625B /* BAAGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BAAGlobals.h; path = "baasbox-lib/BAAGlobals.h"; sourceTree = "<group>"; };
+		172487AA1C27B5E5003E625B /* BAAGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BAAGlobals.m; path = "baasbox-lib/BAAGlobals.m"; sourceTree = "<group>"; };
+		172487AB1C27B5E5003E625B /* BAAMutableURLRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BAAMutableURLRequest.h; path = "baasbox-lib/BAAMutableURLRequest.h"; sourceTree = "<group>"; };
+		172487AC1C27B5E5003E625B /* BAAMutableURLRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BAAMutableURLRequest.m; path = "baasbox-lib/BAAMutableURLRequest.m"; sourceTree = "<group>"; };
+		172487AD1C27B5E5003E625B /* BAAObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BAAObject.h; path = "baasbox-lib/BAAObject.h"; sourceTree = "<group>"; };
+		172487AE1C27B5E5003E625B /* BAAObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BAAObject.m; path = "baasbox-lib/BAAObject.m"; sourceTree = "<group>"; };
+		172487AF1C27B5E5003E625B /* BaasBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaasBox.h; path = "baasbox-lib/BaasBox.h"; sourceTree = "<group>"; };
+		172487B01C27B5E5003E625B /* BaasBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaasBox.m; path = "baasbox-lib/BaasBox.m"; sourceTree = "<group>"; };
+		172487B11C27B5E5003E625B /* BAAUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BAAUser.h; path = "baasbox-lib/BAAUser.h"; sourceTree = "<group>"; };
+		172487B21C27B5E5003E625B /* BAAUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BAAUser.m; path = "baasbox-lib/BAAUser.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1724878E1C27B3FF003E625B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		172487881C27B3FF003E625B = {
+			isa = PBXGroup;
+			children = (
+				172487931C27B3FF003E625B /* ios */,
+				172487A01C27B491003E625B /* baasbox-lib */,
+				172487921C27B3FF003E625B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		172487921C27B3FF003E625B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				172487911C27B3FF003E625B /* libPluginBaasbox.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		172487931C27B3FF003E625B /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				172487A11C27B580003E625B /* PluginBaasbox.h */,
+				172487A21C27B580003E625B /* PluginBaasbox.m */,
+			);
+			name = ios;
+			path = PluginBaasbox;
+			sourceTree = "<group>";
+		};
+		172487A01C27B491003E625B /* baasbox-lib */ = {
+			isa = PBXGroup;
+			children = (
+				172487A51C27B5E5003E625B /* BAAClient.h */,
+				172487A61C27B5E5003E625B /* BAAClient.m */,
+				172487A71C27B5E5003E625B /* BAAFile.h */,
+				172487A81C27B5E5003E625B /* BAAFile.m */,
+				172487A91C27B5E5003E625B /* BAAGlobals.h */,
+				172487AA1C27B5E5003E625B /* BAAGlobals.m */,
+				172487AB1C27B5E5003E625B /* BAAMutableURLRequest.h */,
+				172487AC1C27B5E5003E625B /* BAAMutableURLRequest.m */,
+				172487AD1C27B5E5003E625B /* BAAObject.h */,
+				172487AE1C27B5E5003E625B /* BAAObject.m */,
+				172487AF1C27B5E5003E625B /* BaasBox.h */,
+				172487B01C27B5E5003E625B /* BaasBox.m */,
+				172487B11C27B5E5003E625B /* BAAUser.h */,
+				172487B21C27B5E5003E625B /* BAAUser.m */,
+			);
+			name = "baasbox-lib";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		172487901C27B3FF003E625B /* PluginBaasbox */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1724879A1C27B3FF003E625B /* Build configuration list for PBXNativeTarget "PluginBaasbox" */;
+			buildPhases = (
+				1724878D1C27B3FF003E625B /* Sources */,
+				1724878E1C27B3FF003E625B /* Frameworks */,
+				1724878F1C27B3FF003E625B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PluginBaasbox;
+			productName = PluginBaasbox;
+			productReference = 172487911C27B3FF003E625B /* libPluginBaasbox.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		172487891C27B3FF003E625B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = Senspark;
+				TargetAttributes = {
+					172487901C27B3FF003E625B = {
+						CreatedOnToolsVersion = 7.2;
+					};
+				};
+			};
+			buildConfigurationList = 1724878C1C27B3FF003E625B /* Build configuration list for PBXProject "PluginBaasbox" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 172487881C27B3FF003E625B;
+			productRefGroup = 172487921C27B3FF003E625B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				172487901C27B3FF003E625B /* PluginBaasbox */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1724878D1C27B3FF003E625B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				172487A31C27B580003E625B /* PluginBaasbox.m in Sources */,
+				172487B61C27B5E5003E625B /* BAAMutableURLRequest.m in Sources */,
+				172487B81C27B5E5003E625B /* BaasBox.m in Sources */,
+				172487B31C27B5E5003E625B /* BAAClient.m in Sources */,
+				172487B41C27B5E5003E625B /* BAAFile.m in Sources */,
+				172487B51C27B5E5003E625B /* BAAGlobals.m in Sources */,
+				172487B71C27B5E5003E625B /* BAAObject.m in Sources */,
+				172487B91C27B5E5003E625B /* BAAUser.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		172487981C27B3FF003E625B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		172487991C27B3FF003E625B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1724879B1C27B3FF003E625B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		1724879C1C27B3FF003E625B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1724878C1C27B3FF003E625B /* Build configuration list for PBXProject "PluginBaasbox" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				172487981C27B3FF003E625B /* Debug */,
+				172487991C27B3FF003E625B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1724879A1C27B3FF003E625B /* Build configuration list for PBXNativeTarget "PluginBaasbox" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1724879B1C27B3FF003E625B /* Debug */,
+				1724879C1C27B3FF003E625B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 172487891C27B3FF003E625B /* Project object */;
+}
