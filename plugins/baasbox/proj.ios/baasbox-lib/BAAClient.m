@@ -162,11 +162,8 @@ NSString* const BAAUserKeyForUserDefaults = @"com.baaxbox.user";
     
     if (self = [super init]) {
         
-        _baseURL = [[NSURL URLWithString:[BaasBox baseURL]] retain];
+        _baseURL = [NSURL URLWithString:[BaasBox baseURL]];
         _appCode = [BaasBox appCode];
-        
-        [_baseURL retain];
-        [_appCode retain];
         [self _initSession];
         
 	}
@@ -184,7 +181,7 @@ NSString* const BAAUserKeyForUserDefaults = @"com.baaxbox.user";
     _session = [NSURLSession sessionWithConfiguration:sessionConfiguration
                                              delegate:nil
                                         delegateQueue:[NSOperationQueue mainQueue]];
-    [_session retain];
+    
 }
 
 #pragma mark - Authentication
@@ -203,7 +200,6 @@ NSString* const BAAUserKeyForUserDefaults = @"com.baaxbox.user";
                    
                    BAAUser *user = [[BAAUser alloc] initWithDictionary:responseObject[@"data"]];
                    user.authenticationToken = token;
-                   [user.authenticationToken retain];
                    self.currentUser = user;
                    [self saveUserToDisk:user];
                    completionHandler(YES, nil);

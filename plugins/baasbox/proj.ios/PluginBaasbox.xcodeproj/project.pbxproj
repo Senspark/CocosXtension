@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		172487A31C27B580003E625B /* PluginBaasbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 172487A21C27B580003E625B /* PluginBaasbox.m */; };
+		172487A31C27B580003E625B /* PluginBaasbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 172487A21C27B580003E625B /* PluginBaasbox.mm */; };
 		172487B31C27B5E5003E625B /* BAAClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 172487A61C27B5E5003E625B /* BAAClient.m */; };
 		172487B41C27B5E5003E625B /* BAAFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 172487A81C27B5E5003E625B /* BAAFile.m */; };
 		172487B51C27B5E5003E625B /* BAAGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = 172487AA1C27B5E5003E625B /* BAAGlobals.m */; };
@@ -32,7 +32,7 @@
 /* Begin PBXFileReference section */
 		172487911C27B3FF003E625B /* libPluginBaasbox.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginBaasbox.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		172487A11C27B580003E625B /* PluginBaasbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginBaasbox.h; sourceTree = SOURCE_ROOT; };
-		172487A21C27B580003E625B /* PluginBaasbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PluginBaasbox.m; sourceTree = SOURCE_ROOT; };
+		172487A21C27B580003E625B /* PluginBaasbox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PluginBaasbox.mm; sourceTree = SOURCE_ROOT; };
 		172487A51C27B5E5003E625B /* BAAClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BAAClient.h; path = "baasbox-lib/BAAClient.h"; sourceTree = "<group>"; };
 		172487A61C27B5E5003E625B /* BAAClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BAAClient.m; path = "baasbox-lib/BAAClient.m"; sourceTree = "<group>"; };
 		172487A71C27B5E5003E625B /* BAAFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BAAFile.h; path = "baasbox-lib/BAAFile.h"; sourceTree = "<group>"; };
@@ -81,7 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				172487A11C27B580003E625B /* PluginBaasbox.h */,
-				172487A21C27B580003E625B /* PluginBaasbox.m */,
+				172487A21C27B580003E625B /* PluginBaasbox.mm */,
 			);
 			name = ios;
 			path = PluginBaasbox;
@@ -164,7 +164,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				172487A31C27B580003E625B /* PluginBaasbox.m in Sources */,
+				172487A31C27B580003E625B /* PluginBaasbox.mm in Sources */,
 				172487B61C27B5E5003E625B /* BAAMutableURLRequest.m in Sources */,
 				172487B81C27B5E5003E625B /* BaasBox.m in Sources */,
 				172487B31C27B5E5003E625B /* BAAClient.m in Sources */,
@@ -261,6 +261,11 @@
 		1724879B1C27B3FF003E625B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../protocols/include",
+					"$(SRCROOT)/../../../protocols/platform/ios",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -270,6 +275,11 @@
 		1724879C1C27B3FF003E625B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../protocols/include",
+					"$(SRCROOT)/../../../protocols/platform/ios",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

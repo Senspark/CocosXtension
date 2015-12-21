@@ -7,7 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "InterfaceBaaS.h"
 
-@interface PluginBaasbox : NSObject
+@interface PluginBaasbox : NSObject<InterfaceBaaS>
+
+-(void) loginWithFacebookToken:(NSString*)facebookToken andCallbackId:(int)cbId;
+-(void) updateProfileUser:(NSString*)jsonData withCallbackId:(int)cbId;
+-(void) fetchProfileUserWithCallbackId:(int)cbId;
 
 @end

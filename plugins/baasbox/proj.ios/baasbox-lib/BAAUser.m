@@ -49,7 +49,6 @@
         _visibleByAnonymousUsers = [NSMutableDictionary dictionaryWithDictionary:dict[@"visibleByAnonymousUsers"]];
         _visibleByRegisteredUsers = [NSMutableDictionary dictionaryWithDictionary:dict[@"visibleByRegisteredUsers"]];
         
-        
         if (dict[@"visibleByFriends"] == [NSNull null]) {
             
             _visibleByFriends = [NSMutableDictionary dictionary];
@@ -69,14 +68,6 @@
             _visibleByTheUser = [NSMutableDictionary dictionaryWithDictionary:dict[@"visibleByTheUser"]];
             
         }
-        
-        [_user retain];
-        [_roles retain];
-        [_status retain];
-        [_visibleByAnonymousUsers retain];
-        [_visibleByRegisteredUsers retain];
-        [_visibleByFriends retain];
-        [_visibleByTheUser retain];
         
     }
     
@@ -238,7 +229,6 @@
                  
                  BAAUser *user = [[BAAUser alloc] initWithDictionary:responseObject[@"data"]];
                  user.authenticationToken = responseObject[@"data"][@"X-BB-SESSION"];
-                 [user.authenticationToken retain];
                  client.currentUser = user;
                  [client saveUserToDisk:user];
                  if (completionBlock) {
@@ -298,7 +288,6 @@
                  
                  BAAUser *user = [[BAAUser alloc] initWithDictionary:responseObject[@"data"]];
                  user.authenticationToken = responseObject[@"data"][@"X-BB-SESSION"];
-                 [user.authenticationToken retain];
                  client.currentUser = user;
                  [client saveUserToDisk:user];
                  if (completionBlock) {
@@ -503,6 +492,7 @@
     if (_visibleByRegisteredUsers == nil) {
         _visibleByRegisteredUsers = [NSMutableDictionary dictionary];
     }
+    
     return _visibleByRegisteredUsers;
     
 }
@@ -540,13 +530,6 @@
         decodeObject(_visibleByFriends);
         decodeObject(_visibleByTheUser);
         
-        [_user retain];
-        [_authenticationToken retain];
-        [_pushNotificationToken retain];
-        [_visibleByAnonymousUsers retain];
-        [_visibleByRegisteredUsers retain];
-        [_visibleByFriends retain];
-        [_visibleByTheUser retain];
     }
     
     return self;
