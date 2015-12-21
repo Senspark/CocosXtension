@@ -76,25 +76,30 @@ public class UserGooglePlay implements InterfaceUser, PluginListener, GoogleApiC
 	
 	@Override
 	public void configDeveloperInfo(Hashtable<String, String> cpInfo) {
-		PluginWrapper.runOnMainThread(new Runnable() {
-			@Override
-			public void run() {			
+//		PluginWrapper.runOnMainThread(new Runnable() {
+//			@Override
+//			public void run() {			
 				mGameHelper.setup(mGameHelperListener);
 				mGameHelper.setMaxAutoSignInAttempts(0);
 				setDebugMode(bDebug);
-			}
-		});
+//			}
+//		});
 	}
 
 	@Override
 	public void login() {
-		if (mGameHelper != null) {
-			mShouldResolve = true;
-			mGameHelper.beginUserInitiatedSignIn();
-		} else {
-			Log.e("G+", "Please configure first");
-			UserWrapper.onActionResult(mUserGooglePlay, UserWrapper.ACTION_RET_LOGIN_FAILED, "Google Play: not configured yet.");
-		}				
+		PluginWrapper.runOnMainThread(new Runnable() {
+			@Override
+			public void run() {
+				if (mGameHelper != null) {
+					mShouldResolve = true;
+					mGameHelper.beginUserInitiatedSignIn();
+				} else {
+					Log.e("G+", "Please configure first");
+					UserWrapper.onActionResult(mUserGooglePlay, UserWrapper.ACTION_RET_LOGIN_FAILED, "Google Play: not configured yet.");
+				}
+			}
+		});
 	}
 
 	@Override
@@ -162,6 +167,7 @@ public class UserGooglePlay implements InterfaceUser, PluginListener, GoogleApiC
 
 	@Override
 	public void onStart() {
+		Log.e("UserGooglePlay", "mGameHelper :" + mGameHelper);
 		if (mGameHelper != null) {
 			Log.e("G+", "onStart");
 			mGameHelper.onStart((Activity) mContext);
