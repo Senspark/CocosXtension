@@ -54,6 +54,18 @@ std::string FacebookProtocolUser::getUserID() {
     return callStringFuncWithParam("getUserID", nullptr);
 }
 
+std::string FacebookProtocolUser::getUserFullName() {
+    return callStringFuncWithParam("getUserFullName", nullptr);
+}
+
+std::string FacebookProtocolUser::getUserLastName() {
+    return callStringFuncWithParam("getUserLastName", nullptr);
+}
+
+std::string FacebookProtocolUser::getUserFirstName() {
+    return callStringFuncWithParam("getUserFirstName", nullptr);
+}
+
 void FacebookProtocolUser::graphRequest(const std::string& graphPath, const FBParam& params, FacebookProtocolUser::UserCallback& callback) {
     
     PluginParam pathParam(graphPath.c_str());
@@ -61,7 +73,7 @@ void FacebookProtocolUser::graphRequest(const std::string& graphPath, const FBPa
     CallbackWrapper *wrapper = new CallbackWrapper(callback);
     PluginParam cbID((long)wrapper);
     
-    callFuncWithParam("graphRequest", &pathParam, &paramsParam, &cbID, nullptr);
+    callFuncWithParam("graphRequestWithParams", &pathParam, &paramsParam, &cbID, nullptr);
 }
 
 void FacebookProtocolUser::api(const std::string &graphPath, HttpMethod method, const FBParam &params, FacebookProtocolUser::UserCallback &callback) {
@@ -72,5 +84,5 @@ void FacebookProtocolUser::api(const std::string &graphPath, HttpMethod method, 
     CallbackWrapper *wrapper = new CallbackWrapper(callback);
     PluginParam cbID((long)wrapper);
     
-    callFuncWithParam("request", &pathParam, &_method, &paramsParam, &cbID, NULL);
+    callFuncWithParam("api", &pathParam, &_method, &paramsParam, &cbID, NULL);
 }

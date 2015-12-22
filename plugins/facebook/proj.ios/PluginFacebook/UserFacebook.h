@@ -35,7 +35,9 @@
 
 - (NSString*) getSessionID;
 - (NSString*) getUserID;
-- (NSString*) getUserName;
+- (NSString*) getUserFullName;
+- (NSString*) getUserLastName;
+- (NSString*) getUserFirstName;
 - (NSString*) getAccessToken;
 - (NSString*) getPermissionList;
 
