@@ -38,6 +38,10 @@ public:
 
     
     std::string getUserID();
+    std::string getUserFullName();
+    std::string getUserLastName();
+    std::string getUserFirstName();
+    
     void graphRequest(const std::string& graphPath, const FBParam& param, FacebookProtocolUser::UserCallback& callback);
     void api(const std::string& graphPath, HttpMethod method, const FBParam& param, FacebookProtocolUser::UserCallback& callback);
 

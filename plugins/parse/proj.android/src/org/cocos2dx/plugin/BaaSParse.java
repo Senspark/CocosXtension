@@ -80,7 +80,7 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 
 	@Override
-	public void signUp(Hashtable<String, String> userInfo, long callbackID) {
+	public void signUp(Hashtable<String, String> userInfo, int callbackID) {
 		final long cbID = callbackID;
 		ParseUser user = new ParseUser();
 		user.setUsername(userInfo.get("username"));
@@ -107,7 +107,7 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 
 	@Override
-	public void login(String userName, String password, long callbackID) {
+	public void login(String userName, String password, int callbackID) {
 		final long cbID = callbackID;
 		ParseUser.logInInBackground(userName, password, new LogInCallback() {
 			
@@ -127,7 +127,7 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 
 	@Override
-	public void logout(long callbackID) {
+	public void logout(int callbackID) {
 		final long cbID = callbackID;
 		ParseUser.logOutInBackground(new LogOutCallback() {
 			@Override
@@ -168,7 +168,7 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 
 	@Override
-	public void saveObjectInBackground(String className, String json, long callbackID) {
+	public void saveObjectInBackground(String className, String json, int callbackID) {
 		final long cbID = callbackID;
 		try {
 			JSONObject jsonObj = new JSONObject(json);
@@ -212,7 +212,7 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 	
 	@Override
-	public void findObjectInBackground(String className, String whereKey, String equalTo, long callbackID) {
+	public void findObjectInBackground(String className, String whereKey, String equalTo, int callbackID) {
 		final long cbID = callbackID;
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
 		query.whereEqualTo(whereKey, equalTo);
@@ -244,7 +244,7 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 	
 	@Override
-	public void getObjectInBackground(String className, String objId, long callbackID) {
+	public void getObjectInBackground(String className, String objId, int callbackID) {
 		final long cbID = callbackID;
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
 		query.getInBackground(objId, new GetCallback<ParseObject>() {
@@ -298,7 +298,7 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public void updateObjectInBackground(String className, String objId,
-			final String jsonChanges, long callbackID) {
+			final String jsonChanges, int callbackID) {
 		final long cbID = callbackID;
 		ParseQuery<ParseObject>	query = ParseQuery.getQuery(className);
 		
@@ -356,7 +356,7 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 	
 	@Override
-	public void deleteObjectInBackground(String className, String objId, long callbackID) {
+	public void deleteObjectInBackground(String className, String objId, int callbackID) {
 		final long cbID = callbackID;
 		ParseQuery<ParseObject>	query = ParseQuery.getQuery(className);
 
@@ -403,7 +403,7 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 	
 	@Override
-	public void fetchConfigInBackground(long callbackID) {
+	public void fetchConfigInBackground(int callbackID) {
 		final long cbID = callbackID;
 		
 		Log.i("BaaSParse", "Callback address: " + callbackID);

@@ -30,24 +30,29 @@ THE SOFTWARE.
 namespace cocos2d { namespace plugin {
 
 extern "C" {
-JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_ShareWrapper_nativeOnShareResult(JNIEnv*  env, jobject thiz, jstring className, jint code, std::map<std::string, std::string> content, jstring msg, jlong cbID)
+JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_ShareWrapper_nativeOnShareResult(JNIEnv*  env, jobject thiz, jstring className, jint code, std::map<std::string, std::string> content, jstring msg)
 {
 	std::string strMsg 			= PluginJniHelper::jstring2string(msg);
 	std::string strClassName 	= PluginJniHelper::jstring2string(className);
 	PluginProtocol* pPlugin 	= PluginUtils::getPluginPtr(strClassName);
+
 	PluginUtils::outputLog("ProtocolShare", "nativeOnShareResult(), Get plugin ptr : %p", pPlugin);
 
 	if (pPlugin != nullptr) {
 		PluginUtils::outputLog("ProtocolShare", "nativeOnShareResult(), Get plugin name : %s", pPlugin->getPluginName());
 		ProtocolShare* pShare = dynamic_cast<ProtocolShare*>(pPlugin);
-		if (pShare != nullptr && cbID) {
-			ProtocolShare::CallbackWrapper* wrapper = (ProtocolShare::CallbackWrapper*) cbID;
-			wrapper->fnPtr(code, content, strMsg);
-			delete wrapper;
+		if (pShare != nullptr) {
+        	ProtocolShare::ShareCallback callback = pShare->getCallback();
+        	if(callback) {
+        		callback(code, content, strMsg);
+        	} else {
+        		PluginUtils::outputLog("ProtocolShare", "Can't find the listener of plugin %s", pPlugin->getPluginName());
+        	}
 		} else {
 			PluginUtils::outputLog("Listener of plugin %s not set correctly", pPlugin->getPluginName());
 		}
 	}
+}
 }
 
 void ProtocolShare::configDeveloperInfo(TShareInfo devInfo)
@@ -91,20 +96,20 @@ void ProtocolShare::share(TShareInfo& info, ShareCallback& cb)
 		if (PluginJniHelper::getMethodInfo(t
 				, pData->jclassName.c_str()
 				, "share"
-				, "(Ljava/util/Hashtable;J)V"))
+				, "(Ljava/util/Hashtable;)V"))
 		{
 			// generate the hashtable from map
 			jobject obj_Map = PluginUtils::createJavaMapObject(&info);
 
-			CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
+			_callback = cb;
 
 			// invoke java method
-			t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map, (long) cbWrapper);
+			t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map);
 			t.env->DeleteLocalRef(obj_Map);
 			t.env->DeleteLocalRef(t.classID);
 		}
 	}
 }
-}
+
 
 }} // namespace cocos2d { namespace plugin {

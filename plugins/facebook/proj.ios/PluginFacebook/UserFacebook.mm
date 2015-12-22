@@ -100,9 +100,19 @@ using namespace cocos2d::plugin;
     return [FBSDKAccessToken currentAccessToken].userID;
 }
 
--(NSString*) getUserName{
+-(NSString*) getUserFullName {
     NSLog(@"user name %@",[FBSDKProfile currentProfile].name);
     return [FBSDKProfile currentProfile].name;
+}
+
+-(NSString*) getUserLastName {
+    NSLog(@"user last name %@", [[FBSDKProfile currentProfile] lastName]);
+    return [[FBSDKProfile currentProfile] lastName];
+}
+
+-(NSString*) getUserFirstName {
+    NSLog(@"user first name %@", [[FBSDKProfile currentProfile] firstName]);
+    return [[FBSDKProfile currentProfile] firstName];
 }
 
 - (BOOL) isLoggedIn{

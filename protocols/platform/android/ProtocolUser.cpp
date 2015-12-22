@@ -30,7 +30,7 @@ THE SOFTWARE.
 namespace cocos2d { namespace plugin {
 
 extern "C" {
-JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_UserWrapper_nativeOnActionResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jstring msg, jlong cbID)
+JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_UserWrapper_nativeOnActionResult(JNIEnv* env, jobject thiz, jstring className, jint ret, jstring msg)
 {
 	std::string strMsg = PluginJniHelper::jstring2string(msg);
 	std::string strClassName = PluginJniHelper::jstring2string(className);
@@ -40,18 +40,17 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_UserWrapper_nativeOnActionResult
 	{
 		PluginUtils::outputLog("ProtocolUser", "nativeOnActionResult(), Get plugin name : %s", pPlugin->getPluginName());
 		ProtocolUser* pUser = dynamic_cast<ProtocolUser*>(pPlugin);
-		if (pUser != NULL && cbID)
+		if (pUser != NULL)
 		{
-			auto wrapper = (ProtocolUser::CallbackWrapper*) cbID;
-
-			wrapper->fnPtr((int) ret, strMsg);
-
-			delete wrapper;
-		} else {
-			PluginUtils::outputLog("Listener of plugin %s not set correctly", pPlugin->getPluginName());
+			ProtocolUser::UserCallback callback = pUser->getCallback();
+			if (callback) {
+				callback(ret, strMsg);
+			} else {
+				PluginUtils::outputLog("Listener of plugin %s not set correctly", pPlugin->getPluginName());
+			}
 		}
 	}
-
+}
 }
 
 ProtocolUser::ProtocolUser()
@@ -89,16 +88,24 @@ void ProtocolUser::configDeveloperInfo(TUserInfo devInfo)
     }
 }
 
-void ProtocolUser::login(UserCallback &cb)
+void ProtocolUser::login()
 {
-	CallbackWrapper* wrapper = new CallbackWrapper(cb);
+    PluginUtils::callJavaFunctionWithName(this, "login");
+}
 
-    PluginUtils::callJavaFunctionWithName_oneParam(this, "login", "(J)V", (long)wrapper);
+void ProtocolUser::login(UserCallback& cb) {
+	_callback = cb;
+	ProtocolUser::login();
 }
 
 void ProtocolUser::logout()
 {
 	PluginUtils::callJavaFunctionWithName(this, "logout");
+}
+
+void ProtocolUser::logout(UserCallback& cb) {
+	_callback = cb;
+	ProtocolUser::logout();
 }
 
 bool ProtocolUser::isLoggedIn()
@@ -128,7 +135,7 @@ std::string ProtocolUser::getDisplayName() {
 	return PluginUtils::callJavaStringFuncWithName(this, "getDisplayName");
 }
 
-}
+
 
 }} // namespace cocos2d { namespace plugin {
 

@@ -24,5 +24,5 @@ public class BaaSWrapper {
 		});
 	}
 	
-	private native static void nativeOnBaaSActionResult(String className, int code, String result, long callbackID);
+	public native static void nativeOnBaaSActionResult(String className, int code, String result, long callbackID);
 }
