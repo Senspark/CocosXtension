@@ -11,8 +11,8 @@
 
 @interface PluginBaasbox : NSObject<InterfaceBaaS>
 
--(void) loginWithFacebookToken:(NSString*)facebookToken andCallbackId:(int)cbId;
--(void) updateProfileUser:(NSString*)jsonData withCallbackId:(int)cbId;
--(void) fetchProfileUserWithCallbackId:(int)cbId;
+-(void) loginWithFacebookToken:(NSString*)facebookToken andCallbackId:(long)cbId;
+-(void) updateProfileUser:(NSString*)jsonData withCallbackId:(long)cbId;
+-(void) fetchProfileUserWithCallbackId:(long)cbId;
 
 @end

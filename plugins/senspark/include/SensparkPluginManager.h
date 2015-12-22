@@ -58,6 +58,7 @@ enum class UserPluginType {
 };
 
 enum class BaaSPluginType {
+    BAASBOX,
     PARSE
 };
 

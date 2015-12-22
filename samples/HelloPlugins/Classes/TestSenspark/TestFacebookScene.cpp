@@ -9,7 +9,6 @@
 #include "TestFacebookScene.h"
 #include "cocos-ext.h"
 #include "SensparkPlugin.h"
-#include "FacebookAgent.h"
 #include "ProtocolUser.h"
 
 USING_NS_CC;

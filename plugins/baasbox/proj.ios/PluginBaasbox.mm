@@ -17,6 +17,8 @@ using namespace cocos2d::plugin;
 
 @implementation PluginBaasbox
 
+//implement interfaceBaas
+
 - (void) configDeveloperInfo:(NSDictionary*) devInfo{
     NSString* baseUrl = [devInfo objectForKey:@"baseUrl"];
     NSString* appCode = [devInfo objectForKey:@"appCode"];
@@ -69,7 +71,9 @@ using namespace cocos2d::plugin;
     return @"";
 }
 
--(void)loginWithFacebookToken:(NSString*)facebookToken andCallbackId:(int)cbId{
+// end implement
+
+-(void)loginWithFacebookToken:(NSString*)facebookToken andCallbackId:(long)cbId{
     if(facebookToken != NULL){
         [BAAUser loginWithFacebookToken:facebookToken
                              completion:^(BOOL success, NSError *error) {
@@ -90,7 +94,7 @@ using namespace cocos2d::plugin;
     }
 }
 
--(void)updateProfileUser:(NSString*)jsonData withCallbackId:(int)cbId{
+-(void)updateProfileUser:(NSString*)jsonData withCallbackId:(long)cbId{
     
     BAAUser *user = [[BAAClient sharedClient]currentUser];
     
@@ -134,7 +138,7 @@ using namespace cocos2d::plugin;
     
 }
 
--(void)fetchProfileUserWithCallbackId:(int)cbId{
+-(void)fetchProfileUserWithCallbackId:(long)cbId{
     
     if([BAAClient sharedClient].isAuthenticated){
         
