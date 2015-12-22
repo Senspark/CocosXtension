@@ -8,6 +8,9 @@
          location = "container:"
          name = "baas">
          <FileRef
+            location = "group:plugins/baasbox/proj.ios/PluginBaasbox.xcodeproj">
+         </FileRef>
+         <FileRef
             location = "group:plugins/parse/proj.ios/PluginParse.xcodeproj">
          </FileRef>
       </Group>

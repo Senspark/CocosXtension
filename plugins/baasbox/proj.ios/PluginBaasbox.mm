@@ -96,42 +96,31 @@ using namespace cocos2d::plugin;
     
     NSDictionary* data = [ParseUtils NSStringToArrayOrNSDictionary:jsonData];
     
-    NSDictionary* visibleByRegisterUsers = [data objectForKey:@"visibleByRegisteredUsers"];
-    NSDictionary* visibleByTheUser       = [data objectForKey:@"visibleByTheUser"];
-    NSDictionary* visibleByAnonymousUsers= [data objectForKey:@"visibleByAnonymousUsers"];
-    NSDictionary* visibleByFriends       = [data objectForKey:@"visibleByFriends"];
+    NSMutableDictionary* visibleByRegisterUsers = [data objectForKey:@"visibleByRegisteredUsers"];
+    NSMutableDictionary* visibleByTheUser       = [data objectForKey:@"visibleByTheUser"];
+    NSMutableDictionary* visibleByAnonymousUsers= [data objectForKey:@"visibleByAnonymousUsers"];
+    NSMutableDictionary* visibleByFriends       = [data objectForKey:@"visibleByFriends"];
     
     // set visibleByRegisterUsers
     if(visibleByRegisterUsers){
-        NSArray* keysVisibleByRegisterUsers  = [visibleByRegisterUsers allKeys];
-        for(NSString* key : keysVisibleByRegisterUsers){
-            [user.visibleByRegisteredUsers setObject:[visibleByRegisterUsers objectForKey:key] forKey:key];
-        }
+        [user setVisibleByRegisteredUsers:visibleByRegisterUsers];
     }
     
     // set visibleByTheUsers
     if(visibleByTheUser){
-        NSArray* keysVisibleByTheUser        = [visibleByTheUser allKeys];
-        for(NSString* key : keysVisibleByTheUser){
-            [user.visibleByTheUser setObject:[visibleByTheUser objectForKey:key] forKey:key];
-        }
+        [user setVisibleByTheUser:visibleByTheUser];
     }
     
     // set visibleByAnonymousUsers
     if(visibleByAnonymousUsers){
-        NSArray* keysVisibleByAnonymousUsers = [visibleByAnonymousUsers allKeys];
-        for(NSString* key : keysVisibleByAnonymousUsers){
-            [user.visibleByAnonymousUsers setObject:[visibleByAnonymousUsers objectForKey:key] forKey:key];
-        }
+        [user setVisibleByAnonymousUsers:visibleByAnonymousUsers];
     }
     
     // set visibleByFriends
     if(visibleByFriends){
-        NSArray* keysVisibleByFriends        = [visibleByFriends allKeys];
-        for(NSString* key : keysVisibleByFriends){
-            [user.visibleByFriends setObject:[visibleByFriends objectForKey:key] forKey:key];
-        }
+        [user visibleByFriends];
     }
+    
     
     [user updateWithCompletion:^(BAAUser *user, NSError *error) {
         if (error == nil) {
