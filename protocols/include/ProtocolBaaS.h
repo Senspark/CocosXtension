@@ -40,6 +40,9 @@ namespace cocos2d { namespace plugin {
 
         kFetchConfigSucceed,
         kFetchConfigFailed,
+        
+        kRegisterForRemoteNotificationsSuccessed,
+        kRegisterForRemoteNotificationsFailed,
     };
 
     typedef std::map<std::string, std::string> TBaaSInfo;

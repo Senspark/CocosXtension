@@ -23,8 +23,12 @@ public:
     virtual ~BaasboxProtocolBaaS();
     
     void loginWithFacebookToken(const std::string& facebookToken, BaaSCallback &cb);
-    void updateProfileUser(const std::string& jsonData, BaaSCallback &cb);
-    void fetchProfileUser(BaaSCallback &cb);
+    
+    void updateUserProfile(const std::string& profile, BaaSCallback &cb);
+    
+    void fetchUserProfile(BaaSCallback &cb);
+    
+    void fetchScoresFriendsFacebookWithPlayers(const std::string& players, BaaSCallback &cb);
 };
 
 NS_SENSPARK_PLUGIN_BAAS_END

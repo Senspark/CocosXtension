@@ -33,7 +33,7 @@ using namespace std;
 + (id)NSStringToArrayOrNSDictionary:(NSString *)jsonData{
     NSError *error = nil;
     NSData *stringData = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
-    id jsonObject = [NSJSONSerialization JSONObjectWithData:stringData options:NSJSONReadingAllowFragments error:&error];
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:stringData options:NSJSONReadingAllowFragments | NSJSONReadingMutableContainers error:&error];
     
     if (jsonObject != nil && error == nil){
         return jsonObject;

@@ -22,6 +22,7 @@
 #include "VungleProtocolAds.h"
 
 #include "ParseProtocolBaaS.h"
+#include "BaasboxProtocolBaas.h"
 
 #include "GooglePlayProtocolData.h"
 

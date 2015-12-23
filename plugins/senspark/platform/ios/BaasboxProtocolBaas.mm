@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "BaasboxProtocolBaas.h"
 #import "PluginUtilsIOS.h"
+#import "ProtocolBaaS.h"
+#import "PluginProtocol.h"
+
 
 USING_NS_SENSPARK_PLUGIN_BAAS;
 using namespace cocos2d::plugin;
@@ -19,27 +22,43 @@ BaasboxProtocolBaaS::~BaasboxProtocolBaaS(){
 }
 
 void BaasboxProtocolBaaS::loginWithFacebookToken(const std::string &facebookToken, BaaSCallback &cb){
-    PluginParam fbTokenparams(facebookToken.c_str());
+    PluginParam facebookTokenParam(facebookToken.c_str());
     
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
+    
     PluginParam callbackParam((long) wrapper);
     
-    callFuncWithParam("loginWithFacebookToken", &fbTokenparams, &callbackParam, nullptr);
+    callFuncWithParam("loginWithFacebookToken", &facebookTokenParam, &callbackParam, nullptr);
 }
 
-void BaasboxProtocolBaaS::updateProfileUser(const std::string &jsonData, BaaSCallback &cb){
-    PluginParam jsonDataparams(jsonData.c_str());
+void BaasboxProtocolBaaS::updateUserProfile(const std::string &profile, BaaSCallback &cb){
+    PluginParam profileParam(profile.c_str());
     
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
+    
     PluginParam callbackParam((long) wrapper);
     
-    callFuncWithParam("loginWithFacebookToken", &jsonDataparams, &callbackParam, nullptr);
+    callFuncWithParam("updateUserProfile", &profileParam, &callbackParam, nullptr);
 }
 
-void BaasboxProtocolBaaS::fetchProfileUser(BaaSCallback &cb){
+void BaasboxProtocolBaaS::fetchUserProfile(BaaSCallback &cb){
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
     
     PluginParam callbackParam((long) wrapper);
     
-    callFuncWithParam("fetchProfileUserWithCallbackId", &callbackParam, nullptr);
+    callFuncWithParam("fetchUserProfileWithCallbackId", &callbackParam, nullptr);
 }
+
+void BaasboxProtocolBaaS::fetchScoresFriendsFacebookWithPlayers(const std::string& players, BaaSCallback &cb){
+    PluginParam facebookPlayersParam(players.c_str());
+    
+    CallbackWrapper *wrapper = new CallbackWrapper(cb);
+    
+    PluginParam callbackParam((long) wrapper);
+    
+    callFuncWithParam("fetchScoresFriendsFacebook", &facebookPlayersParam, &callbackParam, nullptr);
+}
+
+
+
+
