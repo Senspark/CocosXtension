@@ -1,5 +1,5 @@
 //
-//  BaasboxProtocolBaas.m
+//  BaasboxProtocolBaaS.m
 //  PluginSenspark
 //
 //  Created by Tran Van Tuan on 12/22/15.
@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BaasboxProtocolBaas.h"
+#import "BaasboxProtocolBaaS.h"
 #import "PluginUtilsIOS.h"
 #import "ProtocolBaaS.h"
 #import "PluginProtocol.h"

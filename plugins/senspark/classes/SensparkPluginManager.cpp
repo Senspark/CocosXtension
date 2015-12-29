@@ -41,7 +41,7 @@ SensparkPluginManager::SensparkPluginManager(void)
     
     //------ Register BaaS Services ------
     REGISTER_PLUGIN_NAME(BaaSPluginType, PARSE, "BaaSParse");
-    REGISTER_PLUGIN_NAME(BaaSPluginType, BAASBOX, "PluginBaasbox");
+    REGISTER_PLUGIN_NAME(BaaSPluginType, BAASBOX, "BaaSBaasbox");
     
     //------ Register Data Services ------
     REGISTER_PLUGIN_NAME(DataPluginType, GOOGLE_PLAY, "DataGooglePlay");

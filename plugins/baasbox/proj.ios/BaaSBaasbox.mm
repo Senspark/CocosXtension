@@ -1,12 +1,12 @@
 //
-//  PluginBaasbox.m
-//  PluginBaasbox
+//  BaaSBaasbox.m
+//  BaaSBaasbox
 //
 //  Created by Tran Van Tuan on 12/21/15.
 //  Copyright © 2015 Senspark. All rights reserved.
 //
 
-#import "PluginBaasbox.h"
+#import "BaaSBaasbox.h"
 #import "BAAClient.h"
 #import "BaaSWrapper.h"
 #import "ProtocolBaaS.h"
@@ -15,13 +15,17 @@
 
 using namespace cocos2d::plugin;
 
-@implementation PluginBaasbox
+@implementation BaaSBaasbox
 
 //implement interfaceBaas
 
 - (void) configDeveloperInfo:(NSDictionary*) devInfo{
-    NSString* baseUrl = [devInfo objectForKey:@"baseURL"];
+    NSString* domain  = [devInfo objectForKey:@"domain"];
+    NSString* port    = [devInfo objectForKey:@"port"];
     NSString* appCode = [devInfo objectForKey:@"appCode"];
+    
+    NSString* baseUrl = [[[@"http://" stringByAppendingString:domain] stringByAppendingString:@":"] stringByAppendingString:port];
+    NSLog(@"baseUrl of baasbox server is : %@", baseUrl);
     
     [BaasBox setBaseURL:baseUrl
                 appCode:appCode];
@@ -235,31 +239,10 @@ using namespace cocos2d::plugin;
     }
 }
 
-//-(void) registerForRemoteNotifications:(NSString*) params{
-//    NSDictionary* dic = [ParseUtils NSStringToArrayOrNSDictionary:params];
-//    
-//    NSData* deviceToken = [dic objectForKey:@"deviceToken"];
-//    long callbackId = [[dic objectForKey:@"callbackId"] longValue];
-//    
-//    [self registerForRemoteNotificationsWithDeviceToken:deviceToken andCallbackId:callbackId];
-//}
-
--(void) registerForRemoteNotificationsWithDeviceToken:(NSData *) deviceToken andCallbackId:(long) cbId{
++(void) registerForRemoteNotificationsWithDeviceToken:(NSData *) deviceToken completion:(void(^)(BOOL))successed{
     BAAClient *client = [BAAClient sharedClient];
     [client enablePushNotifications:deviceToken completion:^(BOOL success, NSError *error) {
-        if (success) {
-            NSLog(@"register remote notification success");
-            [BaaSWrapper onBaaSActionResult: self
-                             withReturnCode: (int)BaaSActionResultCode::kRegisterForRemoteNotificationsSuccessed
-                               andReturnMsg: @"register success"
-                              andCallbackID: cbId];
-        }else{
-            NSLog(@"register remote notification : %@",error);
-            [BaaSWrapper onBaaSActionResult: self
-                             withReturnCode: (int)BaaSActionResultCode::kRegisterForRemoteNotificationsFailed
-                               andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
-                              andCallbackID: cbId];
-        }
+        successed(success);
     }];
 }
 

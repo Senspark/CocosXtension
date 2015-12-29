@@ -1,5 +1,6 @@
 #include "ParseProtocolBaaS.h"
 #include "PluginUtils.h"
+#include <string>
 
 USING_NS_SENSPARK_PLUGIN_BAAS;
 using namespace cocos2d::plugin;
@@ -12,9 +13,9 @@ std::string ParseProtocolBaaS::getUserInfo() {
 	return PluginUtils::callJavaStringFuncWithName(this, "getUserInfo");
 }
 
-std::string ParseProtocolBaaS::setUserInfo(const std::map<std::string, std::string>& changes) {
-	PluginParam param(changes);
-	return PluginUtils::callJavaStringFuncWithName_oneParam(this, "setUserInfo", "(Ljava/util/Hashtable;)Ljava/lang/String;", &param);
+std::string ParseProtocolBaaS::setUserInfo(const std::string& changes) {
+	PluginParam param(changes.c_str());
+	return PluginUtils::callJavaStringFuncWithName_oneParam(this, "setUserInfo", "(Ljava/lang/String;)Ljava/lang/String;", &param);
 }
 
 void ParseProtocolBaaS::saveUserInfo(BaaSCallback& cb) {
@@ -31,9 +32,9 @@ std::string ParseProtocolBaaS::getInstallationInfo() {
 	return PluginUtils::callJavaStringFuncWithName(this, "getInstallationInfo");
 }
 
-std::string ParseProtocolBaaS::setInstallationInfo(const std::map<std::string, std::string>& changes) {
-	PluginParam param(changes);
-	return PluginUtils::callJavaStringFuncWithName_oneParam(this, "getInstallationInfo","(Ljava/util/Hashtable;)Ljava/lang/String;", &param);
+std::string ParseProtocolBaaS::setInstallationInfo(const std::string& changes) {
+	PluginParam param(changes.c_str());
+	return PluginUtils::callJavaStringFuncWithName_oneParam(this, "getInstallationInfo","(Ljava/lang/String;)Ljava/lang/String;", &param);
 }
 
 void ParseProtocolBaaS::saveInstallationInfo(BaaSCallback& cb) {

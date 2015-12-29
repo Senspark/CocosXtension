@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1701BC5C1C28F7A2005F59B1 /* BaasboxProtocolBaas.h in Headers */ = {isa = PBXBuildFile; fileRef = 1701BC5B1C28F7A2005F59B1 /* BaasboxProtocolBaas.h */; };
-		1701BC5E1C28FA49005F59B1 /* BaasboxProtocolBaas.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1701BC5D1C28FA49005F59B1 /* BaasboxProtocolBaas.mm */; };
+		1701BC5C1C28F7A2005F59B1 /* BaasboxProtocolBaaS.h in Headers */ = {isa = PBXBuildFile; fileRef = 1701BC5B1C28F7A2005F59B1 /* BaasboxProtocolBaaS.h */; };
+		1701BC5E1C28FA49005F59B1 /* BaasboxProtocolBaaS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1701BC5D1C28FA49005F59B1 /* BaasboxProtocolBaaS.mm */; };
 		95376F611B86E83C001C62A5 /* AdColonyProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F501B86E83C001C62A5 /* AdColonyProtocolAds.mm */; };
 		95376F621B86E83C001C62A5 /* AdmobProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F511B86E83C001C62A5 /* AdmobProtocolAds.mm */; };
 		95376F631B86E83C001C62A5 /* ChartboostProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F521B86E83C001C62A5 /* ChartboostProtocolAds.mm */; };
@@ -32,8 +32,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1701BC5B1C28F7A2005F59B1 /* BaasboxProtocolBaas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaasboxProtocolBaas.h; sourceTree = "<group>"; };
-		1701BC5D1C28FA49005F59B1 /* BaasboxProtocolBaas.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BaasboxProtocolBaas.mm; sourceTree = "<group>"; };
+		1701BC5B1C28F7A2005F59B1 /* BaasboxProtocolBaaS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaasboxProtocolBaaS.h; sourceTree = "<group>"; };
+		1701BC5D1C28FA49005F59B1 /* BaasboxProtocolBaaS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BaasboxProtocolBaaS.mm; sourceTree = "<group>"; };
 		9520E0B31B46A74800B7768B /* libPluginSenspark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginSenspark.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		95376F501B86E83C001C62A5 /* AdColonyProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdColonyProtocolAds.mm; sourceTree = "<group>"; };
 		95376F511B86E83C001C62A5 /* AdmobProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdmobProtocolAds.mm; sourceTree = "<group>"; };
@@ -95,7 +95,6 @@
 				95FE48E91B57693A00739C4A /* include */,
 				953C06EE1B57A8B5002BB1A2 /* classes */,
 				95FE48EA1B5769A700739C4A /* ios */,
-				9520E0BB1B46A84F00B7768B /* Senspark */,
 				95C1602F1B5CF0D300501400 /* Frameworks */,
 				9520E0B41B46A74800B7768B /* Products */,
 			);
@@ -107,13 +106,6 @@
 				9520E0B31B46A74800B7768B /* libPluginSenspark.a */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		9520E0BB1B46A84F00B7768B /* Senspark */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Senspark;
 			sourceTree = "<group>";
 		};
 		953C06EE1B57A8B5002BB1A2 /* classes */ = {
@@ -157,7 +149,7 @@
 				95CFAD8A1B81943600E8C88C /* ParseProtocolBaaS.h */,
 				953C06ED1B57A267002BB1A2 /* SensparkPluginManager.h */,
 				95C1602C1B5CEC9B00501400 /* SensparkPluginMacros.h */,
-				1701BC5B1C28F7A2005F59B1 /* BaasboxProtocolBaas.h */,
+				1701BC5B1C28F7A2005F59B1 /* BaasboxProtocolBaaS.h */,
 			);
 			name = include;
 			path = ../include;
@@ -182,7 +174,7 @@
 				95376F5E1B86E83C001C62A5 /* GoogleProtocolAnalytics.mm */,
 				95376F5F1B86E83C001C62A5 /* ParseProtocolBaaS.mm */,
 				95376F601B86E83C001C62A5 /* VungleProtocolAds.mm */,
-				1701BC5D1C28FA49005F59B1 /* BaasboxProtocolBaas.mm */,
+				1701BC5D1C28FA49005F59B1 /* BaasboxProtocolBaaS.mm */,
 			);
 			name = ios;
 			path = ../platform/ios;
@@ -195,7 +187,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1701BC5C1C28F7A2005F59B1 /* BaasboxProtocolBaas.h in Headers */,
+				1701BC5C1C28F7A2005F59B1 /* BaasboxProtocolBaaS.h in Headers */,
 				95CFAD8C1B81943600E8C88C /* ParseProtocolBaaS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -273,7 +265,7 @@
 				95376F701B86E83C001C62A5 /* ParseProtocolBaaS.mm in Sources */,
 				95376F631B86E83C001C62A5 /* ChartboostProtocolAds.mm in Sources */,
 				95376F711B86E83C001C62A5 /* VungleProtocolAds.mm in Sources */,
-				1701BC5E1C28FA49005F59B1 /* BaasboxProtocolBaas.mm in Sources */,
+				1701BC5E1C28FA49005F59B1 /* BaasboxProtocolBaaS.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

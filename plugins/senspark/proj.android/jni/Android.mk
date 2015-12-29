@@ -26,6 +26,7 @@ $(addprefix ../../platform/android/, \
     GooglePlayProtocolUser.cpp \
     GoogleProtocolAnalytics.cpp \
     ParseProtocolBaaS.cpp \
+    BaasboxProtocolBaas.cpp \
 ) \
 ../../classes/SensparkPluginManager.cpp
 

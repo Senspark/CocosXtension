@@ -1,6 +1,6 @@
 //
-//  PluginBaasbox.h
-//  PluginBaasbox
+//  BaaSBaasbox.h
+//  BaaSBaasbox
 //
 //  Created by Tran Van Tuan on 12/21/15.
 //  Copyright © 2015 Senspark. All rights reserved.
@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "InterfaceBaaS.h"
 
-@interface PluginBaasbox : NSObject<InterfaceBaaS>
+@interface BaaSBaasbox : NSObject<InterfaceBaaS>
 
-// multiple params: NSDictionary, @Param1, @param2
-// one params: int,long, double.. -> NSNumber
+
+
++(void) registerForRemoteNotificationsWithDeviceToken:(NSData *) deviceToken completion:(void(^)(BOOL))successed;
 
 -(void) fetchUserProfileWithCallbackId:(NSNumber*)cbId;
 
