@@ -33,26 +33,24 @@ using namespace cocos2d::plugin;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
-+ (void) onSocialResult:(id) obj withRet:(SocialResult) ret withMsg:(NSString*) msg
++ (void) onSocialResult:(id) obj withRet:(SocialResult) ret withMsg:(NSString*) msg andCallback:(long)callbackID
 {
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolSocial* pSocial = dynamic_cast<ProtocolSocial*>(pPlugin);
-    if (pSocial) {
-        SocialListener* pListener = pSocial->getListener();
-        ProtocolSocial::ProtocolSocialCallback callback = pSocial->getCallback();
-        const char* chMsg = [msg UTF8String];
-        SocialRetCode cRet = (SocialRetCode) ret;
-        if (NULL != pListener)
-        {
-            pListener->onSocialResult(cRet, chMsg);
-        }else if(callback){
-            std::string stdmsg(chMsg);
-            callback(cRet,stdmsg);
-        }
-    } else {
-        PluginUtilsIOS::outputLog("Can't find the C++ object of the Social plugin");
+    if (pSocial && callbackID) {
+        
+        ProtocolSocial::CallbackWrapper* wrapper = (ProtocolSocial::CallbackWrapper*) callbackID;
+        
+        std::string stdmsg = [msg UTF8String] ? [msg UTF8String] : "";
+        
+        wrapper->fnPtr(ret, stdmsg);
+        delete wrapper;
+    }
+    else {
+        PluginUtilsIOS::outputLog("No callback.");
     }
 }
+
 #pragma GCC diagnostic pop
 
 

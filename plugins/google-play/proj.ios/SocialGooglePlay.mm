@@ -18,7 +18,7 @@
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo {
 }
 
-- (void) submitScore: (NSString*) leaderboardID withScore: (long) score
+- (void) submitScore: (NSString*) leaderboardID withScore: (int) score withCallback:(long) callbackID
 {
     GPGScore *myScore = [[GPGScore alloc] initWithLeaderboardId:leaderboardID];
     myScore.value = score;
@@ -26,9 +26,9 @@
         if (error) {
             NSLog(@"Submit score fail.");
             
-            [SocialWrapper onSocialResult:self withRet:kSubmitScoreFailed withMsg:@"Submit score fail."];
+            [SocialWrapper onSocialResult:self withRet:kSubmitScoreFailed withMsg:@"Submit score fail." andCallback:callbackID];
         } else {
-            NSLog(@"Submit score %ld", score);
+            NSLog(@"Submit score %d", score);
             
             if (![report isHighScoreForLocalPlayerAllTime]) {
                 NSLog(@"%lld is a good score, but it's not enough to beat your all-time score of %@!",
@@ -36,7 +36,7 @@
                       report.highScoreForLocalPlayerAllTime.formattedScore);
             }
             
-            [SocialWrapper onSocialResult:self withRet:kSubmitScoreSuccess withMsg:@"Submit score successfully."];
+            [SocialWrapper onSocialResult:self withRet:kSubmitScoreSuccess withMsg:@"Submit score successfully." andCallback:callbackID];
         }
     }];
 }
@@ -51,7 +51,7 @@
     [[GPGLauncherController sharedInstance] presentLeaderboardWithLeaderboardId:leaderboardID];
 }
 
-- (void) unlockAchievement: (NSMutableDictionary*) achInfo
+- (void) unlockAchievement: (NSMutableDictionary*) achInfo withCallback: (long)callbackID
 {
     NSString* achievementId = [achInfo objectForKey:@"achievementId"];
     GPGAchievement* unlockMe = [GPGAchievement achievementWithId:achievementId];
@@ -60,64 +60,65 @@
         if (error) {
             NSLog(@"Unlock achievement fail");
             
-            [SocialWrapper onSocialResult:self withRet:kUnlockAchiFailed withMsg:@"Unlock achievement fail."];
+            [SocialWrapper onSocialResult:self withRet:kUnlockAchiFailed withMsg:@"Unlock achievement fail." andCallback:callbackID];
         } else {
             NSLog(@"Unlock achievement successfully.");
             
-            [SocialWrapper onSocialResult:self withRet:kUnlockAchiSuccess withMsg:@"Unlock achievement successfully."];
+            [SocialWrapper onSocialResult:self withRet:kUnlockAchiSuccess withMsg:@"Unlock achievement successfully." andCallback:callbackID];
         }
     }];
 }
 
-- (void) revealAchievement:(NSMutableDictionary *)achInfo
+- (void) revealAchievement:(NSDictionary *)achInfo
 {
-    NSString* achievementId = [achInfo objectForKey:@"achievementId"];
-    GPGAchievement* revealMe = [GPGAchievement achievementWithId:achievementId];
-    
-    [revealMe revealAchievementWithCompletionHandler:^(GPGAchievementState state, NSError *error) {
-        if (error) {
-            NSLog(@"Reveal achievement fail");
-            
-            [SocialWrapper onSocialResult:self withRet:kRevealAchiFailed withMsg:@"Reveal achievement fail."];
-        } else {
-            NSLog(@"Reveal achievement successfully.");
-            
-            [SocialWrapper onSocialResult:self withRet:kRevealAchiSuccess withMsg:@"Reveal achievement successfully."];
-        }
-    }];
+//    NSString* achievementId = [achInfo objectForKey:@"achievementId"];
+//    
+//    GPGAchievement* revealMe = [GPGAchievement achievementWithId:achievementId];
+//    
+//    [revealMe revealAchievementWithCompletionHandler:^(GPGAchievementState state, NSError *error) {
+//        if (error) {
+//            NSLog(@"Reveal achievement fail");
+//            
+//            [SocialWrapper onSocialResult:self withRet:kRevealAchiFailed withMsg:@"Reveal achievement fail." andCallback:callb];
+//        } else {
+//            NSLog(@"Reveal achievement successfully.");
+//            
+//            [SocialWrapper onSocialResult:self withRet:kRevealAchiSuccess withMsg:@"Reveal achievement successfully."];
+//        }
+//    }];
 }
 
 - (void) resetAchievement:(NSMutableDictionary *)achInfo
 {
-    NSString* achievementId = [achInfo objectForKey:@"achievementId"];
-    GPGAchievement* resetMe = [GPGAchievement achievementWithId:achievementId];
-    
-    [resetMe resetAchievementWithCompletionHandler:^(NSError *error) {
-        if (error) {
-            NSLog(@"Reset achievement fail");
-            
-            [SocialWrapper onSocialResult:self withRet:kRevealAchiFailed withMsg:@"Reset achievement fail."];
-        } else {
-            NSLog(@"Reset achievement successfully.");
-            
-            [SocialWrapper onSocialResult:self withRet:kResetAchiSuccess withMsg:@"Reset achievement successfully."];
-        }
-    }];
+//    NSString* achievementId = [achInfo objectForKey:@"achievementId"];
+//    GPGAchievement* resetMe = [GPGAchievement achievementWithId:achievementId];
+//    
+//    [resetMe resetAchievementWithCompletionHandler:^(NSError *error) {
+//        if (error) {
+//            NSLog(@"Reset achievement fail");
+//            
+//            [SocialWrapper onSocialResult:self withRet:kRevealAchiFailed withMsg:@"Reset achievement fail."];
+//        } else {
+//            NSLog(@"Reset achievement successfully.");
+//            
+//            [SocialWrapper onSocialResult:self withRet:kResetAchiSuccess withMsg:@"Reset achievement successfully."];
+//        }
+//    }];
 }
 
 - (void) resetAchievements
 {
-    [GPGAchievement resetAllAchievementsWithCompletionHandler:^(NSError *error) {
-        if (error) {
-            NSLog(@"Reset achievements failed");
-            
-            [SocialWrapper onSocialResult:self withRet:kResetAchiFailed withMsg:@"Reset achievement fail."];
-        } else {
-            NSLog(@"Reset achievements successfully.");
-            
-            [SocialWrapper onSocialResult:self withRet:kResetAchiSuccess withMsg:@"Reset achievement successfully, login again to see chages."];
-        }
-    }];
+//    [GPGAchievement resetAllAchievementsWithCompletionHandler:^(NSError *error) {
+//        if (error) {
+//            NSLog(@"Reset achievements failed");
+//            
+//            [SocialWrapper onSocialResult:self withRet:kResetAchiFailed withMsg:@"Reset achievement fail."];
+//        } else {
+//            NSLog(@"Reset achievements successfully.");
+//            
+//            [SocialWrapper onSocialResult:self withRet:kResetAchiSuccess withMsg:@"Reset achievement successfully, login again to see chages."];
+//        }
+//    }];
 }
 
 - (void) showAchievements

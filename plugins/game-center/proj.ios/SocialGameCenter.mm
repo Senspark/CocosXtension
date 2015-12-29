@@ -12,6 +12,33 @@
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
+@interface ControllerDelegate() <GKGameCenterControllerDelegate>
+{
+    long _callbackID;
+}
+
+- (id) init: (long) callbackID;
+
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController;
+
+@end
+
+@implementation ControllerDelegate
+
+- (id) init: (long) callbackID {
+    if (self = [super init]) {
+        _callbackID = callbackID;
+    }
+    
+    return self;
+}
+
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
+    
+}
+
+@end
+
 @interface SocialGameCenter() <GKGameCenterControllerDelegate, GKGameCenterControllerDelegate>
 
 @end
@@ -29,11 +56,11 @@
     return self;
 }
 
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo {
+- (void) configDeveloperInfo : (NSDictionary*) cpInfo {
     
 }
 
-- (void) submitScore: (NSString*) leaderboardID withScore: (long) score
+- (void) submitScore: (NSString*) leaderboardID withScore: (long) score withCallback:(long)callbackID
 {
     GKScore *myScore = [[GKScore alloc] initWithLeaderboardIdentifier:leaderboardID];
     myScore.value = score;
@@ -54,6 +81,7 @@
 - (void) showLeaderboard: (NSString*) leaderboardID
 {
     GKGameCenterViewController *viewController = [[GKGameCenterViewController alloc] init];
+    
     viewController.leaderboardIdentifier = leaderboardID;
     viewController.viewState = GKGameCenterViewControllerStateLeaderboards;
     viewController.gameCenterDelegate = self;
@@ -67,12 +95,12 @@
     [self showLeaderboard: nil];
 }
 
-- (void) unlockAchievement: (NSMutableDictionary*) achInfo
+- (void) unlockAchievement: (NSDictionary*) achInfo
 {
     NSString* achievementId = [achInfo objectForKey:@"achievementId"];
-//    double percentComplete = [(NSNumber*) [achInfo objectForKey:@"percentComplete"] doubleValue];
+    double percentComplete = [(NSNumber*) [achInfo objectForKey:@"percent"] doubleValue];
     
-    [self submitAchievement:achievementId percentComplete:100];
+    [self submitAchievement:achievementId percentComplete:percentComplete];
 }
 
 - (void) showAchievements
@@ -156,6 +184,7 @@
                 achievement = nil;
             }
             achievement.percentComplete = percentComplete;
+            achievement.
         }
         else {
             achievement= [[GKAchievement alloc] initWithIdentifier: identifier];

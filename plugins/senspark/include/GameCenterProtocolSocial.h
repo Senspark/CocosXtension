@@ -24,21 +24,14 @@ public:
     void configureSocial();
     void showLeaderboards();
     
-    void unlockAchievement(const std::string& achievementId);
-    void unlockAchievement(const std::string& achievementId, GameCenterProtocolSocial::ProtocolSocialCallback pcb);
+    void unlockAchievement(const std::string& achievementId, const GameCenterProtocolSocial::SocialCallback &pcb);
+
+    void revealAchievement(const std::string& achievementId, const GameCenterProtocolSocial::SocialCallback& pcb);
+
+    void resetAchievement(const std::string& achievementId, const GameCenterProtocolSocial::SocialCallback& pcb);
     
-    void revealAchievement(cocos2d::plugin::TAchievementInfo achInfo);
-    void revealAchievement(cocos2d::plugin::TAchievementInfo achInfo, GameCenterProtocolSocial::ProtocolSocialCallback pcb);
-    void revealAchievement(const std::string& achievementId);
-    void revealAchievement(const std::string& achievementId, GameCenterProtocolSocial::ProtocolSocialCallback pcb);
-    
-    void resetAchievement(cocos2d::plugin::TAchievementInfo achInfo);
-    void resetAchievement(cocos2d::plugin::TAchievementInfo achInfo, GameCenterProtocolSocial::ProtocolSocialCallback pcb);
-    void resetAchievement(const std::string& achievementId);
-    void resetAchievement(const std::string& achievementId, GameCenterProtocolSocial::ProtocolSocialCallback pcb);
-    
-    void resetAchievements();
-    void resetAchievements(GameCenterProtocolSocial::ProtocolSocialCallback pcb);
+
+    void resetAchievements(const GameCenterProtocolSocial::SocialCallback &pcb);
 };
 
 NS_SENSPARK_PLUGIN_SOCIAL_END

@@ -18,15 +18,6 @@
 @property BOOL debug;
 @property (retain) NSMutableDictionary* earnedAchievementCache;
 
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
-- (void) submitScore: (NSString*) leaderboardID withScore: (long) score;
-- (void) showLeaderboard: (NSString*) leaderboardID;
-- (void) unlockAchievement: (NSMutableDictionary*) achInfo;
-- (void) showAchievements;
-- (void) setDebugMode: (BOOL) debug;
-- (NSString*) getSDKVersion;
-- (NSString*) getPluginVersion;
-
 - (void) submitAchievement: (NSString*) identifier percentComplete: (double) percentComplete;
 - (void) resetAchievements;
 - (void) showLeaderboards;

@@ -44,7 +44,7 @@ typedef enum {
     
 }
 
-+ (void) onSocialResult:(id) obj withRet:(SocialResult) ret withMsg:(NSString*) msg;
++ (void) onSocialResult:(id) obj withRet:(SocialResult) ret withMsg:(NSString*) msg andCallback: (long) callbackID;
 
 + (UIViewController *) getCurrentRootViewController;
 @end

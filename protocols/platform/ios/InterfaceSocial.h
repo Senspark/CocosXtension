@@ -24,11 +24,12 @@ THE SOFTWARE.
 
 @protocol InterfaceSocial <NSObject>
 
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
-- (void) submitScore: (NSString*) leaderboardID withScore: (int64_t) score;
+- (void) configDeveloperInfo : (NSDictionary*) cpInfo;
+- (void) submitScore: (NSString*) leaderboardID withScore: (int) score withCallback: (long) callbackID;
 - (void) showLeaderboard: (NSString*) leaderboardID;
-- (void) unlockAchievement: (NSMutableDictionary*) achInfo;
-- (void) showAchievements;
+
+- (void) unlockAchievement: (NSDictionary*) achInfo withCallback:(long) callbackID;
+- (void) showAchievements: (long) callbackID;
 - (void) setDebugMode: (BOOL) debug;
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;

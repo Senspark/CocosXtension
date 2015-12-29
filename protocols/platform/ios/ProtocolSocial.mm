@@ -28,7 +28,6 @@ THE SOFTWARE.
 namespace cocos2d { namespace plugin {
 
 ProtocolSocial::ProtocolSocial()
-: _listener(NULL)
 {
 }
 
@@ -36,7 +35,7 @@ ProtocolSocial::~ProtocolSocial()
 {
 }
 
-void ProtocolSocial::configDeveloperInfo(TSocialDeveloperInfo devInfo)
+void ProtocolSocial::configDeveloperInfo(TSocialInfo devInfo)
 {
     if (devInfo.empty())
     {
@@ -57,7 +56,7 @@ void ProtocolSocial::configDeveloperInfo(TSocialDeveloperInfo devInfo)
     }
 }
     
-void ProtocolSocial::submitScore(const char* leadboardID, int64_t score)
+void ProtocolSocial::submitScore(const std::string& leadboardID, int score, const SocialCallback& cb)
 {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != NULL);
@@ -66,23 +65,12 @@ void ProtocolSocial::submitScore(const char* leadboardID, int64_t score)
     if ([ocObj conformsToProtocol:@protocol(InterfaceSocial)]) {
         NSObject<InterfaceSocial>* curObj = ocObj;
         
-        NSString* pID = [NSString stringWithUTF8String:leadboardID];
-        [curObj submitScore:pID withScore:score];
+        CallbackWrapper *wrapper = new CallbackWrapper(cb);
+        
+        NSString* pID = [NSString stringWithUTF8String:leadboardID.c_str()];
+        [curObj submitScore:pID withScore:score withCallback:(long)wrapper];
     }
 }
-    void ProtocolSocial::submitScore(const char* leadboardID, int64_t score, ProtocolSocialCallback callback)
-    {
-        PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-        assert(pData != NULL);
-        setCallback(callback);
-        id ocObj = pData->obj;
-        if ([ocObj conformsToProtocol:@protocol(InterfaceSocial)]) {
-            NSObject<InterfaceSocial>* curObj = ocObj;
-            
-            NSString* pID = [NSString stringWithUTF8String:leadboardID];
-            [curObj submitScore:pID withScore:score];
-        }
-    }
 
 void ProtocolSocial::showLeaderboard(const char* leaderboardID)
 {
@@ -98,48 +86,22 @@ void ProtocolSocial::showLeaderboard(const char* leaderboardID)
     }
 }
 
-void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo)
+void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo, const SocialCallback &cb)
 {
-    if (achInfo.empty())
-    {
-        PluginUtilsIOS::outputLog("ProtocolSocial", "The achievement info is empty!");
-        return;
-    }
-    else
-    {
-        PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-        assert(pData != NULL);
+
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != NULL);
+
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceSocial)]) {
+        NSObject<InterfaceSocial>* curObj = ocObj;
         
-        id ocObj = pData->obj;
-        if ([ocObj conformsToProtocol:@protocol(InterfaceSocial)]) {
-            NSObject<InterfaceSocial>* curObj = ocObj;
-            
-            NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&achInfo);
-            [curObj unlockAchievement:pDict];
-        }
+        CallbackWrapper* wrapper = new CallbackWrapper(cb);
+        
+        NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&achInfo);
+        [curObj unlockAchievement:pDict withCallback:(long) wrapper];
     }
 }
-    void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo,ProtocolSocialCallback callback)
-    {
-        if (achInfo.empty())
-        {
-            PluginUtilsIOS::outputLog("ProtocolSocial", "The achievement info is empty!");
-            return;
-        }
-        else
-        {
-            PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-            assert(pData != NULL);
-            setCallback(callback);
-            id ocObj = pData->obj;
-            if ([ocObj conformsToProtocol:@protocol(InterfaceSocial)]) {
-                NSObject<InterfaceSocial>* curObj = ocObj;
-                
-                NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&achInfo);
-                [curObj unlockAchievement:pDict];
-            }
-        }
-    }
 
 void ProtocolSocial::showAchievements()
 {

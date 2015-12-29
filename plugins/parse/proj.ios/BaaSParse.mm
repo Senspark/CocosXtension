@@ -173,10 +173,10 @@ static BOOL sIsSet = false;
     PFUser* parseUser = [PFUser currentUser];
     if (parseUser) {
         [parseUser fetchInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
-            if (object) {
-                [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveSucceed andReturnObj:[BaaSParse convertPFUserToDictionary:parseUser] andCallbackID:cb];
-            } else {
+            if (error) {
                 [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveFailed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cb];
+            } else {
+                [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveSucceed andReturnObj:[BaaSParse convertPFUserToDictionary:parseUser] andCallbackID:cb];
             }
         }];
     } else {
@@ -264,16 +264,15 @@ static BOOL sIsSet = false;
 - (void) getObjectInBackground: (NSString*) className withId: (NSString*) objId andCallbackID:(long) cbID {
     PFQuery *query = [PFQuery queryWithClassName:className];
     [query getObjectInBackgroundWithId:objId block:^(PFObject *object,  NSError *error) {
-        if (object) {
-            
-            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveSucceed andReturnObj:[BaaSParse convertPFObjectToDictionary:object] andCallbackID:cbID];
-            
-            NSLog(@"Retrieve object successfully.");
-        } else {
-            
+        if (error) {
             [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveFailed andReturnObj:nil andCallbackID:cbID];
             
             NSLog(@"Retrieve object fail.");
+            
+        } else {
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveSucceed andReturnObj:[BaaSParse convertPFObjectToDictionary:object] andCallbackID:cbID];
+            
+            NSLog(@"Retrieve object successfully.");
         }
     }];
 }
@@ -312,6 +311,18 @@ static BOOL sIsSet = false;
     NSLog(@"Retrieve object successfully.");
     
     return [BaaSParse convertPFObjectToDictionary:object];
+}
+
+- (void) fetchObjectInBackground: (NSString*) className withId: (NSString*) objId andCallbackID:(long) cbID {
+    PFObject* parseObj = [PFObject objectWithoutDataWithObjectId:objId];
+
+    [parseObj fetchInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+        if (error) {
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveFailed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];
+        } else {
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kRetrieveSucceed andReturnObj:[BaaSParse convertPFObjectToDictionary:parseObj] andCallbackID:cbID];
+        }
+    }];
 }
 
 - (void) findObjectsInBackground: (NSString*) className whereKey: (NSString*) key containedIn: (NSArray*) values  withCallbackID:(long)callbackId {
@@ -383,7 +394,6 @@ static BOOL sIsSet = false;
             }
         }];
      }];
-    
 }
 
 - (NSString*) updateObject:(NSString *)className withId:(NSString *)objId withParams:(NSDictionary *)params {
@@ -411,45 +421,29 @@ static BOOL sIsSet = false;
 }
 
 - (BOOL) deleteObject: (NSString*) className withId: (NSString*) objId {
-    PFQuery* query = [PFQuery queryWithClassName:className];
-
-    PFObject *object = [query getObjectWithId:objId];
+    PFObject *object = [PFObject objectWithoutDataWithClassName:className objectId:objId];
     BOOL ret = false;
     
-    if (object) {
-        ret = [object delete];
-        if (ret) {
-            NSLog(@"Delete object successfully");
-        } else {
-            NSLog(@"Delete object failed");
-        }
+    ret = [object delete];
+    if (ret) {
+        NSLog(@"Delete object successfully");
     } else {
-        NSLog(@"Object not found");
+        NSLog(@"Delete object failed");
     }
-    
     return ret;
 }
 
 - (void) deleteObjectInBackground: (NSString*) className withId: (NSString*) objId andCallbackID:(long) cbID {
-    PFQuery* query = [PFQuery queryWithClassName:className];
+    PFObject* object = [PFObject objectWithoutDataWithClassName:className objectId:objId];
+    [object deleteInBackgroundWithBlock:^(BOOL succeed, NSError* error) {
+        if (succeed && error == nil) {
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kDeleteSucceed andReturnMsg:object.objectId andCallbackID:cbID];
 
-    [query getObjectInBackgroundWithId:objId block:^(PFObject* object, NSError* error) {
-        if (object && error == nil) {
-            [object deleteInBackgroundWithBlock:^(BOOL succeed, NSError* error2) {
-                if (succeed && error2 == nil) {
-                    [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kDeleteSucceed andReturnMsg:object.objectId andCallbackID:cbID];
-
-                    NSLog(@"Delete object successfully with ID: %@ ", objId);
-                } else {
-                    [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kDeleteFailed andReturnMsg:error2.description andCallbackID:cbID];
-                    
-                    NSLog(@"Delete object failed with ID: %@", objId);
-                }
-            }];
+            NSLog(@"Delete object successfully with ID: %@ ", objId);
         } else {
             [BaaSWrapper onBaaSActionResult:self withReturnCode:(int)BaaSActionResultCode::kDeleteFailed andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];
             
-            NSLog(@"Object not found");
+            NSLog(@"Delete object failed with ID: %@", objId);
         }
     }];
 }
