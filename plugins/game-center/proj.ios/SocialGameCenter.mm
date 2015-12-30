@@ -12,12 +12,12 @@
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
-@interface ControllerDelegate() <GKGameCenterControllerDelegate>
+@interface ControllerDelegate: NSObject <GKGameCenterControllerDelegate>
 {
     long _callbackID;
 }
 
-- (id) init: (long) callbackID;
+- (id) initWithCallbackID: (long) callbackID;
 
 - (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController;
 
@@ -25,7 +25,7 @@
 
 @implementation ControllerDelegate
 
-- (id) init: (long) callbackID {
+- (id) initWithCallbackID: (long) callbackID {
     if (self = [super init]) {
         _callbackID = callbackID;
     }
@@ -34,7 +34,7 @@
 }
 
 - (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
-    
+    [SocialWrapper onDialogDismissedWithCallback:_callbackID];
 }
 
 @end
@@ -60,7 +60,7 @@
     
 }
 
-- (void) submitScore: (NSString*) leaderboardID withScore: (long) score withCallback:(long)callbackID
+- (void) submitScore: (NSString*) leaderboardID withScore: (int) score withCallback:(long)callbackID
 {
     GKScore *myScore = [[GKScore alloc] initWithLeaderboardIdentifier:leaderboardID];
     myScore.value = score;
@@ -69,61 +69,66 @@
         if (error) {
             NSLog(@"Submit score fail.");
             
-            [SocialWrapper onSocialResult:self withRet:kSubmitScoreFailed withMsg:@"Submit score fail."];
+            [SocialWrapper onSocialResult:self withRet:false withMsg:@"Submit score fail." andCallback:callbackID];
         } else {
-            NSLog(@"Submit score %ld", score);
+            NSLog(@"Submit score %d", score);
             
-            [SocialWrapper onSocialResult:self withRet:kSubmitScoreSuccess withMsg:@"Submit score successfully."];
+            [SocialWrapper onSocialResult:self withRet:true withMsg:@"Submit score successfully." andCallback:callbackID];
         }
     }];
 }
 
-- (void) showLeaderboard: (NSString*) leaderboardID
+- (void) showLeaderboard: (NSString*) leaderboardID withCallback:(long)callbackID
 {
     GKGameCenterViewController *viewController = [[GKGameCenterViewController alloc] init];
     
     viewController.leaderboardIdentifier = leaderboardID;
     viewController.viewState = GKGameCenterViewControllerStateLeaderboards;
-    viewController.gameCenterDelegate = self;
+    
+    ControllerDelegate* delegate = [[ControllerDelegate alloc] initWithCallbackID:callbackID];
+    viewController.gameCenterDelegate = delegate;
+    
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         [[SocialWrapper getCurrentRootViewController] presentViewController:viewController animated:YES completion:nil];
     });
 }
 
-- (void) showLeaderboards
+- (void) showLeaderboards: (long) cbID
 {
-    [self showLeaderboard: nil];
+    [self showLeaderboard: nil withCallback:cbID];
 }
 
-- (void) unlockAchievement: (NSDictionary*) achInfo
+- (void) unlockAchievement: (NSDictionary*) achInfo withCallback:(long)callbackID
 {
     NSString* achievementId = [achInfo objectForKey:@"achievementId"];
     double percentComplete = [(NSNumber*) [achInfo objectForKey:@"percent"] doubleValue];
     
-    [self submitAchievement:achievementId percentComplete:percentComplete];
+    [self submitAchievement:achievementId percentComplete:percentComplete andCallback:callbackID];
 }
 
-- (void) showAchievements
+- (void) showAchievements: (long) cbID
 {
     GKGameCenterViewController *viewController = [[GKGameCenterViewController alloc] init];
     viewController.viewState = GKGameCenterViewControllerStateAchievements;
-    viewController.gameCenterDelegate = self;
+    
+    ControllerDelegate *delegate = [[ControllerDelegate alloc] initWithCallbackID: cbID];
+    viewController.gameCenterDelegate = delegate;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [[SocialWrapper getCurrentRootViewController] presentViewController:viewController animated:YES completion:nil];
     });
 }
 
-- (void) resetAchievements
+- (void) resetAchievements: (long) cbID
 {
     self.earnedAchievementCache= NULL;
     [GKAchievement resetAchievementsWithCompletionHandler: ^(NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
-                [SocialWrapper onSocialResult:self withRet:kResetAchiFailed withMsg:@"Reset achievements fail."];
+                [SocialWrapper onSocialResult:self withRet:false withMsg:@"Reset achievements fail." andCallback:cbID];
             } else {
-                [SocialWrapper onSocialResult:self withRet:kResetAchiSuccess withMsg:@"Reset achievements success."];
+                [SocialWrapper onSocialResult:self withRet:true withMsg:@"Reset achievements success." andCallback:cbID];
             }
-            
         });
      }];
 }
@@ -147,7 +152,8 @@
     [[SocialWrapper getCurrentRootViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void) submitAchievement:(NSString *)identifier percentComplete:(double)percentComplete {
+- (void) submitAchievement:(NSString *)identifier percentComplete:(double)percentComplete  andCallback:(long) cbID
+{
 
     //GameCenter check for duplicate achievements when the achievement is submitted, but if you only want to report
     // new achievements to the user, then you need to check if it's been earned
@@ -163,12 +169,12 @@
                 }
                 self.earnedAchievementCache= tempCache;
                 
-                [self submitAchievement: identifier percentComplete: percentComplete];
+                [self submitAchievement: identifier percentComplete: percentComplete andCallback:cbID];
             }
             else {
                 //Something broke loading the achievement list.  Error out, and we'll try again the next time achievements submit.
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [SocialWrapper onSocialResult:self withRet:kUnlockAchiFailed withMsg:@"Error when loading the achievement list, please try again later."];
+                    [SocialWrapper onSocialResult:self withRet:false withMsg:@"Error when loading the achievement list, please try again later." andCallback:cbID];
 
                 });
             }
@@ -182,9 +188,10 @@
             if((achievement.percentComplete >= 100.0f) || (achievement.percentComplete >= percentComplete)) {
                 //Achievement has already been earned so we're done.
                 achievement = nil;
+                
+                [SocialWrapper onSocialResult:self withRet:false withMsg:[NSString stringWithFormat:@"The achievement has been unlocked - %@", identifier] andCallback:cbID];
             }
             achievement.percentComplete = percentComplete;
-            achievement.
         }
         else {
             achievement= [[GKAchievement alloc] initWithIdentifier: identifier];
@@ -198,11 +205,11 @@
             [GKAchievement reportAchievements:@[achievement] withCompletionHandler:^(NSError *error) {
                 if (error) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [SocialWrapper onSocialResult:self withRet:kUnlockAchiFailed withMsg:[NSString stringWithFormat:@"Submit achievement with id: %@ error", identifier]];
+                        [SocialWrapper onSocialResult:self withRet:false withMsg:[NSString stringWithFormat:@"Submit achievement with id: %@ error", identifier] andCallback:cbID];
                     });
                 } else {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [SocialWrapper onSocialResult:self withRet:kUnlockAchiSuccess withMsg:[NSString stringWithFormat:@"Submit achievement with id: %@ success", identifier]];
+                        [SocialWrapper onSocialResult:self withRet:true withMsg:[NSString stringWithFormat:@"Submit achievement with id: %@ success", identifier] andCallback:cbID];
                         
                     });
                 }

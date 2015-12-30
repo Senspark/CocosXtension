@@ -26,10 +26,6 @@ void GameCenterProtocolSocial::configureSocial()
 {
 }
 
-void GameCenterProtocolSocial::showLeaderboards() {
-    callFuncWithParam("showLeaderboards", nullptr);
-}
-
 void GameCenterProtocolSocial::unlockAchievement(const std::string &achievementId, const GameCenterProtocolSocial::SocialCallback& pcb) {
     TAchievementInfo achievementInfo;
     achievementInfo["achievemetId"] = achievementId;

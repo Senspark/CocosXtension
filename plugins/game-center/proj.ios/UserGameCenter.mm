@@ -13,10 +13,6 @@
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
-//@interface <#class name#> : <#superclass#>
-//
-//@end
-
 @implementation UserGameCenter
 
 #pragma mark -
@@ -24,9 +20,8 @@
 
 using namespace cocos2d::plugin;
 
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo
+- (void) configDeveloperInfo : (NSDictionary*) cpInfo
 {
-
 }
 
 - (void) login
@@ -40,26 +35,29 @@ using namespace cocos2d::plugin;
             } else if ([GKLocalPlayer localPlayer].isAuthenticated) {
                 NSLog(@"Signed in!");
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    [UserWrapper onActionResult:self withRet:kLoginSucceed withMsg:@"Game Center: login successful"];
+                    [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLoginSucceed withMsg:@"Game Center: login successful"];
                 });
             } else {
 //            if (error) {
                 NSLog(@"Received an error while signing in %@", [error localizedDescription]);
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    [UserWrapper onActionResult:self withRet:kLoginFailed withMsg:@"Game Center: login failed"];
+                    [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLoginFailed withMsg:@"Game Center: login failed"];
                 });
           }
         }];
     } else {    //iOS < 6
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         [[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:^(NSError *error) {
             if (error) {
                 NSLog(@"Received an error while signing in %@", [error localizedDescription]);
-                [UserWrapper onActionResult:self withRet:kLoginFailed withMsg:@"Game Center: login failed"];
+                [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLoginFailed withMsg:@"Game Center: login failed"];
             } else {
                 NSLog(@"Signed in!");
-                [UserWrapper onActionResult:self withRet:kLoginSucceed withMsg:@"Game Center: login successful"];
+                [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLoginSucceed withMsg:@"Game Center: login successful"];
             }
         }];
+#pragma GCC diagnostic pop
     }
     
 }

@@ -22,7 +22,6 @@ public:
     virtual ~GooglePlayProtocolSocial();
     
     void configureSocial(const std::string& appId);
-    void showLeaderboards();
     
     void unlockAchievement(const std::string& achievementId, const GooglePlayProtocolSocial::SocialCallback& pcb);
     

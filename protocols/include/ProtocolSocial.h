@@ -34,32 +34,27 @@ namespace cocos2d { namespace plugin {
 typedef std::map<std::string, std::string> TSocialInfo;
 typedef std::map<std::string, std::string> TAchievementInfo;
 
-typedef enum
-{
-    // code for leaderboard feature
-    SCORE_SUBMIT_SUCCESS = 1,
-    SCORE_SUBMIT_FAILED,
-
-    // code for achievement feature
-    ACH_UNLOCK_SUCCESS,
-    ACH_UNLOCK_FAILED,
-
-} SocialRetCode;
-
 class ProtocolSocial : public PluginProtocol
 {
 public:
     ProtocolSocial();
     virtual ~ProtocolSocial();
 
-	typedef std::function<void(int, const std::string&)> SocialCallback;
+	typedef std::function<void(bool, const std::string&)> SocialCallback;
+    typedef std::function<void()> DialogCallback;
     
     typedef struct __CallbackWrapper {
         __CallbackWrapper(const SocialCallback& cb) {
-            fnPtr = cb;
+            callbackSocialPtr = cb;
         }
         
-        SocialCallback fnPtr;
+        __CallbackWrapper(const DialogCallback& cb) {
+            
+        }
+        
+        SocialCallback callbackSocialPtr;
+        DialogCallback callbackDialogPtr;
+        
     } CallbackWrapper;
     
     /**
@@ -75,13 +70,15 @@ public:
      * @brief methods of leaderboard feature
      */
     void submitScore(const std::string& leadboardID, int score, const SocialCallback& cb);
-    void showLeaderboard(const char* leaderboardID);
-
+    
+    void showLeaderboard(const char* leaderboardID, const SocialCallback& cb);
+    void showLeaderboards(const DialogCallback& cb);
     /**
      * @brief methods of achievement feature
      */
     void unlockAchievement(TAchievementInfo achInfo, const SocialCallback& cb);
-    void showAchievements();
+    
+    void showAchievements(const DialogCallback& cb);
 };
 
 }} // namespace cocos2d { namespace plugin {

@@ -29,10 +29,6 @@ void GooglePlayProtocolSocial::configureSocial(const std::string &appId)
     configDeveloperInfo(devInfo);
 }
 
-void GooglePlayProtocolSocial::showLeaderboards() {
-    callFuncWithParam("showLeaderboards", nullptr);
-}
-
 void GooglePlayProtocolSocial::unlockAchievement(const std::string &achievementId, const GooglePlayProtocolSocial::SocialCallback& pcb) {
     
     TAchievementInfo achievementInfo;

@@ -33,26 +33,19 @@ ProtocolSocial::ProtocolSocial()
 
 ProtocolSocial::~ProtocolSocial()
 {
+    PluginUtilsIOS::erasePluginOCData(this);
 }
 
 void ProtocolSocial::configDeveloperInfo(TSocialInfo devInfo)
 {
-    if (devInfo.empty())
-    {
-        PluginUtilsIOS::outputLog("The developer info is empty for %s!", this->getPluginName());
-        return;
-    }
-    else
-    {
-        PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-        assert(pData != NULL);
-        
-        id ocObj = pData->obj;
-        if ([ocObj conformsToProtocol:@protocol(InterfaceSocial)]) {
-            NSObject<InterfaceSocial>* curObj = ocObj;
-            NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&devInfo);
-            [curObj configDeveloperInfo:pDict];
-        }
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != NULL);
+    
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceSocial)]) {
+        NSObject<InterfaceSocial>* curObj = ocObj;
+        NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&devInfo);
+        [curObj configDeveloperInfo:pDict];
     }
 }
     
@@ -72,7 +65,7 @@ void ProtocolSocial::submitScore(const std::string& leadboardID, int score, cons
     }
 }
 
-void ProtocolSocial::showLeaderboard(const char* leaderboardID)
+void ProtocolSocial::showLeaderboard(const char* leaderboardID, const SocialCallback& cb)
 {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != NULL);
@@ -81,8 +74,24 @@ void ProtocolSocial::showLeaderboard(const char* leaderboardID)
     if ([ocObj conformsToProtocol:@protocol(InterfaceSocial)]) {
         NSObject<InterfaceSocial>* curObj = ocObj;
         
+        CallbackWrapper* wrapper = new CallbackWrapper(cb);
+        
         NSString* pID = [NSString stringWithUTF8String:leaderboardID];
-        [curObj showLeaderboard:pID];
+        [curObj showLeaderboard:pID withCallback:(long) wrapper];
+    }
+}
+    
+void ProtocolSocial::showLeaderboards(const DialogCallback &cb) {
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != NULL);
+    
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceSocial)]) {
+        NSObject<InterfaceSocial>* curObj = ocObj;
+        
+        CallbackWrapper* wrapper = new CallbackWrapper(cb);
+        
+        [curObj showLeaderboards:(long) wrapper];
     }
 }
 
@@ -103,9 +112,19 @@ void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo, const SocialCal
     }
 }
 
-void ProtocolSocial::showAchievements()
+void ProtocolSocial::showAchievements(const DialogCallback &cb)
 {
-    PluginUtilsIOS::callOCFunctionWithName(this, "showAchievements");
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != NULL);
+    
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceSocial)]) {
+        NSObject<InterfaceSocial>* curObj = ocObj;
+        
+        CallbackWrapper* wrapper = new CallbackWrapper(cb);
+        
+        [curObj showAchievements:(long) wrapper];
+    }
 }
 
 }} // namespace cocos2d { namespace plugin {

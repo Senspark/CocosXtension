@@ -22,7 +22,6 @@ public:
     virtual ~GameCenterProtocolSocial();
     
     void configureSocial();
-    void showLeaderboards();
     
     void unlockAchievement(const std::string& achievementId, const GameCenterProtocolSocial::SocialCallback &pcb);
 
