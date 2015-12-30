@@ -49,7 +49,7 @@ public:
         }
         
         __CallbackWrapper(const DialogCallback& cb) {
-            
+            callbackDialogPtr = cb;
         }
         
         SocialCallback callbackSocialPtr;
@@ -71,7 +71,7 @@ public:
      */
     void submitScore(const std::string& leadboardID, int score, const SocialCallback& cb);
     
-    void showLeaderboard(const char* leaderboardID, const SocialCallback& cb);
+    void showLeaderboard(const std::string& leaderboardID, const DialogCallback& cb);
     void showLeaderboards(const DialogCallback& cb);
     /**
      * @brief methods of achievement feature

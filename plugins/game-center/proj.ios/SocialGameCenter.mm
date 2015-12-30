@@ -12,7 +12,7 @@
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
-@interface ControllerDelegate: NSObject <GKGameCenterControllerDelegate>
+@interface GameCenterControllerDelegate: NSObject <GKGameCenterControllerDelegate>
 {
     long _callbackID;
 }
@@ -23,10 +23,10 @@
 
 @end
 
-@implementation ControllerDelegate
+@implementation GameCenterControllerDelegate
 
 - (id) initWithCallbackID: (long) callbackID {
-    if (self = [super init]) {
+    if (self = [self init]) {
         _callbackID = callbackID;
     }
     
@@ -34,12 +34,12 @@
 }
 
 - (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
-    [SocialWrapper onDialogDismissedWithCallback:_callbackID];
+    
+    [gameCenterViewController dismissViewControllerAnimated:YES completion:^{
+        [SocialWrapper onDialogDismissedWithCallback:_callbackID];
+        [self release];
+    }];
 }
-
-@end
-
-@interface SocialGameCenter() <GKGameCenterControllerDelegate, GKGameCenterControllerDelegate>
 
 @end
 
@@ -62,7 +62,7 @@
 
 - (void) submitScore: (NSString*) leaderboardID withScore: (int) score withCallback:(long)callbackID
 {
-    GKScore *myScore = [[GKScore alloc] initWithLeaderboardIdentifier:leaderboardID];
+    GKScore *myScore = [[[GKScore alloc] initWithLeaderboardIdentifier:leaderboardID] autorelease];
     myScore.value = score;
     
     [GKScore reportScores:@[myScore] withCompletionHandler:^(NSError *error) {
@@ -80,13 +80,12 @@
 
 - (void) showLeaderboard: (NSString*) leaderboardID withCallback:(long)callbackID
 {
-    GKGameCenterViewController *viewController = [[GKGameCenterViewController alloc] init];
+    GKGameCenterViewController *viewController = [[[GKGameCenterViewController alloc] init] autorelease];
     
     viewController.leaderboardIdentifier = leaderboardID;
     viewController.viewState = GKGameCenterViewControllerStateLeaderboards;
     
-    ControllerDelegate* delegate = [[ControllerDelegate alloc] initWithCallbackID:callbackID];
-    viewController.gameCenterDelegate = delegate;
+    viewController.gameCenterDelegate = [[GameCenterControllerDelegate alloc] initWithCallbackID:callbackID];
     
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         [[SocialWrapper getCurrentRootViewController] presentViewController:viewController animated:YES completion:nil];
@@ -108,11 +107,10 @@
 
 - (void) showAchievements: (long) cbID
 {
-    GKGameCenterViewController *viewController = [[GKGameCenterViewController alloc] init];
+    GKGameCenterViewController *viewController = [[[GKGameCenterViewController alloc] init] autorelease];
     viewController.viewState = GKGameCenterViewControllerStateAchievements;
-    
-    ControllerDelegate *delegate = [[ControllerDelegate alloc] initWithCallbackID: cbID];
-    viewController.gameCenterDelegate = delegate;
+
+    viewController.gameCenterDelegate = [[GameCenterControllerDelegate alloc] initWithCallbackID: cbID];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [[SocialWrapper getCurrentRootViewController] presentViewController:viewController animated:YES completion:nil];
@@ -146,10 +144,6 @@
 - (NSString*) getPluginVersion
 {
     return @"0.1.0";
-}
-
-- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
-    [[SocialWrapper getCurrentRootViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) submitAchievement:(NSString *)identifier percentComplete:(double)percentComplete  andCallback:(long) cbID

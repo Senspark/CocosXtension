@@ -13,7 +13,7 @@
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
-@interface ControllerDelegate : NSObject <GPGLauncherDelegate>
+@interface GooglePlayControllerDelegate : NSObject <GPGLauncherDelegate>
 {
     long _callbackID;
 }
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation ControllerDelegate
+@implementation GooglePlayControllerDelegate
 
 - (id) initWithCallbackID:(long)callbackID
 {
@@ -35,8 +35,8 @@
 }
 
 - (void)launcherDismissed {
-    
     [SocialWrapper onDialogDismissedWithCallback:_callbackID];
+    [self release];
 }
 
 @end
@@ -49,7 +49,7 @@
 
 - (void) submitScore: (NSString*) leaderboardID withScore: (int) score withCallback:(long) callbackID
 {
-    GPGScore *myScore = [[GPGScore alloc] initWithLeaderboardId:leaderboardID];
+    GPGScore *myScore = [[[GPGScore alloc] initWithLeaderboardId:leaderboardID] autorelease];
     myScore.value = score;
     [myScore submitScoreWithCompletionHandler:^(GPGScoreReport *report, NSError *error) {
         if (error) {
@@ -72,16 +72,19 @@
 
 - (void) showLeaderboards: (long) callbackID;
 {
-    GPGLauncherController* controller = [[GPGLauncherController alloc] init];
-    ControllerDelegate* delegate = [[ControllerDelegate alloc] initWithCallbackID:callbackID];
+    GPGLauncherController* controller = [[[GPGLauncherController alloc] init] autorelease];
     
-    controller.launcherDelegate = delegate;
+    controller.launcherDelegate = [[GooglePlayControllerDelegate alloc] initWithCallbackID:callbackID];
     [controller presentLeaderboardList];
 }
 
-- (void) showLeaderboard: (NSString*) leaderboardID
+- (void) showLeaderboard: (NSString*) leaderboardID withCallback:(long)callbackID
 {
-    [[GPGLauncherController sharedInstance] presentLeaderboardWithLeaderboardId:leaderboardID];
+    GPGLauncherController* controller = [[[GPGLauncherController alloc] init] autorelease];
+    
+    controller.launcherDelegate = [[GooglePlayControllerDelegate alloc] initWithCallbackID:callbackID];
+    
+    [controller presentLeaderboardWithLeaderboardId:leaderboardID];
 }
 
 - (void) unlockAchievement: (NSMutableDictionary*) achInfo withCallback: (long)callbackID
@@ -163,11 +166,10 @@
 
 - (void) showAchievements: (long) cbID
 {
-    GPGLauncherController* controller = [[GPGLauncherController alloc] init];
-    ControllerDelegate *delegate = [[ControllerDelegate alloc] initWithCallbackID:cbID];
-    controller.launcherDelegate = delegate;
+    GPGLauncherController* controller = [[[GPGLauncherController alloc] init] autorelease];
+    controller.launcherDelegate = [[GooglePlayControllerDelegate alloc] initWithCallbackID:cbID];
     
-    [[GPGLauncherController sharedInstance] presentAchievementList];
+    [controller presentAchievementList];
 }
 
 - (void) setDebugMode: (BOOL) debug

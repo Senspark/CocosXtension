@@ -65,7 +65,7 @@ void ProtocolSocial::submitScore(const std::string& leadboardID, int score, cons
     }
 }
 
-void ProtocolSocial::showLeaderboard(const char* leaderboardID, const SocialCallback& cb)
+void ProtocolSocial::showLeaderboard(const std::string& leaderboardID, const DialogCallback& cb)
 {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != NULL);
@@ -76,7 +76,7 @@ void ProtocolSocial::showLeaderboard(const char* leaderboardID, const SocialCall
         
         CallbackWrapper* wrapper = new CallbackWrapper(cb);
         
-        NSString* pID = [NSString stringWithUTF8String:leaderboardID];
+        NSString* pID = [NSString stringWithUTF8String:leaderboardID.c_str()];
         [curObj showLeaderboard:pID withCallback:(long) wrapper];
     }
 }
