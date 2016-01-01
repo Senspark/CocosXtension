@@ -196,6 +196,16 @@ int PluginProtocol::callIntFuncWithParam(const char* funcName, std::vector<Plugi
 {
     CALL_OC_FUNC(int, 0, Int)
 }
+    
+long PluginProtocol::callLongFuncWithParam(const char* funcName, PluginParam* param, ...)
+{
+    CALL_OC_FUNC_WITH_VALIST(Long)
+}
+
+long PluginProtocol::callLongFuncWithParam(const char* funcName, std::vector<PluginParam*> params)
+{
+    CALL_OC_FUNC(long, 0, Int)
+}
 
 bool PluginProtocol::callBoolFuncWithParam(const char* funcName, PluginParam* param, ...)
 {
@@ -215,6 +225,16 @@ float PluginProtocol::callFloatFuncWithParam(const char* funcName, PluginParam* 
 float PluginProtocol::callFloatFuncWithParam(const char* funcName, std::vector<PluginParam*> params)
 {
     CALL_OC_FUNC(float, 0.0f, Float)
+}
+    
+double PluginProtocol::callDoubleFuncWithParam(const char* funcName, PluginParam* param, ...)
+{
+    CALL_OC_FUNC_WITH_VALIST(Double)
+}
+
+double PluginProtocol::callDoubleFuncWithParam(const char* funcName, std::vector<PluginParam*> params)
+{
+    CALL_OC_FUNC(double, 0.0f, Double)
 }
 
 }} //namespace cocos2d { namespace plugin {

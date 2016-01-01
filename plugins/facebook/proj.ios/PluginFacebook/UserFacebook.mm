@@ -88,9 +88,8 @@ using namespace cocos2d::plugin;
     if ([FBSDKAccessToken currentAccessToken]) {
         FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
         [login logOut];
-        [FBSDKAccessToken setCurrentAccessToken:nil];
         
-        [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLogoutSucceed withMsg:@"Facebook logout"];
+        [UserWrapper onActionResult:self withRet: (int)([self isLoggedIn] ? UserActionResultCode::kLogoutFailed : UserActionResultCode::kLogoutSucceed) withMsg:@"Facebook logout"];
     } else {
         [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLogoutFailed withMsg:@"Not login yet."];
     }

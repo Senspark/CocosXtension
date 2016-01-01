@@ -13,9 +13,9 @@
 {
 }
 
-+ (void) onBaaSActionResult: (id)obj withReturnCode: (int)ret andReturnMsg: (NSString*) msg andCallbackID: (long) callbackID;
++ (void) onBaaSActionResult: (id)obj withReturnCode: (bool)success andReturnMsg: (NSString*) msg andCallbackID: (long) callbackID;
 
-+ (void) onBaaSActionResult: (id)obj withReturnCode: (int)ret andReturnObj: (id) returnObj andCallbackID: (long) callbackID;
++ (void) onBaaSActionResult: (id)obj withReturnCode: (bool)success andReturnObj: (id) returnObj andCallbackID: (long) callbackID;
 
 + (UIViewController *) getCurrentRootViewController;
 

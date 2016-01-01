@@ -15,38 +15,12 @@
 
 
 namespace cocos2d { namespace plugin {
-    
-    enum class BaaSActionResultCode {
-        kLoginSucceed = 0,
-        kLoginFailed,
-        
-        kLogoutSucceed,
-        kLogoutFailed,
-        
-        kSignUpSucceed,
-        kSignUpFailed,
-        
-        kSaveSucceed,
-        kSaveFailed,
-        
-        kRetrieveSucceed,
-        kRetrieveFailed,
-        
-        kDeleteSucceed,
-        kDeleteFailed,
-        
-        kUpdateSucceed,
-        kUpdateFailed,
-
-        kFetchConfigSucceed,
-        kFetchConfigFailed,
-    };
 
     typedef std::map<std::string, std::string> TBaaSInfo;
     
     class ProtocolBaaS : public PluginProtocol {
     public:
-        typedef std::function<void(int, const std::string&)> BaaSCallback;
+        typedef std::function<void(bool, const std::string&)> BaaSCallback;
         
         typedef struct __CallbackWrapper {
             __CallbackWrapper(BaaSCallback& cb) {
@@ -85,17 +59,6 @@ namespace cocos2d { namespace plugin {
 
         void deleteObjectInBackground(const std::string& className, const std::string& objId, BaaSCallback& cb);
         bool deleteObject(const std::string& className, const std::string& objId);
-
-        /**
-         * Return cached config.
-         */
-        void    fetchConfigInBackground(BaaSCallback& cb);
-        bool    getBoolConfig(const std::string& param);
-        int     getIntegerConfig(const std::string& param);
-        double  getDoubleConfig(const std::string& param);
-        long    getLongConfig(const std::string& param);
-        const char* getStringConfig(const std::string& param);
-        const char* getArrayConfig(const std::string& param);
     };
 }}
 

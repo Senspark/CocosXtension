@@ -27,22 +27,14 @@ namespace cocos2d { namespace plugin {
     
     void ProtocolData::configDeveloperInfo(TDataDeveloperInfo devInfo)
     {
-        if (devInfo.empty())
-        {
-            PluginUtilsIOS::outputLog("The developer info is empty for %s!", this->getPluginName());
-            return;
-        }
-        else
-        {
-            PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-            assert(pData != NULL);
-            
-            id ocObj = pData->obj;
-            if ([ocObj conformsToProtocol:@protocol(InterfaceData)]) {
-                NSObject<InterfaceData>* curObj = ocObj;
-                NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&devInfo);
-                [curObj configDeveloperInfo:pDict];
-            }
+        PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+        assert(pData != NULL);
+        
+        id ocObj = pData->obj;
+        if ([ocObj conformsToProtocol:@protocol(InterfaceData)]) {
+            NSObject<InterfaceData>* curObj = ocObj;
+            NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&devInfo);
+            [curObj configDeveloperInfo:pDict];
         }
     }
     

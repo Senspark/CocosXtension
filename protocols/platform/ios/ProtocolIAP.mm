@@ -41,22 +41,15 @@ ProtocolIAP::~ProtocolIAP()
 
 void ProtocolIAP::configDeveloperInfo(TIAPDeveloperInfo devInfo)
 {
-    if (devInfo.empty())
-    {
-        PluginUtilsIOS::outputLog("The developer info is empty for %s!", this->getPluginName());
-        return;
-    }
-    else
-    {
-        PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-        assert(pData != NULL);
-        
-        id ocObj = pData->obj;
-        if ([ocObj conformsToProtocol:@protocol(InterfaceIAP)]) {
-            NSObject<InterfaceIAP>* curObj = ocObj;
-            NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&devInfo);
-            [curObj configDeveloperInfo:pDict];
-        }
+    
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != NULL);
+    
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceIAP)]) {
+        NSObject<InterfaceIAP>* curObj = ocObj;
+        NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&devInfo);
+        [curObj configDeveloperInfo:pDict];
     }
 }
 

@@ -78,6 +78,18 @@ public:
     static bool callOCBoolFunctionWithName(PluginProtocol* pPlugin, const char* funcName);
     
     /**
+     @brief method return long value
+     */
+    static long callOCLongFunctionWithName_oneParam(PluginProtocol* pPlugin, const char* funcName, id param);
+    static long callOCLongFunctionWithName(PluginProtocol* pPlugin, const char* funcName);
+    
+    /**
+     @brief method return double value
+     */
+    static double callOCDoubleFunctionWithName_oneParam(PluginProtocol* pPlugin, const char* funcName, id param);
+    static double callOCDoubleFunctionWithName(PluginProtocol* pPlugin, const char* funcName);
+    
+    /**
      @brief method return string value
      */
     static std::string callOCStringFunctionWithName_oneParam(PluginProtocol* pPlugin, const char* funcName, id param);
