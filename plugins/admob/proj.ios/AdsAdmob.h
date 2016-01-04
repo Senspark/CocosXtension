@@ -48,8 +48,7 @@ typedef enum {
 @property BOOL debug;
 
 @property (nonatomic, retain) NSTimer* showBannerAdsTimer;
-@property (copy, nonatomic) NSString* strBannerPublishID;
-@property (copy, nonatomic) NSString* strInterstitialPublishID;
+@property (copy, nonatomic) NSString* strPublishID;
 @property (assign, nonatomic) GADBannerView* bannerView;
 @property (assign, nonatomic) GADInterstitial* interstitialView;
 @property (assign, nonatomic) NSMutableArray* testDeviceIDs;
