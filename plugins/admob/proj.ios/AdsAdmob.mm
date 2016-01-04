@@ -178,7 +178,7 @@
     self.bannerView.adUnitID = self.strPublishID;
     self.bannerView.delegate = self;
     [self.bannerView setRootViewController:[AdsWrapper getCurrentRootViewController]];
-    [AdsWrapper addAdView:self.bannerView atPos:(AdsPosEnum)pos];
+    [AdsWrapper addAdView:self.bannerView atPos:(ProtocolAds::AdsPos)pos];
     
     GADRequest* request = [GADRequest request];
     request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
@@ -202,7 +202,7 @@
         OUTPUT_LOG(@"Admob interstitial not loaded.");
     } else {
         [self.interstitialView presentFromRootViewController:[AdsWrapper getCurrentRootViewController]];
-        [AdsWrapper onAdsResult:self withRet:kAdsShown withMsg:@"Ads is shown!"];
+        [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsShown withMsg:@"Ads is shown!"];
     }
 }
 
@@ -223,40 +223,40 @@
 // Since we've received an ad, let's go ahead and set the frame to display it.
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
     NSLog(@"Received ad");
-    [AdsWrapper onAdsResult:self withRet:kAdsReceived withMsg:@"Ads request received success!"];
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsReceived withMsg:@"Ads request received success!"];
 }
 
 - (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"Failed to receive ad with error: %@", [error localizedFailureReason]);
-    int errorNo = kUnknownError;
+    AdsResultCode errorNo = AdsResultCode::kUnknownError;
     switch ([error code]) {
     case kGADErrorNetworkError:
-        errorNo = kNetworkError;
+        errorNo = AdsResultCode::kNetworkError;
         break;
     default:
         break;
     }
-    [AdsWrapper onAdsResult:self withRet:(AdsResult)errorNo withMsg:[error localizedDescription]];
+    [AdsWrapper onAdsResult:self withRet:errorNo withMsg:[error localizedDescription]];
 }
 
 #pragma mark GADInterstitialDelegate impl
 
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
     OUTPUT_LOG(@"Interstitial ad was loaded. Can present now.");
-    [AdsWrapper onAdsResult:self withRet:kAdsReceived withMsg:@"Ads request received success!"];
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsReceived withMsg:@"Ads request received success!"];
 }
 
 /// Called when an interstitial ad request completed without an interstitial to
 /// show. This is common since interstitials are shown sparingly to users.
 - (void)interstitial:(GADInterstitial *)ad didFailToReceiveAdWithError:(GADRequestError *)error {
     OUTPUT_LOG(@"Interstitial failed to load with error: %@", error.description);
-    [AdsWrapper onAdsResult:self withRet:kUnknownError withMsg:error.description];
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kUnknownError withMsg:error.description];
 }
 
 #pragma mark Display-Time Lifecycle Notifications
 
 - (void)interstitialWillPresentScreen:(GADInterstitial *)ad {
-    [AdsWrapper onAdsResult:self withRet:kAdsShown withMsg:@"Interstitial is showing"];
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsShown withMsg:@"Interstitial is showing"];
 }
 
 - (void)interstitialWillDismissScreen:(GADInterstitial *)ad {
@@ -266,7 +266,7 @@
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
     OUTPUT_LOG(@"Interstitial dismissed")
     [self loadInterstitial];
-    [AdsWrapper onAdsResult:self withRet:kAdsDismissed withMsg:@"Interstital dismissed."];
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsDismissed withMsg:@"Interstital dismissed."];
 }
 
 - (void)interstitialWillLeaveApplication:(GADInterstitial *)ad {

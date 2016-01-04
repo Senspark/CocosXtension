@@ -75,7 +75,7 @@ using namespace cocos2d::plugin;
     NSLog(@"Chartboost: Not support %s", __func__);
 }
 
-- (CBLocation) getCBLocationFrom: (NSDictionary) info {
+- (CBLocation) getCBLocationFrom: (NSDictionary*) info {
     NSString* strLocation = [info objectForKey:@"location"];
     
     NSArray* cbStrLocations = @[@"CBLocationStartup",
@@ -124,7 +124,7 @@ using namespace cocos2d::plugin;
 }
 
 - (BOOL) hasMoreApps: (NSDictionary*) info {
-    [self getCBLocationFrom:info]
+    [self getCBLocationFrom:info];
     NSString* location = [info objectForKey:@"location"];
     
     return [Chartboost hasMoreApps:location];
