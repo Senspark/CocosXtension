@@ -32,7 +32,7 @@ using namespace cocos2d::plugin;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-+ (void) onAdsResult:(id) obj withRet:(AdsResult) ret withMsg:(NSString*) msg
++ (void) onAdsResult:(id) obj withRet:(AdsResultCode) ret withMsg:(NSString*) msg
 {
     PluginProtocol* plugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolAds* adsPlugin = dynamic_cast<ProtocolAds*>(plugin);
@@ -106,7 +106,7 @@ using namespace cocos2d::plugin;
   return ![self wasBuiltForiOS8orLater] || ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0);
 }
 
-+ (void) addAdView:(UIView*) view atPos:(AdsPosEnum) pos
++ (void) addAdView:(UIView*) view atPos:(ProtocolAds::AdsPos) pos
 {
     UIViewController* controller = [AdsWrapper getCurrentRootViewController];
 
@@ -126,31 +126,31 @@ using namespace cocos2d::plugin;
     }
 
     switch (pos) {
-    case kPosTop:
+        case ProtocolAds::AdsPos::kPosTop:
         viewOrigin.x = (rootSize.width - viewSize.width) / 2;
         viewOrigin.y = 0.0f;
         break;
-    case kPosTopLeft:
+    case ProtocolAds::AdsPos::kPosTopLeft:
         viewOrigin.x = 0.0f;
         viewOrigin.y = 0.0f;
         break;
-    case kPosTopRight:
+    case ProtocolAds::AdsPos::kPosTopRight:
         viewOrigin.x = rootSize.width - viewSize.width;
         viewOrigin.y = 0.0f;
         break;
-    case kPosBottom:
+    case ProtocolAds::AdsPos::kPosBottom:
         viewOrigin.x = (rootSize.width - viewSize.width) / 2;
         viewOrigin.y = rootSize.height - viewSize.height;
         break;
-    case kPosBottomLeft:
+    case ProtocolAds::AdsPos::kPosBottomLeft:
         viewOrigin.x = 0.0f;
         viewOrigin.y = rootSize.height - viewSize.height;
         break;
-    case kPosBottomRight:
+    case ProtocolAds::AdsPos::kPosBottomRight:
         viewOrigin.x = rootSize.width - viewSize.width;
         viewOrigin.y = rootSize.height - viewSize.height;
         break;
-    case kPosCenter:
+    case ProtocolAds::AdsPos::kPosCenter:
     default:
         viewOrigin.x = (rootSize.width - viewSize.width) / 2;
         viewOrigin.y = (rootSize.height - viewSize.height) / 2;
