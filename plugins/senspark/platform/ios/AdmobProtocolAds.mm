@@ -24,7 +24,7 @@ AdmobProtocolAds::~AdmobProtocolAds() {
 }
 
 void AdmobProtocolAds::configureAds(const std::string &adsId) {
-    TAdsDeveloperInfo devInfo;
+    TAdsInfo devInfo;
     devInfo["AdmobID"] = adsId;
     configDeveloperInfo(devInfo);
 }

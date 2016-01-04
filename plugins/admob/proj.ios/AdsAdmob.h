@@ -52,18 +52,6 @@ typedef enum {
 @property (assign, nonatomic) NSMutableArray* testDeviceIDs;
 
 /**
- interfaces from InterfaceAds
- */
-- (void) configDeveloperInfo: (NSMutableDictionary*) devInfo;
-- (void) showAds: (NSMutableDictionary*) info position:(int) pos;
-- (void) hideAds: (NSMutableDictionary*) info;
-- (void) queryPoints;
-- (void) spendPoints: (int) points;
-- (void) setDebugMode: (BOOL) isDebugMode;
-- (NSString*) getSDKVersion;
-- (NSString*) getPluginVersion;
-
-/**
  interface for Admob SDK
  */
 - (void) addTestDevice: (NSString*) deviceID;

@@ -6,7 +6,16 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		952F67151C38CD8200F1E551 /* AdsChartboost.h in Headers */ = {isa = PBXBuildFile; fileRef = 952F67131C38CD8200F1E551 /* AdsChartboost.h */; };
+		952F67161C38CD8200F1E551 /* AdsChartboost.m in Sources */ = {isa = PBXBuildFile; fileRef = 952F67141C38CD8200F1E551 /* AdsChartboost.m */; };
+		952F67191C3927BD00F1E551 /* Chartboost.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 952F67181C3927BD00F1E551 /* Chartboost.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		952F67131C38CD8200F1E551 /* AdsChartboost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdsChartboost.h; sourceTree = "<group>"; };
+		952F67141C38CD8200F1E551 /* AdsChartboost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdsChartboost.m; sourceTree = "<group>"; };
+		952F67181C3927BD00F1E551 /* Chartboost.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Chartboost.framework; sourceTree = "<group>"; };
 		95EBD86B1B65EE2F0004D448 /* libPluginChartboost.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginChartboost.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -15,15 +24,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				952F67191C3927BD00F1E551 /* Chartboost.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		952F67171C39279B00F1E551 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				952F67181C3927BD00F1E551 /* Chartboost.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		95EBD8621B65EE2F0004D448 = {
 			isa = PBXGroup;
 			children = (
+				952F67131C38CD8200F1E551 /* AdsChartboost.h */,
+				952F67141C38CD8200F1E551 /* AdsChartboost.m */,
+				952F67171C39279B00F1E551 /* Frameworks */,
 				95EBD86C1B65EE2F0004D448 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +64,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				952F67151C38CD8200F1E551 /* AdsChartboost.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +124,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				952F67161C38CD8200F1E551 /* AdsChartboost.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,6 +212,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../protocols/platform/ios";
 				PRODUCT_NAME = PluginChartboost;
 			};
 			name = Debug;
@@ -197,6 +225,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../protocols/platform/ios";
 				PRODUCT_NAME = PluginChartboost;
 			};
 			name = Release;

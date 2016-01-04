@@ -37,7 +37,7 @@ ProtocolAds::~ProtocolAds()
 {
 }
 
-void ProtocolAds::configDeveloperInfo(TAdsDeveloperInfo devInfo)
+void ProtocolAds::configDeveloperInfo(TAdsInfo devInfo)
 {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != NULL);

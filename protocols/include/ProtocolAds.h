@@ -31,7 +31,6 @@ THE SOFTWARE.
 
 namespace cocos2d { namespace plugin {
 
-typedef std::map<std::string, std::string> TAdsDeveloperInfo;
 typedef std::map<std::string, std::string> TAdsInfo;
 
 typedef enum
@@ -81,7 +80,7 @@ public:
         kPosBottomRight,
     } AdsPos;
 
-    typedef std::function<void(int, std::string&)> ProtocolAdsCallback;
+    typedef std::function<void(int, const std::string&)> AdsCallback;
 
     /**
     @brief config the application info
@@ -90,7 +89,7 @@ public:
     @warning Must invoke this interface before other interfaces.
              And invoked only once.
     */
-    void configDeveloperInfo(TAdsDeveloperInfo devInfo);
+    void configDeveloperInfo(TAdsInfo devInfo);
 
     /**
     @brief show adview
@@ -139,7 +138,7 @@ public:
     /**
      @brief set the Ads callback function
     */
-    inline void setCallback(ProtocolAdsCallback& cb)
+    inline void setCallback(const AdsCallback& cb)
     {
     	_callback = cb;
     }
@@ -147,13 +146,13 @@ public:
     /**
      @brief get the Ads callback function
     */
-    inline ProtocolAdsCallback getCallback()
+    inline AdsCallback getCallback()
     {
     	return _callback;
     }
 protected:
     AdsListener* _listener;
-    ProtocolAdsCallback _callback;
+    AdsCallback _callback;
 };
 
 }} // namespace cocos2d { namespace plugin {

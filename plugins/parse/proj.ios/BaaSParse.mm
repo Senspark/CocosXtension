@@ -359,10 +359,10 @@ using namespace cocos2d::plugin;
     [query whereKey:key equalTo:value];
     [query getFirstObjectInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
         if (error) {
-            [BaaSWrapper onBaaSActionResult:self withReturnCode:false andReturnMsg:@"" andCallbackID:callbackId];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:false andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:callbackId];
             NSLog(@"Retrieve object fail.");
         } else {
-            [BaaSWrapper onBaaSActionResult:self withReturnCode:true andReturnMsg:@"" andCallbackID:callbackId];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:true andReturnObj:[BaaSParse convertPFObjectToDictionary:object] andCallbackID:callbackId];
             NSLog(@"Retrieve object successfully.");
         }
     }];
@@ -378,7 +378,7 @@ using namespace cocos2d::plugin;
     
     [object saveInBackgroundWithBlock:^(BOOL succeed, NSError* error) {
         if (succeed) {
-            [BaaSWrapper onBaaSActionResult:self withReturnCode:succeed andReturnMsg:object.objectId  andCallbackID:cbID];
+            [BaaSWrapper onBaaSActionResult:self withReturnCode:succeed andReturnObj:object.objectId  andCallbackID:cbID];
             
             NSLog(@"Update object succesffully.");
         } else {
