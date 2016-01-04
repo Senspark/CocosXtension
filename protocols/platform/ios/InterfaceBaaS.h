@@ -40,14 +40,6 @@
 - (void) deleteObjectInBackground: (NSString*) className withId: (NSString*) objId andCallbackID:(long) cbID;
 - (BOOL) deleteObject: (NSString*) className withId: (NSString*) objId;
 
-- (void) fetchConfigInBackground: (long) callbackID;
-- (BOOL) getBoolConfig: (NSString*) param;
-- (int)  getIntegerConfig: (NSString*) param;
-- (double) getDoubleConfig: (NSString*) param;
-- (long) getLongConfig: (NSString*) param;
-- (NSString*) getStringConfig: (NSString*) param;
-- (NSDictionary*) getArrayConfig: (NSString*) param;
-
 @end
 
 #endif

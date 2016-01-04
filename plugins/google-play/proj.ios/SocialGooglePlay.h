@@ -17,9 +17,8 @@
 
 //------interface social -------
 
-- (void) showLeaderboards;
-- (void) resetAchievements;
 - (void) revealAchievement: (NSDictionary*) achInfo;
+
 - (void) resetAchievement: (NSDictionary*) achiInfo;
 
 @end

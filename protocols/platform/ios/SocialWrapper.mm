@@ -33,7 +33,7 @@ using namespace cocos2d::plugin;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
-+ (void) onSocialResult:(id) obj withRet:(SocialResult) ret withMsg:(NSString*) msg andCallback:(long)callbackID
++ (void) onSocialResult:(id) obj withRet:(bool) ret withMsg:(NSString*) msg andCallback:(long)callbackID
 {
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolSocial* pSocial = dynamic_cast<ProtocolSocial*>(pPlugin);
@@ -43,7 +43,20 @@ using namespace cocos2d::plugin;
         
         std::string stdmsg = [msg UTF8String] ? [msg UTF8String] : "";
         
-        wrapper->fnPtr(ret, stdmsg);
+        wrapper->callbackSocialPtr(ret, stdmsg);
+        delete wrapper;
+    }
+    else {
+        PluginUtilsIOS::outputLog("No callback.");
+    }
+}
+
++ (void) onDialogDismissedWithCallback:(long)callbackID
+{
+    if (callbackID) {
+        ProtocolSocial::CallbackWrapper* wrapper = (ProtocolSocial::CallbackWrapper*) callbackID;
+        
+        wrapper->callbackDialogPtr();
         delete wrapper;
     }
     else {

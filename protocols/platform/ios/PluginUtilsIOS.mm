@@ -265,6 +265,50 @@ bool PluginUtilsIOS::callOCBoolFunctionWithName(PluginProtocol* pPlugin, const c
     
     return ret;
 }
+    
+long PluginUtilsIOS::callOCLongFunctionWithName_oneParam(PluginProtocol* pPlugin, const char* funcName, id param)
+{
+    bool ret = false;
+    long* pRet = (long*)callRetFunctionWithParam(pPlugin, funcName, param);
+    if (nil != pRet) {
+        ret = pRet;
+    }
+    
+    return ret;
+}
+
+long PluginUtilsIOS::callOCLongFunctionWithName(PluginProtocol* pPlugin, const char* funcName)
+{
+    bool ret = false;
+    long* pRet = (long*)callRetFunction(pPlugin, funcName);
+    if (nil != pRet) {
+        ret = pRet;
+    }
+    
+    return ret;
+}
+
+double PluginUtilsIOS::callOCDoubleFunctionWithName_oneParam(PluginProtocol* pPlugin, const char* funcName, id param)
+{
+    bool ret = false;
+    double* pRet = (double*)callRetFunctionWithParam(pPlugin, funcName, param);
+    if (nil != pRet) {
+        ret = pRet;
+    }
+    
+    return ret;
+}
+
+double PluginUtilsIOS::callOCDoubleFunctionWithName(PluginProtocol* pPlugin, const char* funcName)
+{
+    bool ret = false;
+    double* pRet = (double*)callRetFunction(pPlugin, funcName);
+    if (nil != pRet) {
+        ret = pRet;
+    }
+    
+    return ret;
+}
 
 std::string PluginUtilsIOS::callOCStringFunctionWithName_oneParam(PluginProtocol* pPlugin, const char* funcName, id param)
 {

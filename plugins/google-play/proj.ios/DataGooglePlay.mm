@@ -75,7 +75,7 @@ using namespace cocos2d::plugin;
 + (NSDictionary*) convertSnapshotMetadataToDictionary: (GPGSnapshotMetadata*) snapshot
 {
     if (snapshot) {
-        NSDictionary* info = [[NSDictionary alloc] initWithObjects:
+        NSDictionary* info = [[[NSDictionary alloc] initWithObjects:
                               @[snapshot.fileName,
                                 snapshot.snapshotDescription,
                                 [NSNumber numberWithLong:(long)snapshot.lastModifiedTimestamp],
@@ -88,7 +88,7 @@ using namespace cocos2d::plugin;
                                 @"last-modified",
                                 @"played-time",
                                 @"progress-value",
-                                @"cover-image"]];
+                                @"cover-image"]] autorelease];
         return info;
     } else {
         return nil;
@@ -133,7 +133,7 @@ using namespace cocos2d::plugin;
     
     // Create a snapshot change to be committed with a description,
     // cover image, and play time.
-    GPGSnapshotMetadataChange *dataChange = [[GPGSnapshotMetadataChange alloc] init];
+    GPGSnapshotMetadataChange *dataChange = [[[GPGSnapshotMetadataChange alloc] init] autorelease];
     dataChange.snapshotDescription = description;
     
     // Note: This is done for simplicity. You should record time since
@@ -143,8 +143,8 @@ using namespace cocos2d::plugin;
     
     if (path) {
         UIImage *image = [UIImage imageWithContentsOfFile:path];
-        dataChange.coverImage = [[GPGSnapshotMetadataChangeCoverImage alloc]
-                                 initWithImage:image];
+        dataChange.coverImage = [[[GPGSnapshotMetadataChangeCoverImage alloc]
+                                 initWithImage:image] autorelease];
     }
     
     [self.currentSnapshot commitWithMetadataChange:dataChange data: data completionHandler:^(GPGSnapshotMetadata *snapshotMetadata, NSError *error) {
@@ -162,7 +162,7 @@ using namespace cocos2d::plugin;
 
 - (void) resolveConflict:(NSString *)conflictId withData: (NSData*) data andInfo: (NSDictionary*) changes {
     
-    GPGSnapshotMetadataChange *change = [[GPGSnapshotMetadataChange alloc]init];
+    GPGSnapshotMetadataChange *change = [[[GPGSnapshotMetadataChange alloc]init] autorelease];
     change.snapshotDescription = [NSString stringWithFormat:@"Merge conflict %@", conflictId];
     change.playedTime = [[changes objectForKey:@"played-time"] longValue];
     change.progressValue = [[changes objectForKey:@"progress-value"] longValue];
@@ -245,12 +245,12 @@ using namespace cocos2d::plugin;
         
         NSLog(@"Error: %@", error.description);
         
-        GPGSnapshotMetadataChange* change = [[GPGSnapshotMetadataChange alloc] init];
+        GPGSnapshotMetadataChange* change = [[[GPGSnapshotMetadataChange alloc] init] autorelease];
         change.snapshotDescription = @"Update data";
         
         int x = 1;
         
-        NSData *data = [[NSData alloc] initWithBytes:&x length:sizeof(x)];
+        NSData *data = [[[NSData alloc] initWithBytes:&x length:sizeof(x)] autorelease];
         
         [snapshot commitWithMetadataChange:change data:data completionHandler:^(GPGSnapshotMetadata *snapshotMetadata, NSError *error) {
             NSLog(@"Error: %@", error.description);

@@ -69,12 +69,18 @@ public:
 
     int callIntFuncWithParam(const char* funcName, PluginParam* param, ...);
     int callIntFuncWithParam(const char* funcName, std::vector<PluginParam*> params);
-
+    
     bool callBoolFuncWithParam(const char* funcName, PluginParam* param, ...);
     bool callBoolFuncWithParam(const char* funcName, std::vector<PluginParam*> params);
+    
+    long callLongFuncWithParam(const char* funcName, PluginParam* param, ...);
+    long callLongFuncWithParam(const char* funcName, std::vector<PluginParam*> params);
 
     float callFloatFuncWithParam(const char* funcName, PluginParam* param, ...);
     float callFloatFuncWithParam(const char* funcName, std::vector<PluginParam*> params);
+    
+    double callDoubleFuncWithParam(const char* funcName, PluginParam* param, ...);
+    double callDoubleFuncWithParam(const char* funcName, std::vector<PluginParam*> params);
 
 protected:
     PluginProtocol() {}

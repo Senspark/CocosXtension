@@ -76,3 +76,48 @@ void ParseProtocolBaaS::subcribeChannel(const std::string &channel) {
 void ParseProtocolBaaS::unsubcribeChannel(const std::string &channel) {
     
 }
+
+
+void ParseProtocolBaaS::fetchConfigInBackground(BaaSCallback& cb) {
+    CallbackWrapper *wrapper = new CallbackWrapper(cb);
+    
+    PluginParam callbackParam((long) wrapper);
+    
+    callFuncWithParam("fetchConfigInBackground", &callbackParam, nullptr);
+}
+
+bool ParseProtocolBaaS::getBoolConfig(const std::string &param) {
+    PluginParam pluginParam(param.c_str());
+    
+    return callBoolFuncWithParam("getBoolConfig", &pluginParam, nullptr);
+}
+
+int ParseProtocolBaaS::getIntegerConfig(const std::string &param) {
+    PluginParam pluginParam(param.c_str());
+    
+    return callIntFuncWithParam("getIntegerConfig", &pluginParam, nullptr);
+}
+
+double ParseProtocolBaaS::getDoubleConfig(const std::string &param) {
+    PluginParam pluginParam(param.c_str());
+    
+    return callDoubleFuncWithParam("getDoubleConfig", &pluginParam, nullptr);
+}
+
+long ParseProtocolBaaS::getLongConfig(const std::string &param) {
+    PluginParam pluginParam(param.c_str());
+    
+    return callLongFuncWithParam("getLongConfig", &pluginParam, nullptr);
+}
+
+string ParseProtocolBaaS::getStringConfig(const std::string &param) {
+    PluginParam pluginParam(param.c_str());
+    
+    return callStringFuncWithParam("getStringConfig", &pluginParam, nullptr);
+}
+
+string ParseProtocolBaaS::getArrayConfig(const std::string &param) {
+    PluginParam pluginParam(param.c_str());
+    
+    return callStringFuncWithParam("getArrayConfig", &pluginParam, nullptr);
+}

@@ -61,10 +61,9 @@
 }
 
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo {
-    
 }
 
-- (void) share: (NSMutableDictionary*) shareInfo withCallback:(long)cbID
+- (void) share: (NSDictionary*) shareInfo withCallback:(long)cbID
 {
     NSString *link = [shareInfo objectForKey:@"link"];
     NSString *photo = [shareInfo objectForKey:@"photo"];

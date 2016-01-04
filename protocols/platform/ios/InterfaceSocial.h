@@ -26,10 +26,13 @@ THE SOFTWARE.
 
 - (void) configDeveloperInfo : (NSDictionary*) cpInfo;
 - (void) submitScore: (NSString*) leaderboardID withScore: (int) score withCallback: (long) callbackID;
-- (void) showLeaderboard: (NSString*) leaderboardID;
+
+- (void) showLeaderboard: (NSString*) leaderboardID withCallback: (long) callbackID;
+- (void) showLeaderboards: (long) callbackID;
 
 - (void) unlockAchievement: (NSDictionary*) achInfo withCallback:(long) callbackID;
 - (void) showAchievements: (long) callbackID;
+
 - (void) setDebugMode: (BOOL) debug;
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;

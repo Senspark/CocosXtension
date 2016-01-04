@@ -25,26 +25,13 @@ THE SOFTWARE.
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-typedef enum {
-    kSubmitScoreSuccess = 1,
-    kSubmitScoreFailed,
-
-    kUnlockAchiSuccess,
-    kUnlockAchiFailed,
-    
-    kRevealAchiSuccess,
-    kRevealAchiFailed,
-    
-    kResetAchiSuccess,
-    kResetAchiFailed
-} SocialResult;
+#import "ProtocolSocial.h"
 
 @interface SocialWrapper : NSObject
-{
-    
-}
+{}
 
-+ (void) onSocialResult:(id) obj withRet:(SocialResult) ret withMsg:(NSString*) msg andCallback: (long) callbackID;
++ (void) onSocialResult:(id) obj withRet:(bool) ret withMsg:(NSString*) msg andCallback: (long) callbackID;
++ (void) onDialogDismissedWithCallback: (long) callbackID;
 
 + (UIViewController *) getCurrentRootViewController;
 @end
