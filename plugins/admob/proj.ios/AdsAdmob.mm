@@ -23,15 +23,15 @@
  ****************************************************************************/
 
 #import "AdsAdmob.h"
-#import "AdsWrapper.h"
 
-#define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
+#define OUTPUT_LOG(...)     if (self.debug) NSLog(@"[PluginAdMob]" __VA_ARGS__);
 
 @implementation AdsAdmob
 
-@synthesize debug = __debug;
-@synthesize strPublishID = __PublishID;
-@synthesize testDeviceIDs = __TestDeviceIDs;
+@synthesize debug                       = __debug;
+@synthesize strBannerPublishID          = __BannerPublishID;
+@synthesize strInterstitialPublishID    = __strInterstitialPublishID;
+@synthesize testDeviceIDs               = __TestDeviceIDs;
 
 - (void) dealloc
 {
@@ -57,22 +57,30 @@
 
 - (void) configDeveloperInfo: (NSMutableDictionary*) devInfo
 {
-    NSString* adsId = (NSString*) [devInfo objectForKey:@"AdmobID"];
+    NSString* bannerAdsId       = (NSString*) [devInfo objectForKey:@"AdmobBanerID"];
+    NSString* interstitialAdsId = (NSString*) [devInfo objectForKey:@"AdmobInterstitialID"];
     
-    if (nil == adsId) {
-        OUTPUT_LOG(@"Null ads Id at configure time.");
-        return;
+    if (nil == bannerAdsId) {
+        OUTPUT_LOG(@"Null banner ads Id at configure time.");
+        bannerAdsId = @"";
+    } else {
+        OUTPUT_LOG(@"Configure with banenr adsId: %@", bannerAdsId);
+        self.strBannerPublishID = bannerAdsId;
     }
-    
-    OUTPUT_LOG(@"Configure with adsId: %@", adsId);
-    
-    self.strPublishID = adsId;
+
+    if (nil == interstitialAdsId) {
+        OUTPUT_LOG(@"Null interstitial ads Id at configure time.");
+        interstitialAdsId = @"";
+    } else {
+        OUTPUT_LOG(@"configure with interstitial adsId: %@", interstitialAdsId);
+        self.strInterstitialPublishID = interstitialAdsId;
+    }
 }
 
-- (void) showAds: (NSMutableDictionary*) info position:(int) pos
+- (void) showAds: (NSMutableDictionary*) info position:(AdsPosEnum)pos
 {
-    if (self.strPublishID == nil ||
-        [self.strPublishID length] == 0) {
+    if (self.strBannerPublishID == nil || self.strInterstitialPublishID == nil ||
+        [self.strBannerPublishID length] == 0 || [self.strInterstitialPublishID length] == 0) {
         OUTPUT_LOG(@"configDeveloperInfo() not correctly invoked in Admob!");
         return;
     }
@@ -176,10 +184,10 @@
     }
     
     self.bannerView = [[GADBannerView alloc] initWithAdSize:size];
-    self.bannerView.adUnitID = self.strPublishID;
+    self.bannerView.adUnitID = self.strBannerPublishID;
     self.bannerView.delegate = self;
     [self.bannerView setRootViewController:[AdsWrapper getCurrentRootViewController]];
-    [AdsWrapper addAdView:self.bannerView atPos:pos];
+    [AdsWrapper addAdView:self.bannerView atPos:(AdsPosEnum)pos];
     
     GADRequest* request = [GADRequest request];
     request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
@@ -188,7 +196,7 @@
 
 - (void) loadInterstitial
 {
-    self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strPublishID];
+    self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strInterstitialPublishID];
     self.interstitialView.delegate = self;
 
     GADRequest* request = [GADRequest request];
@@ -229,7 +237,7 @@
 
 - (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"Failed to receive ad with error: %@", [error localizedFailureReason]);
-    int errorNo = kUnknownError;
+    AdsResult errorNo = kUnknownError;
     switch ([error code]) {
     case kGADErrorNetworkError:
         errorNo = kNetworkError;
@@ -245,7 +253,6 @@
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
     OUTPUT_LOG(@"Interstitial ad was loaded. Can present now.");
     [AdsWrapper onAdsResult:self withRet:kAdsReceived withMsg:@"Ads request received success!"];
-    [self showInterstitial];
 }
 
 /// Called when an interstitial ad request completed without an interstitial to
@@ -267,7 +274,7 @@
 
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
     OUTPUT_LOG(@"Interstitial dismissed")
-    self.interstitialView = nil;
+    [self loadInterstitial];
     [AdsWrapper onAdsResult:self withRet:kAdsDismissed withMsg:@"Interstital dismissed."];
 }
 
@@ -275,4 +282,33 @@
     OUTPUT_LOG(@"Interstitial will leave application.");
 }
 
+#pragma mark - Animation banner ads
+- (void) slideDownBannerAds {
+    OUTPUT_LOG(@"Hide Banner Ads!");
+
+    CGRect windowBounds = [[[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]] bounds];
+    [UIView animateWithDuration:1.0
+                     animations:^{
+                         self.bannerView.frame = CGRectMake(windowBounds.size.width - self.bannerView.frame.size.width,
+                                                       windowBounds.size.height,
+                                                       self.bannerView.frame.size.width,
+                                                       self.bannerView.frame.size.height);
+
+                     }];
+    _showBannerAdsTimer = [NSTimer scheduledTimerWithTimeInterval:20.0 target:self selector:@selector(showBannerAds) userInfo:nil repeats:NO];
+}
+
+- (void) slideUpBannerAds {
+    OUTPUT_LOG(@"Show Banner Ads!");
+    CGRect windowBounds = [[[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]] bounds];
+    [UIView animateWithDuration:1.0
+                     animations:^{
+                         self.bannerView.frame = CGRectMake(windowBounds.size.width - self.bannerView.frame.size.width,
+                                                       windowBounds.size.height - self.bannerView.frame.size.height,
+                                                       self.bannerView.frame.size.width,
+                                                       self.bannerView.frame.size.height);
+
+                     }];
+    _showBannerAdsTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hideBannerAds) userInfo:nil repeats:NO];
+}
 @end
