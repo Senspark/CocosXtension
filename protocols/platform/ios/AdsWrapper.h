@@ -24,38 +24,18 @@ THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "ProtocolAds.h"
 
-typedef enum {
-    kAdsReceived = 0,
-    
-    kAdsShown,
-    kAdsDismissed,
-    
-    kPointsSpendSucceed,
-    kPointsSpendFailed,
-    
-    kNetworkError,
-    kUnknownError,
-} AdsResult;
-
-typedef enum {
-    kPosCenter = 0,
-	kPosTop,
-	kPosTopLeft,
-	kPosTopRight,
-	kPosBottom,
-	kPosBottomLeft,
-	kPosBottomRight,
-} AdsPosEnum;
+using namespace cocos2d::plugin;
 
 @interface AdsWrapper : NSObject
 {
     
 }
 
-+ (void) onAdsResult:(id) obj withRet:(AdsResult) ret withMsg:(NSString*) msg;
++ (void) onAdsResult:(id) obj withRet:(AdsResultCode) ret withMsg:(NSString*) msg;
 + (void) onPlayerGetPoints:(id) obj withPoints: (int) points;
-+ (void) addAdView:(UIView*) view atPos:(AdsPosEnum) pos;
++ (void) addAdView:(UIView*) view atPos:(ProtocolAds::AdsPos) pos;
 + (UIViewController *) getCurrentRootViewController;
 
 @end

@@ -33,19 +33,32 @@ namespace cocos2d { namespace plugin {
 
 typedef std::map<std::string, std::string> TAdsInfo;
 
-typedef enum
-{
-    kAdsReceived = 0,            // The ad is received
-
+enum class AdsResultCode {
+    kAdsReceived = 0,           // The ad is received
     kAdsShown,                  // The advertisement shown
     kAdsDismissed,              // The advertisement dismissed
+    kAdsClicked,
+    kAdsClosed,
+
+    kMoreAppsReceived,
+    kMoreAppsShown,
+    kMoreAppsDismissed,
+    kMoreAppsClicked,
+    kMoreAppsClosed,
+    
+    kVideoReceived,
+    kVideoShown,
+    kVideoDismissed,
+    kVideoCompleted,
+    kVideoClosed,
+    kVideoClicked,
 
     kPointsSpendSucceed,        // The points spend succeed
     kPointsSpendFailed,         // The points spend failed
-
+    
     kNetworkError,              // Network error
     kUnknownError,              // Unknown error
-} AdsResultCode;
+};
 
 class ProtocolAds;
 class AdsListener
@@ -80,7 +93,7 @@ public:
         kPosBottomRight,
     } AdsPos;
 
-    typedef std::function<void(int, const std::string&)> AdsCallback;
+    typedef std::function<void(AdsResultCode, const std::string&)> AdsCallback;
 
     /**
     @brief config the application info
