@@ -26,6 +26,7 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
 #import "InterfaceAds.h"
+#import "AdsWrapper.h"
 
 typedef enum {
     kSizeBanner = 1,
@@ -46,7 +47,9 @@ typedef enum {
 
 @property BOOL debug;
 
-@property (copy, nonatomic) NSString* strPublishID;
+@property (nonatomic, retain) NSTimer* showBannerAdsTimer;
+@property (copy, nonatomic) NSString* strBannerPublishID;
+@property (copy, nonatomic) NSString* strInterstitialPublishID;
 @property (assign, nonatomic) GADBannerView* bannerView;
 @property (assign, nonatomic) GADInterstitial* interstitialView;
 @property (assign, nonatomic) NSMutableArray* testDeviceIDs;
@@ -55,7 +58,7 @@ typedef enum {
  interfaces from InterfaceAds
  */
 - (void) configDeveloperInfo: (NSMutableDictionary*) devInfo;
-- (void) showAds: (NSMutableDictionary*) info position:(int) pos;
+- (void) showAds: (NSMutableDictionary*) info position:(AdsPosEnum) pos;
 - (void) hideAds: (NSMutableDictionary*) info;
 - (void) queryPoints;
 - (void) spendPoints: (int) points;
@@ -67,5 +70,7 @@ typedef enum {
  interface for Admob SDK
  */
 - (void) addTestDevice: (NSString*) deviceID;
+- (void) slideUpBannerAds;
+- (void) slideDownBannerAds;
 
 @end
