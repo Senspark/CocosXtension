@@ -204,9 +204,10 @@
 
 - (void) showInterstitial
 {
+    NSLog(@"Interstitial view: %@", _interstitialView);
     if (!self.interstitialView || !self.interstitialView.isReady) {
         // Ad not ready to present.
-        NSLog(@"Admob interstitial not loaded.");
+        NSLog(@"ADMOB: Interstitial cannot show. It is not ready.");
     } else {
         [self.interstitialView presentFromRootViewController:[AdsWrapper getCurrentRootViewController]];
         [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsShown withMsg:@"Ads is shown!"];
