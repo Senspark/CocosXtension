@@ -179,7 +179,7 @@ using namespace cocos2d::plugin;
 }
 
 - (NSString*) getSDKVersion {
-    return [NSString stringWithFormat:@"%ld", [Chartboost version]];
+    return [NSString stringWithFormat:@"%d", [Chartboost version]];
 }
 
 - (NSString*) getPluginVersion {

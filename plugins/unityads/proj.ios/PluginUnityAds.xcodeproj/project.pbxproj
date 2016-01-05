@@ -1,0 +1,282 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2C4585951C3A611500BA43BF /* AdsUnity.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2C4585941C3A611500BA43BF /* AdsUnity.h */; };
+		2C4585971C3A611500BA43BF /* AdsUnity.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C4585961C3A611500BA43BF /* AdsUnity.mm */; };
+		2C4585B41C3A644C00BA43BF /* UnityAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4585B21C3A644C00BA43BF /* UnityAds.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2C45858F1C3A611500BA43BF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				2C4585951C3A611500BA43BF /* AdsUnity.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2C4585911C3A611500BA43BF /* libPluginUnityAds.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginUnityAds.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C4585941C3A611500BA43BF /* AdsUnity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdsUnity.h; sourceTree = "<group>"; };
+		2C4585961C3A611500BA43BF /* AdsUnity.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AdsUnity.mm; sourceTree = "<group>"; };
+		2C4585B11C3A644C00BA43BF /* UnityAds.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UnityAds.bundle; sourceTree = "<group>"; };
+		2C4585B21C3A644C00BA43BF /* UnityAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UnityAds.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2C45858E1C3A611500BA43BF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C4585B41C3A644C00BA43BF /* UnityAds.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2C4585881C3A611500BA43BF = {
+			isa = PBXGroup;
+			children = (
+				2C4585941C3A611500BA43BF /* AdsUnity.h */,
+				2C4585961C3A611500BA43BF /* AdsUnity.mm */,
+				2C4585B51C3A645900BA43BF /* Frameworks */,
+				2C4585921C3A611500BA43BF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2C4585921C3A611500BA43BF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2C4585911C3A611500BA43BF /* libPluginUnityAds.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2C4585B51C3A645900BA43BF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2C4585B11C3A644C00BA43BF /* UnityAds.bundle */,
+				2C4585B21C3A644C00BA43BF /* UnityAds.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2C4585901C3A611500BA43BF /* PluginUnityAds */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2C45859A1C3A611500BA43BF /* Build configuration list for PBXNativeTarget "PluginUnityAds" */;
+			buildPhases = (
+				2C45858D1C3A611500BA43BF /* Sources */,
+				2C45858E1C3A611500BA43BF /* Frameworks */,
+				2C45858F1C3A611500BA43BF /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PluginUnityAds;
+			productName = PluginUnityAds;
+			productReference = 2C4585911C3A611500BA43BF /* libPluginUnityAds.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2C4585891C3A611500BA43BF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = Senspark;
+				TargetAttributes = {
+					2C4585901C3A611500BA43BF = {
+						CreatedOnToolsVersion = 7.2;
+					};
+				};
+			};
+			buildConfigurationList = 2C45858C1C3A611500BA43BF /* Build configuration list for PBXProject "PluginUnityAds" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2C4585881C3A611500BA43BF;
+			productRefGroup = 2C4585921C3A611500BA43BF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2C4585901C3A611500BA43BF /* PluginUnityAds */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2C45858D1C3A611500BA43BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C4585971C3A611500BA43BF /* AdsUnity.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2C4585981C3A611500BA43BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../protocols/platform/ios",
+					"$(SRCROOT)/../../../protocols/include",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		2C4585991C3A611500BA43BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../protocols/platform/ios",
+					"$(SRCROOT)/../../../protocols/include",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2C45859B1C3A611500BA43BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		2C45859C1C3A611500BA43BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2C45858C1C3A611500BA43BF /* Build configuration list for PBXProject "PluginUnityAds" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2C4585981C3A611500BA43BF /* Debug */,
+				2C4585991C3A611500BA43BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2C45859A1C3A611500BA43BF /* Build configuration list for PBXNativeTarget "PluginUnityAds" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2C45859B1C3A611500BA43BF /* Debug */,
+				2C45859C1C3A611500BA43BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2C4585891C3A611500BA43BF /* Project object */;
+}

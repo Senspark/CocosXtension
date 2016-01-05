@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C4585E51C3B649300BA43BF /* UnityProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C4585E41C3B649300BA43BF /* UnityProtocolAds.mm */; };
 		95376F611B86E83C001C62A5 /* AdColonyProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F501B86E83C001C62A5 /* AdColonyProtocolAds.mm */; };
 		95376F621B86E83C001C62A5 /* AdmobProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F511B86E83C001C62A5 /* AdmobProtocolAds.mm */; };
 		95376F631B86E83C001C62A5 /* ChartboostProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F521B86E83C001C62A5 /* ChartboostProtocolAds.mm */; };
@@ -30,6 +31,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C4585CA1C3A6F1400BA43BF /* UnityProtocolAds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnityProtocolAds.h; sourceTree = "<group>"; };
+		2C4585E41C3B649300BA43BF /* UnityProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UnityProtocolAds.mm; sourceTree = "<group>"; };
 		9520E0B31B46A74800B7768B /* libPluginSenspark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginSenspark.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		95376F501B86E83C001C62A5 /* AdColonyProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdColonyProtocolAds.mm; sourceTree = "<group>"; };
 		95376F511B86E83C001C62A5 /* AdmobProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdmobProtocolAds.mm; sourceTree = "<group>"; };
@@ -139,6 +142,7 @@
 				95F0344A1B6B2C7B00BD28F2 /* AdColonyProtocolAds.h */,
 				953C06EC1B578105002BB1A2 /* AdmobProtocolAds.h */,
 				95F0344D1B6B2EE400BD28F2 /* ChartboostProtocolAds.h */,
+				2C4585CA1C3A6F1400BA43BF /* UnityProtocolAds.h */,
 				95F034411B6B2B7900BD28F2 /* FacebookProtocolAds.h */,
 				95F034421B6B2BB100BD28F2 /* FlurryProtocolAds.h */,
 				95C954271B62207E0014047A /* VungleProtocolAds.h */,
@@ -163,6 +167,7 @@
 			children = (
 				95376F501B86E83C001C62A5 /* AdColonyProtocolAds.mm */,
 				95376F511B86E83C001C62A5 /* AdmobProtocolAds.mm */,
+				2C4585E41C3B649300BA43BF /* UnityProtocolAds.mm */,
 				95376F521B86E83C001C62A5 /* ChartboostProtocolAds.mm */,
 				95376F531B86E83C001C62A5 /* FacebookProtocolAds.mm */,
 				95376F541B86E83C001C62A5 /* FacebookProtocolShare.mm */,
@@ -251,6 +256,7 @@
 			files = (
 				95376F641B86E83C001C62A5 /* FacebookProtocolAds.mm in Sources */,
 				95376F671B86E83C001C62A5 /* FacebookProtocolUser.mm in Sources */,
+				2C4585E51C3B649300BA43BF /* UnityProtocolAds.mm in Sources */,
 				95376F6E1B86E83C001C62A5 /* GooglePlayProtocolUser.mm in Sources */,
 				95376F6D1B86E83C001C62A5 /* GooglePlayProtocolSocial.mm in Sources */,
 				95376F621B86E83C001C62A5 /* AdmobProtocolAds.mm in Sources */,

@@ -9,5 +9,21 @@
 #ifndef PluginSenspark_AdColony_h
 #define PluginSenspark_AdColony_h
 
+#include "ProtocolAds.h"
+
+class AdColonyProtocolAds : public cocos2d::plugin::ProtocolAds {
+public:
+    ~AdColonyProtocolAds();
+
+    void configureAds(const std::string& appID, const std::string& interstitialZoneID, const std::string& rewardedZoneID);
+
+    bool hasInterstitial();
+    void showInterstitial();
+    void cacheInterstitial();
+
+    bool hasRewardedVideo();
+    void showRewardedVideo();
+    void cacheRewardedVideo();
+};
 
 #endif

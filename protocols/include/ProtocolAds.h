@@ -39,6 +39,7 @@ enum class AdsResultCode {
     kAdsDismissed,              // The advertisement dismissed
     kAdsClicked,
     kAdsClosed,
+    kAdsSkipped,
 
     kMoreAppsReceived,
     kMoreAppsShown,

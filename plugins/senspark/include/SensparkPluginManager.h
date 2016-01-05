@@ -29,6 +29,7 @@ enum class AdsPluginType {
     FACEBOOK_ADS,
     FLURRY_ADS,
     VUNGLE,
+    UNITY,
 };
 
 enum class SharePluginType {
