@@ -305,7 +305,7 @@
     }
 }
 
-- (void) slideUpBannerAds:(int)timePeriod {
+- (void) slideUpBannerAds {
     if (self.slideUpTimePeriod > 0) {
         OUTPUT_LOG(@"Show Banner Ads!");
         CGRect windowBounds = [[[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]] bounds];
