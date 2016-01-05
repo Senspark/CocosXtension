@@ -33,3 +33,20 @@ void AdmobProtocolAds::addTestDevice(const std::string &deviceId) {
     PluginParam deviceIdParam(deviceId.c_str());
     callFuncWithParam("addTestDevice", &deviceIdParam, nullptr);
 }
+
+void AdmobProtocolAds::loadInterstitial() {
+    callFuncWithParam("loadInterstitial", nullptr);
+}
+
+bool AdmobProtocolAds::hasInterstitial() {
+    return callBoolFuncWithParam("hasInterstitial", nullptr);
+}
+
+void AdmobProtocolAds::slideBannerUp() {
+    callFuncWithParam("slideUpBannerAds", nullptr);
+}
+
+void AdmobProtocolAds::slideBannerDown() {
+    callFuncWithParam("slideDownBannerAds", nullptr);
+}
+

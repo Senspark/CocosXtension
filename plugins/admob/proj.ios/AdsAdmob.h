@@ -59,5 +59,7 @@ typedef enum {
 - (void) addTestDevice: (NSString*) deviceID;
 - (void) slideUpBannerAds;
 - (void) slideDownBannerAds;
+- (void) loadInterstitial;
+- (BOOL) hasInterstitial;
 
 @end

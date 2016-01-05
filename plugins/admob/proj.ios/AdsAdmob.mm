@@ -185,14 +185,20 @@
     [self.bannerView loadRequest:request];
 }
 
+- (BOOL) hasInterstitial {
+    return [self.interstitialView isReady];
+}
+
 - (void) loadInterstitial
 {
-    self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strPublishID];
-    self.interstitialView.delegate = self;
+    if (self.interstitialView == nullptr) {
+        self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strPublishID];
+        self.interstitialView.delegate = self;
 
-    GADRequest* request = [GADRequest request];
-    request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
-    [self.interstitialView loadRequest:request];
+        GADRequest* request = [GADRequest request];
+        request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
+        [self.interstitialView loadRequest:request];
+    }
 }
 
 - (void) showInterstitial
@@ -286,7 +292,7 @@
                                                        self.bannerView.frame.size.height);
 
                      }];
-    _showBannerAdsTimer = [NSTimer scheduledTimerWithTimeInterval:20.0 target:self selector:@selector(showBannerAds) userInfo:nil repeats:NO];
+    _showBannerAdsTimer = [NSTimer scheduledTimerWithTimeInterval:20.0 target:self selector:@selector(slideUpBannerAds) userInfo:nil repeats:NO];
 }
 
 - (void) slideUpBannerAds {
@@ -300,6 +306,6 @@
                                                        self.bannerView.frame.size.height);
 
                      }];
-    _showBannerAdsTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hideBannerAds) userInfo:nil repeats:NO];
+    _showBannerAdsTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(slideDownBannerAds) userInfo:nil repeats:NO];
 }
 @end

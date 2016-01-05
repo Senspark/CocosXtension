@@ -96,7 +96,7 @@ using namespace cocos2d::plugin;
                              @"CBLocationQuit",
                              @"CBLocationDefault"];
     
-    NSArray* cbLocations = @[CBLocationStartup,
+    NSArray* cbLocations =      @[CBLocationStartup,
                                 CBLocationHomeScreen,
                                 CBLocationMainMenu,
                                 CBLocationGameScreen,
@@ -188,16 +188,16 @@ using namespace cocos2d::plugin;
 
 #pragma mark - Chartboost Delegate
 - (void)didDisplayInterstitial:(CBLocation)location {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsShown withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsShown withMsg:location];
 }
 
 - (void)didCacheInterstitial:(CBLocation)location {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsReceived withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsReceived withMsg:location];
 }
 
 - (void)didFailToLoadInterstitial:(CBLocation)location
                         withError:(CBLoadError)error {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kUnknownError withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kUnknownError withMsg:location];
 }
 
 - (void)didDismissInterstitial:(CBLocation)location {
@@ -213,57 +213,57 @@ using namespace cocos2d::plugin;
 }
 
 - (void)didDisplayMoreApps:(CBLocation)location {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsShown withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsShown withMsg:location];
 }
 
 - (void)didCacheMoreApps:(CBLocation)location {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsReceived withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsReceived withMsg:location];
 }
 
 - (void)didDismissMoreApps:(CBLocation)location {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsDismissed withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsDismissed withMsg:location];
 }
 
 - (void)didFailToLoadMoreApps:(CBLocation)location
                     withError:(CBLoadError)error {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kUnknownError withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kUnknownError withMsg:location];
 }
 
 - (void)didCloseMoreApps:(CBLocation)location {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsClosed withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsClosed withMsg:location];
 }
 
 - (void)didClickMoreApps:(CBLocation)location {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsClicked withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsClicked withMsg:location];
 }
 
 - (void)didDisplayRewardedVideo:(CBLocation)location {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoShown withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoShown withMsg:location];
 }
 
 - (void)didCacheRewardedVideo:(CBLocation)location {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoReceived withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoReceived withMsg:location];
 }
 
 - (void)didFailToLoadRewardedVideo:(CBLocation)location
                          withError:(CBLoadError)error {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kUnknownError withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kUnknownError withMsg:location];
 }
 
 - (void)didDismissRewardedVideo:(CBLocation)location {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoDismissed withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoDismissed withMsg:location];
 }
 
 - (void)didCloseRewardedVideo:(CBLocation)location {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoClosed withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoClosed withMsg:location];
 }
 
 - (void)didClickRewardedVideo:(CBLocation)location {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoClicked withMsg:location];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoClicked withMsg:location];
 }
 - (void)didCompleteRewardedVideo:(CBLocation)location
                       withReward:(int)reward {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoCompleted withMsg: [NSString stringWithFormat:@"{\"location\": %@, \"reward\": %d}", location, reward] ];
+//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoCompleted withMsg: [NSString stringWithFormat:@"{\"location\": %@, \"reward\": %d}", location, reward] ];
 }
 
 @end
