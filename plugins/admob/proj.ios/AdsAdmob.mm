@@ -24,7 +24,7 @@
 
 #import "AdsAdmob.h"
 
-#define OUTPUT_LOG(...)     if (self.debug) NSLog(@"[PluginAdMob]" __VA_ARGS__);
+#define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
 @implementation AdsAdmob
 
@@ -89,7 +89,7 @@
         }
     case kTypeFullScreen:
         {
-            [self loadInterstitial];
+            [self showInterstitial];
             break;
         }
     default:
@@ -192,7 +192,8 @@
 - (void) loadInterstitial
 {
     if (self.interstitialView == nullptr) {
-        self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strPublishID];
+        self.interstitialView = [[GADInterstitial alloc] init];
+        self.interstitialView.adUnitID = self.strPublishID;
         self.interstitialView.delegate = self;
 
         GADRequest* request = [GADRequest request];
@@ -205,7 +206,7 @@
 {
     if (!self.interstitialView || !self.interstitialView.isReady) {
         // Ad not ready to present.
-        OUTPUT_LOG(@"Admob interstitial not loaded.");
+        NSLog(@"Admob interstitial not loaded.");
     } else {
         [self.interstitialView presentFromRootViewController:[AdsWrapper getCurrentRootViewController]];
         [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsShown withMsg:@"Ads is shown!"];
@@ -213,6 +214,11 @@
 }
 
 #pragma mark interface for Admob SDK
+
+- (void) setBannerAnimationInfo:(NSMutableDictionary *)info {
+    self.slideUpTimePeriod      = [info[@"slideUpTimePeriod"] intValue];
+    self.slideDownTimePeriod    = [info[@"slideDownTimePeriod"] intValue];
+}
 
 - (void) addTestDevice: (NSString*) deviceID
 {
@@ -281,31 +287,39 @@
 
 #pragma mark - Animation banner ads
 - (void) slideDownBannerAds {
-    OUTPUT_LOG(@"Hide Banner Ads!");
+    if (self.slideDownTimePeriod > 0) {
+        OUTPUT_LOG(@"Hide Banner Ads!");
 
-    CGRect windowBounds = [[[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]] bounds];
-    [UIView animateWithDuration:1.0
-                     animations:^{
-                         self.bannerView.frame = CGRectMake(windowBounds.size.width - self.bannerView.frame.size.width,
-                                                       windowBounds.size.height,
-                                                       self.bannerView.frame.size.width,
-                                                       self.bannerView.frame.size.height);
+        CGRect windowBounds = [[[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]] bounds];
+        [UIView animateWithDuration:1.0
+                         animations:^{
+                             self.bannerView.frame = CGRectMake(windowBounds.size.width - self.bannerView.frame.size.width,
+                                                                windowBounds.size.height,
+                                                                self.bannerView.frame.size.width,
+                                                                self.bannerView.frame.size.height);
 
-                     }];
-    _showBannerAdsTimer = [NSTimer scheduledTimerWithTimeInterval:20.0 target:self selector:@selector(slideUpBannerAds) userInfo:nil repeats:NO];
+                         }];
+        _showBannerAdsTimer = [NSTimer scheduledTimerWithTimeInterval: self.slideDownTimePeriod target:self selector:@selector(slideUpBannerAds) userInfo:nil repeats:NO];
+    } else {
+        NSLog(@"Animation time period is not set. Please config it via `setBannerAnimationInfo` method");
+    }
 }
 
-- (void) slideUpBannerAds {
-    OUTPUT_LOG(@"Show Banner Ads!");
-    CGRect windowBounds = [[[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]] bounds];
-    [UIView animateWithDuration:1.0
-                     animations:^{
-                         self.bannerView.frame = CGRectMake(windowBounds.size.width - self.bannerView.frame.size.width,
-                                                       windowBounds.size.height - self.bannerView.frame.size.height,
-                                                       self.bannerView.frame.size.width,
-                                                       self.bannerView.frame.size.height);
+- (void) slideUpBannerAds:(int)timePeriod {
+    if (self.slideUpTimePeriod > 0) {
+        OUTPUT_LOG(@"Show Banner Ads!");
+        CGRect windowBounds = [[[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]] bounds];
+        [UIView animateWithDuration:1.0
+                         animations:^{
+                             self.bannerView.frame = CGRectMake(windowBounds.size.width - self.bannerView.frame.size.width,
+                                                                windowBounds.size.height - self.bannerView.frame.size.height,
+                                                                self.bannerView.frame.size.width,
+                                                                self.bannerView.frame.size.height);
 
-                     }];
-    _showBannerAdsTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(slideDownBannerAds) userInfo:nil repeats:NO];
+                         }];
+        _showBannerAdsTimer = [NSTimer scheduledTimerWithTimeInterval: self.slideUpTimePeriod target:self selector:@selector(slideDownBannerAds) userInfo:nil repeats:NO];
+    } else {
+        NSLog(@"Animation time period is not set. Please config it via `setBannerAnimationInfo` method");
+    }
 }
 @end

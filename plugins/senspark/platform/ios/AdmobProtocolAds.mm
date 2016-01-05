@@ -42,6 +42,14 @@ bool AdmobProtocolAds::hasInterstitial() {
     return callBoolFuncWithParam("hasInterstitial", nullptr);
 }
 
+void AdmobProtocolAds::setBannerAnimationInfo(int slideUpTimePeriod, int slideDownTimePeriod) {
+    TAdsInfo devInfo;
+    devInfo["slideUpTimePeriod"]    = slideUpTimePeriod;
+    devInfo["slideDownTimePeriod"]  = slideDownTimePeriod;
+    PluginParam param(devInfo);
+    callFuncWithParam("setBannerAnimationInfo", &param, nullptr);
+}
+
 void AdmobProtocolAds::slideBannerUp() {
     callFuncWithParam("slideUpBannerAds", nullptr);
 }
