@@ -61,7 +61,8 @@ using namespace cocos2d::plugin;
 }
 
 - (BOOL) hasInterstitial {
-    return [AdColony zoneStatusForZone:self.strInterstitialAdID];
+    NSLog(@"AdColony: zoneStatus: %u for Zone: %@", [AdColony zoneStatusForZone:self.strInterstitialAdID],  self.strInterstitialAdID);
+    return [AdColony zoneStatusForZone:self.strInterstitialAdID] == ADCOLONY_ZONE_STATUS_ACTIVE ? YES : NO;
 }
 
 - (void) showInterstitial {
@@ -73,7 +74,8 @@ using namespace cocos2d::plugin;
 }
 
 - (BOOL) hasRewardedVideo {
-    return [AdColony zoneStatusForZone:self.strRewardedAdID];
+    NSLog(@"AdColony: zoneStatus: %u for Zone: %@", [AdColony zoneStatusForZone:self.strRewardedAdID], self.strRewardedAdID);
+    return [AdColony zoneStatusForZone:self.strRewardedAdID] == ADCOLONY_ZONE_STATUS_ACTIVE ? YES : NO;
 }
 
 - (void) showRewardedVideo {

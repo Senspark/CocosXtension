@@ -13,7 +13,7 @@
 
 class AdColonyProtocolAds : public cocos2d::plugin::ProtocolAds {
 public:
-    ~AdColonyProtocolAds();
+    virtual ~AdColonyProtocolAds();
 
     void configureAds(const std::string& appID, const std::string& interstitialZoneID, const std::string& rewardedZoneID);
 
