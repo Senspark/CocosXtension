@@ -24,7 +24,7 @@ ProtocolPlatform::ProtocolPlatform() {
         }
     };
     
-    _reachability.reachableBlock = ^void(EReachability * reachability) {
+    _reachability.unreachableBlock = ^void(EReachability * reachability) {
         if (_callback) {
             _callback(PlatformResultCode::kUnconnected, "");
         }
