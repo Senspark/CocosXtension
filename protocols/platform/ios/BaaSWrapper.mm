@@ -19,7 +19,7 @@ using namespace cocos2d::plugin;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
-+ (void) onBaaSActionResult: (id)obj withReturnCode: (int)ret andReturnMsg: (NSString*) msg andCallbackID: (long) callbackID {
++ (void) onBaaSActionResult: (id)obj withReturnCode: (bool)ret andReturnMsg: (NSString*) msg andCallbackID: (long) callbackID {
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolBaaS* pBaaS = dynamic_cast<ProtocolBaaS*>(pPlugin);
     if (pBaaS && callbackID) {
@@ -34,7 +34,7 @@ using namespace cocos2d::plugin;
     }
 }
 
-+ (void) onBaaSActionResult:(id)obj withReturnCode:(int)ret andReturnObj:(id)returnObj andCallbackID:(long)callbackID {
++ (void) onBaaSActionResult:(id)obj withReturnCode:(bool)ret andReturnObj:(id)returnObj andCallbackID:(long)callbackID {
     
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolBaaS* pBaaS = dynamic_cast<ProtocolBaaS*>(pPlugin);

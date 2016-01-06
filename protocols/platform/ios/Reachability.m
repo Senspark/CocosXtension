@@ -1,5 +1,5 @@
 //
-//  GMReachability.m
+//  EReachability.m
 //  gold-miner
 //
 //  Created by Nikel Arteta on 9/19/14.
@@ -33,12 +33,12 @@
  POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "GMReachability.h"
+#import "Reachability.h"
 
 
 NSString *const kReachabilityChangedNotification = @"kReachabilityChangedNotification";
 
-@interface GMReachability ()
+@interface EReachability ()
 
 @property (nonatomic, assign) SCNetworkReachabilityRef  _reachabilityRef;
 
@@ -80,9 +80,9 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 {
 #pragma unused (target)
 #if __has_feature(objc_arc)
-    GMReachability *reachability = ((__bridge GMReachability*)info);
+    EReachability *reachability = ((__bridge EReachability*)info);
 #else
-    GMReachability *reachability = ((GMReachability*)info);
+    EReachability *reachability = ((EReachability*)info);
 #endif
 
     // We probably don't need an autoreleasepool here, as GCD docs state each queue has its own autorelease pool,
@@ -94,7 +94,7 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 }
 
 
-@implementation GMReachability
+@implementation EReachability
 
 @synthesize _reachabilityRef;
 @synthesize reachabilitySerialQueue;
@@ -108,12 +108,12 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 #pragma mark - Class Constructor Methods
 
-+(GMReachability*)reachabilityWithHostName:(NSString*)hostname
++(EReachability*)reachabilityWithHostName:(NSString*)hostname
 {
-    return [GMReachability reachabilityWithHostname:hostname];
+    return [EReachability reachabilityWithHostname:hostname];
 }
 
-+(GMReachability*)reachabilityWithHostname:(NSString*)hostname
++(EReachability*)reachabilityWithHostname:(NSString*)hostname
 {
     SCNetworkReachabilityRef ref = SCNetworkReachabilityCreateWithName(NULL, [hostname UTF8String]);
     if (ref)
@@ -131,7 +131,7 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
     return nil;
 }
 
-+(GMReachability *)reachabilityWithAddress:(const struct sockaddr_in *)hostAddress
++(EReachability *)reachabilityWithAddress:(const struct sockaddr_in *)hostAddress
 {
     SCNetworkReachabilityRef ref = SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, (const struct sockaddr*)hostAddress);
     if (ref)
@@ -148,7 +148,7 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
     return nil;
 }
 
-+(GMReachability *)reachabilityForInternetConnection
++(EReachability *)reachabilityForInternetConnection
 {
     struct sockaddr_in zeroAddress;
     bzero(&zeroAddress, sizeof(zeroAddress));
@@ -158,7 +158,7 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
     return [self reachabilityWithAddress:&zeroAddress];
 }
 
-+(GMReachability*)reachabilityForLocalWiFi
++(EReachability*)reachabilityForLocalWiFi
 {
     struct sockaddr_in localWifiAddress;
     bzero(&localWifiAddress, sizeof(localWifiAddress));
@@ -173,7 +173,7 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 // Initialization methods
 
--(GMReachability *)initWithReachabilityRef:(SCNetworkReachabilityRef)ref
+-(EReachability *)initWithReachabilityRef:(SCNetworkReachabilityRef)ref
 {
     self = [super init];
     if (self != nil)
@@ -308,10 +308,10 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 // This is for the case where you flick the airplane mode;
 // you end up getting something like this:
-//Reachability: WR ct-----
-//Reachability: -- -------
-//Reachability: WR ct-----
-//Reachability: -- -------
+//EReachability: WR ct-----
+//EReachability: -- -------
+//EReachability: WR ct-----
+//EReachability: -- -------
 // We treat this as 4 UNREACHABLE triggers - really apple should do better than this
 
 #define testcase (kSCNetworkReachabilityFlagsConnectionRequired | kSCNetworkReachabilityFlagsTransientConnection)

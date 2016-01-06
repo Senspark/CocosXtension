@@ -35,8 +35,11 @@ THE SOFTWARE.
     #define CC_DEPRECATED_ATTRIBUTE
 #endif 
 
-namespace cocos2d { namespace plugin {
+#define NS_CC_PLUGIN_BEGIN  namespace cocos2d { namespace plugin {
+#define NS_CC_PLUGIN_END    }}
+#define USING_NS_CC_PLUGIN  using namespace cocos2d::plugin
 
+NS_CC_PLUGIN_BEGIN
 /**
 	The super class for all plugins.
 */
@@ -93,6 +96,6 @@ private:
     std::string _pluginName;
 };
 
-}} //namespace cocos2d { namespace plugin {
+NS_CC_PLUGIN_END //namespace cocos2d { namespace plugin {
 
 #endif /* __CCX_IPLUGIN_H__ */

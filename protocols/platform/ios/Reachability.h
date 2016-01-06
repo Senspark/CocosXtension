@@ -1,5 +1,5 @@
 //
-//  GMReachability.h
+//  EReachability.h
 //  gold-miner
 //
 //  Created by Nikel Arteta on 9/19/14.
@@ -72,12 +72,12 @@ typedef NS_ENUM(NSInteger, NetworkStatus) {
     ReachableViaWWAN = 1
 };
 
-@class GMReachability;
+@class EReachability;
 
-typedef void (^NetworkReachable)(GMReachability * reachability);
-typedef void (^NetworkUnreachable)(GMReachability * reachability);
+typedef void (^NetworkReachable)(EReachability * reachability);
+typedef void (^NetworkUnreachable)(EReachability * reachability);
 
-@interface GMReachability : NSObject
+@interface EReachability : NSObject
 
 @property (nonatomic, copy) NetworkReachable    reachableBlock;
 @property (nonatomic, copy) NetworkUnreachable  unreachableBlock;
@@ -85,15 +85,15 @@ typedef void (^NetworkUnreachable)(GMReachability * reachability);
 
 @property (nonatomic, assign) BOOL reachableOnWWAN;
 
-+(GMReachability*)reachabilityWithHostname:(NSString*)hostname;
++(EReachability*)reachabilityWithHostname:(NSString*)hostname;
 // This is identical to the function above, but is here to maintain
 //compatibility with Apples original code. (see .m)
-+(GMReachability*)reachabilityWithHostName:(NSString*)hostname;
-+(GMReachability*)reachabilityForInternetConnection;
-+(GMReachability*)reachabilityWithAddress:(const struct sockaddr_in*)hostAddress;
-+(GMReachability*)reachabilityForLocalWiFi;
++(EReachability*)reachabilityWithHostName:(NSString*)hostname;
++(EReachability*)reachabilityForInternetConnection;
++(EReachability*)reachabilityWithAddress:(const struct sockaddr_in*)hostAddress;
++(EReachability*)reachabilityForLocalWiFi;
 
--(GMReachability *)initWithReachabilityRef:(SCNetworkReachabilityRef)ref;
+-(EReachability *)initWithReachabilityRef:(SCNetworkReachabilityRef)ref;
 
 -(BOOL)startNotifier;
 -(void)stopNotifier;
