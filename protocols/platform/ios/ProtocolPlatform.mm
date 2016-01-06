@@ -17,7 +17,7 @@ static EReachability* _reachability = nullptr;
 USING_NS_CC_PLUGIN;
 
 ProtocolPlatform::ProtocolPlatform() {
-    _reachability = [EReachability reachabilityWithHostName:@"www.google.com"];
+    _reachability = [[EReachability reachabilityWithHostName:@"www.google.com"] retain];
     _reachability.reachableBlock = ^void(EReachability * reachability) {
         if (_callback) {
             _callback(PlatformResultCode::kConnected, "");
@@ -34,7 +34,6 @@ ProtocolPlatform::ProtocolPlatform() {
 }
 
 ProtocolPlatform::~ProtocolPlatform() {
-    [_reachability stopNotifier];
     [_reachability release];
 }
 
