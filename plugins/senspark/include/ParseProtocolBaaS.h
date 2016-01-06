@@ -32,8 +32,10 @@ public:
     
     void loginWithFacebookAccessToken(BaaSCallback& cb);
     
-    void subcribeChannel(const std::string& channel);
-    void unsubcribeChannel(const std::string& channel);
+    std::string getSubscribedChannels();
+    void subscribeChannels(const std::string& channels);
+    void unsubscribeChannels(const std::string& channels);
+    
     
     void    fetchConfigInBackground(BaaSCallback& cb);
     bool    getBoolConfig(const std::string& param);

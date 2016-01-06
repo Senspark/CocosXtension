@@ -38,4 +38,8 @@
 - (NSString*)   setInstallationInfo: (NSString*) params;
 - (void)        saveInstallationInfo: (NSNumber*) cbID;
 
+- (NSString*)   getSubscribedChannels;
+- (void)        subscribeChannels: (NSString*) channels;
+- (void)        unsubscribeChannels: (NSString*) channels;
+
 @end

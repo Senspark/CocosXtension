@@ -510,6 +510,33 @@ using namespace cocos2d::plugin;
     return ret;
 }
 
+- (NSString*) getSubscribedChannels {
+    PFInstallation *obj = [PFInstallation currentInstallation];
+    
+    return [ParseUtils NSArrayToNSString:obj.channels];
+}
+
+- (void) subscribeChannels:(NSString *)channels {
+    NSArray* array = [ParseUtils NSStringToArrayOrNSDictionary:channels];
+    
+    [PFInstallation currentInstallation].channels = array;
+    [[PFInstallation currentInstallation] saveEventually];
+}
+
+- (void) unsubscribeChannels:(NSString *)channels {
+    NSArray* array = [ParseUtils NSStringToArrayOrNSDictionary:channels];
+    
+    NSMutableArray* subcribed = [NSMutableArray arrayWithArray:[PFInstallation currentInstallation].channels];
+    
+    for (int i = 0; i < array.count; i++) {
+        if ([subcribed containsObject:[array objectAtIndex:i]]) {
+            [subcribed removeObject:[array objectAtIndex:i]];
+        }
+    }
+    
+    [[PFInstallation currentInstallation] saveEventually];
+}
+
 - (NSString*) getSDKVersion
 {
     return @"";

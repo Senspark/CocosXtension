@@ -69,12 +69,18 @@ void ParseProtocolBaaS::loginWithFacebookAccessToken(BaaSCallback& cb) {
 }
 
 
-void ParseProtocolBaaS::subcribeChannel(const std::string &channel) {
-    
+void ParseProtocolBaaS::subscribeChannels(const std::string &channels) {
+    PluginParam channelsParam(channels.c_str());
+    callFuncWithParam("subscribeChannels", &channelsParam, nullptr);
 }
 
-void ParseProtocolBaaS::unsubcribeChannel(const std::string &channel) {
-    
+void ParseProtocolBaaS::unsubscribeChannels(const std::string &channels) {
+    PluginParam channelsParam(channels.c_str());
+    callFuncWithParam("unsubscribeChannels", &channelsParam, nullptr);
+}
+
+std::string ParseProtocolBaaS::getSubscribedChannels() {
+    return callStringFuncWithParam("getSubscribedChannels", nullptr);
 }
 
 
