@@ -32,34 +32,35 @@ SensparkPluginManager::SensparkPluginManager(void)
     REGISTER_PLUGIN_NAME(AnalyticsPluginType, GOOGLE_ANALYTICS, "AnalyticsGoogle");
     
     //------ Register Ads Services -------
-    REGISTER_PLUGIN_NAME(AdsPluginType, ADMOB, "AdsAdmob");
-    REGISTER_PLUGIN_NAME(AdsPluginType, ADCOLONY, "AdsColony");
-    REGISTER_PLUGIN_NAME(AdsPluginType, CHARTBOOST, "AdsChartboost");
-    REGISTER_PLUGIN_NAME(AdsPluginType, FACEBOOK_ADS, "AdsFacebook");
-    REGISTER_PLUGIN_NAME(AdsPluginType, FLURRY_ADS, "AdsFlurry");
-    REGISTER_PLUGIN_NAME(AdsPluginType, VUNGLE, "AdsVungle");
-    REGISTER_PLUGIN_NAME(AdsPluginType, UNITY, "AdsUnity");
+    REGISTER_PLUGIN_NAME(AdsPluginType, ADMOB,          "AdsAdmob");
+    REGISTER_PLUGIN_NAME(AdsPluginType, ADCOLONY,       "AdsColony");
+    REGISTER_PLUGIN_NAME(AdsPluginType, CHARTBOOST,     "AdsChartboost");
+    REGISTER_PLUGIN_NAME(AdsPluginType, FACEBOOK_ADS,   "AdsFacebook");
+    REGISTER_PLUGIN_NAME(AdsPluginType, FLURRY_ADS,     "AdsFlurry");
+    REGISTER_PLUGIN_NAME(AdsPluginType, VUNGLE,         "AdsVungle");
+    REGISTER_PLUGIN_NAME(AdsPluginType, UNITY,          "AdsUnity");
     
     //------ Register BaaS Services ------
     REGISTER_PLUGIN_NAME(BaaSPluginType, PARSE, "BaaSParse");
     REGISTER_PLUGIN_NAME(BaaSPluginType, BAASBOX, "BaaSBaasbox");
     
     //------ Register Data Services ------
-    REGISTER_PLUGIN_NAME(DataPluginType, GOOGLE_PLAY, "DataGooglePlay");
+    REGISTER_PLUGIN_NAME(DataPluginType, GOOGLE_PLAY,   "DataGooglePlay");
     
     //------ Register Social Services
-    REGISTER_PLUGIN_NAME(SocialPluginType, FACEBOOK, "SocialFacebook");
+    REGISTER_PLUGIN_NAME(SocialPluginType, FACEBOOK,    "SocialFacebook");
     REGISTER_PLUGIN_NAME(SocialPluginType, GAME_CENTER, "SocialGameCenter");
     REGISTER_PLUGIN_NAME(SocialPluginType, GOOGLE_PLAY, "SocialGooglePlay");
     
     //------ Register User Service ------
-    REGISTER_PLUGIN_NAME(UserPluginType, FACEBOOK, "UserFacebook");
-    REGISTER_PLUGIN_NAME(UserPluginType, GAME_CENTER, "UserGameCenter");
-    REGISTER_PLUGIN_NAME(UserPluginType, GOOGLE_PLAY, "UserGooglePlay");
+    REGISTER_PLUGIN_NAME(UserPluginType, FACEBOOK,      "UserFacebook");
+    REGISTER_PLUGIN_NAME(UserPluginType, GAME_CENTER,   "UserGameCenter");
+    REGISTER_PLUGIN_NAME(UserPluginType, GOOGLE_PLAY,   "UserGooglePlay");
+    REGISTER_PLUGIN_NAME(UserPluginType, GOOGLE_PLUS,   "UserGooglePlus");
 
     //------ Register Share Serice ------
-    REGISTER_PLUGIN_NAME(SharePluginType, FACEBOOK, "ShareFacebook");
-    REGISTER_PLUGIN_NAME(SharePluginType, GOOGLE_PLUS, "ShareGooglePlus");
+    REGISTER_PLUGIN_NAME(SharePluginType, FACEBOOK,     "ShareFacebook");
+    REGISTER_PLUGIN_NAME(SharePluginType, GOOGLE_PLUS,  "ShareGooglePlus");
 
 }
 

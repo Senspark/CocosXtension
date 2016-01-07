@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "Reachability.h"
+#import "EReachability.h"
 
 #include "ProtocolPlatform.h"
 

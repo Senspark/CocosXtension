@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2CF9B4911C0EA7EA00308304 /* ShareGooglePlus.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2CF9B4901C0EA7EA00308304 /* ShareGooglePlus.mm */; };
 		95175BBB1B67987A0005CC3D /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175B591B67987A0005CC3D /* GoogleOpenSource.framework */; };
 		95175BBC1B67987A0005CC3D /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175B5B1B67987A0005CC3D /* GooglePlus.framework */; };
 		957727861B7851F200E532E6 /* DataGooglePlay.h in Headers */ = {isa = PBXBuildFile; fileRef = 957727841B7851F200E532E6 /* DataGooglePlay.h */; };
@@ -22,8 +21,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2CF9B48F1C0EA76600308304 /* ShareGooglePlus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareGooglePlus.h; sourceTree = "<group>"; };
-		2CF9B4901C0EA7EA00308304 /* ShareGooglePlus.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ShareGooglePlus.mm; sourceTree = "<group>"; };
 		95175B581B67987A0005CC3D /* Changelog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Changelog; sourceTree = "<group>"; };
 		95175B591B67987A0005CC3D /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleOpenSource.framework; sourceTree = "<group>"; };
 		95175B5A1B67987A0005CC3D /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GooglePlus.bundle; sourceTree = "<group>"; };
@@ -70,8 +67,6 @@
 				95EBD88F1B6644550004D448 /* SocialGooglePlay.mm */,
 				95EBD8881B661CA60004D448 /* UserGooglePlay.h */,
 				95EBD88C1B6623BA0004D448 /* UserGooglePlay.mm */,
-				2CF9B48F1C0EA76600308304 /* ShareGooglePlus.h */,
-				2CF9B4901C0EA7EA00308304 /* ShareGooglePlus.mm */,
 				95EBD8821B6613380004D448 /* ios */,
 				95EBD87C1B65F36B0004D448 /* Products */,
 				95EBD8891B6622DC0004D448 /* Frameworks */,
@@ -182,7 +177,6 @@
 				957727871B7851F200E532E6 /* DataGooglePlay.mm in Sources */,
 				95EBD88D1B6623BA0004D448 /* UserGooglePlay.mm in Sources */,
 				95EBD8951B6648F60004D448 /* IAPGooglePlay.m in Sources */,
-				2CF9B4911C0EA7EA00308304 /* ShareGooglePlus.mm in Sources */,
 				95EBD8911B6644550004D448 /* SocialGooglePlay.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
