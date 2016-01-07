@@ -28,7 +28,7 @@ public:
     
     void fetchUserProfile(BaaSCallback &cb);
     
-    void fetchScoresFriendsFacebookWithPlayers(const std::string& players, BaaSCallback &cb);
+    void loadUsersWithParameters(const std::string& condition, BaaSCallback &cb);
 };
 
 NS_SENSPARK_PLUGIN_BAAS_END

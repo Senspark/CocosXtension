@@ -13,7 +13,7 @@
 
 
 
-+(void) registerForRemoteNotificationsWithDeviceToken:(NSData *) deviceToken completion:(void(^)(BOOL))successed;
+-(void) registerForRemoteNotificationsWithDeviceToken:(NSData *) deviceToken completion:(void(^)(BOOL))successed;
 
 -(void) fetchUserProfileWithCallbackId:(NSNumber*)cbId;
 
@@ -30,10 +30,10 @@
 -(void) updateUserProfile:(NSDictionary*) params;
 
 /**
- @param1 :(NSString*) facebookPlayers
+ @param1 :(NSString*) condition
  @param2 :(long) callbackId
  */
--(void) fetchScoresFriendsFacebook:(NSDictionary*) params;
+-(void) loadUsersWithParameters:(NSDictionary*) params;
 
 
 @end

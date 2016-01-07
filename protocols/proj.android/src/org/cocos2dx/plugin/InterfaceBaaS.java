@@ -24,11 +24,4 @@ public interface InterfaceBaaS {
     public void deleteObjectInBackground(String className, String objId, int cbID);
     public String deleteObject(String className, String objId);
     
-    public void fetchConfigInBackground(int cbID);
-    public boolean getBoolConfig(String param);
-    public int getIntegerConfig(String param);
-    public double getDoubleConfig(String param);
-    public long getLongConfig(String param);
-    public String getStringConfig(String param);
-    public String getArrayConfig(String param);
 }

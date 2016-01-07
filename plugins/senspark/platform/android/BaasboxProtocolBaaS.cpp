@@ -14,38 +14,44 @@ BaasboxProtocolBaaS::~BaasboxProtocolBaaS(){
 }
 
 void BaasboxProtocolBaaS::loginWithFacebookToken(const std::string &facebookToken, BaaSCallback &cb){
-	CallbackWrapper* wrapper = new CallbackWrapper(cb);
-	PluginUtils::outputLog("BaasboxProtocol", "loginWithFacebookToken with facebookToken %s and callbackid %d.", facebookToken.c_str(), wrapper);
+
+	PluginUtils::outputLog("BaasboxProtocolBaaS", "loginWithFacebookToken with facebookToken %s", facebookToken.c_str());
+
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
 	PluginJniMethodInfo t;
 
-	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "loginWithFacebookToken", "(Ljava/lang/String;J)V")){
-		jstring strFacebookToken = PluginUtils::getEnv()->NewStringUTF(facebookToken.c_str());
-		jlong jWrapper = (jlong) wrapper;
+	if (PluginJniHelper::getMethodInfo(t,
+			pData->jclassName.c_str(),
+			"loginWithFacebookToken",
+			"(Ljava/lang/String;I)V")){
+		jstring strFacebookToken = t.env->NewStringUTF(facebookToken.c_str());
 
+		CallbackWrapper* wrapper = new CallbackWrapper(cb);
+		PluginUtils::outputLog("BaasboxProtocolBaaS", "callback id %d", (long)wrapper);
 		// invoke java method
-		t.env->CallVoidMethod(pData->jobj, t.methodID, strFacebookToken, jWrapper);
+		t.env->CallVoidMethod(pData->jobj, t.methodID, strFacebookToken, (long) wrapper);
 		t.env->DeleteLocalRef(strFacebookToken);
 		t.env->DeleteLocalRef(t.classID);
 	}
+
 }
 
 void BaasboxProtocolBaaS::updateUserProfile(const std::string &profile, BaaSCallback &cb){
-	CallbackWrapper* wrapper = new CallbackWrapper(cb);
-	PluginUtils::outputLog("BaasboxProtocol", "updateUserProfile with profile %s and callbackid %d.", profile.c_str(), wrapper);
+
+	PluginUtils::outputLog("BaasboxProtocol", "updateUserProfile with profile %s ", profile.c_str());
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
 	PluginJniMethodInfo t;
 	if (PluginJniHelper::getMethodInfo(
 			t
 			, pData->jclassName.c_str()
 			, "updateUserProfile"
-			, "(Ljava/lang/String;J)V"))
+			, "(Ljava/lang/String;I)V"))
 	{
-		jstring strProfile = PluginUtils::getEnv()->NewStringUTF(profile.c_str());
-		jlong jWrapper = (jlong) wrapper;
+		jstring strProfile = t.env->NewStringUTF(profile.c_str());
+		CallbackWrapper* wrapper = new CallbackWrapper(cb);
 
 		// invoke java method
-		t.env->CallVoidMethod(pData->jobj, t.methodID, strProfile, jWrapper);
+		t.env->CallVoidMethod(pData->jobj, t.methodID, strProfile, (long) wrapper);
 		t.env->DeleteLocalRef(strProfile);
 		t.env->DeleteLocalRef(t.classID);
 	}
@@ -53,25 +59,25 @@ void BaasboxProtocolBaaS::updateUserProfile(const std::string &profile, BaaSCall
 
 void BaasboxProtocolBaaS::fetchUserProfile(BaaSCallback &cb){
 	CallbackWrapper* wrapper = new CallbackWrapper(cb);
-	PluginUtils::callJavaFunctionWithName_oneParam(this, "fetchUserProfile", "(J)V", (long) wrapper);
+	PluginUtils::callJavaFunctionWithName_oneParam(this, "fetchUserProfile", "(I)V", (long) wrapper);
 }
 
 void BaasboxProtocolBaaS::fetchScoresFriendsFacebookWithPlayers(const std::string& players, BaaSCallback &cb){
-	CallbackWrapper* wrapper = new CallbackWrapper(cb);
-	PluginUtils::outputLog("BaasboxProtocol", "fetchScoresFriendsFacebookWithPlayers with plaers %s and callbackid %d.", players.c_str(), wrapper);
+
+	PluginUtils::outputLog("BaasboxProtocol", "fetchScoresFriendsFacebookWithPlayers with plaers %s .", players.c_str());
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
 	PluginJniMethodInfo t;
 	if (PluginJniHelper::getMethodInfo(
 			t
 			, pData->jclassName.c_str()
 			, "fetchScoresFriendsFacebookWithPlayers"
-			, "(Ljava/lang/String;J)V"))
+			, "(Ljava/lang/String;I)V"))
 	{
-		jstring strPlayers = PluginUtils::getEnv()->NewStringUTF(players.c_str());
-		jlong jWrapper = (jlong) wrapper;
+		jstring strPlayers = t.env->NewStringUTF(players.c_str());
+		CallbackWrapper* wrapper = new CallbackWrapper(cb);
 
 		// invoke java method
-		t.env->CallVoidMethod(pData->jobj, t.methodID, strPlayers, jWrapper);
+		t.env->CallVoidMethod(pData->jobj, t.methodID, strPlayers, (long)wrapper);
 		t.env->DeleteLocalRef(strPlayers);
 		t.env->DeleteLocalRef(t.classID);
 	}

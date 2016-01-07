@@ -239,7 +239,7 @@ using namespace cocos2d::plugin;
     }
 }
 
-+(void) registerForRemoteNotificationsWithDeviceToken:(NSData *) deviceToken completion:(void(^)(BOOL))successed{
+-(void) registerForRemoteNotificationsWithDeviceToken:(NSData *) deviceToken completion:(void(^)(BOOL))successed{
     BAAClient *client = [BAAClient sharedClient];
     [client enablePushNotifications:deviceToken completion:^(BOOL success, NSError *error) {
         successed(success);
@@ -247,74 +247,37 @@ using namespace cocos2d::plugin;
 }
 
 
--(void) fetchScoresFriendsFacebook:(NSDictionary*) params{
+-(void) loadUsersWithParameters:(NSDictionary*) params{
 //    NSLog(@"params fetchscoaresFriendsFB : %@",params);
-    NSString* facebookPlayers = [params objectForKey:@"Param1"];
-    NSMutableArray* players = [[ParseUtils NSStringToArrayOrNSDictionary:facebookPlayers] mutableCopy];
+    NSString* condition = [params objectForKey:@"Param1"];
+  
     long callbackId = [[params objectForKey:@"Param2"] longValue];
-    [self fetchScoresFriendsFacebookWithPlayers:players andCallbackId:callbackId];
+    
+    [self loadUsersWithParameters:condition andCallbackId:callbackId];
 }
 
--(void)fetchScoresFriendsFacebookWithPlayers:(NSMutableArray*)players andCallbackId:(long)cbId{
-//    NSLog(@"players : %@",players);
-//    NSLog(@"cbid : %ld",cbId);
+-(void)loadUsersWithParameters:(NSString*)condition andCallbackId:(long)cbId{
+//    NSString* conditionWhere = [NSString stringWithFormat:@"visibleByRegisteredUsers._social.facebook.id in %@",strFacebookIdList];
+    NSDictionary *params = @{@"where" : condition};
     
-    NSMutableArray* facebookIdList = [[NSMutableArray alloc] init] ;
-    
-    for(NSMutableDictionary *p in players){
-        NSString* facebookId = [p objectForKey:@"id"];
-        [facebookIdList addObject:facebookId];
-    }
-    
-    if(facebookIdList){
-        
-        NSString* strFacebookIdList = [ParseUtils NSDictionaryToNSString:facebookIdList];
-        
-        NSString* conditionWhere = [NSString stringWithFormat:@"visibleByRegisteredUsers._social.facebook.id in %@",strFacebookIdList];
-        
-        NSDictionary *params = @{@"where" : conditionWhere};
-        
-        [BAAUser loadUsersWithParameters:params
-                              completion:^(NSArray *users, NSError *error) {
-                                  if (users) {
-                                      for (BAAUser* user in users) {
-                                          NSDictionary* visibleByRegisterUser = user.visibleByRegisteredUsers;
-                                          NSString* nsFBId = [[[visibleByRegisterUser objectForKey:@"_social"] objectForKey:@"facebook"] objectForKey:@"id"];
-                                          NSArray* nsScores = [visibleByRegisterUser objectForKey:@"scores"];
-//                                          NSLog(@"ns score  %@",nsScores);
-                                          if(nsScores){
-                                              for(NSMutableDictionary * p in players){
-                                                  NSString* facebookId = [p objectForKey:@"id"];
-//                                                  NSLog(@"facebook id %@",facebookId);
-//                                                  NSLog(@"ns facebook id %@",nsFBId);
-                                                  if([facebookId isEqualToString:nsFBId]){
-                                                      [p setObject:nsScores forKey:@"scores"];
-                                                  }
-                                              }
-                                          }
-                                      }
-                                      
-                                      NSString* NSJsonData = [ParseUtils NSDictionaryToNSString:players];
-                                      
-                                      [BaaSWrapper onBaaSActionResult: self
-                                                       withReturnCode: (int)BaaSActionResultCode::kRetrieveSucceed
-                                                         andReturnMsg: NSJsonData
-                                                        andCallbackID: cbId];
-                                  } else {
-                                      NSLog(@"fetch score facebook friends fail: %@",error);
-                                      [BaaSWrapper onBaaSActionResult: self
-                                                       withReturnCode: (int)BaaSActionResultCode::kRetrieveFailed
-                                                         andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
-                                                        andCallbackID: cbId];
-                                  }
-                              }];
-    }else{
-        NSLog(@"facebook id list NULL");
-        [BaaSWrapper onBaaSActionResult: self
-                         withReturnCode: (int)BaaSActionResultCode::kRetrieveFailed
-                           andReturnMsg: @"players facebook parameter is NULL"
-                          andCallbackID: cbId];
-    }
+    [BAAUser loadUsersWithParameters:params
+                          completion:^(NSArray *users, NSError *error) {
+                              if (users) {
+                                  
+                                  NSString* NSUsers = [ParseUtils NSDictionaryToNSString:users];
+                                  
+                                  [BaaSWrapper onBaaSActionResult: self
+                                                   withReturnCode: (int)BaaSActionResultCode::kRetrieveSucceed
+                                                     andReturnMsg: NSUsers
+                                                    andCallbackID: cbId];
+                              } else {
+                                  NSLog(@"fetch score facebook friends fail: %@",error);
+                                  [BaaSWrapper onBaaSActionResult: self
+                                                   withReturnCode: (int)BaaSActionResultCode::kRetrieveFailed
+                                                     andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
+                                                    andCallbackID: cbId];
+                              }
+                          }];
     
 }
 

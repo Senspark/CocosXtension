@@ -209,7 +209,7 @@ bool PluginJniHelper::getMethodInfo(PluginJniMethodInfo &methodinfo, const char 
         LOGD("Failed to find class %s", className);
         return false;
     }
-
+    
     jmethodID methodID = pEnv->GetMethodID(classID, methodName, paramCode);
     if (! methodID) {
         if(pEnv->ExceptionCheck())

@@ -92,13 +92,13 @@ namespace cocos2d { namespace plugin {
         /**
          * Return cached config.
          */
-        void    fetchConfigInBackground(BaaSCallback& cb);
-        bool    getBoolConfig(const std::string& param);
-        int     getIntegerConfig(const std::string& param);
-        double  getDoubleConfig(const std::string& param);
-        long    getLongConfig(const std::string& param);
-        const char* getStringConfig(const std::string& param);
-        const char* getArrayConfig(const std::string& param);
+//        void    fetchConfigInBackground(BaaSCallback& cb);
+//        bool    getBoolConfig(const std::string& param);
+//        int     getIntegerConfig(const std::string& param);
+//        double  getDoubleConfig(const std::string& param);
+//        long    getLongConfig(const std::string& param);
+//        const char* getStringConfig(const std::string& param);
+//        const char* getArrayConfig(const std::string& param);
 
         /**
          @brief set login callback function

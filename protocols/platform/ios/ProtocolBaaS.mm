@@ -294,6 +294,7 @@ bool ProtocolBaaS::deleteObject(const std::string& className, const std::string&
     return false;
 }
 
+/*
 #pragma mark - Get Parse Config
 void ProtocolBaaS::fetchConfigInBackground(BaaSCallback& cb) {
 
@@ -391,3 +392,5 @@ const char* ProtocolBaaS::getArrayConfig(const std::string &param) {
     }
     return "";
 }
+
+*/

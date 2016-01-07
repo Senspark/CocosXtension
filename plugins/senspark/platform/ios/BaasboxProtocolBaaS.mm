@@ -49,14 +49,14 @@ void BaasboxProtocolBaaS::fetchUserProfile(BaaSCallback &cb){
     callFuncWithParam("fetchUserProfileWithCallbackId", &callbackParam, nullptr);
 }
 
-void BaasboxProtocolBaaS::fetchScoresFriendsFacebookWithPlayers(const std::string& players, BaaSCallback &cb){
-    PluginParam facebookPlayersParam(players.c_str());
+void BaasboxProtocolBaaS::loadUsersWithParameters(const std::string& condition, BaaSCallback &cb){
+    PluginParam conditionParam(condition.c_str());
     
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
     
     PluginParam callbackParam((long) wrapper);
     
-    callFuncWithParam("fetchScoresFriendsFacebook", &facebookPlayersParam, &callbackParam, nullptr);
+    callFuncWithParam("loadUsersWithParameters", &conditionParam, &callbackParam, nullptr);
 }
 
 
