@@ -26,109 +26,36 @@ void GameCenterProtocolSocial::configureSocial()
 {
 }
 
-void GameCenterProtocolSocial::showLeaderboards() {
-    callFuncWithParam("showLeaderboards", nullptr);
-}
-
-void GameCenterProtocolSocial::unlockAchievement(const std::string &achievementId) {
-    TAchievementInfo achievementInfo;
-    achievementInfo["achievementId"] = achievementId;
-//    achievementInfo["percentComplete"] = 100;
-    
-    ProtocolSocial::unlockAchievement(achievementInfo);
-}
-
-void GameCenterProtocolSocial::unlockAchievement(const std::string &achievementId, GameCenterProtocolSocial::ProtocolSocialCallback pcb) {
+void GameCenterProtocolSocial::unlockAchievement(const std::string &achievementId, const GameCenterProtocolSocial::SocialCallback& pcb) {
     TAchievementInfo achievementInfo;
     achievementInfo["achievemetId"] = achievementId;
-//    achievementInfo["percentComplete"] = 100;
+    achievementInfo["percent"] = 100;
     
     ProtocolSocial::unlockAchievement(achievementInfo, pcb);
 }
 
-void GameCenterProtocolSocial::revealAchievement(cocos2d::plugin::TAchievementInfo achInfo) {
+void GameCenterProtocolSocial::revealAchievement(const std::string& achievementId, const GameCenterProtocolSocial::SocialCallback &pcb) {
+    PluginParam achInfoParam(achievementId.c_str());
     
-    PluginParam achInfoParam(achInfo);
+    CallbackWrapper* wrapper = new CallbackWrapper(pcb);
+    PluginParam callbackParam((long) wrapper);
     
-    if (achInfo.empty()) {
-        PluginUtilsIOS::outputLog("ProtocolSocial", "The achievement info is empty!");
-        return;
-    } else {
-        callFuncWithParam("revealAchievement", &achInfoParam, nullptr);
-    }
+    callFuncWithParam("revealAchievement", &achInfoParam, &callbackParam, nullptr);
 }
 
-void GameCenterProtocolSocial::revealAchievement(cocos2d::plugin::TAchievementInfo achInfo, GameCenterProtocolSocial::ProtocolSocialCallback pcb) {
+void GameCenterProtocolSocial::resetAchievement(const std::string& achievementId, const GameCenterProtocolSocial::SocialCallback &pcb) {
+    PluginParam achInfoParam(achievementId.c_str());
     
-    PluginParam achInfoParam(achInfo);
+    CallbackWrapper* wrapper = new CallbackWrapper(pcb);
+    PluginParam callbackParam((long) wrapper);
     
-    if (achInfo.empty()) {
-        PluginUtilsIOS::outputLog("ProtocolSocial", "The achievement info is empty!");
-        return;
-    } else {
-        setCallback(pcb);
-        callFuncWithParam("revealAchievement", &achInfoParam, nullptr);
-    }
+    callFuncWithParam("resetAchievement", &achInfoParam, &callbackParam, nullptr);
 }
 
-void GameCenterProtocolSocial::revealAchievement(const std::string& achievementId) {
-    TAchievementInfo achInfo;
-    achInfo["achievemetId"] = achievementId;
+void GameCenterProtocolSocial::resetAchievements(const GameCenterProtocolSocial::SocialCallback& pcb) {
     
-    revealAchievement(achInfo);
-}
-
-void GameCenterProtocolSocial::revealAchievement(const std::string& achievementId, GameCenterProtocolSocial::ProtocolSocialCallback pcb) {
-    TAchievementInfo achInfo;
-    achInfo["achievemetId"] = achievementId;
+    CallbackWrapper* wrapper = new CallbackWrapper(pcb);
+    PluginParam callbackParam((long) wrapper);
     
-    revealAchievement(achInfo, pcb);
-}
-
-void GameCenterProtocolSocial::resetAchievements() {
-    callFuncWithParam("resetAchievements", nullptr);
-}
-
-void GameCenterProtocolSocial::resetAchievements(GameCenterProtocolSocial::ProtocolSocialCallback pcb) {
-    setCallback(pcb);
-    resetAchievements();
-}
-
-void GameCenterProtocolSocial::resetAchievement(cocos2d::plugin::TAchievementInfo achInfo) {
-    
-    PluginParam achInfoParam(achInfo);
-    
-    if (achInfo.empty()) {
-        PluginUtilsIOS::outputLog("ProtocolSocial", "The achievement info is empty!");
-        return;
-    } else {
-        callFuncWithParam("resetAchievement", &achInfoParam, nullptr);
-    }
-}
-
-void GameCenterProtocolSocial::resetAchievement(cocos2d::plugin::TAchievementInfo achInfo, GameCenterProtocolSocial::ProtocolSocialCallback pcb) {
-    
-    PluginParam achInfoParam(achInfo);
-    
-    if (achInfo.empty()) {
-        PluginUtilsIOS::outputLog("ProtocolSocial", "The achievement info is empty!");
-        return;
-    } else {
-        setCallback(pcb);
-        callFuncWithParam("resetAchievement", &achInfoParam, nullptr);
-    }
-}
-
-void GameCenterProtocolSocial::resetAchievement(const std::string& achievementId) {
-    TAchievementInfo achInfo;
-    achInfo["achievemetId"] = achievementId;
-    
-    resetAchievement(achInfo);
-}
-
-void GameCenterProtocolSocial::resetAchievement(const std::string& achievementId, GameCenterProtocolSocial::ProtocolSocialCallback pcb) {
-    TAchievementInfo achInfo;
-    achInfo["achievemetId"] = achievementId;
-    
-    resetAchievement(achInfo, pcb);
+    callFuncWithParam("resetAchievements", &callbackParam, nullptr);
 }

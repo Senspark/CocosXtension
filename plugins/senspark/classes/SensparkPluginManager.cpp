@@ -33,11 +33,12 @@ SensparkPluginManager::SensparkPluginManager(void)
     
     //------ Register Ads Services -------
     REGISTER_PLUGIN_NAME(AdsPluginType, ADMOB, "AdsAdmob");
-    REGISTER_PLUGIN_NAME(AdsPluginType, ADCOLONY, "AdsAdColony");
+    REGISTER_PLUGIN_NAME(AdsPluginType, ADCOLONY, "AdsColony");
     REGISTER_PLUGIN_NAME(AdsPluginType, CHARTBOOST, "AdsChartboost");
     REGISTER_PLUGIN_NAME(AdsPluginType, FACEBOOK_ADS, "AdsFacebook");
     REGISTER_PLUGIN_NAME(AdsPluginType, FLURRY_ADS, "AdsFlurry");
     REGISTER_PLUGIN_NAME(AdsPluginType, VUNGLE, "AdsVungle");
+    REGISTER_PLUGIN_NAME(AdsPluginType, UNITY, "AdsUnity");
     
     //------ Register BaaS Services ------
     REGISTER_PLUGIN_NAME(BaaSPluginType, PARSE, "BaaSParse");

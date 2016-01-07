@@ -13,10 +13,6 @@
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
-//@interface <#class name#> : <#superclass#>
-//
-//@end
-
 @implementation UserGameCenter
 
 #pragma mark -
@@ -24,9 +20,8 @@
 
 using namespace cocos2d::plugin;
 
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo
+- (void) configDeveloperInfo : (NSDictionary*) cpInfo
 {
-
 }
 
 - (void) login
@@ -51,6 +46,8 @@ using namespace cocos2d::plugin;
           }
         }];
     } else {    //iOS < 6
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         [[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:^(NSError *error) {
             if (error) {
                 NSLog(@"Received an error while signing in %@", [error localizedDescription]);
@@ -60,6 +57,7 @@ using namespace cocos2d::plugin;
                 [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLoginSucceed withMsg:@"Game Center: login successful"];
             }
         }];
+#pragma GCC diagnostic pop
     }
     
 }

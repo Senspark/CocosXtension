@@ -32,8 +32,18 @@ public:
     
     void loginWithFacebookAccessToken(BaaSCallback& cb);
     
-    void subcribeChannel(const std::string& channel);
-    void unsubcribeChannel(const std::string& channel);
+    std::string getSubscribedChannels();
+    void subscribeChannels(const std::string& channels);
+    void unsubscribeChannels(const std::string& channels);
+    
+    
+    void    fetchConfigInBackground(BaaSCallback& cb);
+    bool    getBoolConfig(const std::string& param);
+    int     getIntegerConfig(const std::string& param);
+    double  getDoubleConfig(const std::string& param);
+    long    getLongConfig(const std::string& param);
+    std::string getStringConfig(const std::string& param);
+    std::string getArrayConfig(const std::string& param);
 };
 
 NS_SENSPARK_PLUGIN_BAAS_END

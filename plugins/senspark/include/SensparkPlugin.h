@@ -16,6 +16,7 @@
 
 #include "AdColonyProtocolAds.h"
 #include "AdmobProtocolAds.h"
+#include "UnityProtocolAds.h"
 #include "ChartboostProtocolAds.h"
 
 #include "FlurryProtocolAds.h"

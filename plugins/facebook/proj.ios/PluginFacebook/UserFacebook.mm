@@ -88,9 +88,8 @@ using namespace cocos2d::plugin;
     if ([FBSDKAccessToken currentAccessToken]) {
         FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
         [login logOut];
-        [FBSDKAccessToken setCurrentAccessToken:nil];
         
-        [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLogoutSucceed withMsg:@"Facebook logout"];
+        [UserWrapper onActionResult:self withRet: (int)([self isLoggedIn] ? UserActionResultCode::kLogoutFailed : UserActionResultCode::kLogoutSucceed) withMsg:@"Facebook logout"];
     } else {
         [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLogoutFailed withMsg:@"Not login yet."];
     }
@@ -149,13 +148,13 @@ using namespace cocos2d::plugin;
         [[[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:params]
          startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
              if (!error) {
-                 NSLog(@"Fetch facebook info:%@", result);
+//                 NSLog(@"Fetch facebook info:%@", result);
                  
                  [UserWrapper onGraphRequestResultFrom:self withRet: (int) GraphResult::kGraphResultSuccess result:result andCallback:cbid];
                  
              } else {
                  
-                 NSLog(@"Fetch facebook info error: %@", error.description);
+//                 NSLog(@"Fetch facebook info error: %@", error.description);
                  
                  [UserWrapper onGraphRequestResultFrom:self withRet: (int) GraphResult::kGraphResultFail result:result andCallback:cbid];
              }

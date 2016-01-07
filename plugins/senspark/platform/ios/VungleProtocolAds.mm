@@ -24,7 +24,7 @@ VungleProtocolAds::~VungleProtocolAds() {
 }
 
 void VungleProtocolAds::configureAds(const std::string &adsId) {
-    TAdsDeveloperInfo devInfo;
+    TAdsInfo devInfo;
     devInfo["VungleID"] = adsId;
     configDeveloperInfo(devInfo);
 }

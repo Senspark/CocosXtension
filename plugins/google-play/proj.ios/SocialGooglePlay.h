@@ -16,18 +16,9 @@
 @property BOOL  debug;
 
 //------interface social -------
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
-- (void) submitScore: (NSString*) leaderboardID withScore: (long) score;
-- (void) showLeaderboard: (NSString*) leaderboardID;
-- (void) unlockAchievement: (NSMutableDictionary*) achInfo;
-- (void) showAchievements;
-- (void) setDebugMode: (BOOL) debug;
-- (NSString*) getSDKVersion;
-- (NSString*) getPluginVersion;
 
-- (void) showLeaderboards;
-- (void) resetAchievements;
-- (void) revealAchievement: (NSMutableDictionary*) achInfo;
-- (void) resetAchievement: (NSMutableDictionary*) achiInfo;
+- (void) revealAchievement: (NSDictionary*) achInfo;
+
+- (void) resetAchievement: (NSDictionary*) achiInfo;
 
 @end

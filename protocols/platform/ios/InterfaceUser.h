@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 @protocol InterfaceUser <NSObject>
 
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
+- (void) configDeveloperInfo : (NSDictionary*) cpInfo;
 - (void) login;
 - (void) logout;
 - (BOOL) isLoggedIn;

@@ -26,9 +26,9 @@ THE SOFTWARE.
 
 @protocol InterfaceAds <NSObject>
 
-- (void) configDeveloperInfo: (NSMutableDictionary*) devInfo;
-- (void) showAds: (NSMutableDictionary*) info position:(int) pos;
-- (void) hideAds: (NSMutableDictionary*) info;
+- (void) configDeveloperInfo: (NSDictionary*) devInfo;
+- (void) showAds: (NSDictionary*) info position:(int) pos;
+- (void) hideAds: (NSDictionary*) info;
 - (void) queryPoints;
 - (void) spendPoints: (int) points;
 - (void) setDebugMode: (BOOL) debug;

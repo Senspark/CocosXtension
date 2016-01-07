@@ -22,7 +22,7 @@ using namespace cocos2d::plugin;
 
 #pragma mark - InterfaceUser
 
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo
+- (void) configDeveloperInfo : (NSDictionary*) cpInfo
 {
     _clientID = (NSString*) [cpInfo objectForKey:@"GoogleClientID"];
 
@@ -38,8 +38,7 @@ using namespace cocos2d::plugin;
     signIn.scopes = @[ kGTLAuthScopePlusLogin ];  // "https://www.googleapis.com/auth/plus.login" scope
 
     // Optional: declare signIn.actions, see "app activities"
-    id delegate = self;
-    signIn.delegate = delegate;
+    signIn.delegate = self;
 
     [signIn trySilentAuthentication];
 

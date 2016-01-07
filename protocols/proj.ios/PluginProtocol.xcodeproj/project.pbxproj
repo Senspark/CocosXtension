@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		051FF7BC192CE3CC00C43A06 /* IAPWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051FF7BB192CE3CC00C43A06 /* IAPWrapper.mm */; };
 		05AB25181988F62000D00E8E /* ParseUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05AB25171988F62000D00E8E /* ParseUtils.mm */; };
+		950768871C3BCAAD004293FF /* ProtocolPlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 950768861C3BCAAD004293FF /* ProtocolPlatform.mm */; };
+		9507688A1C3BCD92004293FF /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 950768891C3BCD92004293FF /* Reachability.m */; };
 		95094CCF1B7C96CF00CEFD43 /* ProtocolBaaS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95094CCE1B7C96CF00CEFD43 /* ProtocolBaaS.mm */; };
 		95AB235A1B7AFF2B002476CC /* DataWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95AB23591B7AFF2B002476CC /* DataWrapper.mm */; };
 		95CFAD871B818EB200E8C88C /* BaaSWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95CFAD861B818EB200E8C88C /* BaaSWrapper.mm */; };
@@ -50,6 +52,10 @@
 		051FF7BB192CE3CC00C43A06 /* IAPWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IAPWrapper.mm; sourceTree = "<group>"; };
 		05AB25161988F62000D00E8E /* ParseUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseUtils.h; sourceTree = "<group>"; };
 		05AB25171988F62000D00E8E /* ParseUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ParseUtils.mm; sourceTree = "<group>"; };
+		950768851C3BB943004293FF /* ProtocolPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProtocolPlatform.h; sourceTree = "<group>"; };
+		950768861C3BCAAD004293FF /* ProtocolPlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ProtocolPlatform.mm; sourceTree = "<group>"; };
+		950768881C3BCD92004293FF /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		950768891C3BCD92004293FF /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		95094CCC1B7C964800CEFD43 /* InterfaceBaaS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceBaaS.h; sourceTree = "<group>"; };
 		95094CCD1B7C96CF00CEFD43 /* ProtocolBaaS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProtocolBaaS.h; sourceTree = "<group>"; };
 		95094CCE1B7C96CF00CEFD43 /* ProtocolBaaS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ProtocolBaaS.mm; sourceTree = "<group>"; };
@@ -117,6 +123,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		950768841C3BB8B2004293FF /* platform */ = {
+			isa = PBXGroup;
+			children = (
+				950768881C3BCD92004293FF /* Reachability.h */,
+				950768891C3BCD92004293FF /* Reachability.m */,
+				950768861C3BCAAD004293FF /* ProtocolPlatform.mm */,
+			);
+			name = platform;
+			sourceTree = "<group>";
+		};
 		955335561C153A03004DF6D1 /* baas */ = {
 			isa = PBXGroup;
 			children = (
@@ -248,6 +264,7 @@
 				FA7C6C971724E4DD008A0ECC /* ProtocolAds.h */,
 				FA09A339168ADC05008C1C7B /* ProtocolAnalytics.h */,
 				FA09A33A168ADC05008C1C7B /* ProtocolIAP.h */,
+				950768851C3BB943004293FF /* ProtocolPlatform.h */,
 			);
 			name = include;
 			path = ../include;
@@ -261,6 +278,7 @@
 				955335561C153A03004DF6D1 /* baas */,
 				9553355B1C153B07004DF6D1 /* data */,
 				955335581C153AA0004DF6D1 /* iap */,
+				950768841C3BB8B2004293FF /* platform */,
 				9553355D1C153B15004DF6D1 /* share */,
 				9553355C1C153B0D004DF6D1 /* social */,
 				955335591C153AF3004DF6D1 /* user */,
@@ -336,6 +354,7 @@
 				FA8CC209173894F000464206 /* ProtocolAnalytics.mm in Sources */,
 				95AB235A1B7AFF2B002476CC /* DataWrapper.mm in Sources */,
 				FA8CC20A173894F000464206 /* ProtocolIAP.mm in Sources */,
+				950768871C3BCAAD004293FF /* ProtocolPlatform.mm in Sources */,
 				FAB6DF961755D7E500C90D89 /* PluginParam.cpp in Sources */,
 				FAB6DF981755D82F00C90D89 /* PluginFactory.mm in Sources */,
 				95EBD8991B664A1F0004D448 /* ProtocolData.mm in Sources */,
@@ -343,6 +362,7 @@
 				FADC44CA176EABCF00B2D5ED /* AdsWrapper.mm in Sources */,
 				FAC2A7F91777F8C200035D22 /* ProtocolShare.mm in Sources */,
 				FAC2A7FA1777F8C200035D22 /* ShareWrapper.mm in Sources */,
+				9507688A1C3BCD92004293FF /* Reachability.m in Sources */,
 				FAD55520177D1FA900968F54 /* ProtocolUser.mm in Sources */,
 				FAD55521177D1FA900968F54 /* UserWrapper.mm in Sources */,
 				BA1BF842195A6FC100B47F4E /* AgentManager.mm in Sources */,
@@ -387,6 +407,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -413,6 +434,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -424,7 +446,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				DSTROOT = /tmp/PluginProtocol.dst;
-				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginProtocol-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -453,7 +475,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				DSTROOT = /tmp/PluginProtocol.dst;
-				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginProtocol-Prefix.pch";
 				HEADER_SEARCH_PATHS = (

@@ -16,19 +16,14 @@
 using namespace cocos2d::plugin;
 
 void ProtocolBaaS::configDeveloperInfo(TBaaSInfo devInfo) {
-    if (devInfo.empty()) {
-        PluginUtilsIOS::outputLog("The developer info is emty for %s!", this->getPluginName());
-        return;
-    } else {
-        PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-        assert(pData != nullptr);
-        
-        id ocObj = pData->obj;
-        if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-            NSObject<InterfaceBaaS>* curObj = ocObj;
-            NSDictionary* pDict = PluginUtilsIOS::createDictFromMap(&devInfo);
-            [curObj configDeveloperInfo:pDict];
-        }
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != nullptr);
+    
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
+        NSObject<InterfaceBaaS>* curObj = ocObj;
+        NSDictionary* pDict = PluginUtilsIOS::createDictFromMap(&devInfo);
+        [curObj configDeveloperInfo:pDict];
     }
 }
 
@@ -294,103 +289,3 @@ bool ProtocolBaaS::deleteObject(const std::string& className, const std::string&
     return false;
 }
 
-/*
-#pragma mark - Get Parse Config
-void ProtocolBaaS::fetchConfigInBackground(BaaSCallback& cb) {
-
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-
-        CallbackWrapper *callback = new CallbackWrapper(cb);
-
-        [curObj fetchConfigInBackground:(long) callback];
-    }
-}
-
-bool ProtocolBaaS::getBoolConfig(const std::string &param) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-
-        return [curObj getBoolConfig:[NSString stringWithUTF8String:param.c_str()]];
-    }
-
-    return false;
-}
-
-int ProtocolBaaS::getIntegerConfig(const std::string &param) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-
-        return [curObj getIntegerConfig:[NSString stringWithUTF8String:param.c_str()]];
-    }
-
-    return 0;
-}
-
-double ProtocolBaaS::getDoubleConfig(const std::string &param) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-
-        return [curObj getDoubleConfig:[NSString stringWithUTF8String:param.c_str()]];
-    }
-    return 0;
-}
-
-long ProtocolBaaS::getLongConfig(const std::string &param) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-
-        return [curObj getLongConfig:[NSString stringWithUTF8String:param.c_str()]];
-    }
-    return 0;
-}
-
-const char* ProtocolBaaS::getStringConfig(const std::string &param) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-
-        return [curObj getStringConfig:[NSString stringWithUTF8String:param.c_str()]].UTF8String;
-    }
-    return "";
-}
-
-const char* ProtocolBaaS::getArrayConfig(const std::string &param) {
-    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
-    assert(pData != nullptr);
-
-    id ocObj = pData->obj;
-    if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
-        NSObject<InterfaceBaaS>* curObj = ocObj;
-
-        NSDictionary *dict = [curObj getArrayConfig:[NSString stringWithUTF8String:param.c_str()]];
-
-        return [ParseUtils NSDictionaryToNSString:dict].UTF8String;
-    }
-    return "";
-}
-
-*/

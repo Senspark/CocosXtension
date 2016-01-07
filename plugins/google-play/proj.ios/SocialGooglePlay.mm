@@ -13,22 +13,51 @@
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
-@implementation SocialGooglePlay
-
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo {
+@interface GooglePlayControllerDelegate : NSObject <GPGLauncherDelegate>
+{
+    long _callbackID;
 }
 
-- (void) submitScore: (NSString*) leaderboardID withScore: (long) score
+- (id) initWithCallbackID: (long) callbackID;
+- (void)launcherDismissed;
+
+@end
+
+@implementation GooglePlayControllerDelegate
+
+- (id) initWithCallbackID:(long)callbackID
 {
-    GPGScore *myScore = [[GPGScore alloc] initWithLeaderboardId:leaderboardID];
+    if (self = [super init]) {
+        _callbackID = callbackID;
+    }
+    
+    return self;
+}
+
+- (void)launcherDismissed {
+    [SocialWrapper onDialogDismissedWithCallback:_callbackID];
+    [self release];
+}
+
+@end
+
+@implementation SocialGooglePlay
+
+- (void) configDeveloperInfo : (NSDictionary*) cpInfo
+{
+}
+
+- (void) submitScore: (NSString*) leaderboardID withScore: (int) score withCallback:(long) callbackID
+{
+    GPGScore *myScore = [[[GPGScore alloc] initWithLeaderboardId:leaderboardID] autorelease];
     myScore.value = score;
     [myScore submitScoreWithCompletionHandler:^(GPGScoreReport *report, NSError *error) {
         if (error) {
             NSLog(@"Submit score fail.");
             
-            [SocialWrapper onSocialResult:self withRet:kSubmitScoreFailed withMsg:@"Submit score fail."];
+            [SocialWrapper onSocialResult:self withRet:false withMsg:@"Submit score fail." andCallback:callbackID];
         } else {
-            NSLog(@"Submit score %ld", score);
+            NSLog(@"Submit score %d", score);
             
             if (![report isHighScoreForLocalPlayerAllTime]) {
                 NSLog(@"%lld is a good score, but it's not enough to beat your all-time score of %@!",
@@ -36,22 +65,29 @@
                       report.highScoreForLocalPlayerAllTime.formattedScore);
             }
             
-            [SocialWrapper onSocialResult:self withRet:kSubmitScoreSuccess withMsg:@"Submit score successfully."];
+            [SocialWrapper onSocialResult:self withRet:true withMsg:@"Submit score successfully." andCallback:callbackID];
         }
     }];
 }
 
-- (void) showLeaderboards
+- (void) showLeaderboards: (long) callbackID;
 {
-    [[GPGLauncherController sharedInstance] presentLeaderboardList];
+    GPGLauncherController* controller = [[[GPGLauncherController alloc] init] autorelease];
+    
+    controller.launcherDelegate = [[GooglePlayControllerDelegate alloc] initWithCallbackID:callbackID];
+    [controller presentLeaderboardList];
 }
 
-- (void) showLeaderboard: (NSString*) leaderboardID
+- (void) showLeaderboard: (NSString*) leaderboardID withCallback:(long)callbackID
 {
-    [[GPGLauncherController sharedInstance] presentLeaderboardWithLeaderboardId:leaderboardID];
+    GPGLauncherController* controller = [[[GPGLauncherController alloc] init] autorelease];
+    
+    controller.launcherDelegate = [[GooglePlayControllerDelegate alloc] initWithCallbackID:callbackID];
+    
+    [controller presentLeaderboardWithLeaderboardId:leaderboardID];
 }
 
-- (void) unlockAchievement: (NSMutableDictionary*) achInfo
+- (void) unlockAchievement: (NSMutableDictionary*) achInfo withCallback: (long)callbackID
 {
     NSString* achievementId = [achInfo objectForKey:@"achievementId"];
     GPGAchievement* unlockMe = [GPGAchievement achievementWithId:achievementId];
@@ -60,69 +96,80 @@
         if (error) {
             NSLog(@"Unlock achievement fail");
             
-            [SocialWrapper onSocialResult:self withRet:kUnlockAchiFailed withMsg:@"Unlock achievement fail."];
+            [SocialWrapper onSocialResult:self withRet:false withMsg:@"Unlock achievement fail." andCallback:callbackID];
         } else {
             NSLog(@"Unlock achievement successfully.");
             
-            [SocialWrapper onSocialResult:self withRet:kUnlockAchiSuccess withMsg:@"Unlock achievement successfully."];
+            [SocialWrapper onSocialResult:self withRet:true withMsg:@"Unlock achievement successfully." andCallback:callbackID];
         }
     }];
 }
 
-- (void) revealAchievement:(NSMutableDictionary *)achInfo
+- (void) revealAchievement:(NSDictionary *)params
 {
+    NSDictionary* achInfo = [params objectForKey:@"Param1"];
+    long cbID = [[params objectForKey:@"Param2"] longValue];
+    
     NSString* achievementId = [achInfo objectForKey:@"achievementId"];
+
     GPGAchievement* revealMe = [GPGAchievement achievementWithId:achievementId];
     
     [revealMe revealAchievementWithCompletionHandler:^(GPGAchievementState state, NSError *error) {
         if (error) {
             NSLog(@"Reveal achievement fail");
             
-            [SocialWrapper onSocialResult:self withRet:kRevealAchiFailed withMsg:@"Reveal achievement fail."];
+            [SocialWrapper onSocialResult:self withRet:false withMsg:@"Reveal achievement fail." andCallback:cbID];
         } else {
             NSLog(@"Reveal achievement successfully.");
             
-            [SocialWrapper onSocialResult:self withRet:kRevealAchiSuccess withMsg:@"Reveal achievement successfully."];
+            [SocialWrapper onSocialResult:self withRet:true withMsg:@"Reveal achievement successfully." andCallback:cbID];
         }
     }];
 }
 
-- (void) resetAchievement:(NSMutableDictionary *)achInfo
+- (void) resetAchievement:(NSDictionary *) params
 {
+    NSDictionary* achInfo = [params objectForKey:@"Param1"];
+    long cbID = [[params objectForKey:@"Param2"] longValue];
+    
     NSString* achievementId = [achInfo objectForKey:@"achievementId"];
+    
     GPGAchievement* resetMe = [GPGAchievement achievementWithId:achievementId];
     
     [resetMe resetAchievementWithCompletionHandler:^(NSError *error) {
         if (error) {
             NSLog(@"Reset achievement fail");
             
-            [SocialWrapper onSocialResult:self withRet:kRevealAchiFailed withMsg:@"Reset achievement fail."];
+            [SocialWrapper onSocialResult:self withRet:false withMsg:@"Reset achievement fail." andCallback:cbID];
         } else {
             NSLog(@"Reset achievement successfully.");
             
-            [SocialWrapper onSocialResult:self withRet:kResetAchiSuccess withMsg:@"Reset achievement successfully."];
+            [SocialWrapper onSocialResult:self withRet:true withMsg:@"Reset achievement successfully." andCallback:cbID];
         }
     }];
 }
 
-- (void) resetAchievements
+- (void) resetAchievements: (long) cbID
 {
     [GPGAchievement resetAllAchievementsWithCompletionHandler:^(NSError *error) {
         if (error) {
             NSLog(@"Reset achievements failed");
             
-            [SocialWrapper onSocialResult:self withRet:kResetAchiFailed withMsg:@"Reset achievement fail."];
+            [SocialWrapper onSocialResult:self withRet:false withMsg:@"Reset achievement fail." andCallback:cbID];
         } else {
             NSLog(@"Reset achievements successfully.");
             
-            [SocialWrapper onSocialResult:self withRet:kResetAchiSuccess withMsg:@"Reset achievement successfully, login again to see chages."];
+            [SocialWrapper onSocialResult:self withRet:true withMsg:@"Reset achievement successfully, login again to see chages." andCallback:cbID];
         }
     }];
 }
 
-- (void) showAchievements
+- (void) showAchievements: (long) cbID
 {
-    [[GPGLauncherController sharedInstance] presentAchievementList];
+    GPGLauncherController* controller = [[[GPGLauncherController alloc] init] autorelease];
+    controller.launcherDelegate = [[GooglePlayControllerDelegate alloc] initWithCallbackID:cbID];
+    
+    [controller presentAchievementList];
 }
 
 - (void) setDebugMode: (BOOL) debug

@@ -31,26 +31,8 @@ THE SOFTWARE.
 
 namespace cocos2d { namespace plugin {
 
-typedef std::map<std::string, std::string> TSocialDeveloperInfo;
+typedef std::map<std::string, std::string> TSocialInfo;
 typedef std::map<std::string, std::string> TAchievementInfo;
-
-typedef enum
-{
-    // code for leaderboard feature
-    SCORE_SUBMIT_SUCCESS = 1,
-    SCORE_SUBMIT_FAILED,
-
-    // code for achievement feature
-    ACH_UNLOCK_SUCCESS,
-    ACH_UNLOCK_FAILED,
-
-} SocialRetCode;
-
-class SocialListener
-{
-public:
-    virtual void onSocialResult(SocialRetCode code, const char* msg) = 0;
-};
 
 class ProtocolSocial : public PluginProtocol
 {
@@ -58,8 +40,23 @@ public:
     ProtocolSocial();
     virtual ~ProtocolSocial();
 
-	typedef std::function<void(int, std::string&)> ProtocolSocialCallback;
-
+	typedef std::function<void(bool, const std::string&)> SocialCallback;
+    typedef std::function<void()> DialogCallback;
+    
+    typedef struct __CallbackWrapper {
+        __CallbackWrapper(const SocialCallback& cb) {
+            callbackSocialPtr = cb;
+        }
+        
+        __CallbackWrapper(const DialogCallback& cb) {
+            callbackDialogPtr = cb;
+        }
+        
+        SocialCallback callbackSocialPtr;
+        DialogCallback callbackDialogPtr;
+        
+    } CallbackWrapper;
+    
     /**
     @brief config the share developer info
     @param devInfo This parameter is the info of developer,
@@ -67,58 +64,21 @@ public:
     @warning Must invoke this interface before other interfaces.
              And invoked only once.
     */
-    void configDeveloperInfo(TSocialDeveloperInfo devInfo);
+    void configDeveloperInfo(TSocialInfo devInfo);
 
     /**
      * @brief methods of leaderboard feature
      */
-    void submitScore(const char* leadboardID, int64_t score);
-    void submitScore(const char* leadboardID, int64_t score, ProtocolSocialCallback cb);
-    void showLeaderboard(const char* leaderboardID);
-
+    void submitScore(const std::string& leadboardID, int score, const SocialCallback& cb);
+    
+    void showLeaderboard(const std::string& leaderboardID, const DialogCallback& cb);
+    void showLeaderboards(const DialogCallback& cb);
     /**
      * @brief methods of achievement feature
      */
-    void unlockAchievement(TAchievementInfo achInfo);
-    void unlockAchievement(TAchievementInfo achInfo, ProtocolSocialCallback cb);
-    void showAchievements();
-
-    /*
-     @deprecated
-     @brief set listener
-     */
-    CC_DEPRECATED_ATTRIBUTE inline void setListener(SocialListener* listener) {
-        _listener = listener;
-    }
-
-    /*
-     @deprecated
-     @brief get listener
-     */
-    CC_DEPRECATED_ATTRIBUTE inline SocialListener* getListener()
-    {
-        return _listener;
-    }
-
-    /*
-     @brief set callback function
-     */
-    inline void setCallback(ProtocolSocialCallback &cb)
-    {
-    	_callback = cb;
-    }
-
-    /*
-     @brief get callback function
-     */
-    inline ProtocolSocialCallback& getCallback()
-    {
-    	return _callback;
-    }
-
-protected:
-    SocialListener* _listener;
-    ProtocolSocialCallback _callback;
+    void unlockAchievement(TAchievementInfo achInfo, const SocialCallback& cb);
+    
+    void showAchievements(const DialogCallback& cb);
 };
 
 }} // namespace cocos2d { namespace plugin {

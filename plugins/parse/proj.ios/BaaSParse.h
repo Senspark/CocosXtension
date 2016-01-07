@@ -18,7 +18,7 @@
 
 - (void)        loginWithFacebookAccessToken: (NSNumber*) cbID;
 
-- (void)        fetchConfigInBackground:(long) cbID;
+- (void)        fetchConfigInBackground:(NSNumber*) callbackID;
 - (BOOL)        getBoolConfig: (NSString*) param;
 - (int)         getIntegerConfig: (NSString*) param;
 - (double)      getDoubleConfig: (NSString*) param;
@@ -37,5 +37,9 @@
 - (NSString*)   getInstallationInfo;
 - (NSString*)   setInstallationInfo: (NSString*) params;
 - (void)        saveInstallationInfo: (NSNumber*) cbID;
+
+- (NSString*)   getSubscribedChannels;
+- (void)        subscribeChannels: (NSString*) channels;
+- (void)        unsubscribeChannels: (NSString*) channels;
 
 @end

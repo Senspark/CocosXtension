@@ -35,8 +35,11 @@ THE SOFTWARE.
     #define CC_DEPRECATED_ATTRIBUTE
 #endif 
 
-namespace cocos2d { namespace plugin {
+#define NS_CC_PLUGIN_BEGIN  namespace cocos2d { namespace plugin {
+#define NS_CC_PLUGIN_END    }}
+#define USING_NS_CC_PLUGIN  using namespace cocos2d::plugin
 
+NS_CC_PLUGIN_BEGIN
 /**
 	The super class for all plugins.
 */
@@ -69,12 +72,18 @@ public:
 
     int callIntFuncWithParam(const char* funcName, PluginParam* param, ...);
     int callIntFuncWithParam(const char* funcName, std::vector<PluginParam*> params);
-
+    
     bool callBoolFuncWithParam(const char* funcName, PluginParam* param, ...);
     bool callBoolFuncWithParam(const char* funcName, std::vector<PluginParam*> params);
+    
+    long callLongFuncWithParam(const char* funcName, PluginParam* param, ...);
+    long callLongFuncWithParam(const char* funcName, std::vector<PluginParam*> params);
 
     float callFloatFuncWithParam(const char* funcName, PluginParam* param, ...);
     float callFloatFuncWithParam(const char* funcName, std::vector<PluginParam*> params);
+    
+    double callDoubleFuncWithParam(const char* funcName, PluginParam* param, ...);
+    double callDoubleFuncWithParam(const char* funcName, std::vector<PluginParam*> params);
 
 protected:
     PluginProtocol() {}
@@ -87,6 +96,6 @@ private:
     std::string _pluginName;
 };
 
-}} //namespace cocos2d { namespace plugin {
+NS_CC_PLUGIN_END //namespace cocos2d { namespace plugin {
 
 #endif /* __CCX_IPLUGIN_H__ */

@@ -26,6 +26,14 @@ public:
     void configureAds(const std::string& adsId);
     
     void addTestDevice(const std::string& deviceId);
+
+    void loadInterstitial();
+
+    bool hasInterstitial();
+
+    void setBannerAnimationInfo(int slideUpTimePeriod, int slideDownTimePeriod);
+    void slideBannerUp();
+    void slideBannerDown();
 };
 
 NS_SENSPARK_PLUGIN_ADS_END
