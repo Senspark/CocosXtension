@@ -33,7 +33,7 @@
  POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "Reachability.h"
+#import "EReachability.h"
 
 
 NSString *const kReachabilityChangedNotification = @"kReachabilityChangedNotification";

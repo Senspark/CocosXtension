@@ -34,9 +34,11 @@
 #include "GameCenterProtocolSocial.h"
 #include "GooglePlayProtocolSocial.h"
 
-
 #include "GameCenterProtocolUser.h"
 #include "GooglePlayProtocolUser.h"
+
+#include "GooglePlusProtocolUser.h"
+#include "GooglePlusProtocolShare.h"
 
 #include "SensparkPluginManager.h"
 

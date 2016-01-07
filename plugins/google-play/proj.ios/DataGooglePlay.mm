@@ -7,7 +7,6 @@
 //
 
 #import "DataGooglePlay.h"
-#import <GooglePlus/GooglePlus.h>
 #import "DataWrapper.h"
 #include <map>
 

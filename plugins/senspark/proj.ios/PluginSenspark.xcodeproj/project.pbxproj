@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C0FB20C1C3E033E009511B4 /* GooglePlusProtocolUser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C0FB20B1C3E033E009511B4 /* GooglePlusProtocolUser.mm */; };
 		2C4585E51C3B649300BA43BF /* UnityProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C4585E41C3B649300BA43BF /* UnityProtocolAds.mm */; };
+		2C8AE15B1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8AE15A1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm */; };
 		95376F611B86E83C001C62A5 /* AdColonyProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F501B86E83C001C62A5 /* AdColonyProtocolAds.mm */; };
 		95376F621B86E83C001C62A5 /* AdmobProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F511B86E83C001C62A5 /* AdmobProtocolAds.mm */; };
 		95376F631B86E83C001C62A5 /* ChartboostProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F521B86E83C001C62A5 /* ChartboostProtocolAds.mm */; };
@@ -31,8 +33,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C0FB20B1C3E033E009511B4 /* GooglePlusProtocolUser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GooglePlusProtocolUser.mm; sourceTree = "<group>"; };
+		2C0FB20D1C3E03AD009511B4 /* GooglePlusProtocolUser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GooglePlusProtocolUser.h; sourceTree = "<group>"; };
+		2C0FB20E1C3E03BC009511B4 /* GooglePlusProtocolShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GooglePlusProtocolShare.h; sourceTree = "<group>"; };
 		2C4585CA1C3A6F1400BA43BF /* UnityProtocolAds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnityProtocolAds.h; sourceTree = "<group>"; };
 		2C4585E41C3B649300BA43BF /* UnityProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UnityProtocolAds.mm; sourceTree = "<group>"; };
+		2C8AE15A1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GooglePlusProtocolShare.mm; sourceTree = "<group>"; };
 		9520E0B31B46A74800B7768B /* libPluginSenspark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginSenspark.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		95376F501B86E83C001C62A5 /* AdColonyProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdColonyProtocolAds.mm; sourceTree = "<group>"; };
 		95376F511B86E83C001C62A5 /* AdmobProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdmobProtocolAds.mm; sourceTree = "<group>"; };
@@ -136,27 +142,29 @@
 		95FE48E91B57693A00739C4A /* include */ = {
 			isa = PBXGroup;
 			children = (
-				95C160251B5CD83500501400 /* SensparkPlugin.h */,
-				95F034471B6B2C4900BD28F2 /* FlurryProtocolAnalytics.h */,
-				953C06EB1B577563002BB1A2 /* GoogleProtocolAnalytics.h */,
 				95F0344A1B6B2C7B00BD28F2 /* AdColonyProtocolAds.h */,
 				953C06EC1B578105002BB1A2 /* AdmobProtocolAds.h */,
 				95F0344D1B6B2EE400BD28F2 /* ChartboostProtocolAds.h */,
-				2C4585CA1C3A6F1400BA43BF /* UnityProtocolAds.h */,
 				95F034411B6B2B7900BD28F2 /* FacebookProtocolAds.h */,
-				95F034421B6B2BB100BD28F2 /* FlurryProtocolAds.h */,
-				95C954271B62207E0014047A /* VungleProtocolAds.h */,
-				957727881B78808000E532E6 /* GooglePlayProtocolData.h */,
-				95F034321B6B238200BD28F2 /* GameCenterProtocolSocial.h */,
-				95EBD89B1B664AD80004D448 /* GooglePlayProtocolSocial.h */,
-				95F0343B1B6B26E900BD28F2 /* FacebookProtocolSocial.h */,
 				95F0343E1B6B276E00BD28F2 /* FacebookProtocolShare.h */,
+				95F0343B1B6B26E900BD28F2 /* FacebookProtocolSocial.h */,
 				95F034381B6B267600BD28F2 /* FacebookProtocolUser.h */,
+				95F034421B6B2BB100BD28F2 /* FlurryProtocolAds.h */,
+				95F034471B6B2C4900BD28F2 /* FlurryProtocolAnalytics.h */,
+				95F034321B6B238200BD28F2 /* GameCenterProtocolSocial.h */,
 				95F034351B6B25C100BD28F2 /* GameCenterProtocolUser.h */,
+				957727881B78808000E532E6 /* GooglePlayProtocolData.h */,
+				95EBD89B1B664AD80004D448 /* GooglePlayProtocolSocial.h */,
 				95EBD89A1B664AC00004D448 /* GooglePlayProtocolUser.h */,
+				2C0FB20E1C3E03BC009511B4 /* GooglePlusProtocolShare.h */,
+				2C0FB20D1C3E03AD009511B4 /* GooglePlusProtocolUser.h */,
+				953C06EB1B577563002BB1A2 /* GoogleProtocolAnalytics.h */,
 				95CFAD8A1B81943600E8C88C /* ParseProtocolBaaS.h */,
-				953C06ED1B57A267002BB1A2 /* SensparkPluginManager.h */,
+				95C160251B5CD83500501400 /* SensparkPlugin.h */,
 				95C1602C1B5CEC9B00501400 /* SensparkPluginMacros.h */,
+				953C06ED1B57A267002BB1A2 /* SensparkPluginManager.h */,
+				2C4585CA1C3A6F1400BA43BF /* UnityProtocolAds.h */,
+				95C954271B62207E0014047A /* VungleProtocolAds.h */,
 			);
 			name = include;
 			path = ../include;
@@ -167,7 +175,6 @@
 			children = (
 				95376F501B86E83C001C62A5 /* AdColonyProtocolAds.mm */,
 				95376F511B86E83C001C62A5 /* AdmobProtocolAds.mm */,
-				2C4585E41C3B649300BA43BF /* UnityProtocolAds.mm */,
 				95376F521B86E83C001C62A5 /* ChartboostProtocolAds.mm */,
 				95376F531B86E83C001C62A5 /* FacebookProtocolAds.mm */,
 				95376F541B86E83C001C62A5 /* FacebookProtocolShare.mm */,
@@ -179,8 +186,11 @@
 				95376F5B1B86E83C001C62A5 /* GooglePlayProtocolData.mm */,
 				95376F5C1B86E83C001C62A5 /* GooglePlayProtocolSocial.mm */,
 				95376F5D1B86E83C001C62A5 /* GooglePlayProtocolUser.mm */,
+				2C8AE15A1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm */,
+				2C0FB20B1C3E033E009511B4 /* GooglePlusProtocolUser.mm */,
 				95376F5E1B86E83C001C62A5 /* GoogleProtocolAnalytics.mm */,
 				95376F5F1B86E83C001C62A5 /* ParseProtocolBaaS.mm */,
+				2C4585E41C3B649300BA43BF /* UnityProtocolAds.mm */,
 				95376F601B86E83C001C62A5 /* VungleProtocolAds.mm */,
 			);
 			name = ios;
@@ -260,6 +270,7 @@
 				95376F6E1B86E83C001C62A5 /* GooglePlayProtocolUser.mm in Sources */,
 				95376F6D1B86E83C001C62A5 /* GooglePlayProtocolSocial.mm in Sources */,
 				95376F621B86E83C001C62A5 /* AdmobProtocolAds.mm in Sources */,
+				2C8AE15B1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm in Sources */,
 				95376F681B86E83C001C62A5 /* FlurryProtocolAds.mm in Sources */,
 				953C06F11B57A8DD002BB1A2 /* SensparkPluginManager.cpp in Sources */,
 				95376F651B86E83C001C62A5 /* FacebookProtocolShare.mm in Sources */,
@@ -270,6 +281,7 @@
 				95376F6B1B86E83C001C62A5 /* GameCenterProtocolUser.mm in Sources */,
 				95376F691B86E83C001C62A5 /* FlurryProtocolAnalytics.mm in Sources */,
 				95376F701B86E83C001C62A5 /* ParseProtocolBaaS.mm in Sources */,
+				2C0FB20C1C3E033E009511B4 /* GooglePlusProtocolUser.mm in Sources */,
 				95376F631B86E83C001C62A5 /* ChartboostProtocolAds.mm in Sources */,
 				95376F711B86E83C001C62A5 /* VungleProtocolAds.mm in Sources */,
 			);
