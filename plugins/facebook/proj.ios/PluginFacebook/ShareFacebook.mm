@@ -31,7 +31,7 @@
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
-@interface ShareFacebook() <FBSDKSharingDelegate, FBSDKGameRequestDialogDelegate>
+@interface ShareFacebook() <FBSDKSharingDelegate, FBSDKGameRequestDialogDelegate, UIAlertViewDelegate>
 
 @end
 
@@ -114,6 +114,33 @@
         NSString *msg = [ParseUtils MakeJsonStringWithObject:@"Share failed, share target absent or not supported, please add 'siteUrl' or 'imageUrl' in parameters" andKey:@"error_message"];
         [ShareWrapper onShareResult:self withRet:kShareFail withContent:shareInfo withMsg:msg andCallbackID:cbID];
     }
+}
+
+- (void) likeFanpage:(NSString *)fanpageID {
+    NSString* urlToLikeFor = [NSString stringWithFormat:@"https://www.facebook.com/%@", fanpageID];
+    
+    
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Facebook Like"
+                                                      message:@"Like us and never miss out on awesome events!"
+                                                     delegate:nil
+                                            cancelButtonTitle:@"Dismiss"
+                                            otherButtonTitles:nil];
+    
+    UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 60)];
+    
+    FBSDKLikeControl* button = [[FBSDKLikeControl alloc] initWithFrame:CGRectMake(0, 0, 200, 150)];
+    [button setObjectType:FBSDKLikeObjectTypePage];
+    [button setObjectID:urlToLikeFor];
+    [button setLikeControlAuxiliaryPosition:FBSDKLikeControlAuxiliaryPositionBottom];
+    [button setLikeControlHorizontalAlignment:FBSDKLikeControlHorizontalAlignmentCenter];
+    [button setLikeControlStyle:FBSDKLikeControlStyleStandard];
+    [button setSoundEnabled:YES];
+    [button setFrame:CGRectMake(button.frame.size.width/6 + 5, 0, 200, 150)];
+    
+    [view addSubview:button];
+    
+    [message setValue:view forKey:@"accessoryView"];
+    [message show];
 }
 
 - (void) setDebugMode: (BOOL) debug

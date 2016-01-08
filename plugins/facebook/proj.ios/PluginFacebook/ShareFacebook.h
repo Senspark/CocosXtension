@@ -35,6 +35,7 @@
  * @brief interfaces of protocol : InterfaceShare
  */
 
+-(void) likeFanpage: (NSString*) fanpageID;
 -(void) openInviteDialog:(NSDictionary*) params;
 -(void) sendGameRequest:(NSDictionary*) params;
 
