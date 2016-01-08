@@ -18,7 +18,7 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		BA34A75B195AA8C7002D0ECD /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (

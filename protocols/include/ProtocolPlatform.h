@@ -42,6 +42,7 @@ public:
     
     double getVersionCode();
     
+    void sendFeedback(const std::string& appName);
     /**
      @brief set login callback function
      */
