@@ -33,6 +33,12 @@ void FacebookProtocolShare::share(FBParam &info, FacebookProtocolShare::ShareCal
     callFuncWithParam("share", &params, &callbackID, nullptr);
 }
 
+void FacebookProtocolShare::likeFanpage(const std::string &fanpageID) {
+    PluginParam param(fanpageID.c_str());
+    
+    callFuncWithParam("likeFanpage", &param, nullptr);
+}
+
 void FacebookProtocolShare::openInviteDialog(FBParam &info, FacebookProtocolShare::ShareCallback& callback){
     FacebookProtocolShare::CallbackWrapper* wrapper = new FacebookProtocolShare::CallbackWrapper(callback);
     

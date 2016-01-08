@@ -91,7 +91,7 @@ using namespace cocos2d::plugin;
 }
 
 - (NSString*) getSDKVersion {
-    return [NSString stringWithFormat:@"%d", [AdColony version]];
+    return [NSString stringWithFormat:@"%ld", (long)[AdColony version]];
 }
 
 - (NSString*) getPluginVersion {
