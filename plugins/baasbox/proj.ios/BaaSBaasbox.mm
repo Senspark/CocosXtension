@@ -36,57 +36,43 @@ using namespace cocos2d::plugin;
 }
 
 - (void) loginWithUsername: (NSString*) username andPassword: (NSString*) password andCallbackID: (long) cbId{
-    if(![self isLoggedIn]){
-        [BAAUser loginWithUsername:username
-                          password:password
-                        completion:^(BOOL success, NSError *error) {
-                            if (success) {
-                                NSLog(@"login baasbox success");
-                                [BaaSWrapper onBaaSActionResult: self
-                                                 withReturnCode: (int)BaaSActionResultCode::kLoginSucceed
-                                                   andReturnMsg: @"login baasbox success"
-                                                  andCallbackID: cbId];
-                            } else {
-                                NSLog(@"login baasbox error: %@",error);
-                                [BaaSWrapper onBaaSActionResult: self
-                                                 withReturnCode: (int)BaaSActionResultCode::kLoginFailed
-                                                   andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
-                                                  andCallbackID: cbId];
-                            }
-                        }];
-    }else{
-        [BaaSWrapper onBaaSActionResult: self
-                         withReturnCode: (int)BaaSActionResultCode::kLoginFailed
-                           andReturnMsg: @"BAAUser logged in"
-                          andCallbackID: cbId];
-    }
-
+    [BAAUser loginWithUsername:username
+                      password:password
+                    completion:^(BOOL success, NSError *error) {
+                        if (success) {
+                            NSLog(@"login baasbox success");
+                            [BaaSWrapper onBaaSActionResult: self
+                                             withReturnCode: true
+                                               andReturnMsg: @"login baasbox success"
+                                              andCallbackID: cbId];
+                        } else {
+                            NSLog(@"login baasbox error: %@",error);
+                            [BaaSWrapper onBaaSActionResult: self
+                                             withReturnCode: false
+                                               andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
+                                              andCallbackID: cbId];
+                        }
+                    }];
+    
+    
 }
 
 - (void) logout: (long) cbId{
-    if([BAAClient sharedClient].isAuthenticated){
-        [BAAUser logoutWithCompletion:^(BOOL success, NSError *error) {
-            if(success){
-                NSLog(@"BAAUser logout success");
-                [BaaSWrapper onBaaSActionResult: self
-                                 withReturnCode: (int)BaaSActionResultCode::kLogoutSucceed
-                                   andReturnMsg: @"logout baasbox success"
-                                  andCallbackID: cbId];
-            }else{
-                NSLog(@"BAAUser logout error %@",error);
-                [BaaSWrapper onBaaSActionResult: self
-                                 withReturnCode: (int)BaaSActionResultCode::kLogoutFailed
-                                   andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
-                                  andCallbackID: cbId];
-            }
-        }];
-    }else{
-        [BaaSWrapper onBaaSActionResult: self
-                         withReturnCode: (int)BaaSActionResultCode::kLogoutFailed
-                           andReturnMsg: @"BAAUser is not authenticated"
-                          andCallbackID: cbId];
-    }
-
+    [BAAUser logoutWithCompletion:^(BOOL success, NSError *error) {
+        if(success){
+            NSLog(@"BAAUser logout success");
+            [BaaSWrapper onBaaSActionResult: self
+                             withReturnCode: true
+                               andReturnMsg: @"logout baasbox success"
+                              andCallbackID: cbId];
+        }else{
+            NSLog(@"BAAUser logout error %@",error);
+            [BaaSWrapper onBaaSActionResult: self
+                             withReturnCode: false
+                               andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
+                              andCallbackID: cbId];
+        }
+    }];
 }
 
 - (BOOL) isLoggedIn{
@@ -109,35 +95,30 @@ using namespace cocos2d::plugin;
 }
 
 -(void)loginWithFacebookToken:(NSString*)facebookToken andCallbackId:(long)cbId{
-    if(facebookToken != NULL){
-        [BAAUser loginWithFacebookToken:facebookToken
-                             completion:^(BOOL success, NSError *error) {
-                                 if (success) {
-                                     BAAClient *c = [BAAClient sharedClient];
-                                     NSLog(@"login with facebook %@", c.currentUser);
-                                     
-                                     BAAClient *client = [BAAClient sharedClient];
-                                     [client askToEnablePushNotifications];
-                                     
-                                     [BaaSWrapper onBaaSActionResult: self
-                                                      withReturnCode: (int)BaaSActionResultCode::kLoginSucceed
-                                                        andReturnMsg: @"login baasbox with facebook token success"
-                                                       andCallbackID: cbId];
-                                     
-                                 } else {
-                                     NSLog(@"login with facebook error %@", error);
-                                     [BaaSWrapper onBaaSActionResult: self
-                                                      withReturnCode: (int)BaaSActionResultCode::kLoginFailed
-                                                        andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
-                                                       andCallbackID: cbId];
-                                 }
-                             }];
-    }else{
-        [BaaSWrapper onBaaSActionResult: self
-                         withReturnCode: (int)BaaSActionResultCode::kLoginFailed
-                           andReturnMsg: @"facebookToken parameter is NULL"
-                          andCallbackID: cbId];
-    }
+    
+    [BAAUser loginWithFacebookToken:facebookToken
+                         completion:^(BOOL success, NSError *error) {
+                             if (success) {
+                                 BAAClient *c = [BAAClient sharedClient];
+                                 NSLog(@"login with facebook %@", c.currentUser);
+                                 
+                                 BAAClient *client = [BAAClient sharedClient];
+                                 [client askToEnablePushNotifications];
+                                 
+                                 [BaaSWrapper onBaaSActionResult: self
+                                                  withReturnCode: true
+                                                    andReturnMsg: @"login baasbox with facebook token success"
+                                                   andCallbackID: cbId];
+                                 
+                             } else {
+                                 NSLog(@"login with facebook error %@", error);
+                                 [BaaSWrapper onBaaSActionResult: self
+                                                  withReturnCode: false
+                                                    andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
+                                                   andCallbackID: cbId];
+                             }
+                         }];
+    
 }
 
 -(void) updateUserProfile:(NSDictionary*) params{
@@ -186,13 +167,13 @@ using namespace cocos2d::plugin;
         if (error == nil) {
             NSLog(@"update user profile success");
             [BaaSWrapper onBaaSActionResult: self
-                             withReturnCode: (int)BaaSActionResultCode::kSaveSucceed
+                             withReturnCode: true
                                andReturnMsg: @"update user profile success"
                               andCallbackID: cbId];
         } else {
             NSLog(@"update user profile %@", error);
             [BaaSWrapper onBaaSActionResult: self
-                             withReturnCode: (int)BaaSActionResultCode::kSaveFailed
+                             withReturnCode: false
                                andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
                               andCallbackID:  cbId];
         }
@@ -203,40 +184,33 @@ using namespace cocos2d::plugin;
 -(void)fetchUserProfileWithCallbackId:(NSNumber*)cbId{
     long _cbId = cbId ? [cbId longValue] : 0;
     
-    if([BAAClient sharedClient].isAuthenticated){
+    
+    [BAAUser loadCurrentUserWithCompletion:^(BAAUser*  object, NSError *error) {
         
-        [BAAUser loadCurrentUserWithCompletion:^(BAAUser*  object, NSError *error) {
+        if(object){
+            NSLog(@"load current user : %@",object);
             
-            if(object){
-                NSLog(@"load current user : %@",object);
-                
-                NSMutableDictionary* userInfo = [[NSMutableDictionary alloc] init];
-                
-                [userInfo setObject:object.visibleByRegisteredUsers forKey:@"visibleByRegisteredUsers"];
-                [userInfo setObject:object.visibleByTheUser         forKey:@"visibleByTheUser"];
-                [userInfo setObject:object.visibleByAnonymousUsers  forKey:@"visibleByAnonymousUsers"];
-                [userInfo setObject:object.visibleByFriends         forKey:@"visibleByFriends"];
-                
-                NSString* NSJsonData = [ParseUtils NSDictionaryToNSString:userInfo];
-                
-                [BaaSWrapper onBaaSActionResult: self
-                                 withReturnCode: (int)BaaSActionResultCode::kRetrieveSucceed
-                                   andReturnMsg: NSJsonData
-                                  andCallbackID: _cbId];
-            }else{
-                NSLog(@"BAAUser null");
-                [BaaSWrapper onBaaSActionResult: self
-                                 withReturnCode: (int)BaaSActionResultCode::kRetrieveFailed
-                                   andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
-                                  andCallbackID: _cbId];
-            }
-        }];
-    }else{
-        [BaaSWrapper onBaaSActionResult: self
-                         withReturnCode: (int)BaaSActionResultCode::kRetrieveFailed
-                           andReturnMsg: @"BAAUser is not authenticated"
-                          andCallbackID: _cbId];
-    }
+            NSMutableDictionary* userInfo = [[NSMutableDictionary alloc] init];
+            
+            [userInfo setObject:object.visibleByRegisteredUsers forKey:@"visibleByRegisteredUsers"];
+            [userInfo setObject:object.visibleByTheUser         forKey:@"visibleByTheUser"];
+            [userInfo setObject:object.visibleByAnonymousUsers  forKey:@"visibleByAnonymousUsers"];
+            [userInfo setObject:object.visibleByFriends         forKey:@"visibleByFriends"];
+            
+            NSString* NSJsonData = [ParseUtils NSDictionaryToNSString:userInfo];
+            
+            [BaaSWrapper onBaaSActionResult: self
+                             withReturnCode: true
+                               andReturnMsg: NSJsonData
+                              andCallbackID: _cbId];
+        }else{
+            NSLog(@"BAAUser null");
+            [BaaSWrapper onBaaSActionResult: self
+                             withReturnCode: false
+                               andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
+                              andCallbackID: _cbId];
+        }
+    }];
 }
 
 -(void) registerForRemoteNotificationsWithDeviceToken:(NSData *) deviceToken completion:(void(^)(BOOL))successed{
@@ -263,24 +237,50 @@ using namespace cocos2d::plugin;
     [BAAUser loadUsersWithParameters:params
                           completion:^(NSArray *users, NSError *error) {
                               if (users) {
+                                  NSLog(@"users baasbox : %@",users);
+                                  NSMutableArray* arr = [[NSMutableArray alloc] init];
+                                  for (BAAUser* user in users) {
+                                      NSDictionary* u = [ self BAAUserToNSDictionary:user];
+                                      [arr addObject:u];
+                                  }
+                                  NSLog(@"Arr : %@",arr);
                                   
-                                  NSString* NSUsers = [ParseUtils NSDictionaryToNSString:users];
-                                  
+                                  NSString* NSUsers = [ParseUtils NSDictionaryToNSString:arr];
+                                   NSLog(@"NS users baasbox : %@",NSUsers);
                                   [BaaSWrapper onBaaSActionResult: self
-                                                   withReturnCode: (int)BaaSActionResultCode::kRetrieveSucceed
+                                                   withReturnCode: true
                                                      andReturnMsg: NSUsers
                                                     andCallbackID: cbId];
                               } else {
                                   NSLog(@"fetch score facebook friends fail: %@",error);
                                   [BaaSWrapper onBaaSActionResult: self
-                                                   withReturnCode: (int)BaaSActionResultCode::kRetrieveFailed
+                                                   withReturnCode: false
                                                      andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
                                                     andCallbackID: cbId];
                               }
                           }];
-    
 }
 
+-(NSDictionary*)BAAUserToNSDictionary:(BAAUser*) user{
+    NSString* status = user.status;
+//    NSString* name   = user.username;
+    NSDictionary* roles = user.roles;
+    NSDictionary *visibleByTheUser = user.visibleByTheUser;
+    NSDictionary *visibleByFriends = user.visibleByFriends;
+    NSDictionary *visibleByRegisteredUsers = user.visibleByRegisteredUsers;
+    NSDictionary *visibleByAnonymousUsers = user.visibleByAnonymousUsers;
+    
+    NSMutableDictionary* ret = [[NSMutableDictionary alloc] init];
+    [ret setObject:status forKey:@"status"];
+//    [ret setObject:name forKey:@"username"];
+    [ret setObject:roles forKey:@"roles"];
+    [ret setObject:visibleByAnonymousUsers forKey:@"visibleByAnonymousUsers"];
+    [ret setObject:visibleByRegisteredUsers forKey:@"visibleByRegisteredUsers"];
+    [ret setObject:visibleByFriends forKey:@"visibleByFriends"];
+    [ret setObject:visibleByTheUser forKey:@"visibleByTheUser"];
+    
+    return ret;
+}
 
 
 @end
