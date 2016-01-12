@@ -16,7 +16,41 @@
 
 using namespace cocos2d::plugin;
 
-@interface ShareGooglePlus() <GPPDeepLinkDelegate, GPPShareDelegate>
+@interface GPPShareDelegate : NSObject <GPPDeepLinkDelegate, GPPShareDelegate>
+{
+    long _callbackID;
+}
+
+- (id) initWithCallbackID: (long) callbackID;
+
+- (void)finishedSharingWithError:(NSError *)error;
+- (void)didReceiveDeepLink: (GPPDeepLink *)deepLink;
+
+@end
+
+@implementation GPPShareDelegate
+
+- (id) initWithCallbackID: (long) callbackID {
+    if (self = [self init]) {
+        _callbackID = callbackID;
+    }
+    
+    return self;
+}
+
+- (void)finishedSharingWithError:(NSError *)error {
+    if (!error) {
+        [ShareWrapper onShareResult:self withRet:(int) ShareResultCode::kShareSuccess withContent:nil withMsg:@"[Google+] Share succeeded" andCallbackID:_callbackID];
+    } else {
+        [ShareWrapper onShareResult:self withRet:(int) ShareResultCode::kShareFail withContent:nil withMsg:@"[Google+] Share failed" andCallbackID:_callbackID];
+    }
+    
+    [self release];
+}
+
+- (void)didReceiveDeepLink: (GPPDeepLink *)deepLink {
+    NSLog(@"deepLinkID = %@", [deepLink deepLinkID]);
+}
 
 @end
 
@@ -24,32 +58,32 @@ using namespace cocos2d::plugin;
 
 #pragma mark - InterfaceUser
 
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo
+- (void) configDeveloperInfo : (NSDictionary*) cpInfo
 {
-    // init G+
-    [GPPDeepLink setDelegate: self];
     [GPPDeepLink readDeepLinkAfterInstall];
 }
 
-- (void) share:(NSMutableDictionary *)shareInfo {
-
+- (void) share:(NSDictionary *)shareInfo withCallback:(long)cbID {
     NSString* urlToShare        = (NSString*) [shareInfo objectForKey:@"urlToShare"];
     NSString* prefillText       = (NSString*) [shareInfo objectForKey:@"prefillText"];
     NSString* deepLinkId        = (NSString*) [shareInfo objectForKey:@"deepLinkId"];
     NSString* contentDeepLinkId = (NSString*) [shareInfo objectForKey:@"contentDeepLinkId"];
-
-    [[GPPShare sharedInstance] setDelegate: self]; //set delegate for GPPShare
-    id<GPPNativeShareBuilder> shareBuilder = [[GPPShare sharedInstance] nativeShareDialog];
-
+    
+    GPPShare* sharer = [[GPPShare alloc] init];
+    sharer.delegate = [[GPPShareDelegate alloc] initWithCallbackID:cbID];
+    
+    id<GPPNativeShareBuilder> shareBuilder = [sharer nativeShareDialog];
+    
     [shareBuilder setURLToShare:[NSURL URLWithString:urlToShare]];
     [shareBuilder setPrefillText:prefillText];
     [shareBuilder setContentDeepLinkID:contentDeepLinkId];
-
+    
     //http://www.senspark.com/url/gmci
     [shareBuilder setCallToActionButtonWithLabel:@"Download"
                                              URL:[NSURL URLWithString:urlToShare]
                                       deepLinkID:deepLinkId];
     [shareBuilder open];
+    [sharer release];
 }
 
 #pragma mark -
@@ -77,16 +111,6 @@ using namespace cocos2d::plugin;
 
 #pragma mark -
 #pragma mark Delegate
-- (void)finishedSharingWithError:(NSError *)error {
-    if (!error) {
-        [ShareWrapper onShareResult:self withRet:(int) ShareResultCode::kShareSuccess withContent:nil withMsg:@"[Google+] Share succeeded"];
-    } else {
-        [ShareWrapper onShareResult:self withRet:(int) ShareResultCode::kShareFail withContent:nil withMsg:@"[Google+] Share failed"];
-    }
-}
 
-- (void)didReceiveDeepLink: (GPPDeepLink *)deepLink {
-    NSLog(@"deepLinkID = %@", [deepLink deepLinkID]);
-}
 
 @end
