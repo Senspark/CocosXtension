@@ -13,7 +13,7 @@ std::string ParseProtocolBaaS::getUserInfo() {
 }
 
 std::string ParseProtocolBaaS::setUserInfo(const std::string& jsonChanges) {
-	PluginParam param(jsonChanges);
+	PluginParam param(jsonChanges.c_str());
 	return PluginUtils::callJavaStringFuncWithName_oneParam(this, "setUserInfo", "(Ljava/lang/String;)Ljava/lang/String;", &param);
 }
 
@@ -32,7 +32,7 @@ std::string ParseProtocolBaaS::getInstallationInfo() {
 }
 
 std::string ParseProtocolBaaS::setInstallationInfo(const std::string& changes) {
-	PluginParam param(changes);
+	PluginParam param(changes.c_str());
 	return PluginUtils::callJavaStringFuncWithName_oneParam(this, "getInstallationInfo","(Ljava/lang/String;)Ljava/lang/String;", &param);
 }
 
@@ -46,12 +46,12 @@ void ParseProtocolBaaS::loginWithFacebookAccessToken(BaaSCallback& cb) {
 	PluginUtils::callJavaFunctionWithName_oneParam(this, "loginWithFacebookAccessToken", "(J)V", (long) wrapper);
 }
 
-void ParseProtocolBaaS::subcribeChannel(const std::string& channel) {
+void ParseProtocolBaaS::subscribeChannels(const std::string& channel) {
 	PluginParam param(channel.c_str());
-	PluginUtils::callJavaFunctionWithName_oneParam(this, "subcribeChannel", "(Ljava/lang/String;)V", &param);
+	PluginUtils::callJavaFunctionWithName_oneParam(this, "subcribeChannels", "(Ljava/lang/String;)V", &param);
 }
 
-void ParseProtocolBaaS::unsubcribeChannel(const std::string& channel) {
+void ParseProtocolBaaS::unsubscribeChannels(const std::string& channel) {
 	PluginParam param(channel.c_str());
-	PluginUtils::callJavaFunctionWithName_oneParam(this, "unsubcribeChannel", "(Ljava/lang/String;)V", &param);
+	PluginUtils::callJavaFunctionWithName_oneParam(this, "unsubcribeChannels", "(Ljava/lang/String;)V", &param);
 }

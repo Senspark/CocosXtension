@@ -26,11 +26,12 @@ THE SOFTWARE.
 #include <android/log.h>
 #include "PluginUtils.h"
 #include "PluginJavaData.h"
+#include <string>
 
 namespace cocos2d { namespace plugin {
 
 extern "C" {
-    JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_SocialWrapper_nativeOnSocialResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jstring msg)
+    JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_SocialWrapper_nativeOnSocialResult(JNIEnv*  env, jobject thiz, jstring className, jboolean ret, jstring msg, jint cbID)
     {
         std::string strMsg = PluginJniHelper::jstring2string(msg);
         std::string strClassName = PluginJniHelper::jstring2string(className);
@@ -38,23 +39,19 @@ extern "C" {
         PluginUtils::outputLog("ProtocolSocial", "nativeOnSocialResult(), Get plugin ptr : %p", pPlugin);
         if (pPlugin != NULL)
         {
-            PluginUtils::outputLog("ProtocolSocial", "nativeOnSocialResult(), Get plugin name : %s", pPlugin->getPluginName());
-            ProtocolSocial* pSocial = dynamic_cast<ProtocolSocial*>(pPlugin);
-            if (pSocial != NULL)
-            {
-                SocialListener* pListener = pSocial->getListener();
-                if (NULL != pListener)
-                {
-                    pListener->onSocialResult((SocialRetCode) ret, strMsg.c_str());
-                }
-                else
-                {
-                	ProtocolSocial::ProtocolSocialCallback callback = pSocial->getCallback();
-                	if (callback)
-					{
-						callback(ret, strMsg);
-					}
-                }
+        	PluginUtils::outputLog("ProtocolSocial", "nativeOnSocialResult(), Get plugin name : %s", pPlugin->getPluginName());
+        	ProtocolSocial* pSocial = dynamic_cast<ProtocolSocial*>(pPlugin);
+        	if (pSocial != NULL && cbID)
+        	{
+        		ProtocolSocial::CallbackWrapper* wrapper = (ProtocolSocial::CallbackWrapper*) cbID;
+        		PluginUtils::outputLog("ProtocolSocial", "Wrapper: %p", wrapper);
+        		PluginUtils::outputLog("ProtocolSocial", "cbID : %p", cbID);
+
+        		wrapper->callbackSocialPtr(ret, strMsg);
+        		PluginUtils::outputLog("ProtocolSocial", "End", cbID);
+        		delete wrapper;
+        	} else {
+        		PluginUtils::outputLog("Listener of plugin %s not set correctly", pPlugin->getPluginName());
             }
         }
     }
@@ -62,7 +59,6 @@ extern "C" {
 }
 
 ProtocolSocial::ProtocolSocial()
-: _listener(NULL)
 {
 }
 
@@ -70,7 +66,7 @@ ProtocolSocial::~ProtocolSocial()
 {
 }
 
-void ProtocolSocial::configDeveloperInfo(TSocialDeveloperInfo devInfo)
+void ProtocolSocial::configDeveloperInfo(TSocialInfo devInfo)
 {
     if (devInfo.empty())
     {
@@ -97,51 +93,61 @@ void ProtocolSocial::configDeveloperInfo(TSocialDeveloperInfo devInfo)
     }
 }
 
-void ProtocolSocial::submitScore(const char* leadboardID, int64_t score)
+void ProtocolSocial::submitScore(const std::string& leadboardID, int score, const SocialCallback& cb)
 {
-    PluginUtils::outputLog("ProtocolSocial", "Submit %l to leader board %s.", score, leadboardID);
+    PluginUtils::outputLog("ProtocolSocial", "Submit %l to leader board %s.", score, leadboardID.c_str());
     PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
     PluginJniMethodInfo t;
     if (PluginJniHelper::getMethodInfo(t
         , pData->jclassName.c_str()
         , "submitScore"
-        , "(Ljava/lang/String;J)V"))
+        , "(Ljava/lang/String;IJ)V"))
     {
-        jstring strID = PluginUtils::getEnv()->NewStringUTF(leadboardID);
+        jstring strID = PluginUtils::getEnv()->NewStringUTF(leadboardID.c_str());
         jlong jscore = (jlong) score;
+        CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
 
         // invoke java method
-        t.env->CallVoidMethod(pData->jobj, t.methodID, strID, score);
+        t.env->CallVoidMethod(pData->jobj, t.methodID, strID, score, (int) cbWrapper);
         t.env->DeleteLocalRef(strID);
         t.env->DeleteLocalRef(t.classID);
     }
 }
 
-void ProtocolSocial::submitScore(const char* leadboardID, int64_t score, ProtocolSocialCallback cb)
-{
-	_callback = cb;
-	submitScore(leadboardID, score);
-}
-
-void ProtocolSocial::showLeaderboard(const char* leaderboardID)
+void ProtocolSocial::showLeaderboard(const std::string& leaderboardID, const DialogCallback& cb)
 {
     PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
     PluginJniMethodInfo t;
     if (PluginJniHelper::getMethodInfo(t
         , pData->jclassName.c_str()
         , "showLeaderboard"
-        , "(Ljava/lang/String;)V"))
+        , "(Ljava/lang/String;J)V"))
     {
-        jstring strID = PluginUtils::getEnv()->NewStringUTF(leaderboardID);
-
+        jstring strID = PluginUtils::getEnv()->NewStringUTF(leaderboardID.c_str());
+        CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
         // invoke java method
-        t.env->CallVoidMethod(pData->jobj, t.methodID, strID);
+        t.env->CallVoidMethod(pData->jobj, t.methodID, strID, (int) cbWrapper);
         t.env->DeleteLocalRef(strID);
         t.env->DeleteLocalRef(t.classID);
     }
 }
 
-void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo)
+void ProtocolSocial::showLeaderboards(const DialogCallback& cb) {
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	    PluginJniMethodInfo t;
+	    if (PluginJniHelper::getMethodInfo(t
+	        , pData->jclassName.c_str()
+	        , "showLeaderboard"
+	        , "(J)V"))
+	    {
+	    	CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
+	        // invoke java method
+	        t.env->CallVoidMethod(pData->jobj, t.methodID, (int) cbWrapper);
+	        t.env->DeleteLocalRef(t.classID);
+	    }
+}
+
+void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo, const SocialCallback& cb)
 {
     if (achInfo.empty())
     {
@@ -155,28 +161,33 @@ void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo)
         if (PluginJniHelper::getMethodInfo(t
             , pData->jclassName.c_str()
             , "unlockAchievement"
-            , "(Ljava/util/Hashtable;)V"))
+            , "(Ljava/util/Hashtable;J)V"))
         {
             // generate the hashtable from map
             jobject obj_Map = PluginUtils::createJavaMapObject(&achInfo);
-
+            CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
             // invoke java method
-            t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map);
+            t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map, (int) cbWrapper);
             t.env->DeleteLocalRef(obj_Map);
             t.env->DeleteLocalRef(t.classID);
         }
     }
 }
 
-void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo, ProtocolSocialCallback cb)
+void ProtocolSocial::showAchievements(const DialogCallback& cb)
 {
-	_callback = cb;
-	unlockAchievement(achInfo);
-}
-
-void ProtocolSocial::showAchievements()
-{
-    PluginUtils::callJavaFunctionWithName(this, "showAchievements");
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+		    PluginJniMethodInfo t;
+		    if (PluginJniHelper::getMethodInfo(t
+		        , pData->jclassName.c_str()
+		        , "showAchievements"
+		        , "(J)V"))
+		    {
+		    	CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
+		        // invoke java method
+		        t.env->CallVoidMethod(pData->jobj, t.methodID, (int) cbWrapper);
+		        t.env->DeleteLocalRef(t.classID);
+		    }
 }
 
 }} // namespace cocos2d { namespace plugin {

@@ -75,8 +75,8 @@ void GoogleProtocolAnalytics::trackException(const string& description, bool isF
     callFuncWithParam("trackTimmingWithCategory", &descParam, &fatalParam, nullptr);
 }
 
-void GoogleProtocolAnalytics::trackTimming(const string& category, int interval, const string& name, const string& label) {
-    PluginParam categoryParam(category.c_str());
+void GoogleProtocolAnalytics::trackTiming(const std::string& category, int interval, const std::string& name, const std::string& label)	{
+	PluginParam categoryParam(category.c_str());
     PluginParam intervalParam(interval);
     PluginParam nameParam(name.c_str());
     PluginParam labelParam(label.c_str());

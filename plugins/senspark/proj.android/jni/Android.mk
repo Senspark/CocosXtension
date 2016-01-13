@@ -19,8 +19,6 @@ $(addprefix ../../platform/android/, \
     FacebookProtocolUser.cpp \
     FlurryProtocolAds.cpp \
     FlurryProtocolAnalytics.cpp \
-    GameCenterProtocolSocial.cpp \
-    GameCenterProtocolUser.cpp \
     GooglePlayProtocolData.cpp \
     GooglePlayProtocolSocial.cpp \
     GooglePlayProtocolUser.cpp \

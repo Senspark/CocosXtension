@@ -26,22 +26,22 @@ using namespace cocos2d::plugin;
 
 @implementation AdsColony
 
-@synthesize strInterstitialAdID = _strInterstitialAdID;
-@synthesize strRewardedAdID     = _strRewardedAdID;
+@synthesize strAdZoneID = _strAdZoneID;
 
 - (void) configDeveloperInfo:(NSDictionary *)devInfo {
-    NSString* appID           = [devInfo objectForKey:@"AdColonyAppID"];
-    self.strInterstitialAdID  = [devInfo objectForKey:@"AdColonyInterstitialAdZoneID"];
-    self.strRewardedAdID      = [devInfo objectForKey:@"AdColonyRewardedAdZoneID"];
+    NSString* appID  = [devInfo objectForKey:@"AdColonyAppID"];
+    self.strAdZoneID = [devInfo objectForKey:@"AdColonyZoneIDs"];
+
+    NSArray* zoneList = [self.strAdZoneID componentsSeparatedByString:@","];
 
     // Initialize the AdColony library
     [AdColony configureWithAppID: appID
-                         zoneIDs: @[self.strInterstitialAdID, self.strRewardedAdID]
+                         zoneIDs: zoneList
                         delegate:self
                          logging:YES];
 
     [GADMAdapterAdColonyInitializer startWithAppID: appID
-                                          andZones: @[self.strInterstitialAdID, self.strRewardedAdID]];
+                                          andZones: zoneList];
 }
 
 - (void) showAds: (NSDictionary*) info position:(int) pos {
@@ -64,26 +64,26 @@ using namespace cocos2d::plugin;
     NSLog(@"AdColony: Not support %s", __func__);
 }
 
-- (BOOL) hasInterstitial {
-    NSLog(@"AdColony: zoneStatus: %u for Zone: %@", [AdColony zoneStatusForZone:self.strInterstitialAdID],  self.strInterstitialAdID);
-    return [AdColony zoneStatusForZone:self.strInterstitialAdID] == ADCOLONY_ZONE_STATUS_ACTIVE ? YES : NO;
+- (BOOL) hasInterstitial:(NSString *)zoneID {
+    NSLog(@"AdColony: zoneStatus: %u for Zone: %@", [AdColony zoneStatusForZone: zoneID], zoneID);
+    return [AdColony zoneStatusForZone: zoneID] == ADCOLONY_ZONE_STATUS_ACTIVE ? YES : NO;
 }
 
-- (void) showInterstitial {
-    [AdColony playVideoAdForZone:self.strInterstitialAdID withDelegate:self];
+- (void) showInterstitial:(NSString *)zoneID {
+    [AdColony playVideoAdForZone: zoneID withDelegate:self];
 }
 
 - (void) cacheInterstitial {
     NSLog(@"AdColony: Not support %s", __func__);
 }
 
-- (BOOL) hasRewardedVideo {
-    NSLog(@"AdColony: zoneStatus: %u for Zone: %@", [AdColony zoneStatusForZone:self.strRewardedAdID], self.strRewardedAdID);
-    return [AdColony zoneStatusForZone:self.strRewardedAdID] == ADCOLONY_ZONE_STATUS_ACTIVE ? YES : NO;
+- (BOOL) hasRewardedVideo:(NSString *)zoneID {
+    NSLog(@"AdColony: zoneStatus: %u for Zone: %@", [AdColony zoneStatusForZone: zoneID], zoneID);
+    return [AdColony zoneStatusForZone:zoneID] == ADCOLONY_ZONE_STATUS_ACTIVE ? YES : NO;
 }
 
-- (void) showRewardedVideo {
-    [AdColony playVideoAdForZone: self.strRewardedAdID withDelegate:self withV4VCPrePopup:NO andV4VCPostPopup:NO];
+- (void) showRewardedVideo:(NSString *)zoneID showPrePopup:(BOOL)isShowPrePopup showPostPopup:(BOOL)isShowPostPopup {
+    [AdColony playVideoAdForZone: zoneID withDelegate:self withV4VCPrePopup: isShowPrePopup andV4VCPostPopup: isShowPostPopup];
 }
 
 - (void) cacheRewardedVideo {

@@ -22,114 +22,43 @@ GooglePlayProtocolSocial::~GooglePlayProtocolSocial() {
 
 void GooglePlayProtocolSocial::configureSocial(const std::string &appId)
 {
-    TSocialDeveloperInfo devInfo;
+    TSocialInfo devInfo;
     devInfo["GoogleClientID"] = appId;
     configDeveloperInfo(devInfo);
 }
 
-void GooglePlayProtocolSocial::showLeaderboards() {
-    callFuncWithParam("showLeaderboards", nullptr);
-}
+void GooglePlayProtocolSocial::unlockAchievement(const std::string &achievementId, const GooglePlayProtocolSocial::SocialCallback& pcb) {
 
-void GooglePlayProtocolSocial::unlockAchievement(const std::string &achievementId) {
     TAchievementInfo achievementInfo;
-    achievementInfo["achievementId"] = achievementId;
-
-    ProtocolSocial::unlockAchievement(achievementInfo);
-}
-
-void GooglePlayProtocolSocial::unlockAchievement(const std::string &achievementId, GooglePlayProtocolSocial::ProtocolSocialCallback pcb) {
-    TAchievementInfo achievementInfo;
-    achievementInfo["achievementId"] = achievementId;
+    achievementInfo["achievemetId"] = achievementId;
+    achievementInfo["percent"] = 100;
 
     ProtocolSocial::unlockAchievement(achievementInfo, pcb);
 }
 
-void GooglePlayProtocolSocial::revealAchievement(cocos2d::plugin::TAchievementInfo achInfo) {
+void GooglePlayProtocolSocial::revealAchievement(const std::string& achievementId, const GooglePlayProtocolSocial::SocialCallback& pcb) {
+    PluginParam idParam(achievementId.c_str());
 
-    PluginParam achInfoParam(achInfo);
+    CallbackWrapper* wrapper = new CallbackWrapper(pcb);
+    PluginParam cbParam((long) wrapper);
 
-    if (achInfo.empty()) {
-        PluginUtils::outputLog("ProtocolSocial", "The achievement info is empty!");
-        return;
-    } else {
-        callFuncWithParam("revealAchievement", &achInfoParam, nullptr);
-    }
+    callFuncWithParam("revealAchievement", &idParam, &cbParam, nullptr);
 }
 
-void GooglePlayProtocolSocial::revealAchievement(cocos2d::plugin::TAchievementInfo achInfo, GooglePlayProtocolSocial::ProtocolSocialCallback pcb) {
+void GooglePlayProtocolSocial::resetAchievement(const std::string& achievementId, const GooglePlayProtocolSocial::SocialCallback& pcb) {
+    PluginParam idParam(achievementId.c_str());
 
-    PluginParam achInfoParam(achInfo);
+    CallbackWrapper* wrapper = new CallbackWrapper(pcb);
+    PluginParam cbParam((long) wrapper);
 
-    if (achInfo.empty()) {
-        PluginUtils::outputLog("ProtocolSocial", "The achievement info is empty!");
-        return;
-    } else {
-        setCallback(pcb);
-        callFuncWithParam("revealAchievement", &achInfoParam, nullptr);
-    }
+    callFuncWithParam("resetAchievement", &idParam, &cbParam, nullptr);
 }
 
-void GooglePlayProtocolSocial::revealAchievement(const std::string& achievementId) {
-    TAchievementInfo achInfo;
-    achInfo["achievementId"] = achievementId;
+void GooglePlayProtocolSocial::resetAchievements(const GooglePlayProtocolSocial::SocialCallback& pcb) {
 
-    revealAchievement(achInfo);
+    CallbackWrapper* wrapper = new CallbackWrapper(pcb);
+    PluginParam cbParam((long) wrapper);
+
+
+    callFuncWithParam("resetAchievements", &cbParam, nullptr);
 }
-
-void GooglePlayProtocolSocial::revealAchievement(const std::string& achievementId, GooglePlayProtocolSocial::ProtocolSocialCallback pcb) {
-    TAchievementInfo achInfo;
-    achInfo["achievementId"] = achievementId;
-
-    revealAchievement(achInfo, pcb);
-}
-
-void GooglePlayProtocolSocial::resetAchievements() {
-    callFuncWithParam("resetAchievements", nullptr);
-}
-
-void GooglePlayProtocolSocial::resetAchievements(GooglePlayProtocolSocial::ProtocolSocialCallback pcb) {
-    setCallback(pcb);
-    resetAchievements();
-}
-
-void GooglePlayProtocolSocial::resetAchievement(cocos2d::plugin::TAchievementInfo achInfo) {
-
-    PluginParam achInfoParam(achInfo);
-
-    if (achInfo.empty()) {
-        PluginUtils::outputLog("ProtocolSocial", "The achievement info is empty!");
-        return;
-    } else {
-        callFuncWithParam("resetAchievement", &achInfoParam, nullptr);
-    }
-}
-
-void GooglePlayProtocolSocial::resetAchievement(cocos2d::plugin::TAchievementInfo achInfo, GooglePlayProtocolSocial::ProtocolSocialCallback pcb) {
-
-    PluginParam achInfoParam(achInfo);
-
-    if (achInfo.empty()) {
-        PluginUtils::outputLog("ProtocolSocial", "The achievement info is empty!");
-        return;
-    } else {
-        setCallback(pcb);
-        callFuncWithParam("resetAchievement", &achInfoParam, nullptr);
-    }
-}
-
-void GooglePlayProtocolSocial::resetAchievement(const std::string& achievementId) {
-    TAchievementInfo achInfo;
-    achInfo["achievemetId"] = achievementId;
-
-    resetAchievement(achInfo);
-}
-
-void GooglePlayProtocolSocial::resetAchievement(const std::string& achievementId, GooglePlayProtocolSocial::ProtocolSocialCallback pcb) {
-    TAchievementInfo achInfo;
-    achInfo["achievemetId"] = achievementId;
-
-    resetAchievement(achInfo, pcb);
-}
-
-

@@ -14,18 +14,17 @@
 
 @interface AdsColony : NSObject <InterfaceAds>
 
-@property (copy, nonatomic) NSString* strInterstitialAdID;
-@property (copy, nonatomic) NSString* strRewardedAdID;
+@property (copy, nonatomic) NSString* strAdZoneID;
 
 #pragma mark - Interstitials
-- (BOOL) hasInterstitial;
-- (void) showInterstitial;
-- (void) cacheInterstitial;
+- (BOOL) hasInterstitial: (NSString*) zoneID;
+- (void) showInterstitial: (NSString*) zoneID;
+- (void) cacheInterstitial: (NSString*) zoneID;
 
 #pragma mark - Rewarded Videos
-- (BOOL) hasRewardedVideo;
-- (void) showRewardedVideo;
-- (void) cacheRewardedVideo;
+- (BOOL) hasRewardedVideo: (NSString*) zoneID;
+- (void) showRewardedVideo: (NSString*) zoneID showPrePopup:(BOOL) isShowPrePopup showPostPopup:(BOOL) isShowPostPopup;
+- (void) cacheRewardedVideo: (NSString*) zoneID;
 
 @end
 
