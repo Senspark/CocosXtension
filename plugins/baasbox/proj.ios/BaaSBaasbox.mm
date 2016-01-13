@@ -13,6 +13,7 @@
 
 #import "ParseUtils.h"
 
+
 using namespace cocos2d::plugin;
 
 @implementation BaaSBaasbox
@@ -32,7 +33,28 @@ using namespace cocos2d::plugin;
 }
 
 - (void) signUpWithParams: (NSDictionary*) params andCallbackID: (long) cbId{
+    NSString* username = [params objectForKey:@"username"];
+    NSString* password = [params objectForKey:@"password"];
     
+    BAAClient *client = [BAAClient sharedClient];
+    [client createUserWithUsername:username
+                          password:password
+                        completion:^(BOOL success, NSError *error) {
+                            if (success) {
+                                NSLog(@"user is %@", client.currentUser);
+                                [BaaSWrapper onBaaSActionResult: self
+                                                 withReturnCode: true
+                                                   andReturnMsg: @"signup user baasbox success"
+                                                  andCallbackID: cbId];
+                            } else {
+                                [BaaSWrapper onBaaSActionResult: self
+                                                 withReturnCode: false
+                                                   andReturnMsg: [BaaSWrapper makeErrorJsonString:error]
+                                                  andCallbackID: cbId];
+
+                            }
+                            
+                        }];
 }
 
 - (void) loginWithUsername: (NSString*) username andPassword: (NSString*) password andCallbackID: (long) cbId{
@@ -281,6 +303,156 @@ using namespace cocos2d::plugin;
     
     return ret;
 }
+
+// collection
+
+//class == collection
+- (void) saveObjectInBackground: (NSString*) className withParams: (NSDictionary*) obj andCallbackID:(long) cbID{
+    BAAClient* client = [BAAClient sharedClient];
+    [client postPath:[NSString stringWithFormat:@"document/%@", className]
+        parameters:obj
+           success:^(id responseObject) {
+               
+               NSDictionary *d = responseObject[@"data"];
+               [BaaSWrapper onBaaSActionResult:self withReturnCode:true andReturnObj:d andCallbackID:cbID];
+               
+           } failure:^(NSError *error) {
+               
+               [BaaSWrapper onBaaSActionResult:self withReturnCode:false andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];
+               
+           }];
+}
+
+- (NSString*) saveObject: (NSString*) className withParams: (NSDictionary*) obj{
+    return @"Baasbox is not support";
+}
+
+//private method
+-(void)getPath:(NSString*)path parameters:(NSDictionary*)params callbackId:(long)cbId{
+    BAAClient* client = [BAAClient sharedClient];
+    [client getPath:path
+         parameters:params
+            success:^(id responseObject) {
+                
+                NSDictionary *d = responseObject[@"data"];
+                
+                if (d) {
+                    
+                    [BaaSWrapper onBaaSActionResult:self withReturnCode:true andReturnObj:d andCallbackID:cbId];
+                    
+                } else {
+                    
+                    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+                    [errorDetail setValue:responseObject[@"message"]
+                                   forKey:NSLocalizedDescriptionKey];
+                    NSError *error = [NSError errorWithDomain:[BaasBox errorDomain]
+                                                         code:[BaasBox errorCode]
+                                                     userInfo:errorDetail];
+                    [BaaSWrapper onBaaSActionResult:self withReturnCode:false andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbId];
+                    
+                }
+                
+            } failure:^(NSError *error) {
+                
+                [BaaSWrapper onBaaSActionResult:self withReturnCode:false andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbId];
+                
+            }];
+
+}
+
+- (void) getObjectInBackground: (NSString*) className withId: (NSString*) objId andCallbackID:(long) cbID{
+    
+    [self getPath:[NSString stringWithFormat:@"document/%@/%@", className, objId]
+       parameters:nil
+       callbackId:cbID];
+
+}
+
+- (void) getObjectsInBackground: (NSString*) className withIds: (NSArray*) objIds andCallbackID:(long) cbID{
+    
+    NSString* conditionWhere = [NSString stringWithFormat:@"id in %@",[ParseUtils NSDictionaryToNSString:objIds]];
+    NSDictionary *params = @{@"where" : conditionWhere};
+    NSLog(@"params : %@",params);
+    
+    [self getPath:[NSString stringWithFormat:@"document/%@", className]
+       parameters:params
+       callbackId:cbID];
+
+}
+
+- (NSDictionary*) getObject: (NSString*) className withId: (NSString*) objId{
+    return NULL;
+}
+
+- (void) fetchObjectInBackground: (NSString*) className withId: (NSString*) objId andCallbackID:(long) cbID{
+    [self getObjectInBackground:className withId:objId andCallbackID:cbID];
+}
+
+- (void) findObjectInBackground: (NSString*) className whereKey: (NSString*) key equalTo: (NSString*) value    withCallbackID: (long) callbackId{
+    NSString* conditionWhere = [NSString stringWithFormat:@"%@ = '%@'",key,value];
+    NSLog(@"condition where : %@",conditionWhere);
+    NSDictionary *params = @{@"where" : conditionWhere};
+    NSLog(@"params : %@",params);
+    
+    [self getPath:[NSString stringWithFormat:@"document/%@", className]
+       parameters:params
+       callbackId:callbackId];
+    
+}
+
+- (void) findObjectsInBackground: (NSString*) className whereKey: (NSString*) key containedIn: (NSArray*) values    withCallbackID: (long) callbackId{
+    
+    NSString* conditionWhere = [NSString stringWithFormat:@"%@ in %@",key,[ParseUtils NSDictionaryToNSString:values]];
+    NSDictionary *params = @{@"where" : conditionWhere};
+    NSLog(@"params : %@",params);
+    
+    [self getPath:[NSString stringWithFormat:@"document/%@", className]
+       parameters:params
+       callbackId:callbackId];
+}
+
+- (void) updateObjectInBackground: (NSString*) className withId: (NSString*) objId withParams: (NSDictionary*) params andCallbackID:(long) cbID{
+    NSLog(@"params : %@",params);
+    
+    BAAClient *client = [BAAClient sharedClient];
+    [client putPath:[NSString stringWithFormat:@"document/%@/%@", className, objId]
+       parameters:params
+          success:^(id responseObject) {
+              
+              NSDictionary *d = responseObject[@"data"];
+              [BaaSWrapper onBaaSActionResult:self withReturnCode:true andReturnObj:d andCallbackID:cbID];
+              
+          } failure:^(NSError *error) {
+              
+              [BaaSWrapper onBaaSActionResult:self withReturnCode:false andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];
+              
+          }];
+}
+
+- (NSString*) updateObject: (NSString*) className withId: (NSString*) objId withParams: (NSDictionary*) params{
+    return @"Baasbox is not support";
+}
+
+- (void) deleteObjectInBackground: (NSString*) className withId: (NSString*) objId andCallbackID:(long) cbID{
+    BAAClient* client = [BAAClient sharedClient];
+    [client deletePath:[NSString stringWithFormat:@"document/%@/%@", className, objId]
+          parameters:nil
+             success:^(id responseObject) {
+                 
+                 [BaaSWrapper onBaaSActionResult:self withReturnCode:true andReturnMsg:@"delete object success" andCallbackID:cbID];
+                 
+             } failure:^(NSError *error) {
+                 
+                 [BaaSWrapper onBaaSActionResult:self withReturnCode:false andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbID];
+                 
+             }];
+
+}
+
+- (BOOL) deleteObject: (NSString*) className withId: (NSString*) objId{
+    return false;
+}
+
 
 
 @end

@@ -36,7 +36,7 @@ void ProtocolBaaS::signUp(std::map<std::string, std::string> userInfo, BaaSCallb
     id ocObj = pData->obj;
     if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
         NSObject<InterfaceBaaS>* curObj = ocObj;
-        NSMutableDictionary* pDict = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary* pDict = [[[NSMutableDictionary alloc] init] autorelease];
         for (auto element : userInfo) {
             [pDict setObject:[NSString stringWithUTF8String:element.second.c_str()] forKey:[NSString stringWithUTF8String:element.first.c_str()]];
         }
@@ -158,7 +158,7 @@ void ProtocolBaaS::getObjectsInBackground(const std::string& className, const st
     if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
         NSObject<InterfaceBaaS>* curObj = ocObj;
         
-        NSMutableArray* array = [[NSMutableArray alloc] init];
+        NSMutableArray* array = [[[NSMutableArray alloc] init] autorelease];
         for (auto objId : objIds) {
             [array addObject:[NSString stringWithUTF8String:objId.c_str()]];
         }
@@ -210,7 +210,7 @@ void ProtocolBaaS::findObjectsInBackground(const std::string& className, const s
     if ([ocObj conformsToProtocol:@protocol(InterfaceBaaS)]) {
         NSObject<InterfaceBaaS>* curObj = ocObj;
         
-        NSMutableArray* array = [[NSMutableArray alloc] init];
+        NSMutableArray* array = [[[NSMutableArray alloc] init] autorelease];
         for (auto value : values) {
             [array addObject:[NSString stringWithUTF8String:value.c_str()]];
         }
