@@ -16,37 +16,43 @@ AdColonyProtocolAds::~AdColonyProtocolAds() {
     PluginUtilsIOS::erasePluginOCData(this);
 }
 
-void AdColonyProtocolAds::configureAds(const std::string& appID, const std::string& interstitialZoneID, const std::string& rewardedZoneID) {
+void AdColonyProtocolAds::configureAds(const std::string& appID, const std::string& zoneIDs) {
     TAdsInfo info;
-    info["AdColonyAppID"]                = appID;
-    info["AdColonyRewardedAdZoneID"]     = rewardedZoneID;
-    info["AdColonyInterstitialAdZoneID"] = interstitialZoneID;
+    info["AdColonyAppID"]   = appID;
+    info["AdColonyZoneIDs"] = zoneIDs;
+
     PluginParam param(info);
 
     callFuncWithParam("configDeveloperInfo", &param, nullptr);
 }
 
-bool AdColonyProtocolAds::hasInterstitial() {
-    return callBoolFuncWithParam("hasInterstitial", nullptr);
+bool AdColonyProtocolAds::hasInterstitial(const std::string& zoneID) {
+    PluginParam param(zoneID.c_str());
+    return callBoolFuncWithParam("hasInterstitial", &param, nullptr);
 }
 
-void AdColonyProtocolAds::showInterstitial() {
-    callFuncWithParam("showInterstitial", nullptr);
+void AdColonyProtocolAds::showInterstitial(const std::string& zoneID) {
+    PluginParam param(zoneID.c_str());
+    callFuncWithParam("showInterstitial", &param, nullptr);
 }
 
-void AdColonyProtocolAds::cacheInterstitial() {
-    callFuncWithParam("cacheInterstitial", nullptr);
+void AdColonyProtocolAds::cacheInterstitial(const std::string& zoneID) {
+    PluginParam param(zoneID.c_str());
+    callFuncWithParam("cacheInterstitial", &param, nullptr);
 }
 
-bool AdColonyProtocolAds::hasRewardedVideo() {
-    return callBoolFuncWithParam("hasRewardedVideo", nullptr);
+bool AdColonyProtocolAds::hasRewardedVideo(const std::string& zoneID) {
+    PluginParam param(zoneID.c_str());
+    return callBoolFuncWithParam("hasRewardedVideo", &param, nullptr);
 }
 
-void AdColonyProtocolAds::showRewardedVideo() {
-    callFuncWithParam("showRewardedVideo", nullptr);
+void AdColonyProtocolAds::showRewardedVideo(const std::string& zoneID) {
+    PluginParam param(zoneID.c_str());
+    callFuncWithParam("showRewardedVideo", &param, nullptr);
 }
 
-void AdColonyProtocolAds::cacheRewardedVideo() {
-    callFuncWithParam("cacheRewardedVideo", nullptr);
+void AdColonyProtocolAds::cacheRewardedVideo(const std::string& zoneID) {
+    PluginParam param(zoneID.c_str());
+    callFuncWithParam("cacheRewardedVideo", &param, nullptr);
 }
 
