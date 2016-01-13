@@ -22,10 +22,6 @@ GooglePlusProtocolShare::~GooglePlusProtocolShare() {
 }
 
 void GooglePlusProtocolShare::share(GPParam &info, GooglePlusProtocolShare::ShareCallback &callback) {
-    GooglePlusProtocolShare::CallbackWrapper* wrapper = new GooglePlusProtocolShare::CallbackWrapper(callback);
 
-    cocos2d::plugin::PluginParam params(info);
-    cocos2d::plugin::PluginParam callbackID((long)wrapper);
-
-    callFuncWithParam("share", &params, &callbackID, nullptr);
+    ProtocolShare::share(info, callback);
 }

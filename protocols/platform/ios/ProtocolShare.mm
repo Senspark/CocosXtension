@@ -44,15 +44,14 @@ void ProtocolShare::share(TShareInfo &info, ShareCallback& cb)
 {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
     assert(pData != NULL);
-    
     id ocObj = pData->obj;
     if ([ocObj conformsToProtocol:@protocol(InterfaceShare)]) {
         NSObject<InterfaceShare>* curObj = ocObj;
         NSMutableDictionary* pDict = PluginUtilsIOS::createDictFromMap(&info);
         
-        _callback = cb;
+        CallbackWrapper* wrapper = new CallbackWrapper(cb);
         
-        [curObj share:pDict];
+        [curObj share:pDict withCallback:(long) wrapper];
     }
 }
     

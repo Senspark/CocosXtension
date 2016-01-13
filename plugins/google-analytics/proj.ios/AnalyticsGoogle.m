@@ -214,7 +214,7 @@
     [self trackExceptionWithDescription:description fatal:isFatal];
 }
 
-- (void) trackTimmingWithCategory: (NSString*) category interval: (int) interval name:(NSString*) name label: (NSString*) label
+- (void) trackTimingWithCategory: (NSString*) category interval: (int) interval name:(NSString*) name label: (NSString*) label
 {
     
     if (self.tracker) {
@@ -224,14 +224,14 @@
     }
 }
 
-- (void) trackTimmingWithCategory: (NSMutableDictionary*) params
+- (void) trackTimingWithCategory: (NSMutableDictionary*) params
 {
     NSString* category = (NSString*) [params objectForKey:@"Param1"];
     int interval = [(NSNumber*) [params objectForKey:@"Param2"] intValue];
     NSString* name = (NSString*) [params objectForKey:@"Param3"];
     NSString* label = (NSString*) [params objectForKey:@"Param4"];
     
-    [self trackTimmingWithCategory:category interval:interval name:name label:label];
+    [self trackTimingWithCategory:category interval:interval name:name label:label];
 }
 
 - (void) trackSocialWithNetwork: (NSString*) network action: (NSString*) action target: (NSString*) target

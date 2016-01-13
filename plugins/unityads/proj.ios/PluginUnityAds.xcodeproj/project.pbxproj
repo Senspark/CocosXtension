@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C4585951C3A611500BA43BF /* AdsUnity.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2C4585941C3A611500BA43BF /* AdsUnity.h */; };
 		2C4585971C3A611500BA43BF /* AdsUnity.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C4585961C3A611500BA43BF /* AdsUnity.mm */; };
 		2C4585B41C3A644C00BA43BF /* UnityAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4585B21C3A644C00BA43BF /* UnityAds.framework */; };
 /* End PBXBuildFile section */
@@ -19,7 +18,6 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				2C4585951C3A611500BA43BF /* AdsUnity.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

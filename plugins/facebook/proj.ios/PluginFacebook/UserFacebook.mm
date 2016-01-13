@@ -60,7 +60,7 @@ using namespace cocos2d::plugin;
 
 - (void) onLoginResult: (FBSDKLoginManagerLoginResult*) result error: (NSError*) error {
     if (error) {
-        [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLoginFailed withMsg:@"Login facebook fail!"];
+        [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLoginFailed withMsg:error.description];
     } else if (result.isCancelled) {
         [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLoginFailed withMsg:@"Login facebook: user cancel"];
     } else if (result.declinedPermissions.count > 0) {

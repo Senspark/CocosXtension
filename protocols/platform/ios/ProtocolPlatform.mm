@@ -51,3 +51,19 @@ double ProtocolPlatform::getVersionCode() {
     NSString *versionString = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey];
     return [versionString doubleValue];
 }
+
+void ProtocolPlatform::sendFeedback(const std::string &appName) {
+    char rep[100];
+    sprintf(rep, "mailto:feedback@senspark.com?subject=Feedbacks on %s", appName.c_str());
+    NSString *recipients = [[NSString alloc] initWithUTF8String:rep];
+    
+    char abody[1000];
+    sprintf(abody, "&body=I have feedbacks on %s:\n1.\n2.\n3.\n\nI accept to send the following information to developers for improving the app.\n", appName.c_str());
+    NSString *body = [[NSString alloc] initWithUTF8String:abody];
+    
+    NSString *email = [NSString stringWithFormat:@"%@%@", recipients, body];
+    
+    email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+}

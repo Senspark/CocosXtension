@@ -36,6 +36,8 @@ public:
     
     void share(FBParam& info, FacebookProtocolShare::ShareCallback& callback);
     
+    void likeFanpage(const std::string& fanpageID);
+    
     void openInviteDialog(FBParam &info, FacebookProtocolShare::ShareCallback& callback);
     
     void sendGameRequest(FBParam &info, FacebookProtocolShare::ShareCallback& callback);

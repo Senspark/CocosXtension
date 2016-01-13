@@ -113,28 +113,6 @@ using namespace cocos2d::plugin;
     }
 }
 
-- (void)didFinishGamesSignInWithError:(NSError *)error
-{
-    if (error) {
-        NSLog(@"Received an error while signing in %@", [error localizedDescription]);
-        [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLoginFailed withMsg:@"Google Play: login failed"];
-    } else {
-        NSLog(@"Signed in!");
-        [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLoginSucceed withMsg:@"Google Play: login successful"];
-    }
-}
-
-- (void)didFinishGamesSignOutWithError:(NSError *)error
-{
-    if (error) {
-        NSLog(@"Received an error while signing out %@", [error localizedDescription]);
-        [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLogoutFailed withMsg:@"Google Play: logout failed"];
-    } else {
-        NSLog(@"Signed out!");
-        [UserWrapper onActionResult:self withRet:(int)UserActionResultCode::kLogoutSucceed withMsg:@"Google Play: logout successful"];
-    }
-}
-
 - (void)didFinishGoogleAuthWithError:(NSError *)error
 {
     if (error) {

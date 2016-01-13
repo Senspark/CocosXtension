@@ -44,6 +44,10 @@ using namespace cocos2d::plugin;
                                           andZones: @[self.strInterstitialAdID, self.strRewardedAdID]];
 }
 
+- (void) showAds: (NSDictionary*) info position:(int) pos {
+    NSLog(@"AdColony: Not support %s", __func__);
+}
+
 - (void) hideAds:(NSDictionary *)info {
     NSLog(@"AdColony: Not support %s", __func__);
 }
@@ -87,7 +91,7 @@ using namespace cocos2d::plugin;
 }
 
 - (NSString*) getSDKVersion {
-    return [NSString stringWithFormat:@"%d", [AdColony version]];
+    return [NSString stringWithFormat:@"%ld", (long)[AdColony version]];
 }
 
 - (NSString*) getPluginVersion {
@@ -117,6 +121,10 @@ using namespace cocos2d::plugin;
     } else {
         [AdsWrapper onAdsResult:self withRet: AdsResultCode::kUnknownError withMsg: msg];
     }
+}
+
+- ( void ) onAdColonyAdFinishedWithInfo:( AdColonyAdInfo * )info {
+    
 }
 
 #pragma mark - Delegate for Rewarded ad

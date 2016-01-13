@@ -59,8 +59,8 @@
 - (void) trackExceptionWithDescription: (NSString*) description fatal: (BOOL) isFatal;
 - (void) trackExceptionWithDescription: (NSMutableDictionary*) params;
 
-- (void) trackTimmingWithCategory: (NSString*) category interval: (int) interval name:(NSString*) name label: (NSString*) label;
-- (void) trackTimmingWithCategory: (NSMutableDictionary*) params;
+- (void) trackTimingWithCategory: (NSString*) category interval: (int) interval name:(NSString*) name label: (NSString*) label;
+- (void) trackTimingWithCategory: (NSMutableDictionary*) params;
 
 - (void) trackSocialWithNetwork: (NSString*) network action: (NSString*) action target: (NSString*) target;
 - (void) trackSocialWithNetwork: (NSMutableDictionary*) params;

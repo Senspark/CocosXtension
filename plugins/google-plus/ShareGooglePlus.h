@@ -17,22 +17,6 @@
 }
 
 @property BOOL debug;
-@property (copy, nonatomic) NSMutableDictionary* mShareInfo;
-
-/**
- * @brief interfaces of protocol : InterfaceShare
- */
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo;
-
-- (void) share:(NSMutableDictionary *)shareInfo;
-- (void) setDebugMode: (BOOL) debug;
-- (NSString*) getSDKVersion;
-- (NSString*) getPluginVersion;
-
-
-// ---- Delegate ----
-- (void)finishedSharingWithError:(NSError *)error;
-- (void)didReceiveDeepLink: (GPPDeepLink *)deepLink;
 
 @end
 

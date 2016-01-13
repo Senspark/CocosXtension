@@ -17,14 +17,14 @@ using namespace cocos2d::plugin;
 @interface AdsUnity() <UnityAdsDelegate>
 
 - (void)unityAdsVideoCompleted:(NSString *)rewardItemKey skipped:(BOOL)skipped;
-- (void)unityAdsWillShow;
+//- (void)unityAdsWillShow;
 - (void)unityAdsDidShow;
-- (void)unityAdsWillHide;
+//- (void)unityAdsWillHide;
 - (void)unityAdsDidHide;
-- (void)unityAdsWillLeaveApplication;
-- (void)unityAdsVideoStarted;
-- (void)unityAdsFetchCompleted;
-- (void)unityAdsFetchFailed;
+//- (void)unityAdsWillLeaveApplication;
+//- (void)unityAdsVideoStarted;
+//- (void)unityAdsFetchCompleted;
+//- (void)unityAdsFetchFailed;
 
 @end
 
@@ -37,20 +37,24 @@ using namespace cocos2d::plugin;
     [[UnityAds sharedInstance] setDelegate:self];
 }
 
+- (void) showAds:(NSDictionary *)info position:(int)pos {
+    NSLog(@"Ads Unity: Not support %s", __func__);
+}
+
 - (void) hideAds: (NSDictionary*) info {
-    NSLog(@"Chartboost: Not support %s", __func__);
+    NSLog(@"Ads Unity: Not support %s", __func__);
 }
 
 - (void) queryPoints {
-    NSLog(@"Chartboost: Not support %s", __func__);
+    NSLog(@"Ads Unity: Not support %s", __func__);
 }
 
 - (void) spendPoints: (int) points {
-    NSLog(@"Chartboost: Not support %s", __func__);
+    NSLog(@"Ads Unity: Not support %s", __func__);
 }
 
 - (void) setDebugMode: (BOOL) debug {
-    NSLog(@"Chartboost: Not support %s", __func__);
+    NSLog(@"Ads Unity: Not support %s", __func__);
 }
 
 - (BOOL) hasInterstitial {
@@ -71,7 +75,7 @@ using namespace cocos2d::plugin;
 }
 
 - (NSString*) getSDKVersion {
-    return [NSString stringWithFormat:@"%d", [UnityAds version]];
+    return [NSString stringWithFormat:@"%ld", (long)[UnityAds version]];
 }
 
 - (NSString*) getPluginVersion {

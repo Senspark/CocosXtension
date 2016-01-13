@@ -48,7 +48,7 @@ public:
     
     void trackException(const string& description, bool isFatal);
     
-    void trackTimming(const string& category, int interval, const string& name, const string& label);
+    void trackTiming(const string& category, int interval, const string& name, const string& label);
     
     void trackSocial(const string& network, const string& action, const string& target);
     
