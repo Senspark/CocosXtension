@@ -15,15 +15,15 @@ class AdColonyProtocolAds : public cocos2d::plugin::ProtocolAds {
 public:
     virtual ~AdColonyProtocolAds();
 
-    void configureAds(const std::string& appID, const std::string& interstitialZoneID, const std::string& rewardedZoneID);
+    void configureAds(const std::string& appID, const std::string& zoneIDs);
 
-    bool hasInterstitial();
-    void showInterstitial();
-    void cacheInterstitial();
+    bool hasInterstitial(const std::string& zoneID);
+    void showInterstitial(const std::string& zoneID);
+    void cacheInterstitial(const std::string& zoneID);
 
-    bool hasRewardedVideo();
-    void showRewardedVideo();
-    void cacheRewardedVideo();
+    bool hasRewardedVideo(const std::string& zoneID);
+    void showRewardedVideo(const std::string& zoneID);
+    void cacheRewardedVideo(const std::string& zoneID);
 };
 
 #endif

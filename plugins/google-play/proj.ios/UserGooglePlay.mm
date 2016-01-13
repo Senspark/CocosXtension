@@ -106,13 +106,4 @@ using namespace cocos2d::plugin;
     }
 }
 
-- (void)didFinishGoogleAuthWithError:(NSError *)error
-{
-    if (error) {
-        NSLog(@"Received an error while authenticate %@", [error localizedDescription]);
-    } else {
-        NSLog(@"Authenticate successfully!");
-    }
-}
-
 @end
