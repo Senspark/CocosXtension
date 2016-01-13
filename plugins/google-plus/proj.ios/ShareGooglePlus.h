@@ -17,11 +17,6 @@
 }
 
 @property BOOL debug;
-@property (copy, nonatomic) NSMutableDictionary* mShareInfo;
-
-// ---- Delegate ----
-- (void)finishedSharingWithError:(NSError *)error;
-- (void)didReceiveDeepLink: (GPPDeepLink *)deepLink;
 
 @end
 

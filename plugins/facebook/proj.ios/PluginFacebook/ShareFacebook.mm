@@ -60,7 +60,7 @@
     return params;
 }
 
-- (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo {
+- (void) configDeveloperInfo : (NSDictionary*) cpInfo {
 }
 
 - (void) share: (NSDictionary*) shareInfo withCallback:(long)cbID
