@@ -62,20 +62,10 @@ using namespace cocos2d::plugin;
 #pragma GCC diagnostic pop
 
 + (NSString*) makeErrorJsonString: (NSError*) error {
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
     
-    NSUInteger code = error ? error.code : 0;
-    NSString* desc = error ? error.description : @"";
-    
-    [dict setValue:[NSNumber numberWithUnsignedInteger:code] forKey:@"code"];
-    [dict setValue:desc forKey:@"description"];
-    
-    NSError *writeJsonError = [[NSError alloc] init];
-    
-    NSData* data = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&writeJsonError];
-    
-    if (data)
-        return [NSString stringWithUTF8String:(const char*)[data bytes]];
+    if (error != nil) {
+        return [NSString stringWithFormat:@"{ \"code\": %ld, \"description\": \"%@\" }", (long) error.code, error.description];
+    }
     
     return nil;
 }
