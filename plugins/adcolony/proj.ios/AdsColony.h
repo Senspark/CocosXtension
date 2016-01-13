@@ -23,7 +23,7 @@
 
 #pragma mark - Rewarded Videos
 - (BOOL) hasRewardedVideo: (NSString*) zoneID;
-- (void) showRewardedVideo: (NSString*) zoneID;
+- (void) showRewardedVideo: (NSString*) zoneID showPrePopup:(BOOL) isShowPrePopup showPostPopup:(BOOL) isShowPostPopup;
 - (void) cacheRewardedVideo: (NSString*) zoneID;
 
 @end

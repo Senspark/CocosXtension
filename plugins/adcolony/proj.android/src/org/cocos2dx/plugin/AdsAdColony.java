@@ -26,8 +26,8 @@ public class AdsAdColony implements InterfaceAds, PluginListener {
 
 	@Override
 	public void configDeveloperInfo(Hashtable<String, String> devInfo) {
-		String appId = devInfo.get("AdColonyAppId");
-		String zoneIds = devInfo.get("AdColonyZoneIds");
+		String appId = devInfo.get("AdColonyAppID");
+		String zoneIds = devInfo.get("AdColonyZoneIDs");
 		configure(appId, zoneIds);
 	}
 

@@ -48,10 +48,10 @@ extern "C" {
 				}
 			    else
 			    {
-			    	ProtocolAds::ProtocolAdsCallback callback = pAds->getCallback();
+			    	ProtocolAds::AdsCallback callback = pAds->getCallback();
 			    	if(callback)
 			    	{
-			    		callback(ret, strMsg);
+			    		callback((AdsResultCode)ret, strMsg);
 			    	}
 			    }
 			}
@@ -87,7 +87,7 @@ ProtocolAds::~ProtocolAds()
 {
 }
 
-void ProtocolAds::configDeveloperInfo(TAdsDeveloperInfo devInfo)
+void ProtocolAds::configDeveloperInfo(TAdsInfo devInfo)
 {
     if (devInfo.empty())
     {

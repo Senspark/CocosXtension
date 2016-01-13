@@ -46,9 +46,11 @@ bool AdColonyProtocolAds::hasRewardedVideo(const std::string& zoneID) {
     return callBoolFuncWithParam("hasRewardedVideo", &param, nullptr);
 }
 
-void AdColonyProtocolAds::showRewardedVideo(const std::string& zoneID) {
-    PluginParam param(zoneID.c_str());
-    callFuncWithParam("showRewardedVideo", &param, nullptr);
+void AdColonyProtocolAds::showRewardedVideo(const std::string &zoneID, bool isShowPrePopup, bool isShowPostPopup) {
+    PluginParam param1(zoneID.c_str());
+    PluginParam param2(isShowPrePopup);
+    PluginParam param3(isShowPostPopup);
+    callFuncWithParam("showRewardedVideo", &param1, &param2, &param3, nullptr);
 }
 
 void AdColonyProtocolAds::cacheRewardedVideo(const std::string& zoneID) {

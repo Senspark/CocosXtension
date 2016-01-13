@@ -27,16 +27,24 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import org.cocos2dx.libAdsAdmob.R;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 public class AdsAdmob implements InterfaceAds {
 
@@ -44,8 +52,11 @@ public class AdsAdmob implements InterfaceAds {
 	private static Activity mContext = null;
 	private static boolean bDebug = false;
 	private static AdsAdmob mAdapter = null;
+	private int slideUpTimePeriod;
+	private int slideDownTimePeriod;
 
 	private AdView adView = null;
+	private InterstitialAd interstitialAdView = null;
 	private String mPublishID = "";
 	private Set<String> mTestDevices = null;
 	private WindowManager mWm = null;
@@ -122,7 +133,7 @@ public class AdsAdmob implements InterfaceAds {
 	        LogE("Error when show Ads ( " + info.toString() + " )", e);
 	    }
 	}
-
+	
 	@Override
 	public void spendPoints(int points) {
 		LogD("Admob not support spend points!");
@@ -243,7 +254,39 @@ public class AdsAdmob implements InterfaceAds {
 		}
 		mTestDevices.add(deviceID);
 	}
-
+	
+	public void loadInterstitial() {
+		if (interstitialAdView == null) {
+			interstitialAdView = new InterstitialAd(mContext);
+			interstitialAdView.setAdUnitId(mPublishID);
+			interstitialAdView.setAdListener(new AdmobAdsListener());
+			
+			AdRequest.Builder builder = new AdRequest.Builder();
+			try {
+				if (mTestDevices != null) {
+					Iterator<String> ir = mTestDevices.iterator();
+					while(ir.hasNext())
+					{
+						builder.addTestDevice(ir.next());
+					}
+				}
+			} catch (Exception e) {
+				LogE("Error during add test device", e);
+			}
+			
+			//begin load interstitial ad
+			interstitialAdView.loadAd(builder.build());
+		}
+	}
+	
+	public void showInterstitial() {
+		if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
+			Log.e("PluginAdmob", "ADMOB: Interstitial cannot show. It is not ready");
+		} else {
+			interstitialAdView.show();
+		}
+	}
+	
 	private class AdmobAdsListener extends AdListener {
 		@Override
 		public void onAdClosed() {
@@ -309,5 +352,110 @@ public class AdsAdmob implements InterfaceAds {
     @Override
     public void queryPoints() {
         LogD("Admob not support query points!");
+    }
+    
+    public boolean hasInterstitial() {
+    	return interstitialAdView.isLoaded();
+    }
+    
+    public void setBannerAniamtionInfo(Hashtable<Integer, Integer> devInfo) {
+    	slideUpTimePeriod = devInfo.get("slideUpTimePeriod");
+    	slideDownTimePeriod = devInfo.get("slideDownTimePeriod");
+    }
+    
+    public void slideUpBannerAds() {
+    	mContext.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				adView.setVisibility(View.VISIBLE);
+				MyUtils myUtils = new MyUtils();
+				myUtils.SlideUp(adView, mContext);
+			}
+		});
+    	
+    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
+			
+			@Override
+			public void run() {
+				slideDownBannerAds();
+			}
+		}, slideUpTimePeriod, TimeUnit.SECONDS);
+    }
+    
+    public void slideDownBannerAds() {
+    	mContext.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				MyUtils myUtils = new MyUtils();
+				myUtils.SlideDown(adView, mContext);
+			}
+		});
+    	
+    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
+			
+			@Override
+			public void run() {
+				slideUpBannerAds();				
+			}
+		}, slideDownTimePeriod, TimeUnit.SECONDS);
+    }
+        
+    public class MyUtils {
+
+        public void SlideUp(final View view, Context context) {
+            Animation anim = AnimationUtils.loadAnimation(context, R.anim.slide_down);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    // TODO Auto-generated method stub
+                    view.setAlpha(255);
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+            view.startAnimation(anim);
+
+
+        }
+
+        public void SlideDown(final View view, Context context) {
+            Animation anim = AnimationUtils.loadAnimation(context, R.anim.slide_up);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    // TODO Auto-generated method stub
+                    view.setVisibility(View.INVISIBLE);
+                }
+            });
+            view.startAnimation(anim);
+
+        }
     }
 }

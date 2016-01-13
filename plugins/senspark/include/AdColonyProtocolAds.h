@@ -22,7 +22,7 @@ public:
     void cacheInterstitial(const std::string& zoneID);
 
     bool hasRewardedVideo(const std::string& zoneID);
-    void showRewardedVideo(const std::string& zoneID);
+    void showRewardedVideo(const std::string& zoneID, bool isShowPrePopup, bool isShowPostPopup);
     void cacheRewardedVideo(const std::string& zoneID);
 };
 
