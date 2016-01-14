@@ -4,7 +4,15 @@
 USING_NS_SENSPARK_PLUGIN_ADS;
 using namespace cocos2d::plugin;
 
+#include "AdmobProtocolAds.h"
+#include "PluginUtils.h"
+
+USING_NS_SENSPARK_PLUGIN_ADS;
+
+using namespace cocos2d::plugin;
+
 AdmobProtocolAds::AdmobProtocolAds() {
+
 }
 
 AdmobProtocolAds::~AdmobProtocolAds() {
@@ -23,11 +31,11 @@ void AdmobProtocolAds::addTestDevice(const std::string &deviceId) {
 }
 
 void AdmobProtocolAds::loadInterstitial() {
-	callFuncWithParam("loadInterstitial", nullptr);
+    callFuncWithParam("loadInterstitial", nullptr);
 }
 
 bool AdmobProtocolAds::hasInterstitial() {
-	return callBoolFuncWithParam("hasInterstitial", nullptr);
+    return callBoolFuncWithParam("hasInterstitial", nullptr);
 }
 
 void AdmobProtocolAds::setBannerAnimationInfo(int slideUpTimePeriod, int slideDownTimePeriod) {
