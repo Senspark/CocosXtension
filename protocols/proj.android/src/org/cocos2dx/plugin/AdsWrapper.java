@@ -29,13 +29,30 @@ import android.view.WindowManager;
 
 public class AdsWrapper {
 
-	public static final int RESULT_CODE_AdsReceived = 0;               // The ad is received
-	public static final int RESULT_CODE_AdsShown = 1;                  // The advertisement shown
-    public static final int RESULT_CODE_AdsDismissed = 2;              // The advertisement dismissed
-    public static final int RESULT_CODE_PointsSpendSucceed = 3;        // The points spend succeed
-    public static final int RESULT_CODE_PointsSpendFailed = 4;         // The points spend failed
-    public static final int RESULT_CODE_NetworkError = 5;              // Network error
-    public static final int RESULT_CODE_UnknownError = 6;              // Unknown error
+	public static final int RESULT_CODE_AdsReceived 	= 0;               // The ad is received
+	public static final int RESULT_CODE_AdsShown 		= 1;                  // The advertisement shown
+    public static final int RESULT_CODE_AdsDismissed 	= 2;              // The advertisement dismissed
+    public static final int RESULT_CODE_AdsClicked 		= 3;
+    public static final int RESULT_CODE_AdsClosed 		= 4;
+    public static final int RESULT_CODE_AdsSkipped 		= 5;
+    
+    public static final int RESULT_CODE_MoreAppsReceived 	= 6;
+    public static final int RESULT_CODE_MoreAppsShown 		= 7;
+    public static final int RESULT_CODE_MoreAppsDismissed 	= 8;
+    public static final int RESULT_CODE_MoreAppsClicked 	= 9;
+    public static final int RESULT_CODE_MoreAppsClosed 		= 10;
+    
+    public static final int RESULT_CODE_VideoReceived 	= 11;
+    public static final int RESULT_CODE_VideoShown 		= 12;
+    public static final int RESULT_CODE_VideoDismissed	= 13;
+    public static final int RESULT_CODE_VideoCompleted 	= 14;
+    public static final int RESULT_CODE_VideoClosed 	= 15;
+    public static final int RESULT_CODE_VideoClicked 	= 16;
+    
+    public static final int RESULT_CODE_PointsSpendSucceed	= 17;        // The points spend succeed
+    public static final int RESULT_CODE_PointsSpendFailed 	= 18;         // The points spend failed
+    public static final int RESULT_CODE_NetworkError 		= 19;              // Network error
+    public static final int RESULT_CODE_UnknownError 		= 20;              // Unknown error
 
 	public static final int POS_CENTER 	     = 0;
 	public static final int POS_TOP		     = 1;
