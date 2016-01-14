@@ -44,6 +44,7 @@ public class ChartboostListener extends ChartboostDelegate {
 	}
 
 	public void didDismissInterstitial(String location) {
+		AdsWrapper.onAdsResult(AdsChartboost.mAdapter, AdsWrapper.RESULT_CODE_AdsDismissed, "AdChartboost interstitial dismissed");
 	}
 
 	public void didDismissMoreApps(String location) {
