@@ -62,23 +62,23 @@ void BaasboxProtocolBaaS::fetchUserProfile(BaaSCallback &cb){
 	PluginUtils::callJavaFunctionWithName_oneParam(this, "fetchUserProfile", "(I)V", (long) wrapper);
 }
 
-void BaasboxProtocolBaaS::fetchScoresFriendsFacebookWithPlayers(const std::string& players, BaaSCallback &cb){
+void BaasboxProtocolBaaS::loadUsersWithParameters(const std::string& condition, BaaSCallback &cb){
 
-	PluginUtils::outputLog("BaasboxProtocol", "fetchScoresFriendsFacebookWithPlayers with plaers %s .", players.c_str());
+	PluginUtils::outputLog("BaasboxProtocol", "loadUsersWithParameters with condition %s .", condition.c_str());
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
 	PluginJniMethodInfo t;
 	if (PluginJniHelper::getMethodInfo(
 			t
 			, pData->jclassName.c_str()
-			, "fetchScoresFriendsFacebookWithPlayers"
+			, "loadUsersWithParameters"
 			, "(Ljava/lang/String;I)V"))
 	{
-		jstring strPlayers = t.env->NewStringUTF(players.c_str());
+		jstring strCondition = t.env->NewStringUTF(condition.c_str());
 		CallbackWrapper* wrapper = new CallbackWrapper(cb);
 
 		// invoke java method
-		t.env->CallVoidMethod(pData->jobj, t.methodID, strPlayers, (long)wrapper);
-		t.env->DeleteLocalRef(strPlayers);
+		t.env->CallVoidMethod(pData->jobj, t.methodID, strCondition, (long)wrapper);
+		t.env->DeleteLocalRef(strCondition);
 		t.env->DeleteLocalRef(t.classID);
 	}
 }

@@ -156,7 +156,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	}
 
 	@Override
-	public void login(long callbackID) {
+	public void login() {
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
@@ -166,7 +166,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	}
 
 	@Override
-	public void logout(long callbackID) {
+	public void logout() {
 		if (mAccessToken != null) {
 			LoginManager.getInstance().logOut();
 			mAccessToken = null;

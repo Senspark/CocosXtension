@@ -98,7 +98,11 @@ using namespace cocos2d::plugin;
 }
 
 - (BOOL) isLoggedIn{
+    
+//    NSDictionary* dic = [BAAClient sharedClient].currentUser.visibleByRegisteredUsers;
+//    NSLog(@"visibleByRegisterUsers : %@", dic);
     return [BAAClient sharedClient].isAuthenticated;
+    
 }
 
 - (NSString*) getUserID{

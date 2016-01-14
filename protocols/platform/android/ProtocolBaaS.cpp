@@ -124,6 +124,25 @@ bool ProtocolBaaS::isLoggedIn() {
 	return false;
 }
 
+std::string ProtocolBaaS::getUserID() {
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
+
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(),
+			"getUserID", "()Ljava/lang/String")) {
+
+		jobject obj = t.env->CallObjectMethod(pData->jobj, t.methodID);
+		const char* ret = t.env->GetStringUTFChars((jstring) obj, nullptr);
+
+		t.env->DeleteLocalRef(t.classID);
+
+		return ret;
+	}
+
+    return nullptr;
+}
+
+
 void ProtocolBaaS::saveObjectInBackground(const std::string& className,
 		const std::string& json, BaaSCallback& cb) {
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
@@ -193,6 +212,11 @@ void ProtocolBaaS::getObjectInBackground(const std::string& className,
 	}
 }
 
+void ProtocolBaaS::getObjectsInBackground(const std::string& className, const std::vector<std::string>& objIds, BaaSCallback& cb) {
+
+}
+
+
 void ProtocolBaaS::findObjectInBackground(const std::string& className,
 		const std::string& key, const std::string value, BaaSCallback& cb) {
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
@@ -215,6 +239,10 @@ void ProtocolBaaS::findObjectInBackground(const std::string& className,
 		t.env->DeleteLocalRef(jvalue);
 		t.env->DeleteLocalRef(t.classID);
 	}
+}
+
+void ProtocolBaaS::findObjectsInBackground(const std::string& className, const std::string& key, const std::vector<std::string>& values, BaaSCallback& cb){
+
 }
 
 const char* ProtocolBaaS::getObject(const std::string& className,

@@ -10,6 +10,8 @@ public interface InterfaceBaaS {
     public void login(String userName, String password, int cbID);
     public void logout(int cbID);
     public boolean isLoggedIn();
+    public String getUserID();
+    
     public void saveObjectInBackground(String className, String json, int cbID);
     public String saveObject(String className, String json);
   
