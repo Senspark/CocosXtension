@@ -121,7 +121,7 @@ PluginProtocol* PluginFactory::createPlugin(const char* name)
 		}
 		int curType = t.env->CallStaticIntMethod(t.classID, t.methodID, jObj);
 		t.env->DeleteLocalRef(t.classID);
-		PluginUtils::outputLog("PluginFactory", "The type of plugin %s is : %d", name, curType);
+		PluginUtils::outputLog("PluginFactory", "==> The type of plugin %s is : %d", name, curType);
 
 		switch (curType)
 		{
@@ -155,6 +155,7 @@ PluginProtocol* PluginFactory::createPlugin(const char* name)
 
 		if (pRet != NULL)
 		{
+			PluginUtils::outputLog("PluginFactory", "The plugin %s is null", name);
 			pRet->setPluginName(name);
 			PluginUtils::initJavaPlugin(pRet, jObj, jClassName.c_str());
 		}

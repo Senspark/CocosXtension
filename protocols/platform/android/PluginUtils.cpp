@@ -33,6 +33,7 @@ namespace cocos2d { namespace plugin {
 
 void PluginUtils::initPluginWrapper(android_app* app)
 {
+	outputLog("PluginUtils", "initPluginWrapper function");
     PluginJniMethodInfo t;
     if (! PluginJniHelper::getStaticMethodInfo(t
         , "org/cocos2dx/plugin/PluginWrapper"
@@ -49,6 +50,7 @@ void PluginUtils::initPluginWrapper(android_app* app)
 
 jobject PluginUtils::createJavaMapObject(std::map<std::string, std::string>* paramMap)
 {
+	outputLog("PluginUtils", "createJavaMapObject function");
     JNIEnv* env = getEnv();
 	jclass class_Hashtable = env->FindClass("java/util/Hashtable");
 	jmethodID construct_method = env->GetMethodID( class_Hashtable, "<init>","()V");
@@ -71,6 +73,7 @@ jobject PluginUtils::createJavaMapObject(std::map<std::string, std::string>* par
 
 void PluginUtils::initJavaPlugin(PluginProtocol* pPlugin, jobject jObj, const char* className)
 {
+	outputLog("PluginUtils", "initJavaPlugin function");
 	cocos2d::plugin::PluginJavaData* pUserData = new cocos2d::plugin::PluginJavaData();
 	pUserData->jobj = PluginUtils::getEnv()->NewGlobalRef(jObj);
 	pUserData->jclassName = className;
@@ -113,6 +116,7 @@ typedef std::map<std::string, PluginProtocol*>::iterator JObjPluginMapIter;
 
 PluginJavaData* PluginUtils::getPluginJavaData(PluginProtocol* pKeyObj)
 {
+	outputLog("PluginUtils", "getPluginjavaData function");
     PluginJavaData* ret = NULL;
     ObjMapIter it = s_PluginObjMap.find(pKeyObj);
     if (it != s_PluginObjMap.end()) {
@@ -124,6 +128,7 @@ PluginJavaData* PluginUtils::getPluginJavaData(PluginProtocol* pKeyObj)
 
 PluginProtocol* PluginUtils::getPluginPtr(std::string className)
 {
+	outputLog("PluginUtils", "getpluginPtr function");
 	PluginProtocol* ret = NULL;
 	JObjPluginMapIter it = s_JObjPluginMap.find(className);
 	if (it != s_JObjPluginMap.end()) {
@@ -135,6 +140,7 @@ PluginProtocol* PluginUtils::getPluginPtr(std::string className)
 
 void PluginUtils::setPluginJavaData(PluginProtocol* pKeyObj, PluginJavaData* pData)
 {
+	outputLog("PluginUtils", "setPluginJavaData function");
     erasePluginJavaData(pKeyObj);
     s_PluginObjMap.insert(std::pair<PluginProtocol*, PluginJavaData*>(pKeyObj, pData));
     s_JObjPluginMap.insert(std::pair<std::string, PluginProtocol*>(pData->jclassName, pKeyObj));
@@ -142,11 +148,13 @@ void PluginUtils::setPluginJavaData(PluginProtocol* pKeyObj, PluginJavaData* pDa
 
 void PluginUtils::erasePluginJavaData(PluginProtocol* pKeyObj)
 {
+	outputLog("PluginUtils", "erasePluginJavaData function");
     ObjMapIter it = s_PluginObjMap.find(pKeyObj);
     if (it != s_PluginObjMap.end()) {
         PluginJavaData* pData = it->second;
         if (pData != NULL)
         {
+        	outputLog("PluginUtils", "erasePluginJavaData pData != NULL");
             jobject jobj = pData->jobj;
 
             JObjPluginMapIter pluginIt = s_JObjPluginMap.find(pData->jclassName);
@@ -178,6 +186,7 @@ void PluginUtils::outputLog(const char* logTag, const char* pFormat, ...)
 
 jobject PluginUtils::getJObjFromParam(PluginParam* param)
 {
+	outputLog("PluginUtils", "getJObFromParam function");
 	if (NULL == param)
 	{
 		return NULL;

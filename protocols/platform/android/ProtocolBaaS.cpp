@@ -129,14 +129,14 @@ std::string ProtocolBaaS::getUserID() {
 	PluginJniMethodInfo t;
 
 	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(),
-			"getUserID", "()Ljava/lang/String")) {
+			"getUserID", "()Ljava/lang/String;")) {
 
 		jobject obj = t.env->CallObjectMethod(pData->jobj, t.methodID);
 		const char* ret = t.env->GetStringUTFChars((jstring) obj, nullptr);
 
 		t.env->DeleteLocalRef(t.classID);
 
-		return ret;
+		return std::string(ret);
 	}
 
     return nullptr;
