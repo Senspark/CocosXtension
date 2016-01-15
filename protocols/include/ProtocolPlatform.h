@@ -11,6 +11,7 @@
 
 #include "PluginProtocol.h"
 #include <string>
+#include <functional>
 
 NS_CC_PLUGIN_BEGIN
 
@@ -25,21 +26,15 @@ public:
     virtual ~ProtocolPlatform();
 
     typedef std::function<void(PlatformResultCode, const std::string&)> PlatformCallback;
-    
-//    struct LocalNotification {
-//        std::string alertBody;
-//        int64_t     fireDate;
-//    };
-//    
 
-//
-//    void enableUserNotification();
-//    void scheduleLocalNotification(const LocalNotification& notification);
-    
     bool isAppInstalled(const std::string& url);
     
     bool isConnected(const std::string& hostName);
+
+    std::string getSHA1CertFingerprint();
     
+    bool isRelease();
+
     double getVersionCode();
     
     void sendFeedback(const std::string& appName);
