@@ -212,7 +212,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	
 	@Override
 	public boolean isLoggedIn() {
-		return isLoggedIn;
+		return (AccessToken.getCurrentAccessToken() != null);
 	}
 
 	@Override
