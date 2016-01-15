@@ -25,6 +25,7 @@
 #import "UserFacebook.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <ParseFacebookUtilsV4/ParseFacebookUtilsV4.h>
 #import "UserWrapper.h"
 #import "ProtocolUser.h"
 #import "ParseUtils.h"
@@ -71,22 +72,22 @@ using namespace cocos2d::plugin;
 }
 
 - (void) loginWithReadPermissionsInArray:(NSArray *) permission {
-    FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
-    [loginManager logInWithReadPermissions:permission handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+    FBSDKLoginManager *loginManager = [PFFacebookUtils facebookLoginManager];
+    [loginManager logInWithReadPermissions:permission fromViewController:[UserWrapper getCurrentRootViewController] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         [self onLoginResult:result error: error];
     }];
 }
 
 - (void) loginWithPublishPermissionsInArray:(NSArray *) permission {
-    FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
-    [loginManager logInWithPublishPermissions:permission handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+    FBSDKLoginManager *loginManager = [PFFacebookUtils facebookLoginManager];
+    [loginManager logInWithPublishPermissions:permission fromViewController:[UserWrapper getCurrentRootViewController] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         [self onLoginResult:result error: error];
     }];
 }
 
 - (void) logout{
     if ([FBSDKAccessToken currentAccessToken]) {
-        FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+        FBSDKLoginManager *login = [PFFacebookUtils facebookLoginManager];
         [login logOut];
         
         [UserWrapper onActionResult:self withRet: (int)([self isLoggedIn] ? UserActionResultCode::kLogoutFailed : UserActionResultCode::kLogoutSucceed) withMsg:@"Facebook logout"];
@@ -145,7 +146,7 @@ using namespace cocos2d::plugin;
 
 - (void) graphRequestWithGraphPath: (NSString*) graphPath parameters: (NSDictionary*) params callback: (long) cbid {
     if ([FBSDKAccessToken currentAccessToken]) {
-        [[[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:params]
+        [[[[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:params]
          startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
              if (!error) {
 //                 NSLog(@"Fetch facebook info:%@", result);
@@ -158,7 +159,7 @@ using namespace cocos2d::plugin;
                  
                  [UserWrapper onGraphRequestResultFrom:self withRet: (int) GraphResult::kGraphResultFail result:result andCallback:cbid];
              }
-         }];
+         }] autorelease];
     } else {
         [UserWrapper onGraphRequestResultFrom:self withRet: (int) GraphResult::kGraphResultFail result:nil andCallback:cbid];
     }
@@ -171,7 +172,7 @@ using namespace cocos2d::plugin;
     NSDictionary *param = [params objectForKey:@"Param3"];
     long cbId = [[params objectForKey:@"Param4"] longValue];
     
-    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:param HTTPMethod:method];
+    FBSDKGraphRequest *request = [[[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:param HTTPMethod:method] autorelease];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
         
         if(!error){

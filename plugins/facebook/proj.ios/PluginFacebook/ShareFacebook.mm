@@ -31,7 +31,84 @@
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
-@interface ShareFacebook() <FBSDKSharingDelegate, FBSDKGameRequestDialogDelegate, UIAlertViewDelegate>
+@interface FacebookSharingDelegate : NSObject <FBSDKSharingDelegate, FBSDKGameRequestDialogDelegate>
+{
+    long _callbackID;
+}
+
+@property (nonatomic, retain) ShareFacebook* sharer;
+@property (nonatomic, retain) NSDictionary* shareInfo;
+
+- (id) initWithSharer: (id) sharer andCallbackID:(long)callbackID;
+
+@end
+
+@implementation FacebookSharingDelegate
+
+@synthesize sharer      = _sharer;
+@synthesize shareInfo   = _shareInfo;
+
+- (id) initWithSharer: (id) sharer andCallbackID:(long)callbackID
+{
+    if (self = [super init]) {
+        self.sharer = sharer;
+        _callbackID = callbackID;
+    }
+    
+    return self;
+}
+
+- (void) gameRequestDialog:(FBSDKGameRequestDialog*) gameRequestDialog didCompleteWithResults:(NSDictionary*) results {
+    
+    [ShareWrapper onShareResult:_sharer withRet:kShareSuccess withContent:_shareInfo withMsg:@"request success" andCallbackID:_callbackID];
+    
+    [self release];
+    
+}
+
+- (void) gameRequestDialog:(FBSDKGameRequestDialog*) gameRequestDialog didFailWithError:(NSError*) error {
+    
+    [ShareWrapper onShareResult:_sharer withRet:kShareFail withContent:_shareInfo withMsg:@"request failed" andCallbackID:_callbackID];
+    
+    [self release];
+}
+
+- (void) gameRequestDialogDidCancel:(FBSDKGameRequestDialog*) gameRequestDialog {
+    [ShareWrapper onShareResult:_sharer withRet:kShareCancel withContent:_shareInfo withMsg:@"request cancel" andCallbackID:_callbackID];
+    
+    [self release];
+}
+
+- (void) dealloc {
+    [super dealloc];
+    
+    [_shareInfo release];
+}
+
+#pragma mark -
+#pragma Facebook Sharing Delegate
+
+- (void)sharer:(id<FBSDKSharing>)sharer didCompleteWithResults:(NSDictionary *)results {
+    
+    [ShareWrapper onShareResult:_sharer withRet:kShareSuccess withContent:nil withMsg:[ParseUtils NSDictionaryToNSString:results] andCallbackID:_callbackID];
+    
+    [self release];
+}
+
+- (void)sharer:(id<FBSDKSharing>)sharer didFailWithError:(NSError *)error {
+    
+    [ShareWrapper onShareResult:_sharer withRet:kShareFail withContent:nil withMsg:error.description andCallbackID:_callbackID];
+    
+    [self release];
+    
+}
+
+- (void)sharerDidCancel:(id<FBSDKSharing>)sharer {
+    
+    [ShareWrapper onShareResult:_sharer withRet:kShareCancel withContent:nil withMsg:@"User cancelled request" andCallbackID:_callbackID];
+    
+    [self release];
+}
 
 @end
 
@@ -39,17 +116,9 @@
 
 @synthesize debug = __debug;
 
-- (id) init {
-    if (self = [super init]) {
-        _contentMap = [[NSMutableDictionary alloc] init];
-    }
-    
-    return self;
-}
-
 - (NSDictionary*)parseURLParams:(NSString *)query {
     NSArray *pairs = [query componentsSeparatedByString:@"&"];
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *params = [[[NSMutableDictionary alloc] init] autorelease];
     for (NSString *pair in pairs) {
         NSArray *kv = [pair componentsSeparatedByString:@"="];
         NSString *val =
@@ -76,40 +145,36 @@
         NSString *desc = [shareInfo objectForKey:@"description"];
         NSString *photo = [shareInfo objectForKey:@"picture"];
         
-        FBSDKShareLinkContent* content = [[FBSDKShareLinkContent alloc] init];
+        FBSDKShareLinkContent* content = [[[FBSDKShareLinkContent alloc] init] autorelease];
         content.contentURL = [NSURL URLWithString:link];
         content.contentTitle = caption;
         content.contentDescription = desc;
         content.imageURL = [NSURL URLWithString:photo];
         
         // If the Facebook app is installed and we can present the share dialog
-        id dialog = [FBSDKShareDialog showFromViewController:[ShareWrapper getCurrentRootViewController] withContent:content delegate:self];
-        [_contentMap setObject:[NSNumber numberWithLong:cbID] forKey:dialog];
-
+        [FBSDKShareDialog showFromViewController:[ShareWrapper getCurrentRootViewController] withContent:content delegate:[[FacebookSharingDelegate alloc] initWithSharer:self andCallbackID:cbID]];
     }
     else if (photo) {
         NSURL *photoUrl = [NSURL URLWithString:[shareInfo objectForKey:@"photo"]];
         UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:photoUrl]];
         
-        FBSDKSharePhoto* sharePhoto = [[FBSDKSharePhoto alloc] init];
+        FBSDKSharePhoto* sharePhoto = [[[FBSDKSharePhoto alloc] init] autorelease];
         sharePhoto.image = img;
         
-        FBSDKSharePhotoContent* content = [[FBSDKSharePhotoContent alloc] init];
+        FBSDKSharePhotoContent* content = [[[FBSDKSharePhotoContent alloc] init] autorelease];
         content.photos = @[sharePhoto];
         
         
-        id dialog = [FBSDKShareDialog showFromViewController:[ShareWrapper getCurrentRootViewController] withContent:content delegate:self];
-        [_contentMap setObject:[NSNumber numberWithLong:cbID] forKey:dialog];
+        [FBSDKShareDialog showFromViewController:[ShareWrapper getCurrentRootViewController] withContent:content delegate:[[FacebookSharingDelegate alloc] initWithSharer:self andCallbackID:cbID]];
     }
     else if (video) {
-        FBSDKShareVideo *shareVideo = [[FBSDKShareVideo alloc] init];
+        FBSDKShareVideo *shareVideo = [[[FBSDKShareVideo alloc] init] autorelease];
         shareVideo.videoURL = [NSURL URLWithString:video];
         
-        FBSDKShareVideoContent *content = [[FBSDKShareVideoContent alloc] init];
+        FBSDKShareVideoContent *content = [[[FBSDKShareVideoContent alloc] init] autorelease];
         content.video = shareVideo;
         
-        id dialog = [FBSDKShareDialog showFromViewController:[ShareWrapper getCurrentRootViewController] withContent:content delegate:self];
-        [_contentMap setObject:[NSNumber numberWithLong:cbID] forKey:dialog];
+        [FBSDKShareDialog showFromViewController:[ShareWrapper getCurrentRootViewController] withContent:content delegate:[[FacebookSharingDelegate alloc] initWithSharer:self andCallbackID:cbID]];
     } else {
         NSString *msg = [ParseUtils MakeJsonStringWithObject:@"Share failed, share target absent or not supported, please add 'siteUrl' or 'imageUrl' in parameters" andKey:@"error_message"];
         [ShareWrapper onShareResult:self withRet:kShareFail withContent:shareInfo withMsg:msg andCallbackID:cbID];
@@ -120,15 +185,15 @@
     NSString* urlToLikeFor = [NSString stringWithFormat:@"https://www.facebook.com/%@", fanpageID];
     
     
-    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Facebook Like"
+    UIAlertView *message = [[[UIAlertView alloc] initWithTitle:@"Facebook Like"
                                                       message:@"Like us and never miss out on awesome events!"
                                                      delegate:nil
                                             cancelButtonTitle:@"Dismiss"
-                                            otherButtonTitles:nil];
+                                            otherButtonTitles:nil] autorelease];
     
-    UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 60)];
+    UIView* view = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 60)] autorelease];
     
-    FBSDKLikeControl* button = [[FBSDKLikeControl alloc] initWithFrame:CGRectMake(0, 0, 200, 150)];
+    FBSDKLikeControl* button = [[[FBSDKLikeControl alloc] initWithFrame:CGRectMake(0, 0, 200, 150)] autorelease];
     [button setObjectType:FBSDKLikeObjectTypePage];
     [button setObjectID:urlToLikeFor];
     [button setLikeControlAuxiliaryPosition:FBSDKLikeControlAuxiliaryPositionBottom];
@@ -158,63 +223,6 @@
     return @"0.9.0";
 }
 
-#pragma mark -
-#pragma Facebook Sharing Delegate
-/*!
-@abstract Sent to the delegate when the share completes without error or cancellation.
-@param sharer The FBSDKSharing that completed.
-@param results The results from the sharer.  This may be nil or empty.
-*/
-- (void)sharer:(id<FBSDKSharing>)sharer didCompleteWithResults:(NSDictionary *)results {
-    NSNumber* numberCallback = [_contentMap objectForKey:sharer];
-    
-    long callbackID = 0;
-    
-    if (numberCallback) {
-        callbackID = [numberCallback longValue];
-        [_contentMap removeObjectForKey:sharer];
-    }
-    
-    [ShareWrapper onShareResult:self withRet:kShareSuccess withContent:nil withMsg:[ParseUtils NSDictionaryToNSString:results] andCallbackID:callbackID];
-}
-
-/*!
-@abstract Sent to the delegate when the sharer encounters an error.
-@param sharer The FBSDKSharing that completed.
-@param error The error.
-*/
-- (void)sharer:(id<FBSDKSharing>)sharer didFailWithError:(NSError *)error {
-    NSNumber* numberCallback = [_contentMap objectForKey:sharer];
-    
-    long callbackID = 0;
-    
-    if (numberCallback) {
-        callbackID = [numberCallback longValue];
-        [_contentMap removeObjectForKey:sharer];
-    }
-    
-    [ShareWrapper onShareResult:self withRet:kShareFail withContent:nil withMsg:error.description andCallbackID:callbackID];
-
-}
-
-/*!
-@abstract Sent to the delegate when the sharer is cancelled.
-@param sharer The FBSDKSharing that completed.
-*/
-- (void)sharerDidCancel:(id<FBSDKSharing>)sharer {
-    NSNumber* numberCallback = [_contentMap objectForKey:sharer];
-    
-    long callbackID = 0;
-    
-    if (numberCallback) {
-        callbackID = [numberCallback longValue];
-        [_contentMap removeObjectForKey:sharer];
-    }
-    
-    [ShareWrapper onShareResult:self withRet:kShareCancel withContent:nil withMsg:@"User cancelled request" andCallbackID:callbackID];
-}
-
-
 #pragma mark - facebook invite
 -(void) openInviteDialog:(NSDictionary*) params {
     NSDictionary *shareInfo = [params objectForKey:@"Param1"];
@@ -224,13 +232,13 @@
     NSString* title         = [shareInfo objectForKey:@"title"];
     NSString* message       = [shareInfo objectForKey:@"message"];
     
-    FBSDKGameRequestDialog* gameRequestDialog   = [[FBSDKGameRequestDialog alloc] init];
-    FBSDKGameRequestContent* content            = [[FBSDKGameRequestContent alloc] init];
+    FBSDKGameRequestDialog* gameRequestDialog   = [[[FBSDKGameRequestDialog alloc] init] autorelease];
+    FBSDKGameRequestContent* content            = [[[FBSDKGameRequestContent alloc] init] autorelease];
     content.title                               = title;
     content.message                             = message;
     content.recipients                          = [recipients componentsSeparatedByString:@","];
     gameRequestDialog.content                   = content;
-    gameRequestDialog.delegate                  = self;
+    gameRequestDialog.delegate                  = [[FacebookSharingDelegate alloc] initWithSharer:self andCallbackID:cbID];
     gameRequestDialog.frictionlessRequestsEnabled = YES;
     [gameRequestDialog setValue:[NSNumber numberWithLong:cbID] forKey:@"callbackID"];
     [gameRequestDialog show];
@@ -251,8 +259,8 @@
     NSString* objectId      = [shareInfo objectForKey:@"object-id"];
     NSString* data          = [shareInfo objectForKey:@"data"];
     
-    FBSDKGameRequestDialog* gameRequestDialog   = [[FBSDKGameRequestDialog alloc] init];
-    FBSDKGameRequestContent* content            = [[FBSDKGameRequestContent alloc] init];
+    FBSDKGameRequestDialog* gameRequestDialog   = [[[FBSDKGameRequestDialog alloc] init] autorelease];
+    FBSDKGameRequestContent* content            = [[[FBSDKGameRequestContent alloc] init] autorelease];
     
     content.objectID                            = objectId;
     content.title                               = title;
@@ -261,54 +269,11 @@
     content.data                                = data;
     content.actionType                          = (FBSDKGameRequestActionType) actionType;
     gameRequestDialog.content                   = content;
-    gameRequestDialog.delegate                  = self;
     
-    NSDictionary* tag = [NSDictionary dictionaryWithObjectsAndKeys: shareInfo, @"share-info", cbID, @"callback-id", nil];
-    [_contentMap setObject:tag forKey:[NSNumber numberWithLong:(long)gameRequestDialog]];
+    FacebookSharingDelegate* delegate           = [[FacebookSharingDelegate alloc] initWithSharer:self andCallbackID:cbID ? [cbID longValue] : 0];
+    delegate.shareInfo                          = shareInfo;
     
     [gameRequestDialog show];
-}
-
-/**
- implement request method
- */
-- (void) gameRequestDialog:(FBSDKGameRequestDialog*) gameRequestDialog didCompleteWithResults:(NSDictionary*) results {
-    NSLog(@"data content request dialog %@",gameRequestDialog.content.data);
-    
-    NSDictionary* tag = [_contentMap objectForKey:[NSNumber numberWithLong:(long)gameRequestDialog]];
-    [_contentMap removeObjectForKey:[NSNumber numberWithLong:(long)gameRequestDialog]];
-    
-    NSNumber* numberID = [tag valueForKey:@"callback-id"];
-    NSDictionary* content = [tag valueForKey:@"share-info"];
-    
-    if (numberID) {
-        [ShareWrapper onShareResult:self withRet:kShareSuccess withContent:content withMsg:@"request success" andCallbackID:[numberID longValue]];
-    }
-
-}
-
-- (void) gameRequestDialog:(FBSDKGameRequestDialog*) gameRequestDialog didFailWithError:(NSError*) error {
-    NSDictionary* tag = [_contentMap objectForKey:[NSNumber numberWithLong:(long)gameRequestDialog]];
-    [_contentMap removeObjectForKey:[NSNumber numberWithLong:(long)gameRequestDialog]];
-    
-    NSNumber* numberID = [tag valueForKey:@"callback-id"];
-    NSDictionary* content = [tag valueForKey:@"share-info"];
-    
-    if (numberID) {
-        [ShareWrapper onShareResult:self withRet:kShareFail withContent:content withMsg:@"request failed" andCallbackID:[numberID longValue]];
-    }
-}
-
-- (void) gameRequestDialogDidCancel:(FBSDKGameRequestDialog*) gameRequestDialog {
-    NSDictionary* tag = [_contentMap objectForKey:[NSNumber numberWithLong:(long)gameRequestDialog]];
-    [_contentMap removeObjectForKey:[NSNumber numberWithLong:(long)gameRequestDialog]];
-    
-    NSNumber* numberID = [tag valueForKey:@"callback-id"];
-    NSDictionary* content = [tag valueForKey:@"share-info"];
-    
-    if (numberID) {
-        [ShareWrapper onShareResult:self withRet:kShareCancel withContent:content withMsg:@"request cancel" andCallbackID:[numberID longValue]];
-    }
 }
 
 @end
