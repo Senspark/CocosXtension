@@ -23,6 +23,8 @@ $(addprefix ../../platform/android/, \
     GooglePlayProtocolSocial.cpp \
     GooglePlayProtocolUser.cpp \
     GoogleProtocolAnalytics.cpp \
+    GooglePlusProtocolUser.cpp \
+    GooglePlusProtocolShare.cpp \
     ParseProtocolBaaS.cpp \
 ) \
 ../../classes/SensparkPluginManager.cpp

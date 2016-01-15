@@ -161,6 +161,28 @@ public:
         CALL_BASERET_JAVA_FUNC(bool, "()Z", Boolean, false)
     }
 
+    // methods return value is long
+    template <typename T>
+    static long callJavaLongFuncWithName_oneParam(PluginProtocol* thiz, const char* funcName, const char* paramCode, T param)
+    {
+    	CALL_BASERET_JAVA_FUNC_WITH_PARAM(long, paramCode, param, Long, 0)
+    }
+    static long callJavaLongFuncWithName(PluginProtocol* thiz, const char* funcName)
+    {
+    	CALL_BASERET_JAVA_FUNC(long, "()J", Long, 0)
+    }
+
+    // methods return value is double
+    template <typename T>
+    static double callJavaDoubleFuncWithName_oneParam(PluginProtocol* thiz, const char* funcName, const char* paramCode, T param)
+    {
+    	CALL_BASERET_JAVA_FUNC_WITH_PARAM(double, paramCode, param, Double, 0.0f)
+    }
+    static double callJavaDoubleFuncWithName(PluginProtocol* thiz, const char* funcName)
+    {
+    	CALL_BASERET_JAVA_FUNC(double, "()D", Double, 0.0f)
+    }
+
     static void outputLog(const char* logTag, const char* pFormat, ...);
 };
 

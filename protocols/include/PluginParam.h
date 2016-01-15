@@ -39,6 +39,7 @@ public:
 	PluginParam(int nValue);
     PluginParam(long lValue);
 	PluginParam(float fValue);
+	PluginParam(double dValue);
 	PluginParam(bool bValue);
 	PluginParam(const char* strValue);
 	PluginParam(StringMap strMapValue);
@@ -47,6 +48,7 @@ public:
 		kParamTypeNull = 0,
 		kParamTypeInt,
         kParamTypeLong,
+        kParamTypeDouble,
 		kParamTypeFloat,
 		kParamTypeBool,
 		kParamTypeString,
@@ -68,6 +70,10 @@ public:
     
 	inline float getFloatValue() {
 		return _floatValue;
+	}
+
+	inline double getDoubleValue() {
+		return _doubleValue;
 	}
 
 	inline bool getBoolValue() {
@@ -96,6 +102,7 @@ private:
     long    _longValue;
 	int     _intValue;
 	float   _floatValue;
+	double	_doubleValue;
 	bool    _boolValue;
 	std::string _strValue;
 	std::map<std::string, PluginParam*> _mapValue;

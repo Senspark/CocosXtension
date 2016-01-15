@@ -139,6 +139,16 @@ if (0 == nParamNum)                                                             
         paramCode.append(jRetCode);                                                                           \
         ret = PluginUtils::callJava##retCode##FuncWithName_oneParam(this, funcName, paramCode.c_str(), pRetParam->getFloatValue());       \
         break;                                                                                                \
+    case PluginParam::kParamTypeDouble:																		  \
+    	paramCode = "(D)";																					  \
+		paramCode.append(jRetCode);																			  \
+		ret = PluginUtils::callJava##retCode##FuncWithName_oneParam(this, funcName, paramCode.c_str(), pRetParam->getDoubleValue());	  \
+    	break;																								  \
+    case PluginParam::kParamTypeLong:																		  \
+		paramCode = "(J)";																					  \
+		paramCode.append(jRetCode);																			  \
+		ret = PluginUtils::callJava##retCode##FuncWithName_oneParam(this, funcName, paramCode.c_str(), pRetParam->getLongValue());		  \
+		break;																								  \
     case PluginParam::kParamTypeBool:                                                                         \
         paramCode = "(Z)";                                                                                    \
         paramCode.append(jRetCode);                                                                           \
