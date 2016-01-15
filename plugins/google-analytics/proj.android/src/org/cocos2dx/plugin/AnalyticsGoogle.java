@@ -123,9 +123,14 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 			Log.e(LOG_TAG, "Log Event called w/o valid tracker.");
 	}
 
-	// public void trackEvent(Hashtable<String, String> params) {
-	//
-	// }
+	public void trackEventWithCategory(Hashtable<String, String> params) {
+		String category = params.get("Param1");
+		String action	= params.get("Param2");
+		String label	= params.get("Param3");
+		int value		= Integer.parseInt(params.get("Param4"));
+		
+		trackEvent(category, action, label, value);
+	}
 
 	public void trackException(String description, boolean fatal) {
 		if (null != this.tracker) {
@@ -135,9 +140,12 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 			Log.e(LOG_TAG, "Log Exception called w/o valid tracker.");
 	}
 
-	// public void trackException(Hashtable<String, String> params) {
-	//
-	// }
+	public void trackExceptionWithDescription(Hashtable<String, String> params) {
+		String description  = params.get("Param1");
+		boolean isFatal 	= Boolean.parseBoolean(params.get("Param2"));
+		
+		trackException(description, isFatal);
+	}
 
 	public void trackTimming(String category, int interval, String name,
 			String label) {
@@ -149,9 +157,14 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 			Log.e(LOG_TAG, "Log Timing called w/o valid tracker.");
 	}
 
-	// public void trackTiming(Hashtable<String, String> params) {
-	//
-	// }
+	public void trackTimingWithCategory(Hashtable<String, String> params) {
+		String category = params.get("Param1");
+		int interval	= Integer.parseInt(params.get("Param2"));
+		String name		= params.get("Param3");
+		String label	= params.get("Param4");
+		
+		trackTimming(category, interval, name, label);
+	}
 
 	public void trackSocial(String network, String action, String target) {
 		if (this.tracker != null)
@@ -160,6 +173,14 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 					.build());
 		else
 			Log.e(LOG_TAG, "Log Social called w/o valid tracker.");
+	}
+	
+	public void trackSocialWithNetwork(Hashtable<String, String> params) {
+		String network	= params.get("Param1");
+		String action	= params.get("Param2");
+		String target	= params.get("Param3");
+		
+		trackSocial(network, action, target);
 	}
 
 	void setDryRun(boolean isDryRun) {

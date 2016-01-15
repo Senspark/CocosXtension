@@ -18,10 +18,12 @@ public class AdsAdColony implements InterfaceAds, PluginListener {
 	protected boolean isDebug = false;
 	protected String mClientOptions = null;
 	protected AdColonyListener mListener = null;
-
+	protected static AdsAdColony mAdapter = null;
+	
 	public AdsAdColony(Context context) {
 		this.mContext = context;
 		this.mListener = new AdColonyListener();
+		mAdapter = this;
 	}
 
 	@Override
@@ -49,41 +51,39 @@ public class AdsAdColony implements InterfaceAds, PluginListener {
 		}
 	}
 
+	public boolean hasInterstitial(final String zoneID) {
+		return AdColony.statusForZone(zoneID).equals("active");
+	}
 	
-	
-	private void playVideoAd(String zoneId) {
-		AdColonyVideoAd ad = new AdColonyVideoAd(zoneId);
+	public void showInterstitial(final String zoneID) {
+		AdColonyVideoAd ad = new AdColonyVideoAd(zoneID);
 		ad.withListener(mListener);
 		ad.show();
 	}
-
-	private void playV4vc(String zone_id, boolean showPrePopup,
-			boolean showPostPopup) {
-		AdColonyV4VCAd ad = new AdColonyV4VCAd(zone_id);
-		ad.withListener(this.mListener);
-		ad.withConfirmationDialog(showPrePopup);
-		ad.withResultsDialog(showPostPopup);
+	
+	public void cacheInterstitial(final String zoneID) {
+		Log.e(LOG_TAG, "AdColony does not support cacheInterstitial method");
+	}
+	
+	public boolean hasRewardedVideo(final String zoneID) {
+		return AdColony.statusForZone(zoneID).equals("active");
+	}
+	
+	public void showRewardedVideo(final String zoneID, boolean isShowPrePopup, boolean isShowPostPopup) {
+		AdColonyV4VCAd ad = new AdColonyV4VCAd(zoneID);
+		ad.withListener(mListener);
+		ad.withConfirmationDialog(isShowPrePopup);
+		ad.withResultsDialog(isShowPostPopup);
 		ad.show();
 	}
-
+	
+	public void cacheRewardedVideo(final String zoneID) {
+		Log.e(LOG_TAG, "AdColony does not support cacheRewardedVideo method");
+	}
+	
 	@Override
 	public void showAds(Hashtable<String, String> adsInfo, int pos) {
-		final String zoneId = adsInfo.get("Param1");
-		final boolean v4vc = Boolean.parseBoolean(adsInfo.get("Param2"));
-		final boolean showPrePopup = Boolean.parseBoolean(adsInfo.get("Param3"));
-		final boolean showPostPopup = Boolean.parseBoolean(adsInfo.get("Param4"));
-		
-		final Activity activity = (Activity) mContext;
-		activity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (v4vc) {
-					playV4vc(zoneId, showPrePopup, showPostPopup);
-				} else {
-					playVideoAd(zoneId);
-				}
-			}
-		});
+		Log.e(LOG_TAG, "AdColony does not support showAds method.");
 	}
 
 	@Override

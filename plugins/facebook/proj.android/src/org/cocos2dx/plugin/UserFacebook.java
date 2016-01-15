@@ -38,6 +38,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.facebook.Profile;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -156,7 +157,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	}
 
 	@Override
-	public void login(long callbackID) {
+	public void login() {
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
@@ -166,7 +167,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	}
 
 	@Override
-	public void logout(long callbackID) {
+	public void logout() {
 		if (mAccessToken != null) {
 			LoginManager.getInstance().logOut();
 			mAccessToken = null;
@@ -192,9 +193,21 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 		return null;
 	}
 	
+	public String getUserFullName() {
+		return Profile.getCurrentProfile().getName();
+	}
+	
+	public String getUserLastName() {
+		return Profile.getCurrentProfile().getLastName();
+	}
+	
+	public String getUserFirstName() {
+		return Profile.getCurrentProfile().getFirstName();
+	}
+	
 	@Override
 	public String getUserDisplayName() {
-		return null;
+		return Profile.getCurrentProfile().getName();
 	}
 	
 	@Override
@@ -305,7 +318,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 		});
 	}
 
-	public void graphRequest(final JSONObject info) {
+	public void graphRequestWithParams(final JSONObject info) {
 		try {
 			String graphPath = info.getString("Param1");
 			JSONObject jsonParameters = info.getJSONObject("Param2");
@@ -317,7 +330,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 		}
 	}
 
-	public void request(final String graphPath, final int method,
+	public void api(final String graphPath, final int method,
 			final JSONObject jsonParams, final long nativeCallback) {
 		PluginWrapper.runOnMainThread(new Runnable() {
 
@@ -378,14 +391,14 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 		});
 	}
 
-	public void request(final JSONObject info) {
+	public void api(final JSONObject info) {
 		try {
 			String graphPath = info.getString("Param1");
 			int method = info.getInt("Param2");
 			JSONObject jsonParameters = info.getJSONObject("Param3");
 			long nativeCallback = info.getLong("Param4");
 
-			request(graphPath, method, jsonParameters, nativeCallback);
+			api(graphPath, method, jsonParameters, nativeCallback);
 		} catch (JSONException ex) {
 			ex.printStackTrace();
 		}
@@ -400,30 +413,25 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 
 	@Override
 	public void onResume() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onDestroy() {
-		mAccessTokenTracker.stopTracking();
 	}
 
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -191,7 +191,7 @@
     NSString* category = (NSString*) [params objectForKey:@"Param1"];
     NSString* action = (NSString*) [params objectForKey:@"Param2"];
     NSString* label = (NSString*) [params objectForKey:@"Param3"];
-    NSNumber* value = (NSNumber*) [params objectForKey:@"Param4"];
+    NSNumber* value = [NSNumber numberWithInt:[[params objectForKey:@"Param4"] intValue]];
     
     [self trackEventWithCategory:category action:action label:label value:value];
 }

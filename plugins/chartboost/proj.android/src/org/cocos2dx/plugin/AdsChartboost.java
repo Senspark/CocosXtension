@@ -15,6 +15,7 @@ public class AdsChartboost implements InterfaceAds, PluginListener {
 	protected Context mContext;
 	protected ChartboostListener mListener;
 	protected boolean mDebug = true;
+	protected static AdsChartboost mAdapter = null;
 
 	protected static final int CB_TYPE_INTERSTITIAL = 0;
 	protected static final int CB_TYPE_REWARDED_VIDEO = 1;
@@ -32,6 +33,7 @@ public class AdsChartboost implements InterfaceAds, PluginListener {
 
 	public AdsChartboost(Context context) {
 		mContext = context;
+		mAdapter = this;
 		mListener = new ChartboostListener();
 		logD("Register Chartboost");
 	}
@@ -49,69 +51,23 @@ public class AdsChartboost implements InterfaceAds, PluginListener {
 				Chartboost.startWithAppId(activity, appId, appSignature);
 				Chartboost.setDelegate(mListener);
 				Chartboost.setFramework(Chartboost.CBFramework.CBFrameworkCocos2dx);
+				Chartboost.setImpressionsUseActivities(true);
 				Chartboost.onCreate(activity);
 				Chartboost.onStart(activity);
+				Chartboost.setAutoCacheAds(true);
 			}
 		});
 	}
 
 	@Override
 	public void showAds(Hashtable<String, String> adsInfo, int pos) {
-		final String location = adsInfo.get("location");
-		final int type = Integer.parseInt(adsInfo.get("type"));
-		
-		Activity activity = (Activity) mContext;
-		activity.runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				switch (type) {
-				case CB_TYPE_INTERSTITIAL:
-					Chartboost.showInterstitial(location);
-					break;
-				case CB_TYPE_REWARDED_VIDEO:
-					Chartboost.showRewardedVideo(location);
-					break;
-				case CB_TYPE_MORE_APPS:
-					Chartboost.showMoreApps(location);
-					break;
-				default:
-					break;
-				}
-			}
-		});
+		Log.e(LOG_TAG, "AdChartboost does not support showAds method. Use showInterstitial instead");
 	}
 	
 	public boolean isAnyViewVisible() {
 		return Chartboost.isAnyViewVisible();
 	}
 	
-	public boolean isAvailable(String loc, int type) {
-		switch (type) {
-		case CB_TYPE_INTERSTITIAL:
-			return Chartboost.hasInterstitial(loc);
-		case CB_TYPE_REWARDED_VIDEO:
-			return Chartboost.hasRewardedVideo(loc);
-		case CB_TYPE_MORE_APPS:
-			return Chartboost.hasMoreApps(loc);
-		}
-		return false;
-	}
-	
-	public void cache(String loc, int type) {
-		switch (type) {
-		case CB_TYPE_INTERSTITIAL:
-			Chartboost.cacheInterstitial(loc);
-			break;
-		case CB_TYPE_REWARDED_VIDEO:
-			Chartboost.cacheRewardedVideo(loc);
-			break;
-		case CB_TYPE_MORE_APPS:
-			Chartboost.cacheMoreApps(loc);
-			break;
-		}
-	}
-
 	public void setAutoCacheAds(boolean shouldCache) {
 		Chartboost.setAutoCacheAds(shouldCache);
 	}
@@ -126,6 +82,42 @@ public class AdsChartboost implements InterfaceAds, PluginListener {
 	
 	public void disPassAgeGate(boolean pass) {
 		Chartboost.didPassAgeGate(pass);
+	}
+	
+	public boolean hasMoreApps(Hashtable<String, String> adsInfo) {
+		return Chartboost.hasMoreApps(adsInfo.get("location"));
+	}
+	
+	public void cacheMoreApps(Hashtable<String, String> adsInfo) {
+		Chartboost.cacheMoreApps(adsInfo.get("location"));
+	}
+	
+	public void showMoreApps(Hashtable<String, String> adsInfo) {
+		Chartboost.showMoreApps(adsInfo.get("location"));
+	}
+	
+	public boolean hasInterstitial(Hashtable<String, String> adsInfo) {
+		return Chartboost.hasInterstitial(adsInfo.get("location"));
+	}
+	
+	public void cacheInterstitial(Hashtable<String, String> adsInfo) {
+		Chartboost.cacheInterstitial(adsInfo.get("location"));
+	}
+	
+	public void showInterstitial(Hashtable<String, String> adsInfo) {
+		Chartboost.showInterstitial(adsInfo.get("location"));
+	}
+	
+	public boolean hasRewardedVideo(Hashtable<String, String> adsInfo) {
+		return Chartboost.hasRewardedVideo(adsInfo.get("location"));
+	}
+	
+	public void cacheRewardedVideo(Hashtable<String, String> adsInfo) {
+		Chartboost.cacheRewardedVideo(adsInfo.get("location"));
+	}
+	
+	public void showRewardedVideo(Hashtable<String, String> adsInfo) {
+		Chartboost.showRewardedVideo(adsInfo.get("location"));
 	}
 	
 	@Override
@@ -180,6 +172,9 @@ public class AdsChartboost implements InterfaceAds, PluginListener {
 
 	@Override
 	public void onBackPressed() {
+		if (Chartboost.onBackPressed()) {
+			return;
+		}
 	}
 	
 	@Override

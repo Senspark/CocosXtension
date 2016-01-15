@@ -20,6 +20,7 @@ $(addprefix ../../platform/android/, \
     ProtocolShare.cpp \
     ProtocolUser.cpp \
     ProtocolSocial.cpp \
+    ProtocolPlatform.cpp \
     AgentManager.cpp \
 ) \
 ../../PluginManager.cpp \

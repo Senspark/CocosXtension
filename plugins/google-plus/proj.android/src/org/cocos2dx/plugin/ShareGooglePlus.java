@@ -9,14 +9,12 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.google.android.gms.plus.PlusShare;
-import com.google.games.utils.GameHelper;
 
 public class ShareGooglePlus implements InterfaceShare, PluginListener {
 	protected static final String LOG_TAG = "ShareGooglePlus";
 
 	protected static Activity mContext;
 	protected ShareGooglePlus mShareGooglePlus;
-	protected GameHelper mGameHelper;
 	protected boolean bDebug = true;
 
 	private static final int RC_SHARE_G_PLUS = 8891;
@@ -37,7 +35,6 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
 		mContext = (Activity) context;
 		mShareGooglePlus = this;
 		PluginWrapper.addListener(this);
-		mGameHelper = GooglePlayAgent.getInstance().getGameHelper();
 	}
 
 	@Override
@@ -99,7 +96,6 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
 
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		mGameHelper.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == RC_SHARE_G_PLUS) {
 			if (resultCode == RESULT_OK) {
 				ShareWrapper.onShareResult(mShareGooglePlus,
