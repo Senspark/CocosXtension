@@ -6,14 +6,15 @@ android {
 
     defaultConfig {
         minSdkVersion 10
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
 
     sourceSets.main {
-        java.srcDir "src"
-        manifest.srcFile "AndroidManifest.xml"
+        java.srcDir 'src'
+        res.srcDir 'res'
+        manifest.srcFile 'AndroidManifest.xml'
     }
 
     buildTypes {
@@ -25,5 +26,4 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
 }

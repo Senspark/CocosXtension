@@ -20,6 +20,8 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
+*.iml
+*.idea
 [Bb]in
 [Dd]ebug*/
 *.sbr
