@@ -1,0 +1,20 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.cocos2dx.libAnalyticsGoogle"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="21" />
+
+    <uses-permission android:name="android.permission.INTERNET" />					<!-- for Parse Push Notification & FB Audience Network Ad & Vungle & Chartboost & Pokkt-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />		<!-- for Parse Push Notification & FB Audience Network Ad & Vungle & Chartboost & Pokkt-->
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+    </application>
+
+</manifest>
