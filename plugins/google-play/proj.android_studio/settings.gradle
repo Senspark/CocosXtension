@@ -1,0 +1,4 @@
+include ':libPluginGooglePlay'
+include ':libProtocols'
+project(':libProtocols').projectDir = new File(settingsDir, '../../../protocols/proj.android_studio/libProtocols')
+
