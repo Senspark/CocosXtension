@@ -1,0 +1,26 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 9
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile project(':libProtocols')
+    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.google.android.gms:play-services-auth:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
+}
