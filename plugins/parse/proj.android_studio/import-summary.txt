@@ -1,0 +1,247 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+From libPluginParse:
+* .DS_Store
+* Parse-1.10.1/
+* Parse-1.10.1/.DS_Store
+* Parse-1.10.1/PPNS-1.10.1.jar
+* Parse-1.10.1/PPNS-1.10.1.jar.properties
+* Parse-1.10.1/Parse-1.10.1-javadoc/
+* Parse-1.10.1/Parse-1.10.1-javadoc/allclasses-frame.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/allclasses-noframe.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ConfigCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/CountCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/DeleteCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/FindCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/FunctionCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/GetCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/GetDataCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/LocationCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/LogInCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/LogOutCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/Parse.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseACL.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseAnalytics.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseAnonymousUtils.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseClassName.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseCloud.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseConfig.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseException.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseFile.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseGeoPoint.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseInstallation.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseObject.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParsePush.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParsePushBroadcastReceiver.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseQuery.CachePolicy.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseQuery.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseRelation.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseRole.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseSession.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ParseUser.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/ProgressCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/PushService.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/RefreshCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/RequestPasswordResetCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/SaveCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/SendCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/SignUpCallback.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/package-frame.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/package-summary.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/com/parse/package-tree.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/constant-values.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/deprecated-list.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/help-doc.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/index-all.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/index.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/overview-tree.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/package-list
+* Parse-1.10.1/Parse-1.10.1-javadoc/resources/
+* Parse-1.10.1/Parse-1.10.1-javadoc/resources/background.gif
+* Parse-1.10.1/Parse-1.10.1-javadoc/resources/tab.gif
+* Parse-1.10.1/Parse-1.10.1-javadoc/resources/titlebar.gif
+* Parse-1.10.1/Parse-1.10.1-javadoc/resources/titlebar_end.gif
+* Parse-1.10.1/Parse-1.10.1-javadoc/serialized-form.html
+* Parse-1.10.1/Parse-1.10.1-javadoc/stylesheet.css
+* Parse-1.10.1/Parse-1.10.1.jar
+* Parse-1.10.1/Parse-1.10.1.jar.properties
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/allclasses-frame.html
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/allclasses-noframe.html
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/com/
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/com/parse/
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/com/parse/ParseCrashReporting.html
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/com/parse/package-frame.html
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/com/parse/package-summary.html
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/com/parse/package-tree.html
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/constant-values.html
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/deprecated-list.html
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/help-doc.html
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/index-all.html
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/index.html
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/overview-tree.html
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/package-list
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/resources/
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/resources/background.gif
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/resources/tab.gif
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/resources/titlebar.gif
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/resources/titlebar_end.gif
+* Parse-1.10.1/ParseCrashReporting-1.10.1-javadoc/stylesheet.css
+* Parse-1.10.1/ParseCrashReporting-1.10.1.jar
+* Parse-1.10.1/ParseCrashReporting-1.10.1.jar.properties
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/allclasses-frame.html
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/allclasses-noframe.html
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/com/
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/com/parse/
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/com/parse/ParseFacebookUtils.html
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/com/parse/package-frame.html
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/com/parse/package-summary.html
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/com/parse/package-tree.html
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/constant-values.html
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/deprecated-list.html
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/help-doc.html
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/index-all.html
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/index.html
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/overview-tree.html
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/package-list
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/resources/
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/resources/background.gif
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/resources/tab.gif
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/resources/titlebar.gif
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/resources/titlebar_end.gif
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1-javadoc/stylesheet.css
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1.jar
+* Parse-1.10.1/ParseFacebookUtilsV3-1.10.1.jar.properties
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/allclasses-frame.html
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/allclasses-noframe.html
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/com/
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/com/parse/
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/com/parse/ParseFacebookUtils.html
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/com/parse/package-frame.html
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/com/parse/package-summary.html
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/com/parse/package-tree.html
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/constant-values.html
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/deprecated-list.html
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/help-doc.html
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/index-all.html
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/index.html
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/overview-tree.html
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/package-list
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/resources/
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/resources/background.gif
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/resources/tab.gif
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/resources/titlebar.gif
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/resources/titlebar_end.gif
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1-javadoc/stylesheet.css
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1.jar
+* Parse-1.10.1/ParseFacebookUtilsV4-1.10.1.jar.properties
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/allclasses-frame.html
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/allclasses-noframe.html
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/com/
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/com/parse/
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/com/parse/ParseTwitterUtils.html
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/com/parse/package-frame.html
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/com/parse/package-summary.html
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/com/parse/package-tree.html
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/constant-values.html
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/deprecated-list.html
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/help-doc.html
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/index-all.html
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/index.html
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/overview-tree.html
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/package-list
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/resources/
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/resources/background.gif
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/resources/tab.gif
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/resources/titlebar.gif
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/resources/titlebar_end.gif
+* Parse-1.10.1/ParseTwitterUtils-1.10.1-javadoc/stylesheet.css
+* Parse-1.10.1/ParseTwitterUtils-1.10.1.jar
+* Parse-1.10.1/ParseTwitterUtils-1.10.1.jar.properties
+* Parse-1.10.1/bolts-android-1.2.1-javadoc.jar
+* Parse-1.10.1/bolts-android-1.2.1.jar
+* Parse-1.10.1/bolts-android-1.2.1.jar.properties
+* Parse-1.10.1/third_party_licenses.txt
+* build.xml
+* proguard-project.txt
+* sdk/
+* sdk/Parse-1.10.1.jar
+* sdk/bolts-android-1.2.1.jar
+From libPluginProtocol:
+* Debug/
+* Debug/android/
+* Debug/android/subdir.mk
+* Debug/makefile
+* Debug/obj/
+* Debug/obj/local/
+* Debug/obj/local/armeabi-v7a/
+* Debug/obj/local/armeabi-v7a/objs/
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/__/
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/__/__/
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/__/__/platform/
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/__/__/platform/android/
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/__/__/platform/android/subdir.mk
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/__/__/subdir.mk
+* Debug/obj/local/armeabi-v7a/objs/android_native_app_glue/
+* Debug/obj/local/armeabi-v7a/objs/android_native_app_glue/subdir.mk
+* Debug/obj/local/armeabi/
+* Debug/obj/local/armeabi/objs/
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/__/
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/__/__/
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/__/__/platform/
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/__/__/platform/android/
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/__/__/platform/android/subdir.mk
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/__/__/subdir.mk
+* Debug/obj/local/armeabi/objs/android_native_app_glue/
+* Debug/obj/local/armeabi/objs/android_native_app_glue/subdir.mk
+* Debug/objects.mk
+* Debug/sources.mk
+* build.xml
+* build_native.sh
+* proguard-project.txt
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+In libPluginProtocol:
+* AndroidManifest.xml => libPluginProtocol/src/main/AndroidManifest.xml
+* jni/ => libPluginProtocol/src/main/jni/
+* lint.xml => libPluginProtocol/lint.xml
+* res/ => libPluginProtocol/src/main/res/
+* src/ => libPluginProtocol/src/main/java/
+In libPluginParse:
+* AndroidManifest.xml => libPluginParse/src/main/AndroidManifest.xml
+* assets/ => libPluginParse/src/main/assets
+* res/ => libPluginParse/src/main/res/
+* src/ => libPluginParse/src/main/java/
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)
