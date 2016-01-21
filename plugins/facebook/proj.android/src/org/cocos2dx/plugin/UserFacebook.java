@@ -212,7 +212,6 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	
 	@Override
 	public boolean isLoggedIn() {
-		LogD("currentAccesstoken is : "+ AccessToken.getCurrentAccessToken());
 		return (AccessToken.getCurrentAccessToken() != null);
 	}
 

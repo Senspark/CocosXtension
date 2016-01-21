@@ -67,14 +67,14 @@ public class BaaSBaasbox implements InterfaceBaaS {
         BaasUser user = BaasUser.withUserName(username)
                                 .setPassword(password);
 
-        user.signup(new BaasHandler<BaasUser>(){
+        user.signup(new BaasHandler<BaasUser>() {
             @Override
-            public void handle(BaasResult<BaasUser> result){
-                if(result.isSuccess()) {
-                    Log.d(TAG,"Current user is: "+result.value());
+            public void handle(BaasResult<BaasUser> result) {
+                if (result.isSuccess()) {
+                    Log.d(TAG, "Current user is: " + result.value());
                     BaaSWrapper.onBaaSActionResult(mAdapter, true, result.value().toString(), callbackID);
                 } else {
-                    Log.e(TAG,"Show error",result.error());
+                    Log.e(TAG, "Show error", result.error());
                     BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(result.error()), callbackID);
                 }
             }
@@ -197,36 +197,44 @@ Log.d(TAG,"login with username : "+userName+" password : "+password);
         JsonObject visibleByAnonymousUsers = data.get("visibleByAnonymousUsers");
         JsonObject visibleByFriends        = data.get("visibleByFriends");
 
-        Iterator v1 = visibleByRegisterUses.iterator();
-        while (v1.hasNext()) {
-            Map.Entry e = (Map.Entry) v1.next();
-            String key = (String) e.getKey();
-            Object value = e.getValue();
-            JsonObjectPutObject(user.getScope(BaasUser.Scope.REGISTERED), key, value);
+        if(visibleByRegisterUses != null) {
+            Iterator v1 = visibleByRegisterUses.iterator();
+            while (v1.hasNext()) {
+                Map.Entry e = (Map.Entry) v1.next();
+                String key = (String) e.getKey();
+                Object value = e.getValue();
+                JsonObjectPutObject(user.getScope(BaasUser.Scope.REGISTERED), key, value);
+            }
         }
 
-        Iterator v2 = visibleByTheUser.iterator();
-        while (v2.hasNext()) {
-            Map.Entry e = (Map.Entry) v2.next();
-            String key = (String) e.getKey();
-            Object value = e.getValue();
-            JsonObjectPutObject(user.getScope(BaasUser.Scope.PRIVATE), key, value);
+        if(visibleByTheUser != null) {
+            Iterator v2 = visibleByTheUser.iterator();
+            while (v2.hasNext()) {
+                Map.Entry e = (Map.Entry) v2.next();
+                String key = (String) e.getKey();
+                Object value = e.getValue();
+                JsonObjectPutObject(user.getScope(BaasUser.Scope.PRIVATE), key, value);
+            }
         }
 
-        Iterator v3 = visibleByAnonymousUsers.iterator();
-        while (v3.hasNext()){
-            Map.Entry e = (Map.Entry) v3.next();
-            String key = (String) e.getKey();
-            Object value = e.getValue();
-            JsonObjectPutObject(user.getScope(BaasUser.Scope.PUBLIC), key, value);
+        if(visibleByAnonymousUsers != null) {
+            Iterator v3 = visibleByAnonymousUsers.iterator();
+            while (v3.hasNext()) {
+                Map.Entry e = (Map.Entry) v3.next();
+                String key = (String) e.getKey();
+                Object value = e.getValue();
+                JsonObjectPutObject(user.getScope(BaasUser.Scope.PUBLIC), key, value);
+            }
         }
 
-        Iterator v4 = visibleByFriends.iterator();
-        while (v4.hasNext()){
-            Map.Entry e = (Map.Entry) v4.next();
-            String key = (String) e.getKey();
-            Object value = e.getValue();
-            JsonObjectPutObject(user.getScope(BaasUser.Scope.FRIEND), key, value);
+        if(visibleByFriends != null) {
+            Iterator v4 = visibleByFriends.iterator();
+            while (v4.hasNext()) {
+                Map.Entry e = (Map.Entry) v4.next();
+                String key = (String) e.getKey();
+                Object value = e.getValue();
+                JsonObjectPutObject(user.getScope(BaasUser.Scope.FRIEND), key, value);
+            }
         }
 
         user.save(new BaasHandler<BaasUser>() {
