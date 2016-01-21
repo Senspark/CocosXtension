@@ -217,6 +217,10 @@ void ProtocolBaaS::findObjectInBackground(const std::string& className,
 	}
 }
 
+void ProtocolBaaS::findObjectsInBackground(const std::string& className, const std::string& key, const std::vector<std::string>& value, BaaSCallback& cb) {
+
+}
+
 const char* ProtocolBaaS::getObject(const std::string& className,
 		const std::string& objId) {
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
@@ -337,6 +341,10 @@ bool ProtocolBaaS::deleteObject(const std::string& className,
 	}
 
 	return nullptr;
+}
+
+std::string ProtocolBaaS::getUserID() {
+	return PluginUtils::callJavaStringFuncWithName(this, "getUserID");
 }
 
 

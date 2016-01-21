@@ -8,21 +8,24 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.jirbo.adcolony.AdColony;
+import com.jirbo.adcolony.AdColonyAd;
+import com.jirbo.adcolony.AdColonyAdAvailabilityListener;
+import com.jirbo.adcolony.AdColonyAdListener;
 import com.jirbo.adcolony.AdColonyV4VCAd;
+import com.jirbo.adcolony.AdColonyV4VCListener;
+import com.jirbo.adcolony.AdColonyV4VCReward;
 import com.jirbo.adcolony.AdColonyVideoAd;
 
-public class AdsAdColony implements InterfaceAds, PluginListener {
-	public static final String LOG_TAG = "AdsAdColony";
+public class AdsColony implements InterfaceAds, PluginListener, AdColonyAdAvailabilityListener, AdColonyV4VCListener, AdColonyAdListener {
+	public static final String LOG_TAG = "AdsColony";
 
 	protected Context mContext = null;
 	protected boolean isDebug = false;
 	protected String mClientOptions = null;
-	protected AdColonyListener mListener = null;
-	protected static AdsAdColony mAdapter = null;
+	protected static AdsColony mAdapter = null;
 	
-	public AdsAdColony(Context context) {
+	public AdsColony(Context context) {
 		this.mContext = context;
-		this.mListener = new AdColonyListener();
 		mAdapter = this;
 	}
 
@@ -41,8 +44,8 @@ public class AdsAdColony implements InterfaceAds, PluginListener {
 				public void run() {
 					AdColony.configure(activity, mClientOptions, appId,
 							zoneIds.split(","));
-					AdColony.addAdAvailabilityListener(mListener);
-					AdColony.addV4VCListener(mListener);
+					AdColony.addAdAvailabilityListener(mAdapter);
+					AdColony.addV4VCListener(mAdapter);
 				}
 			});
 		} catch (Exception e) {
@@ -57,7 +60,7 @@ public class AdsAdColony implements InterfaceAds, PluginListener {
 	
 	public void showInterstitial(final String zoneID) {
 		AdColonyVideoAd ad = new AdColonyVideoAd(zoneID);
-		ad.withListener(mListener);
+		ad.withListener(mAdapter);
 		ad.show();
 	}
 	
@@ -71,7 +74,7 @@ public class AdsAdColony implements InterfaceAds, PluginListener {
 	
 	public void showRewardedVideo(final String zoneID, boolean isShowPrePopup, boolean isShowPostPopup) {
 		AdColonyV4VCAd ad = new AdColonyV4VCAd(zoneID);
-		ad.withListener(mListener);
+		ad.withListener(mAdapter);
 		ad.withConfirmationDialog(isShowPrePopup);
 		ad.withResultsDialog(isShowPostPopup);
 		ad.show();
@@ -151,4 +154,33 @@ public class AdsAdColony implements InterfaceAds, PluginListener {
 		AdColony.onBackPressed();		
 	}
 
+	@Override
+	public void onAdColonyAdAttemptFinished(AdColonyAd ad) {
+		if (ad.shown()) {
+			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_AdsShown, "AdColony Interstitial Ad shown");
+		} else if (ad.notShown()) {
+			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_UnknownError, "AdColony ad not show with error UNKNOWN");
+		} else if (ad.skipped()) {
+			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_AdsDismissed, "AdColony ad DISMISS");		
+		}
+	}
+
+	@Override
+	public void onAdColonyAdStarted(AdColonyAd ad) {
+		AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_VideoShown, "AdColony started showing");
+	}
+
+	@Override
+	public void onAdColonyV4VCReward(AdColonyV4VCReward ad) {
+		if (ad.success()) {
+			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_VideoCompleted, "AdColony V4VC succeeded");
+		} else {
+			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_VideoDismissed, "AdColony V4VC dismissed");
+		}
+	}
+
+	@Override
+	public void onAdColonyAdAvailabilityChange(boolean ad, String arg1) {
+		AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_VideoReceived, "AdColony video received");
+	}
 }

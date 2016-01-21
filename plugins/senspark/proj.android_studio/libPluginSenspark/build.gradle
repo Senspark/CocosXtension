@@ -1,16 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 'Google Inc.:Google APIs:21'
+    compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 23
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_7
-            targetCompatibility JavaVersion.VERSION_1_7
-        }
     }
 
     buildTypes {
@@ -21,7 +17,4 @@ android {
     }
 }
 
-dependencies {
-    compile files('libs/android-support-v13.jar')
-    compile files('libs/bolts-android-1.1.2.jar')
-}
+dependencies {}
