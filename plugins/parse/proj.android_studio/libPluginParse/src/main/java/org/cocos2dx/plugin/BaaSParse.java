@@ -14,7 +14,9 @@ import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseConfig;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -149,7 +151,8 @@ public class BaaSParse implements InterfaceBaaS {
 	public boolean isLoggedIn() {
 		return ParseUser.getCurrentUser() != null;
 	}
-	
+
+	@Override
 	public String getUserID() {
 		return ParseUser.getCurrentUser().getObjectId();
 	}
@@ -163,8 +166,8 @@ public class BaaSParse implements InterfaceBaaS {
 		}
 	}
 
-	/*public String getInstallationInfo() {
-		Log.e(LOG_TAG, "ParseInstallation: " + ParseInstallation.getCurrentInstallation().toString());       
+	public String getInstallationInfo() {
+		Log.e(LOG_TAG, "ParseInstallation: " + ParseInstallation.getCurrentInstallation().toString());
 		return ParseInstallation.getCurrentInstallation().toString();
 	}
 	
@@ -187,7 +190,7 @@ public class BaaSParse implements InterfaceBaaS {
 		}
 		
 		ParsePush.subscribeInBackground(channelList, new SaveCallback() {
-			
+
 			@Override
 			public void done(ParseException e) {
 				if (e != null) {
@@ -220,7 +223,7 @@ public class BaaSParse implements InterfaceBaaS {
 				}
 			}
 		});
-	}*/
+	}
 	
 	private ParseObject convertJSONObject(String className, JSONObject jsonObj)  throws JSONException {
 		ParseObject parseObj = new ParseObject(className);
@@ -531,7 +534,6 @@ public class BaaSParse implements InterfaceBaaS {
 		return "Delete object failed";
 	}
 
-	@Override
 	public void fetchConfigInBackground(int callbackID) {
 		final long cbID = callbackID;
 
@@ -553,42 +555,36 @@ public class BaaSParse implements InterfaceBaaS {
 		});
 	}
 
-	@Override
 	public boolean getBoolConfig(String param) {
 		boolean ret = mCurrentConfig.getBoolean(param, false);
 		Log.i("Parse", "Parse Config >>> Get bool: "+ ret);
 		return ret;
 	}
 
-	@Override
 	public int getIntegerConfig(String param) {
 		int ret = mCurrentConfig.getInt(param, 0);
 		Log.i("Parse", "Parse Config >>> Get Integer: "+ ret);
 		return ret;
 	}
 
-	@Override
 	public double getDoubleConfig(String param) {
 		double ret = mCurrentConfig.getDouble(param, 0);
 		Log.i("Parse", "Parse Config >>> Get Double: "+ ret);
 		return ret;
 	}
 
-	@Override
 	public long getLongConfig(String param) {
 		long ret = mCurrentConfig.getLong(param, 0);
 		Log.i("Parse", "Parse Config >>> Get Long: "+ ret);
 		return ret;
 	}
 
-	@Override
 	public String getStringConfig(String param) {
 		String ret = mCurrentConfig.getString(param, "defaultString");
 		Log.i("Parse", "Parse Config >>> Get String: "+ ret);
 		return ret;
 	}
 	
-	@Override
 	public String getArrayConfig(String param) {
 		String ret = mCurrentConfig.getJSONArray(param).toString();
 		Log.i("Parse", "Parse Config >>> Get Array: "+ ret);

@@ -3,6 +3,7 @@
 #include <android/log.h>
 #include "PluginUtils.h"
 #include "PluginJavaData.h"
+#include <sstream>
 
 using namespace std;
 namespace cocos2d {
@@ -217,8 +218,38 @@ void ProtocolBaaS::findObjectInBackground(const std::string& className,
 	}
 }
 
-void ProtocolBaaS::findObjectsInBackground(const std::string& className, const std::string& key, const std::vector<std::string>& value, BaaSCallback& cb) {
+void ProtocolBaaS::findObjectsInBackground(const std::string& className, const std::string& key, const std::vector<std::string>& values, BaaSCallback& cb){
+	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+	PluginJniMethodInfo t;
 
+	std::stringstream ss;
+	ss << "[";
+	for(size_t i = 0; i < values.size(); ++i)
+	{
+		if(i != 0)
+			ss << ",";
+		ss << values[i];
+	}
+	ss << "]";
+	std::string s = ss.str();
+
+	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(),
+			"findObjectsInBackground",
+			"(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V")) {
+		jstring jclass_name = t.env->NewStringUTF(className.c_str());
+		jstring jkey = t.env->NewStringUTF(key.c_str());
+		jstring jvalue = t.env->NewStringUTF(s.c_str());
+
+		CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
+
+		t.env->CallVoidMethod(pData->jobj, t.methodID, jclass_name, jkey,
+				jvalue, (long) cbWrapper);
+
+		t.env->DeleteLocalRef(jclass_name);
+		t.env->DeleteLocalRef(jkey);
+		t.env->DeleteLocalRef(jvalue);
+		t.env->DeleteLocalRef(t.classID);
+	}
 }
 
 const char* ProtocolBaaS::getObject(const std::string& className,

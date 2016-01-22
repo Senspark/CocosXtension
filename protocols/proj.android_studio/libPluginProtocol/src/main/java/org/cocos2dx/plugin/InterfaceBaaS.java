@@ -10,6 +10,7 @@ public interface InterfaceBaaS {
     public void login(String userName, String password, int cbID);
     public void logout(int cbID);
     public boolean isLoggedIn();
+    public String getUserID();
     public void saveObjectInBackground(String className, String json, int cbID);
     public String saveObject(String className, String json);
   
@@ -26,11 +27,4 @@ public interface InterfaceBaaS {
     public void deleteObjectInBackground(String className, String objId, int cbID);
     public String deleteObject(String className, String objId);
     
-    public void fetchConfigInBackground(int cbID);
-    public boolean getBoolConfig(String param);
-    public int getIntegerConfig(String param);
-    public double getDoubleConfig(String param);
-    public long getLongConfig(String param);
-    public String getStringConfig(String param);
-    public String getArrayConfig(String param);
 }
