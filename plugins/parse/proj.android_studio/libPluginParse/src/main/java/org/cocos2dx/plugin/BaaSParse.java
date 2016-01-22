@@ -14,7 +14,9 @@ import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseConfig;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -163,8 +165,8 @@ public class BaaSParse implements InterfaceBaaS {
 		}
 	}
 
-	/*public String getInstallationInfo() {
-		Log.e(LOG_TAG, "ParseInstallation: " + ParseInstallation.getCurrentInstallation().toString());       
+	public String getInstallationInfo() {
+		Log.e(LOG_TAG, "ParseInstallation: " + ParseInstallation.getCurrentInstallation().toString());
 		return ParseInstallation.getCurrentInstallation().toString();
 	}
 	
@@ -187,7 +189,7 @@ public class BaaSParse implements InterfaceBaaS {
 		}
 		
 		ParsePush.subscribeInBackground(channelList, new SaveCallback() {
-			
+
 			@Override
 			public void done(ParseException e) {
 				if (e != null) {
@@ -220,7 +222,7 @@ public class BaaSParse implements InterfaceBaaS {
 				}
 			}
 		});
-	}*/
+	}
 	
 	private ParseObject convertJSONObject(String className, JSONObject jsonObj)  throws JSONException {
 		ParseObject parseObj = new ParseObject(className);

@@ -25,7 +25,6 @@
 #import "UserFacebook.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
-#import <ParseFacebookUtilsV4/ParseFacebookUtilsV4.h>
 #import "UserWrapper.h"
 #import "ProtocolUser.h"
 #import "ParseUtils.h"
@@ -72,14 +71,14 @@ using namespace cocos2d::plugin;
 }
 
 - (void) loginWithReadPermissionsInArray:(NSArray *) permission {
-    FBSDKLoginManager *loginManager = [PFFacebookUtils facebookLoginManager];
+    FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
     [loginManager logInWithReadPermissions:permission fromViewController:[UserWrapper getCurrentRootViewController] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         [self onLoginResult:result error: error];
     }];
 }
 
 - (void) loginWithPublishPermissionsInArray:(NSArray *) permission {
-    FBSDKLoginManager *loginManager = [PFFacebookUtils facebookLoginManager];
+    FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
     [loginManager logInWithPublishPermissions:permission fromViewController:[UserWrapper getCurrentRootViewController] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         [self onLoginResult:result error: error];
     }];
@@ -87,7 +86,7 @@ using namespace cocos2d::plugin;
 
 - (void) logout{
     if ([FBSDKAccessToken currentAccessToken]) {
-        FBSDKLoginManager *login = [PFFacebookUtils facebookLoginManager];
+        FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
         [login logOut];
         
         [UserWrapper onActionResult:self withRet: (int)([self isLoggedIn] ? UserActionResultCode::kLogoutFailed : UserActionResultCode::kLogoutSucceed) withMsg:@"Facebook logout"];
