@@ -7,7 +7,7 @@ LOCAL_MODULE := PluginProtocolStatic
 LOCAL_MODULE_FILENAME := libPluginProtocolStatic
 
 LOCAL_SRC_FILES :=\
-$(addprefix ../../platform/android/, \
+$(addprefix ../../../platform/android/, \
 	PluginFactory.cpp \
     PluginJniHelper.cpp \
     PluginUtils.cpp \
@@ -23,17 +23,17 @@ $(addprefix ../../platform/android/, \
     ProtocolPlatform.cpp \
     AgentManager.cpp \
 ) \
-../../PluginManager.cpp \
-../../PluginParam.cpp
+../../../PluginManager.cpp \
+../../../PluginParam.cpp
 
 LOCAL_CFLAGS := -std=c++11 -Wno-psabi
 LOCAL_EXPORT_CFLAGS := -Wno-psabi
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../include
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../platform/android
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../include
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../platform/android
 
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../include
-LOCAL_EXPORT_C_INCLUDES += $(LOCAL_PATH)/../../platform/android
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../include
+LOCAL_EXPORT_C_INCLUDES += $(LOCAL_PATH)/../../../platform/android
 
 LOCAL_LDLIBS := -landroid
 LOCAL_LDLIBS += -llog
