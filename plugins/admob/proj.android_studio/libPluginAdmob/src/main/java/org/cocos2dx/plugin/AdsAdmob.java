@@ -30,13 +30,12 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.cocos2dx.libAdsAdmob.R;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.senspark.libAdsAdmob.R;
 
 import android.app.Activity;
 import android.content.Context;
@@ -434,6 +433,7 @@ public class AdsAdmob implements InterfaceAds {
 
         public void SlideDown(final View view, Context context) {
             Animation anim = AnimationUtils.loadAnimation(context, R.anim.slide_up);
+
             anim.setAnimationListener(new Animation.AnimationListener() {
 
                 @Override
