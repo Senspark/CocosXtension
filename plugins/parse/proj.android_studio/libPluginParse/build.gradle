@@ -20,5 +20,7 @@ android {
 dependencies {
     compile project(':libPluginProtocol')
     compile files('libs/bolts-android-1.2.1.jar')
-    compile files('libs/Parse-1.10.1.jar')
+    compile files('libs/Parse-1.10.2.jar')
+    compile files('libs/ParseFacebookUtilsV4-1.10.2.jar')
+    compile files('libs/PPNS-1.10.2.jar')
 }
