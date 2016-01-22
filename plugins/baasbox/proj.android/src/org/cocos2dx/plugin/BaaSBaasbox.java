@@ -22,7 +22,6 @@ import com.baasbox.android.json.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.Override;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -84,7 +83,7 @@ public class BaaSBaasbox implements InterfaceBaaS {
 
     @Override
     public void login(String userName, String password, int callbackID) {
-Log.d(TAG,"login with username : "+userName+" password : "+password);
+        Log.d(TAG,"login with username : "+userName+" password : "+password);
         final long cbID = callbackID;
         BaasUser user = BaasUser.withUserName(userName)
                 .setPassword(password);
@@ -124,6 +123,7 @@ Log.d(TAG,"login with username : "+userName+" password : "+password);
         return BaasUser.current() != null;
     }
 
+    @Override
     public String getUserID(){
         return BaasUser.current().getName();
     }
@@ -161,15 +161,14 @@ Log.d(TAG,"login with username : "+userName+" password : "+password);
                 return json.toString();
 
             } catch (JSONException ex) {
-                Log.i(TAG, "Error when making json.");
+                Log.d(TAG, "Error when making json.");
             }
         }
-
         return null;
     }
 
     public void loginWithFacebookToken(final String facebookToken, final int cbId){
-        Log.i(TAG, "loginWithFacebookToken : " + facebookToken + " cbid: " + cbId);
+        Log.d(TAG, "loginWithFacebookToken : " + facebookToken + " cbid: " + cbId);
         final long lCallbackId = cbId;
         BaasUser.signupWithProvider(BaasUser.Social.FACEBOOK, facebookToken, facebookToken, new BaasHandler<BaasUser>() {
             @Override
@@ -187,7 +186,7 @@ Log.d(TAG,"login with username : "+userName+" password : "+password);
     }
 
     public void updateUserProfile(final String profile, final int cbId){
-        Log.i(TAG,"updateProfile : "+profile+" cbid: "+cbId);
+        Log.d(TAG,"updateProfile : "+profile+" cbid: "+cbId);
         final long lCallbackId = cbId;
         BaasUser user = BaasUser.current();
 
@@ -253,7 +252,7 @@ Log.d(TAG,"login with username : "+userName+" password : "+password);
     }
 
     public void fetchUserProfile(final int cbId){
-        Log.i(TAG, "fetchProfile  cbid: " + cbId);
+        Log.d(TAG, "fetchUserProfile  cbid: " + cbId);
         final long lCallbackId = cbId;
         BaasUser.fetch(BaasUser.current().getName(), new BaasHandler<BaasUser>() {
             @Override
@@ -267,7 +266,7 @@ Log.d(TAG,"login with username : "+userName+" password : "+password);
                     userInfo.put("visibleByAnonymousUsers",  baasUser.getScope(BaasUser.Scope.PUBLIC));
                     userInfo.put("visibleByFriends",         baasUser.getScope(BaasUser.Scope.FRIEND));
 
-                    Log.i(TAG, "load visibleByRegister current user : " + userInfo);
+                    Log.d(TAG, "load visibleByRegister current user : " + userInfo);
                     BaaSWrapper.onBaaSActionResult(mAdapter, true, userInfo.toString(), lCallbackId);
                 } else {
                     BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(baasResult.error()), lCallbackId);
@@ -277,7 +276,7 @@ Log.d(TAG,"login with username : "+userName+" password : "+password);
     }
 
     public void loadUsersWithParameters(final String condition, final int cbId){
-        Log.i(TAG,"floadUsersWithParameters cbid: "+cbId);
+        Log.d(TAG,"floadUsersWithParameters cbid: "+cbId);
         final long lCallbackId = cbId;
 
         BaasQuery.Criteria filter = BaasQuery.builder()
