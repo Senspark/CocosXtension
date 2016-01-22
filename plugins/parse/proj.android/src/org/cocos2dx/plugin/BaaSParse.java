@@ -1,10 +1,13 @@
 package org.cocos2dx.plugin;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import org.cocos2dx.plugin.BaaSWrapper;
 import org.cocos2dx.plugin.InterfaceBaaS;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,6 +17,7 @@ import android.util.Log;
 
 import com.parse.ConfigCallback;
 import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.LogOutCallback;
@@ -21,7 +25,9 @@ import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseConfig;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -33,29 +39,7 @@ public class BaaSParse implements InterfaceBaaS {
 	private static boolean mDebug 		= true;
 	private static BaaSParse mAdapter 	= null;
 	private static ParseConfig mCurrentConfig = null;
-	
-	public static final int RESULT_CODE_LoginSucceed 		= 0;
-	public static final int RESULT_CODE_LoginFailed 		= 1;
-	public static final int RESULT_CODE_LogoutSucceed 		= 2;
-	public static final int RESULT_CODE_LogoutFailed		= 3;
-	public static final int RESULT_CODE_SignUpSucceed 		= 4;
-	public static final int RESULT_CODE_SignUpFailed 		= 5;
-	public static final int RESULT_CODE_SaveSucceed 		= 6;
-	public static final int RESULT_CODE_SaveFailed 			= 7;
-	public static final int RESULT_CODE_RetrieveSucceed 	= 8;
-	public static final int RESULT_CODE_RetrieveFailed 		= 9;
-	public static final int RESULT_CODE_DeleteSucceed 		= 10;
-	public static final int RESULT_CODE_DeleteFailed 		= 11;
-	public static final int RESULT_CODE_UpdateSucceed 		= 12;
-	public static final int RESULT_CODE_UpdateFailed 		= 13;
-	public static final int RESULT_CODE_FetchConfigSucceed	= 14;
-	public static final int RESULT_CODE_FetchConfigFailed 	= 15;
-	public static final int RESULT_CODE_GetBoolConfig		= 16;
-	public static final int RESULT_CODE_GetIntConfig		= 17;
-	public static final int RESULT_CODE_GetDoubleConfig		= 18;
-	public static final int RESULT_CODE_GetLongConfig		= 19;
-	public static final int RESULT_CODE_GetStringConfig		= 20;
-	
+		
 	public void logD(String msg) {
 		if (mDebug) {
 			Log.d(LOG_TAG, msg);
@@ -69,6 +53,7 @@ public class BaaSParse implements InterfaceBaaS {
 	
 	@Override
 	public void configDeveloperInfo(Hashtable<String, String> devInfo) {
+		Log.e(LOG_TAG, "BAASPARSE CONFIGDEVELOPERINFO ...");
 		String appId = devInfo.get("ParseApplicationId");
 		String clientKey = devInfo.get("ParseClientKey");
 		
@@ -98,9 +83,9 @@ public class BaaSParse implements InterfaceBaaS {
 			public void done(ParseException e) {
 
 				if (e == null) {
-					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_SignUpSucceed, makeErrorJsonString(e), cbID);
+					BaaSWrapper.onBaaSActionResult(mAdapter, true, makeErrorJsonString(e), cbID);
 				} else {
-					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_SignUpFailed, makeErrorJsonString(e), cbID);
+					BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
 				}
 			}
 		});
@@ -114,11 +99,11 @@ public class BaaSParse implements InterfaceBaaS {
 			@Override
 			public void done(ParseUser user, ParseException e) {
 				if (e == null) {
-		            BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_LoginSucceed, makeErrorJsonString(e), cbID); 
+		            BaaSWrapper.onBaaSActionResult(mAdapter, true, makeErrorJsonString(e), cbID); 
 		            
 		            Log.i(LOG_TAG, "Login successfully.");
 		        } else {
-		        	BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_LoginFailed, makeErrorJsonString(e), cbID);
+		        	BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
 		            
 		            Log.i(LOG_TAG, "Error when logging in. Error: " + e.getMessage());
 		        }
@@ -133,11 +118,11 @@ public class BaaSParse implements InterfaceBaaS {
 			@Override
 			public void done(ParseException e) {
 				if (e == null) {
-					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_LogoutSucceed, makeErrorJsonString(e), cbID);
+					BaaSWrapper.onBaaSActionResult(mAdapter, true, makeErrorJsonString(e), cbID);
 					
 					Log.i(LOG_TAG, "Logout successfully");
 				} else {
-					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_LogoutFailed, makeErrorJsonString(e), cbID);
+					BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
 					
 					Log.i(LOG_TAG, "Logout error.");
 				}
@@ -148,6 +133,10 @@ public class BaaSParse implements InterfaceBaaS {
 	@Override
 	public boolean isLoggedIn() {
 		return ParseUser.getCurrentUser() != null;
+	}
+	
+	public String getUserID() {
+		return ParseUser.getCurrentUser().getObjectId();
 	}
 	
 	private void updateParseObject(ParseObject parseObj, JSONObject jsonObj) throws JSONException {
@@ -167,6 +156,65 @@ public class BaaSParse implements InterfaceBaaS {
 		return parseObj;
 	}
 
+	public String getInstallationInfo() {
+		Log.e(LOG_TAG, "ParseInstallation: " + ParseInstallation.getCurrentInstallation().toString());       
+		return ParseInstallation.getCurrentInstallation().toString();
+	}
+	
+	public void setInstallationInfo(String jsonData) {
+		Log.e(LOG_TAG, "BaaSParse does not support setInstallationInfo");
+	}
+	
+	public String getSubscribedChannels() {
+		return ParseInstallation.getCurrentInstallation().getList("channels").toArray().toString();		
+	}
+	
+	public void subscribeChannels(String channelList) throws JSONException {
+		JSONArray jArray = new JSONArray(channelList);
+
+		ArrayList<String> listdata = new ArrayList<String>();     
+		if (jArray != null) { 
+			for (int i=0; i<jArray.length(); i++){ 
+				listdata.add(jArray.get(i).toString());
+			} 
+		}
+		
+		ParsePush.subscribeInBackground(channelList, new SaveCallback() {
+			
+			@Override
+			public void done(ParseException e) {
+				if (e != null) {
+					Log.e(LOG_TAG, "Subscribe channels failed with error: " + e.getMessage());
+				} else {
+					Log.i(LOG_TAG, "Subscribe channels succeeded");
+				}
+			}
+		});
+	}
+	
+	public void unsubscribeChannels(String channelList) throws JSONException {
+		JSONArray jArray = new JSONArray(channelList);
+
+		ArrayList<String> listdata = new ArrayList<String>();     
+		if (jArray != null) { 
+			for (int i=0; i<jArray.length(); i++){ 
+				listdata.add(jArray.get(i).toString());
+			} 
+		}
+		
+		ParsePush.unsubscribeInBackground(channelList, new SaveCallback() {
+			
+			@Override
+			public void done(ParseException e) {
+				if (e != null) {
+					Log.e(LOG_TAG, "Unsubscribe channels failed with error: " + e.getMessage());
+				} else {
+					Log.i(LOG_TAG, "Ubsubscribe channels succeeded");
+				}
+			}
+		});
+	}
+	
 	@Override
 	public void saveObjectInBackground(String className, String json, int callbackID) {
 		final long cbID = callbackID;
@@ -178,16 +226,16 @@ public class BaaSParse implements InterfaceBaaS {
 				@Override
 				public void done(ParseException e) {
 					if (e == null) {
-						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_SaveSucceed, parseObj.getObjectId(), cbID);
+						BaaSWrapper.onBaaSActionResult(mAdapter, true, parseObj.getObjectId(), cbID);
 						Log.i(LOG_TAG, "Save object successfully.");
 					} else {
-						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_SaveFailed, makeErrorJsonString(e), cbID);
+						BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
 						Log.i(LOG_TAG, "Error when saving object. Error: " + e.getMessage());
 					}
 				}
 			});
 		} catch (JSONException ex) {
-			BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_SaveFailed, null, cbID);
+			BaaSWrapper.onBaaSActionResult(mAdapter, false, null, cbID);
 			Log.i(LOG_TAG, "Error when parse json string.");
 		}
 	}
@@ -212,6 +260,39 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 	
 	@Override
+	public void findObjectsInBackground(String className, String whereKey, String containInArray, int callbackID) {
+		final long cbID = callbackID;
+		try {
+			JSONArray jArray = new JSONArray(containInArray);
+
+			ArrayList<String> listdata = new ArrayList<String>();     
+			if (jArray != null) { 
+				for (int i=0; i<jArray.length(); i++){ 
+					listdata.add(jArray.get(i).toString());
+				} 
+			}
+			
+			ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
+			query.whereContainedIn(whereKey, listdata);
+			query.findInBackground(new FindCallback<ParseObject>() {
+				
+				@Override
+				public void done(List<ParseObject> listObjects, ParseException error) {
+
+					if (error != null) {
+						BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(error), cbID);
+					} else {
+						BaaSWrapper.onBaaSActionResult(mAdapter, true, listObjects.toArray().toString(), cbID);
+					}
+				}
+			});
+
+		} catch (JSONException e) {
+			Log.e(LOG_TAG, "Error when parse JSONArray: " + e.getMessage());
+		}
+	}
+	
+	@Override
 	public void findObjectInBackground(String className, String whereKey, String equalTo, int callbackID) {
 		final long cbID = callbackID;
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
@@ -228,15 +309,15 @@ public class BaaSParse implements InterfaceBaaS {
 							jsonObj.accumulate(key, obj.get(key));
 						}
 
-						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveSucceed, jsonObj.toString(), cbID);
+						BaaSWrapper.onBaaSActionResult(mAdapter, true, jsonObj.toString(), cbID);
 						Log.i(LOG_TAG, "Retrieve object successfully. ");
 					} catch (JSONException ex) {
-						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveFailed, null, cbID);
+						BaaSWrapper.onBaaSActionResult(mAdapter, false, null, cbID);
 						Log.i(LOG_TAG, "Error when converting parse object to json. " + ex.getMessage());
 					}
 
 				} else {
-					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveFailed, makeErrorJsonString(e), cbID);
+					BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
 					Log.i(LOG_TAG, "Error when retrieve object. " + e.getMessage());
 				}
 			}
@@ -259,20 +340,54 @@ public class BaaSParse implements InterfaceBaaS {
 							jsonObj.accumulate(key, obj.get(key));
 						}
 						
-						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveSucceed, jsonObj.toString(), cbID);
+						BaaSWrapper.onBaaSActionResult(mAdapter, true, jsonObj.toString(), cbID);
 						Log.i(LOG_TAG, "Retrieve object successfully. ");
 					} catch (JSONException ex) {
-						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveFailed, null, cbID);
+						BaaSWrapper.onBaaSActionResult(mAdapter, false, null, cbID);
 						Log.i(LOG_TAG, "Error when converting parse object to json. " + ex.getMessage());
 					}
  					
 				} else {
-					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveFailed, makeErrorJsonString(e), cbID);
+					BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
 					Log.i(LOG_TAG, "Error when retrieve object. " + e.getMessage());
 				}
 			}
 		});
 	}
+	
+	@Override
+	public void getObjectsInBackground(String className, String objIds, int callbackID) {
+		final long cbID = callbackID;
+		try {
+			JSONArray jArray = new JSONArray(objIds);
+
+			ArrayList<String> listdata = new ArrayList<String>();     
+			if (jArray != null) { 
+				for (int i=0; i<jArray.length(); i++){ 
+					listdata.add(jArray.get(i).toString());
+				} 
+			}
+			
+			ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
+			query.whereContainedIn("objectId", listdata);
+			query.findInBackground(new FindCallback<ParseObject>() {
+				
+				@Override
+				public void done(List<ParseObject> listObjects, ParseException error) {
+
+					if (error != null) {
+						BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(error), cbID);
+					} else {
+						BaaSWrapper.onBaaSActionResult(mAdapter, true, listObjects.toArray().toString(), cbID);
+					}
+				}
+			});
+
+		} catch (JSONException e) {
+			Log.e(LOG_TAG, "Error when parse JSONArray: " + e.getMessage());
+		}
+	}
+
 
 	@Override
 	public String getObject(String className, String objId) {
@@ -315,20 +430,20 @@ public class BaaSParse implements InterfaceBaaS {
 							@Override
 							public void done(ParseException e) {
 								if (e == null) {
-									BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveSucceed, parseObj.getObjectId(), cbID);
+									BaaSWrapper.onBaaSActionResult(mAdapter, true, parseObj.getObjectId(), cbID);
 									Log.i(LOG_TAG, "Update object successfully. ");
 								} else {
-									BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_UpdateFailed, makeErrorJsonString(e), cbID);
+									BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
 									Log.i(LOG_TAG, "Error when saving object. " + e.getMessage());
 								}
 							}
 						});
 					} catch (JSONException ex) {
-						BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_RetrieveFailed, null, cbID);
+						BaaSWrapper.onBaaSActionResult(mAdapter, false, null, cbID);
 						Log.i(LOG_TAG, "Error when converting parse object to json. " + ex.getMessage());
 					}
 				} else {
-					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_UpdateFailed, makeErrorJsonString(e), cbID);
+					BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
 				}
 			}
 		});
@@ -371,18 +486,18 @@ public class BaaSParse implements InterfaceBaaS {
 						public void done(ParseException arg0) {
 							if (arg0 == null) {
 								Log.i("Parse", "Delete object in background successfully");
-								BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_DeleteSucceed, null, cbID);
+								BaaSWrapper.onBaaSActionResult(mAdapter, true, null, cbID);
 
 							} else {
 								Log.e("Parse", "Delete object in background failed with error: " + arg0);
-								BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_DeleteFailed, makeErrorJsonString(arg0), cbID);
+								BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(arg0), cbID);
 							}
 						}
 					});
 
 				} else {
 					Log.e("Parse", "Cannot find object for deleting");
-					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_DeleteFailed, makeErrorJsonString(e), cbID);
+					BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
 				}
 			}
 		});
@@ -414,11 +529,11 @@ public class BaaSParse implements InterfaceBaaS {
 				if (config != null && e == null) {
 					Log.i("Parse", "Fetch config from server successfully");
 					mCurrentConfig = config;
-					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_FetchConfigSucceed, "Fetch config from server successfully", cbID);
+					BaaSWrapper.onBaaSActionResult(mAdapter, true, "Fetch config from server successfully", cbID);
 				} else {
 					Log.e("Parse", "Fetch config from server failed. Use current config instead");
 					mCurrentConfig = ParseConfig.getCurrentConfig();
-					BaaSWrapper.onBaaSActionResult(mAdapter, RESULT_CODE_FetchConfigFailed, makeErrorJsonString(e), cbID);
+					BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
 				}
 			}
 		});
@@ -484,4 +599,5 @@ public class BaaSParse implements InterfaceBaaS {
 		Log.i("Parse", "Parse Config >>> Get Array: "+ ret);
 		return ret;
 	}
+
 }

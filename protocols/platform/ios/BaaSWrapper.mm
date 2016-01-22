@@ -63,7 +63,7 @@ using namespace cocos2d::plugin;
 
 + (NSString*) makeErrorJsonString: (NSError*) error {
     if (error != nil) {
-        return [NSString stringWithFormat:@"{ \"code\": %ld, \"description\": \"%@\" }", (long) error.code, error.description];
+        return [NSString stringWithFormat:@"{ \"code\": %ld }", (long) error.code];
     }
     
     return nil;

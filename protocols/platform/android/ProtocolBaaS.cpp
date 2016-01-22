@@ -302,6 +302,7 @@ void ProtocolBaaS::findObjectsInBackground(const std::string& className, const s
 		t.env->DeleteLocalRef(jvalue);
 		t.env->DeleteLocalRef(t.classID);
 	}
+
 }
 
 const char* ProtocolBaaS::getObject(const std::string& className,
@@ -424,6 +425,10 @@ bool ProtocolBaaS::deleteObject(const std::string& className,
 	}
 
 	return nullptr;
+}
+
+std::string ProtocolBaaS::getUserID() {
+	return PluginUtils::callJavaStringFuncWithName(this, "getUserID");
 }
 
 

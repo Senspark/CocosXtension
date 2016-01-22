@@ -13,6 +13,7 @@ $(addprefix ../../platform/android/, \
 	AdColonyProtocolAds.cpp \
     AdmobProtocolAds.cpp \
     ChartboostProtocolAds.cpp \
+    UnityProtocolAds.cpp \
     FacebookProtocolAds.cpp \
     FacebookProtocolShare.cpp \
     FacebookProtocolSocial.cpp \
@@ -23,6 +24,8 @@ $(addprefix ../../platform/android/, \
     GooglePlayProtocolSocial.cpp \
     GooglePlayProtocolUser.cpp \
     GoogleProtocolAnalytics.cpp \
+    GooglePlusProtocolUser.cpp \
+    GooglePlusProtocolShare.cpp \
     ParseProtocolBaaS.cpp \
     BaasboxProtocolBaas.cpp \
 ) \

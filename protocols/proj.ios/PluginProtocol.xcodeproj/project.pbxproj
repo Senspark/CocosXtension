@@ -52,6 +52,7 @@
 		051FF7BB192CE3CC00C43A06 /* IAPWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IAPWrapper.mm; sourceTree = "<group>"; };
 		05AB25161988F62000D00E8E /* ParseUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseUtils.h; sourceTree = "<group>"; };
 		05AB25171988F62000D00E8E /* ParseUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ParseUtils.mm; sourceTree = "<group>"; };
+		17F253E81C51E42F00BF2EF9 /* android */ = {isa = PBXFileReference; lastKnownFileType = folder; name = android; path = ../platform/android; sourceTree = "<group>"; };
 		950768851C3BB943004293FF /* ProtocolPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProtocolPlatform.h; sourceTree = "<group>"; };
 		950768861C3BCAAD004293FF /* ProtocolPlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ProtocolPlatform.mm; sourceTree = "<group>"; };
 		950768881C3BCD92004293FF /* EReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EReachability.h; sourceTree = "<group>"; };
@@ -222,6 +223,7 @@
 		FA09A316168ADBC2008C1C7B = {
 			isa = PBXGroup;
 			children = (
+				17F253E81C51E42F00BF2EF9 /* android */,
 				FAB6DF951755D7E500C90D89 /* PluginParam.cpp */,
 				FA09A33C168ADC1F008C1C7B /* PluginManager.cpp */,
 				FA0CB8B5168D3CC200E36B11 /* ios */,

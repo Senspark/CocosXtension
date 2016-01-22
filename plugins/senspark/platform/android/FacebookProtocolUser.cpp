@@ -6,10 +6,8 @@
 //  Copyright (c) 2015 Senspark Co., Ltd. All rights reserved.
 //
 
-#include "FacebookProtocolUser.h"
+#import "FacebookProtocolUser.h"
 #include "PluginUtils.h"
-
-#define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
 USING_NS_SENSPARK_PLUGIN_USER;
 
@@ -34,6 +32,7 @@ void FacebookProtocolUser::loginWithReadPermissions(const std::string &permissio
 }
 
 void FacebookProtocolUser::loginWithReadPermissions(const std::string &permission, FacebookProtocolUser::UserCallback &cb) {
+
     loginWithReadPermissions(permission);
 }
 
@@ -65,6 +64,7 @@ std::string FacebookProtocolUser::getUserFirstName() {
 }
 
 void FacebookProtocolUser::graphRequest(const std::string& graphPath, const FBParam& params, FacebookProtocolUser::UserCallback& callback) {
+
     PluginParam pathParam(graphPath.c_str());
     PluginParam paramsParam(params);
     CallbackWrapper *wrapper = new CallbackWrapper(callback);
@@ -73,12 +73,13 @@ void FacebookProtocolUser::graphRequest(const std::string& graphPath, const FBPa
     callFuncWithParam("graphRequestWithParams", &pathParam, &paramsParam, &cbID, nullptr);
 }
 
-void FacebookProtocolUser::api(const std::string &graphPath, HttpMethod method, const FBParam &param, FacebookProtocolUser::UserCallback& callback) {
+void FacebookProtocolUser::api(const std::string &graphPath, HttpMethod method, const FBParam &params, FacebookProtocolUser::UserCallback &callback) {
+
     PluginParam pathParam(graphPath.c_str());
     PluginParam _method((int) method);
-    PluginParam paramsParam(param);
+    PluginParam paramsParam(params);
     CallbackWrapper *wrapper = new CallbackWrapper(callback);
     PluginParam cbID((long)wrapper);
 
-    callFuncWithParam("api", &pathParam, &_method, &paramsParam, &cbID, nullptr);
+    callFuncWithParam("api", &pathParam, &_method, &paramsParam, &cbID, NULL);
 }

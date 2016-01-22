@@ -25,9 +25,6 @@
 #import "InterfaceShare.h"
 
 @interface ShareFacebook : NSObject <InterfaceShare>
-{
-    NSMutableDictionary* _contentMap;
-}
 
 @property BOOL debug;
 

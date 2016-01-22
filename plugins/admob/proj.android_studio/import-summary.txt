@@ -1,0 +1,79 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+From libPluginAdmob:
+* .DS_Store
+* ForManifest.xml
+* build.xml
+* proguard-project.txt
+From libPluginProtocol:
+* Debug/
+* Debug/android/
+* Debug/android/subdir.mk
+* Debug/makefile
+* Debug/obj/
+* Debug/obj/local/
+* Debug/obj/local/armeabi-v7a/
+* Debug/obj/local/armeabi-v7a/objs/
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/__/
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/__/__/
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/__/__/platform/
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/__/__/platform/android/
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/__/__/platform/android/subdir.mk
+* Debug/obj/local/armeabi-v7a/objs/PluginProtocolStatic/__/__/subdir.mk
+* Debug/obj/local/armeabi-v7a/objs/android_native_app_glue/
+* Debug/obj/local/armeabi-v7a/objs/android_native_app_glue/subdir.mk
+* Debug/obj/local/armeabi/
+* Debug/obj/local/armeabi/objs/
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/__/
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/__/__/
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/__/__/platform/
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/__/__/platform/android/
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/__/__/platform/android/subdir.mk
+* Debug/obj/local/armeabi/objs/PluginProtocolStatic/__/__/subdir.mk
+* Debug/obj/local/armeabi/objs/android_native_app_glue/
+* Debug/obj/local/armeabi/objs/android_native_app_glue/subdir.mk
+* Debug/objects.mk
+* Debug/sources.mk
+* build.xml
+* build_native.sh
+* proguard-project.txt
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+In libPluginProtocol:
+* AndroidManifest.xml => libPluginProtocol/src/main/AndroidManifest.xml
+* jni/ => libPluginProtocol/src/main/jni/
+* lint.xml => libPluginProtocol/lint.xml
+* res/ => libPluginProtocol/src/main/res/
+* src/ => libPluginProtocol/src/main/java/
+In libPluginAdmob:
+* AndroidManifest.xml => libPluginAdmob/src/main/AndroidManifest.xml
+* res/ => libPluginAdmob/src/main/res/
+* src/ => libPluginAdmob/src/main/java/
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

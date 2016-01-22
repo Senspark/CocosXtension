@@ -101,7 +101,7 @@ plugins/punchbox*
 plugins/touchpay*
 samplesPrivate*
 userconf.ini
-samples/HelloPluginsLua/runtime
+*.iml
 plugins/googleplay/platform/ios/gpg.framework
 plugins/googleplay/platform/ios/gpg.bundle
 plugins/googleplay/platform/android/include/gpg
@@ -115,3 +115,6 @@ plugins/google-play/platform/ios/gpg.framework
 plugins/google-play/platform/ios/OpenSource
 plugins/google-play/platform/ios/GooglePlus.framework
 plugins/google-play/platform/android/lib
+.gradle
+.idea
+wrapper

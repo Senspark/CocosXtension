@@ -16,11 +16,12 @@ public interface InterfaceBaaS {
     public String saveObject(String className, String json);
   
     public void getObjectInBackground(String className, String objId, int cbID);
-    public void getObjectsInBackground(String className, String stringJsonArrayId, int cbID);
+
+    public void getObjectsInBackground(String className, String objIds, int cbID);
     public String getObject(String className, String objId);
     
     public void findObjectInBackground(String className, String whereKey, String equalTo, int cbID);
-    public void findObjectsInBackground(String className, String whereKey, String stringJsonArrayValue, int cbID);
+    public void findObjectsInBackground(String className, String whereKey, String containInArray, int cbID);
     
     public void updateObjectInBackground(String className, String objId, String jsonChanges, int cbID);
     public String updateObject(String className, String objId, String jsonChanges);

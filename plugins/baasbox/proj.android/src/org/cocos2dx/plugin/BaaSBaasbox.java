@@ -22,6 +22,7 @@ import com.baasbox.android.json.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.Override;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -123,7 +124,6 @@ Log.d(TAG,"login with username : "+userName+" password : "+password);
         return BaasUser.current() != null;
     }
 
-    @Override
     public String getUserID(){
         return BaasUser.current().getName();
     }
@@ -536,9 +536,42 @@ Log.d(TAG,"login with username : "+userName+" password : "+password);
         });
     }
 
-    @Override
     public String deleteObject(String colectionName, String objId) {
         return "Baasbox is not support";
+    }
+
+    public boolean getBoolConfig(String param) {
+
+        return false;
+    }
+
+    public int getIntegerConfig(String param) {
+
+        return 0;
+    }
+
+    public double getDoubleConfig(String param) {
+
+        return 0.0;
+    }
+
+    public long getLongConfig(String param) {
+
+        return 0;
+    }
+
+    public String getStringConfig(String param) {
+
+        return "";
+    }
+
+    public String getArrayConfig(String param) {
+
+        return "";
+    }
+
+    public void fetchConfigInBackground(int callbackID) {
+
     }
 
 }

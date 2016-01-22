@@ -17,11 +17,11 @@
 using namespace cocos2d::plugin;
 
 @interface GPPShareDelegate : NSObject <GPPDeepLinkDelegate, GPPShareDelegate>
-{
-    long _callbackID;
-}
 
-- (id) initWithCallbackID: (long) callbackID;
+@property (nonatomic, retain) ShareGooglePlus* sharer;
+@property (assign) long callbackID;
+
+- (id) initWithSharer: (id) sharer andCallbackID: (long) callbackID;
 
 - (void)finishedSharingWithError:(NSError *)error;
 - (void)didReceiveDeepLink: (GPPDeepLink *)deepLink;
@@ -30,9 +30,14 @@ using namespace cocos2d::plugin;
 
 @implementation GPPShareDelegate
 
-- (id) initWithCallbackID: (long) callbackID {
+@synthesize callbackID = _callbackID;
+@synthesize sharer = _sharer;
+
+- (id) initWithSharer:(id)sharer andCallbackID:(long)callbackID {
+    
     if (self = [self init]) {
-        _callbackID = callbackID;
+        self.callbackID = callbackID;
+        self.sharer = sharer;
     }
     
     return self;
@@ -40,9 +45,9 @@ using namespace cocos2d::plugin;
 
 - (void)finishedSharingWithError:(NSError *)error {
     if (!error) {
-        [ShareWrapper onShareResult:self withRet:(int) ShareResultCode::kShareSuccess withContent:nil withMsg:@"[Google+] Share succeeded" andCallbackID:_callbackID];
+        [ShareWrapper onShareResult:_sharer withRet:(int) ShareResultCode::kShareSuccess withContent:nil withMsg:@"[Google+] Share succeeded" andCallbackID:_callbackID];
     } else {
-        [ShareWrapper onShareResult:self withRet:(int) ShareResultCode::kShareFail withContent:nil withMsg:@"[Google+] Share failed" andCallbackID:_callbackID];
+        [ShareWrapper onShareResult:_sharer withRet:(int) ShareResultCode::kShareFail withContent:nil withMsg:@"[Google+] Share failed" andCallbackID:_callbackID];
     }
     
     [self release];
@@ -50,6 +55,12 @@ using namespace cocos2d::plugin;
 
 - (void)didReceiveDeepLink: (GPPDeepLink *)deepLink {
     NSLog(@"deepLinkID = %@", [deepLink deepLinkID]);
+}
+
+- (void) dealloc {
+    [super dealloc];
+    
+    [_sharer release];
 }
 
 @end
@@ -69,8 +80,8 @@ using namespace cocos2d::plugin;
     NSString* deepLinkId        = (NSString*) [shareInfo objectForKey:@"deepLinkId"];
     NSString* contentDeepLinkId = (NSString*) [shareInfo objectForKey:@"contentDeepLinkId"];
     
-    GPPShare* sharer = [[GPPShare alloc] init];
-    sharer.delegate = [[GPPShareDelegate alloc] initWithCallbackID:cbID];
+    GPPShare* sharer = [GPPShare sharedInstance];
+    sharer.delegate = [[GPPShareDelegate alloc] initWithSharer:self andCallbackID: cbID];
     
     id<GPPNativeShareBuilder> shareBuilder = [sharer nativeShareDialog];
     
@@ -83,7 +94,6 @@ using namespace cocos2d::plugin;
                                              URL:[NSURL URLWithString:urlToShare]
                                       deepLinkID:deepLinkId];
     [shareBuilder open];
-    [sharer release];
 }
 
 #pragma mark -

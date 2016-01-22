@@ -127,6 +127,12 @@ void PluginProtocol::callFuncWithParam(const char* funcName, std::vector<PluginP
                 PluginUtils::getEnv()->DeleteLocalRef(jstr);
             }
             break;
+        case PluginParam::kParamTypeDouble:
+        	PluginUtils::callJavaFunctionWithName_oneParam(this, funcName, "(D)V", pRetParam->getDoubleValue());
+        	break;
+        case PluginParam::kParamTypeLong:
+        	PluginUtils::callJavaFunctionWithName_oneParam(this, funcName, "(J)V", pRetParam->getLongValue());
+        	break;
         case PluginParam::kParamTypeStringMap:
         case PluginParam::kParamTypeMap:
             {
@@ -185,6 +191,26 @@ float PluginProtocol::callFloatFuncWithParam(const char* funcName, PluginParam* 
 float PluginProtocol::callFloatFuncWithParam(const char* funcName, std::vector<PluginParam*> params)
 {
     CALL_JAVA_FUNC(float, Float, 0.0f, "F")
+}
+
+double PluginProtocol::callDoubleFuncWithParam(const char* funcName, PluginParam* param, ...)
+{
+    CALL_JAVA_FUNC_WITH_VALIST(Double)
+}
+
+double PluginProtocol::callDoubleFuncWithParam(const char* funcName, std::vector<PluginParam*> params)
+{
+    CALL_JAVA_FUNC(double, Double, 0.0f, "D")
+}
+
+long PluginProtocol::callLongFuncWithParam(const char* funcName, PluginParam* param, ...)
+{
+    CALL_JAVA_FUNC_WITH_VALIST(Long)
+}
+
+long PluginProtocol::callLongFuncWithParam(const char* funcName, std::vector<PluginParam*> params)
+{
+    CALL_JAVA_FUNC(long, Long, 0, "J")
 }
 
 }} //namespace cocos2d { namespace plugin {

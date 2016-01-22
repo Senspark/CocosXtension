@@ -37,6 +37,11 @@ ProtocolPlatform::~ProtocolPlatform() {
     [_reachability release];
 }
 
+bool ProtocolPlatform::isRelease() {
+    NSLog(@"ProtocolPlatform does not support isRelease on iOS");
+    return false;
+}
+
 bool ProtocolPlatform::isAppInstalled(const std::string& url) {
     return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:[NSString stringWithUTF8String:url.c_str()]]];
 }
@@ -45,6 +50,11 @@ bool ProtocolPlatform::isConnected(const std::string& hostName) {
     EReachability *reachability = [EReachability reachabilityWithHostName:[NSString stringWithUTF8String:hostName.c_str()]];
     
     return [reachability isReachable];
+}
+
+std::string ProtocolPlatform::getSHA1CertFingerprint() {
+    NSLog(@"ProtocolPlatform does not support getSHA1CertFingerprint on iOS");
+    return "";
 }
 
 double ProtocolPlatform::getVersionCode() {
