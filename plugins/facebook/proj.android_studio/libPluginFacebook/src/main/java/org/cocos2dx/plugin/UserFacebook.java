@@ -168,6 +168,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 
 	@Override
 	public void logout() {
+		Log.i(LOG_TAG, mAccessToken == null ? "mAccessToken is null" : "mAccessToken is NOT null");
 		if (mAccessToken != null) {
 			LoginManager.getInstance().logOut();
 			mAccessToken = null;

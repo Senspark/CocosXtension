@@ -36,7 +36,7 @@ void ParseProtocolBaaS::fetchUserInfo(BaaSCallback &cb) {
 }
 
 std::string ParseProtocolBaaS::getInstallationInfo() {
-    return callStringFuncWithParam("getInstallationInfo", nullptr);
+	return callStringFuncWithParam("getInstallationInfo", nullptr);
 }
 
 std::string ParseProtocolBaaS::setInstallationInfo(const std::string& changes) {

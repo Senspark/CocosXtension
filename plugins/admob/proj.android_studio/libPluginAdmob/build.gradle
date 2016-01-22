@@ -18,6 +18,6 @@ android {
 }
 
 dependencies {
-    compile project(':libProtocols')
+    compile project(':libPluginProtocol')
     compile 'com.google.android.gms:play-services-ads:8.4.0'
 }

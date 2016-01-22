@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         minSdkVersion 10
-        targetSdkVersion 10
+        targetSdkVersion 23
     }
 
     buildTypes {
@@ -18,6 +18,7 @@ android {
 }
 
 dependencies {
-    compile project(':libProtocols')
-    compile project(':facebookSDK')
+    compile project(':libPluginProtocol')
+    compile 'com.facebook.android:facebook-android-sdk:4.8.1'
+    compile 'com.facebook.android:audience-network-sdk:4.8.1'
 }
