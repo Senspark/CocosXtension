@@ -57,7 +57,6 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	private Activity mContext = null;
 	private InterfaceUser mAdapter = null;
 	private boolean bDebug = true;
-	private boolean isLoggedIn = false;
 	private CallbackManager mCallbackManager = null;
 	private AccessTokenTracker mAccessTokenTracker = null;
 	private AccessToken mAccessToken = null;
@@ -95,7 +94,6 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 					@Override
 					public void onSuccess(LoginResult result) {
 						LogD("Login facebook success");
-						isLoggedIn = true;
 						UserWrapper.onActionResult(mAdapter,
 								UserWrapper.ACTION_RET_LOGIN_SUCCEED,
 								"Login facebook success.");
@@ -104,7 +102,6 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 					@Override
 					public void onError(FacebookException error) {
 						LogD("Login facebook error" + error.getMessage());
-						isLoggedIn = false;
 						UserWrapper.onActionResult(mAdapter,
 								UserWrapper.ACTION_RET_LOGIN_FAILED,
 								"Login facebook fail: " + error.getMessage());
@@ -114,7 +111,6 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 					@Override
 					public void onCancel() {
 						LogD("Login facebook cancel");
-						isLoggedIn = false;
 						UserWrapper.onActionResult(mAdapter,
 								UserWrapper.ACTION_RET_LOGIN_FAILED,
 								"Login facebook be cancelled");
@@ -172,7 +168,6 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 		if (mAccessToken != null) {
 			LoginManager.getInstance().logOut();
 			mAccessToken = null;
-			isLoggedIn = false;
 			UserWrapper.onActionResult(mAdapter,
 					UserWrapper.ACTION_RET_LOGOUT_SUCCEED, "Facebook logout");
 		} else {
@@ -213,7 +208,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	
 	@Override
 	public boolean isLoggedIn() {
-		return isLoggedIn;
+		return AccessToken.getCurrentAccessToken() != null;
 	}
 
 	@Override

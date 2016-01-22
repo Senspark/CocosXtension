@@ -3,6 +3,7 @@
 #include <android/log.h>
 #include "PluginUtils.h"
 #include "PluginJavaData.h"
+#include <sstream>
 
 using namespace std;
 namespace cocos2d {
