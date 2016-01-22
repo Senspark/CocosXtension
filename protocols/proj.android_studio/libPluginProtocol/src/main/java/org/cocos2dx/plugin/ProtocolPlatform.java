@@ -1,8 +1,5 @@
 package org.cocos2dx.plugin;
 
-import java.security.MessageDigest;
-import java.util.Locale;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +10,9 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+
+import java.security.MessageDigest;
+import java.util.Locale;
 
 public class ProtocolPlatform  {
 	private static final int RC_UNUSED = 5001;
