@@ -59,6 +59,18 @@ void BaasboxProtocolBaaS::loadUsersWithParameters(const std::string& condition, 
     callFuncWithParam("loadUsersWithParameters", &conditionParam, &callbackParam, nullptr);
 }
 
+void BaasboxProtocolBaaS::loadAssetJSON(const std::string &assetName, BaaSCallback &cb){
+    PluginParam assetNameParam(assetName.c_str());
+    
+    CallbackWrapper *wrapper = new CallbackWrapper(cb);
+    
+    PluginParam callbackParam((long)wrapper);
+    
+    callFuncWithParam("loadAssetJSON", &assetNameParam, &callbackParam,nullptr);
+}
+
+
+
 
 
 

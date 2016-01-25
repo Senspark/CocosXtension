@@ -457,6 +457,31 @@ using namespace cocos2d::plugin;
     return false;
 }
 
+// Asset
+
+-(void) loadAssetJSON:(NSDictionary *)params{
+    NSString* assetName = [params objectForKey:@"Param1"];
+    long cbId = [[params objectForKey:@"Param2"] longValue];
+    
+    NSString* path = [NSString stringWithFormat:@"asset/%@/data",assetName];
+    
+    NSLog(@"loadAssetJSON with name: %@ cbid: %ld",assetName,cbId);
+    
+    BAAClient *client = [BAAClient sharedClient];
+    [client getPath:path
+         parameters:nil
+            success:^(id responseObject) {
+                NSDictionary *d = responseObject[@"data"];
+                [BaaSWrapper onBaaSActionResult:self withReturnCode:true andReturnObj:d andCallbackID:cbId];
+                NSLog(@"resp %@", responseObject);
+            }
+            failure:^(NSError *error) {
+                NSLog(@"err %@", error);
+                [BaaSWrapper onBaaSActionResult:self withReturnCode:false andReturnMsg:[BaaSWrapper makeErrorJsonString:error] andCallbackID:cbId];
+            }];
+}
+
+
 
 
 @end

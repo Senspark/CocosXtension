@@ -83,3 +83,22 @@ void BaasboxProtocolBaaS::loadUsersWithParameters(const std::string& condition, 
 	}
 }
 
+void BaasboxProtocolBaaS::loadAssetJSON(const std::string &assetName, BaaSCallback &cb){
+    PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+    PluginJniMethodInfo t;
+    if (PluginJniHelper::getMethodInfo(
+                                       t
+                                       , pData->jclassName.c_str()
+                                       , "loadAssetJSON"
+                                       , "(Ljava/lang/String;I)V"))
+    {
+        jstring strAssetName = t.env->NewStringUTF(assetName.c_str());
+        CallbackWrapper* wrapper = new CallbackWrapper(cb);
+        
+        // invoke java method
+        t.env->CallVoidMethod(pData->jobj, t.methodID, strAssetName, (long)wrapper);
+        t.env->DeleteLocalRef(strAssetName);
+        t.env->DeleteLocalRef(t.classID);
+    }
+}
+

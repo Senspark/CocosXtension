@@ -29,6 +29,8 @@ public:
     void fetchUserProfile(BaaSCallback &cb);
     
     void loadUsersWithParameters(const std::string& condition, BaaSCallback &cb);
+    
+    void loadAssetJSON(const std::string& assetName, BaaSCallback &cb);
 };
 
 NS_SENSPARK_PLUGIN_BAAS_END

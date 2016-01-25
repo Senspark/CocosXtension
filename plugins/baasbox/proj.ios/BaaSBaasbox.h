@@ -35,5 +35,7 @@
  */
 -(void) loadUsersWithParameters:(NSDictionary*) params;
 
+-(void) loadAssetJSON:(NSDictionary*) params;
+
 
 @end

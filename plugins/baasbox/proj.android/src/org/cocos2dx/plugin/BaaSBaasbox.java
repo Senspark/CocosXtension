@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.baasbox.android.BaasAsset;
 import com.baasbox.android.BaasBox;
 import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasException;
@@ -262,9 +263,9 @@ public class BaaSBaasbox implements InterfaceBaaS {
 
                     JsonObject userInfo = new JsonObject();
                     userInfo.put("visibleByRegisteredUsers", baasUser.getScope(BaasUser.Scope.REGISTERED));
-                    userInfo.put("visibleByTheUser",         baasUser.getScope(BaasUser.Scope.PRIVATE));
-                    userInfo.put("visibleByAnonymousUsers",  baasUser.getScope(BaasUser.Scope.PUBLIC));
-                    userInfo.put("visibleByFriends",         baasUser.getScope(BaasUser.Scope.FRIEND));
+                    userInfo.put("visibleByTheUser", baasUser.getScope(BaasUser.Scope.PRIVATE));
+                    userInfo.put("visibleByAnonymousUsers", baasUser.getScope(BaasUser.Scope.PUBLIC));
+                    userInfo.put("visibleByFriends", baasUser.getScope(BaasUser.Scope.FRIEND));
 
                     Log.d(TAG, "load visibleByRegister current user : " + userInfo);
                     BaaSWrapper.onBaaSActionResult(mAdapter, true, userInfo.toString(), lCallbackId);
@@ -334,11 +335,11 @@ public class BaaSBaasbox implements InterfaceBaaS {
         doc.save(new BaasHandler<BaasDocument>() {
             @Override
             public void handle(BaasResult<BaasDocument> res) {
-                if(res.isSuccess()) {
-                    Log.d(TAG,"Saved object: "+res.value());
+                if (res.isSuccess()) {
+                    Log.d(TAG, "Saved object: " + res.value());
                     BaaSWrapper.onBaaSActionResult(mAdapter, true, res.value().toString(), lCbId);
                 } else {
-                    Log.d(TAG,"Saved object error ");
+                    Log.d(TAG, "Saved object error ");
                     BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(res.error()), lCbId);
                 }
             }
@@ -495,15 +496,15 @@ public class BaaSBaasbox implements InterfaceBaaS {
             Object value = e.getValue();
             BaasDocumentPutObject(doc,key,value);
         }
-        doc.save(SaveMode.IGNORE_VERSION,new BaasHandler<BaasDocument>(){
+        doc.save(SaveMode.IGNORE_VERSION, new BaasHandler<BaasDocument>() {
             @Override
             public void handle(BaasResult<BaasDocument> res) {
-                if(res.isSuccess()){
-                    Log.d(TAG,"Document update "+res.value().getId());
+                if (res.isSuccess()) {
+                    Log.d(TAG, "Document update " + res.value().getId());
                     BaasDocument d = res.value();
                     BaaSWrapper.onBaaSActionResult(mAdapter, true, d.toJson().toString(), lCbId);
                 } else {
-                    Log.e(TAG,"Error",res.error());
+                    Log.e(TAG, "Error", res.error());
                     BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(res.error()), lCbId);
                 }
             }
@@ -539,40 +540,21 @@ public class BaaSBaasbox implements InterfaceBaaS {
         return "Baasbox is not support";
     }
 
-    public boolean getBoolConfig(String param) {
-
-        return false;
+    public void loadAssetJSON(String assetName, int cbId){
+        final long lCbId = (long)cbId;
+        Log.d(TAG,"loadAssetJSON");
+        BaasAsset.fetchData(assetName, new BaasHandler<JsonObject>() {
+            @Override
+            public void handle(BaasResult<JsonObject> baasResult) {
+                if(baasResult.isSuccess()){
+                    JsonObject d = baasResult.value();
+                    BaaSWrapper.onBaaSActionResult(mAdapter, true, d.toString(), lCbId);
+                }else{
+                    BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(baasResult.error()), lCbId);
+                }
+            }
+        });
     }
-
-    public int getIntegerConfig(String param) {
-
-        return 0;
-    }
-
-    public double getDoubleConfig(String param) {
-
-        return 0.0;
-    }
-
-    public long getLongConfig(String param) {
-
-        return 0;
-    }
-
-    public String getStringConfig(String param) {
-
-        return "";
-    }
-
-    public String getArrayConfig(String param) {
-
-        return "";
-    }
-
-    public void fetchConfigInBackground(int callbackID) {
-
-    }
-
 }
 
 
