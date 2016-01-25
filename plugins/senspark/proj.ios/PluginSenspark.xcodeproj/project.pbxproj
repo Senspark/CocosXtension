@@ -41,6 +41,7 @@
 /* Begin PBXFileReference section */
 		1701BC5B1C28F7A2005F59B1 /* BaasboxProtocolBaaS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaasboxProtocolBaaS.h; sourceTree = "<group>"; };
 		1701BC5D1C28FA49005F59B1 /* BaasboxProtocolBaaS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BaasboxProtocolBaaS.mm; sourceTree = "<group>"; };
+		17F3B03E1C55D89400DCF7B5 /* android */ = {isa = PBXFileReference; lastKnownFileType = folder; name = android; path = ../platform/android; sourceTree = "<group>"; };
 		17F51F711C3E3FFD00FF30A3 /* GooglePlusProtocolShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GooglePlusProtocolShare.h; sourceTree = "<group>"; };
 		17F51F721C3E3FFD00FF30A3 /* GooglePlusProtocolUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GooglePlusProtocolUser.h; sourceTree = "<group>"; };
 		17F51F731C3E3FFD00FF30A3 /* SensparkPluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensparkPluginManager.h; sourceTree = "<group>"; };
@@ -104,6 +105,7 @@
 		9520E0AA1B46A74800B7768B = {
 			isa = PBXGroup;
 			children = (
+				17F3B03E1C55D89400DCF7B5 /* android */,
 				95FE48E91B57693A00739C4A /* include */,
 				953C06EE1B57A8B5002BB1A2 /* classes */,
 				95FE48EA1B5769A700739C4A /* ios */,
