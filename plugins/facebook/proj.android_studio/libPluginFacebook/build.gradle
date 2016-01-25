@@ -19,6 +19,6 @@ android {
 
 dependencies {
     compile project(':libPluginProtocol')
+//    compile project(':facebookSDK');
     compile 'com.facebook.android:facebook-android-sdk:4.8.1'
-    compile 'com.facebook.android:audience-network-sdk:4.8.1'
 }

@@ -79,7 +79,7 @@ using namespace cocos2d::plugin;
 
 - (void) loginWithPublishPermissionsInArray:(NSArray *) permission {
     FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
-    [loginManager logInWithPublishPermissions:permission fromViewController:[UserWrapper getCurrentRootViewController]  handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+    [loginManager logInWithPublishPermissions:permission fromViewController:[UserWrapper getCurrentRootViewController] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         [self onLoginResult:result error: error];
     }];
 }
