@@ -54,7 +54,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_UserWrapper_nativeOnActionResult
 	}
 }
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_UserWrapper_nativeOnGraphRequestResultFrom(JNIEnv* env, jobject thiz, jstring className, jint ret, jstring msg, jint cbID)
+JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_UserWrapper_nativeOnGraphRequestResultFrom(JNIEnv* env, jobject thiz, jstring className, jint ret, jstring msg, jlong cbID)
 {
 	std::string strClassName = PluginJniHelper::jstring2string(className);
 	std::string strMsg		 = PluginJniHelper::jstring2string(msg);

@@ -53,9 +53,9 @@ public class UserWrapper {
 		});
 	}
 
-	public static void onGraphRequestResult(InterfaceUser obj, int ret, String msg, int cbId) {
+	public static void onGraphRequestResult(InterfaceUser obj, int ret, String msg, long cbId) {
 		final int curRet = ret;
-		final int curCBId = cbId;
+		final long curCBId = cbId;
 		final String curMsg = msg;
 		final InterfaceUser curAdapter = obj;
 		PluginWrapper.runOnGLThread(new Runnable() {
@@ -69,5 +69,5 @@ public class UserWrapper {
 	}
 	
 	private static native void nativeOnActionResult(String className, int ret, String msg);
-	private static native void nativeOnGraphRequestResultFrom(String className, int ret, String msg, int cbId);
+	private static native void nativeOnGraphRequestResultFrom(String className, int ret, String msg, long cbId);
 }

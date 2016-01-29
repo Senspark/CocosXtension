@@ -200,7 +200,7 @@ jobject PluginUtils::getJObjFromParam(PluginParam* param)
 	case PluginParam::kParamTypeLong:
 		if (PluginJniHelper::getStaticMethodInfo(t, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;"))
 		{
-			obj = t.env->CallStaticObjectMethod(t.classID, t.methodID, param->getIntValue());
+			obj = t.env->CallStaticObjectMethod(t.classID, t.methodID, param->getLongValue());
 			t.env->DeleteLocalRef(t.classID);
 		}
 		break;
