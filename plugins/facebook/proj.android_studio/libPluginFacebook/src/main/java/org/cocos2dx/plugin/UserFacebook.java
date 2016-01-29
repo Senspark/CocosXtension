@@ -24,21 +24,12 @@
 
 package org.cocos2dx.plugin;
 
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.facebook.Profile;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -49,8 +40,17 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 
 public class UserFacebook implements InterfaceUser, PluginListener {
 	private final static String LOG_TAG = "UserFacebook";
@@ -83,6 +83,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 			@Override
 			protected void onCurrentAccessTokenChanged(
 					AccessToken oldAccessToken, AccessToken currentAccessToken) {
+				Log.i("AccessToken", "Access token change from: " + mAccessToken + "to: " + currentAccessToken);
 				mAccessToken = currentAccessToken;
 			}
 		};
@@ -254,7 +255,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	}
 
 	public void graphRequest(final String graphPath, final JSONObject params,
-			final long nativeCallback) {
+			final int nativeCallback) {
 		PluginWrapper.runOnMainThread(new Runnable() {
 
 			@Override
@@ -282,18 +283,9 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 														.getError();
 
 												if (error == null) {
-													nativeRequestCallback(
-															UserWrapper.GRAPH_RET_SUCCESS,
-															response.getJSONObject()
-																	.toString(),
-															nativeCallback);
+													UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_SUCCESS, response.getJSONObject().toString(), nativeCallback);
 												} else {
-													nativeRequestCallback(
-															UserWrapper.GRAPH_RET_FAILED,
-															"{\"error_message\":\""
-																	+ error.getErrorMessage()
-																	+ "\"}",
-															nativeCallback);
+													UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_FAILED, "{\"error_message\":\"" + error.getErrorMessage() + "\"}", nativeCallback);
 												}
 											}
 										});
@@ -301,14 +293,10 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 						request.executeAsync();
 					} catch (JSONException e) {
 						e.printStackTrace();
-						nativeRequestCallback(UserWrapper.GRAPH_RET_FAILED,
-								"{\"error_message\":\"" + e.getMessage()
-										+ "\"}", nativeCallback);
+						UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_FAILED, "{\"error_message\":\"" + e.getMessage() + "\"}", nativeCallback);
 					}
 				} else {
-					nativeRequestCallback(UserWrapper.GRAPH_RET_FAILED,
-							"{\"error_message\":\" Not login yet.\"}",
-							nativeCallback);
+					UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_FAILED, "{\"error_message\":\" Not login yet.\"}", nativeCallback);
 				}
 			}
 		});
@@ -318,7 +306,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 		try {
 			String graphPath = info.getString("Param1");
 			JSONObject jsonParameters = info.getJSONObject("Param2");
-			long nativeCallback = info.getLong("Param3");
+			int nativeCallback = info.getInt("Param3");
 
 			graphRequest(graphPath, jsonParameters, nativeCallback);
 		} catch (JSONException ex) {
@@ -327,7 +315,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	}
 
 	public void api(final String graphPath, final int method,
-			final JSONObject jsonParams, final long nativeCallback) {
+			final JSONObject jsonParams, final int nativeCallback) {
 		PluginWrapper.runOnMainThread(new Runnable() {
 
 			@Override
@@ -355,18 +343,9 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 												.getError();
 
 										if (error == null) {
-											nativeRequestCallback(
-													UserWrapper.GRAPH_RET_SUCCESS,
-													response.getJSONObject()
-															.toString(),
-													nativeCallback);
+											UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_SUCCESS, response.getJSONObject().toString(), nativeCallback);
 										} else {
-											nativeRequestCallback(
-													UserWrapper.GRAPH_RET_FAILED,
-													"{\"error_message\":\""
-															+ error.getErrorMessage()
-															+ "\"}",
-													nativeCallback);
+											UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_FAILED, "{\"error_message\":\"" + error.getErrorMessage() + "\"}",	nativeCallback);
 										}
 									}
 								});
@@ -374,14 +353,10 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 						request.executeAsync();
 					} catch (JSONException e) {
 						e.printStackTrace();
-						nativeRequestCallback(UserWrapper.GRAPH_RET_FAILED,
-								"{\"error_message\":\"" + e.getMessage()
-										+ "\"}", nativeCallback);
+						UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_FAILED, "{\"error_message\":\"" + e.getMessage() + "\"}", nativeCallback);
 					}
 				} else {
-					nativeRequestCallback(UserWrapper.GRAPH_RET_FAILED,
-							"{\"error_message\":\" Not login yet.\"}",
-							nativeCallback);
+					UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_FAILED, "{\"error_message\":\" Not login yet.\"}", nativeCallback);
 				}
 			}
 		});
@@ -392,15 +367,13 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 			String graphPath = info.getString("Param1");
 			int method = info.getInt("Param2");
 			JSONObject jsonParameters = info.getJSONObject("Param3");
-			long nativeCallback = info.getLong("Param4");
+			int nativeCallback = info.getInt("Param4");
 
 			api(graphPath, method, jsonParameters, nativeCallback);
 		} catch (JSONException ex) {
 			ex.printStackTrace();
 		}
 	}
-
-	private native void nativeRequestCallback(int ret, String msg, long cbID);
 
 	@Override
 	public void onStart() {
@@ -419,7 +392,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 
 	@Override
 	public void onStop() {
-
+		 mAccessTokenTracker.stopTracking();
 	}
 
 	@Override

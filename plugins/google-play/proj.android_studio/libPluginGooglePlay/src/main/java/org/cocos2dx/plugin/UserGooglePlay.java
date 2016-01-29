@@ -1,7 +1,5 @@
 package org.cocos2dx.plugin;
 
-import java.util.Hashtable;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +9,8 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.games.Games;
 import com.google.games.utils.GameHelper;
 import com.google.games.utils.GameHelper.GameHelperListener;
+
+import java.util.Hashtable;
 
 public class UserGooglePlay implements InterfaceUser, PluginListener {
 	protected static final String LOG_TAG = "UserGooglePlay";
@@ -59,9 +59,10 @@ public class UserGooglePlay implements InterfaceUser, PluginListener {
 	public void configDeveloperInfo(Hashtable<String, String> cpInfo) {
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
-			public void run() {			
-				mGameHelper.setup(mGameHelperListener);
+			public void run() {
 				mGameHelper.setMaxAutoSignInAttempts(0);
+				mGameHelper.setup(mGameHelperListener);
+//				mGameHelper.setConnectOnStart(false);
 				setDebugMode(bDebug);
 			}
 		});

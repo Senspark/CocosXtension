@@ -23,4 +23,5 @@ dependencies {
     compile files('libs/Parse-1.10.2.jar')
     compile files('libs/ParseFacebookUtilsV4-1.10.2.jar')
     compile files('libs/PPNS-1.10.2.jar')
+    compile 'com.facebook.android:facebook-android-sdk:4.8.1'
 }

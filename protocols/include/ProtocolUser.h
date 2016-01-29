@@ -33,27 +33,27 @@ namespace cocos2d { namespace plugin {
 typedef std::map<std::string, std::string> TUserInfo;
 
 enum class UserActionResultCode {
-    kLoginSucceed = 0,
-    kLoginFailed,
-    kLogoutSucceed,
-    kLogoutFailed,
+    kLoginSucceed   = 0,
+    kLoginFailed    = 1,
+    kLogoutSucceed  = 2,
+    kLogoutFailed   = 3,
 };
 
 enum class GraphResult {
-    kGraphResultSuccess = 0,
-    kGraphResultFail,
-    kGraphResultCancel,
-    kGraphResultTimeout,
+    kGraphResultSuccess = 4,
+    kGraphResultFail    = 5,
+    kGraphResultCancel  = 6,
+    kGraphResultTimeout = 7,
 };
 
 enum class PermissionListResult{
-    kPermissionListSuccess = 0,
-    kPermissionListFailed = 0,
+    kPermissionListSuccess  = 8,
+    kPermissionListFailed   = 9,
 };
     
 enum class UserPermissionResult{
-    kPermissionSucceed = 0,
-    kPermissionFailed,
+    kPermissionSucceed  = 10,
+    kPermissionFailed   = 11,
 };
 
 class ProtocolUser : public PluginProtocol

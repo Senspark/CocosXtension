@@ -34,6 +34,8 @@ using namespace cocos2d::plugin;
         [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:nil];
     }
 
+    [PFAnalytics trackAppOpenedWithLaunchOptions:nil];
+
     _currentConfig = [PFConfig currentConfig];
 }
 
@@ -533,7 +535,8 @@ using namespace cocos2d::plugin;
             [subcribed removeObject:[array objectAtIndex:i]];
         }
     }
-    
+
+    [PFInstallation currentInstallation].channels = array;
     [[PFInstallation currentInstallation] saveEventually];
 }
 

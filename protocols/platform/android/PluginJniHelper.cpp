@@ -116,7 +116,12 @@ extern "C"
                 }
             }
 
+            if (pEnv->ExceptionCheck()) {
+                LOGD("WTF! THERE'S AN EXCEPTION AT THIS CLASS: %s", className);
+                pEnv->ExceptionClear();
+            }
             ret = pEnv->FindClass(className);
+
             if (! ret)
             {
                  LOGD("Failed to find class of %s", className);
@@ -223,6 +228,7 @@ bool PluginJniHelper::getMethodInfo(PluginJniMethodInfo &methodinfo, const char 
     methodinfo.classID = classID;
     methodinfo.env = pEnv;
     methodinfo.methodID = methodID;
+
 
     return true;
 }

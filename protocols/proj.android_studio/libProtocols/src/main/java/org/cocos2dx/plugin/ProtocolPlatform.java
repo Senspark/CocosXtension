@@ -1,8 +1,5 @@
 package org.cocos2dx.plugin;
 
-import java.security.MessageDigest;
-import java.util.Locale;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +11,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import java.security.MessageDigest;
+import java.util.Locale;
+
 public class ProtocolPlatform  {
 	private static final int RC_UNUSED = 5001;
 	protected ProtocolPlatform mAdapter = null;
@@ -21,6 +21,7 @@ public class ProtocolPlatform  {
 	protected Activity mActivity = null;
 	
 	public ProtocolPlatform(Context context) {
+		Log.i("ProtocolPlatform", "ProtocolPlatform constructor");
 		mContext = context;
 		mActivity = (Activity) context;
 		mAdapter = this;
@@ -30,8 +31,6 @@ public class ProtocolPlatform  {
 		try {
 			return mContext.getPackageManager().getPackageInfo(appName, PackageManager.GET_ACTIVITIES) != null ? true : false;
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			return false;
 		}
 	}
@@ -41,10 +40,11 @@ public class ProtocolPlatform  {
 		return !isDebuggable;
 	}
 	
-	public boolean isConnected(final String hostName) {
+	public boolean isConnected(String hostName) {
 		ConnectivityManager conMng = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo info = conMng.getActiveNetworkInfo();
 		boolean isConnected = info != null && info.isConnectedOrConnecting();
+		Log.i("ProtocolPlatform", "isConnected? - " + (isConnected? "YES" : "NO"));
 		if (isConnected) {
 			PlatformWrapper.onPlatformResult(PlatformWrapper.PLATFORM_RESULT_CODE_kConnected, "Network connected");
 		} else {

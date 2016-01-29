@@ -26,73 +26,46 @@ void ChartboostProtocolAds::configureAds(const std::string& appID, const std::st
 }
 
 bool ChartboostProtocolAds::hasMoreApps(const std::string& location) {
-    TAdsInfo info;
-    info["location"] = location;
-    PluginParam param(info);
-    
+    PluginParam param(location.c_str());
     return callBoolFuncWithParam("hasMoreApps", &param, nullptr);
 }
 
 void ChartboostProtocolAds::showMoreApps(const std::string& location) {
-    TAdsInfo info;
-    info["location"] = location;
-    PluginParam param(info);
-    
+    PluginParam param(location.c_str());
     return callFuncWithParam("showMoreApps", &param, nullptr);
 }
 
 void ChartboostProtocolAds::cacheMoreApps(const std::string& location) {
-    TAdsInfo info;
-    info["location"] = location;
-    PluginParam param(info);
-    
+    PluginParam param(location.c_str());
     return callFuncWithParam("cacheMoreApps", &param, nullptr);
 }
 
 bool ChartboostProtocolAds::hasInterstitial(const std::string& location) {
-    TAdsInfo info;
-    info["location"] = location;
-    PluginParam param(info);
-    
+    PluginParam param(location.c_str());
     return callBoolFuncWithParam("hasInterstitial", &param, nullptr);
 }
 
 void ChartboostProtocolAds::showInterstitial(const std::string& location) {
-    TAdsInfo info;
-    info["location"] = location;
-    PluginParam param(info);
-    
+    PluginParam param(location.c_str());
     return callFuncWithParam("showInterstitial", &param, nullptr);
 }
 
 void ChartboostProtocolAds::cacheInterstitial(const std::string& location) {
-    TAdsInfo info;
-    info["location"] = location;
-    PluginParam param(info);
-    
+    PluginParam param(location.c_str());
     return callFuncWithParam("cacheInterstitial", &param, nullptr);
 }
 
 bool ChartboostProtocolAds::hasRewardedVideo(const std::string& location) {
-    TAdsInfo info;
-    info["location"] = location;
-    PluginParam param(info);
-    
+    PluginParam param(location.c_str());
     return callBoolFuncWithParam("hasRewardedVideo", &param, nullptr);
 }
 
 void ChartboostProtocolAds::showRewardedVideo(const std::string& location) {
-    TAdsInfo info;
-    info["location"] = location;
-    PluginParam param(info);
-    
+    PluginParam param(location.c_str());
     return callFuncWithParam("showRewardedVideo", &param, nullptr);
 }
 
 void ChartboostProtocolAds::cacheRewardedVideo(const std::string& location) {
-    TAdsInfo info;
-    info["location"] = location;
-    PluginParam param(info);
-    
+    PluginParam param(location.c_str());
     return callFuncWithParam("cacheRewardedVideo", &param, nullptr);
 }

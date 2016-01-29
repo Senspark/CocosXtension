@@ -60,6 +60,7 @@ void GoogleProtocolAnalytics::trackScreen(const string& screenName) {
 }
 
 void GoogleProtocolAnalytics::trackEvent(const string& category, const string& action, const string& label, float value) {
+    PluginUtils::outputLog("GoogleProtocolAnalytics", "Track event: category: %s - action: %s - label: %s - value: %f", category.c_str(), action.c_str(), label.c_str(), value);
     PluginParam categoryParam(category.c_str());
     PluginParam actionParam(action.c_str());
     PluginParam labelParam(label.c_str());
@@ -76,6 +77,7 @@ void GoogleProtocolAnalytics::trackException(const string& description, bool isF
 }
 
 void GoogleProtocolAnalytics::trackTiming(const std::string& category, int interval, const std::string& name, const std::string& label)	{
+    PluginUtils::outputLog("GoogleProtocolAnalytics", "Track timing: category: %s - interval: %d - name: %s - label: %s", category.c_str(), interval, name.c_str(), label.c_str());
 	PluginParam categoryParam(category.c_str());
     PluginParam intervalParam(interval);
     PluginParam nameParam(name.c_str());

@@ -123,59 +123,40 @@ using namespace cocos2d::plugin;
     return CBLocationDefault;
 }
 
-- (BOOL) hasMoreApps: (NSDictionary*) info {
-    [self getCBLocationFrom:info];
-    NSString* location = [info objectForKey:@"location"];
-    
-    return [Chartboost hasMoreApps:location];
+- (BOOL) hasMoreApps: (NSString*) locationID {
+    return [Chartboost hasMoreApps:locationID];
 }
 
-- (void) cacheMoreApps: (NSDictionary*) info {
-    NSString* location = [info objectForKey:@"location"];
-    
-    [Chartboost cacheMoreApps:location];
+- (void) cacheMoreApps: (NSString*) locationID {
+    [Chartboost cacheMoreApps:locationID];
 }
 
-- (void) showMoreApps: (NSDictionary*) info {
-    NSString* location = [info objectForKey:@"location"];
-    
-    [Chartboost showMoreApps:location];
+- (void) showMoreApps: (NSString*) locationID {
+    [Chartboost showMoreApps:locationID];
 }
 
-- (BOOL) hasInterstitial: (NSDictionary*) info {
-    NSString* location = [info objectForKey:@"location"];
-    
-    return [Chartboost hasInterstitial:location];
+- (BOOL) hasInterstitial: (NSString*) locationID {
+    return [Chartboost hasInterstitial:locationID];
 }
 
-- (void) showInterstitial: (NSDictionary*) info {
-    NSString* location = [info objectForKey:@"location"];
-    
-    [Chartboost showInterstitial:location];
+- (void) showInterstitial: (NSString*) locationID {
+    [Chartboost showInterstitial:locationID];
 }
 
-- (void) cacheInterstitial: (NSDictionary*) info {
-    NSString* location = [info objectForKey:@"location"];
-    
-    [Chartboost cacheInterstitial:location];
+- (void) cacheInterstitial: (NSString*) locationID {
+    [Chartboost cacheInterstitial:locationID];
 }
 
-- (BOOL) hasRewardedVideo: (NSDictionary*) info {
-    NSString* location = [info objectForKey:@"location"];
-    
-    return [Chartboost hasRewardedVideo:location];
+- (BOOL) hasRewardedVideo: (NSString*) locationID {
+    return [Chartboost hasRewardedVideo:locationID];
 }
 
-- (void) showRewardedVideo: (NSDictionary*) info {
-    NSString* location = [info objectForKey:@"location"];
-    
-    [Chartboost showRewardedVideo:location];
+- (void) showRewardedVideo: (NSString*) locationID {
+    [Chartboost showRewardedVideo:locationID];
 }
 
-- (void) cacheRewardedVideo: (NSDictionary*) info {
-    NSString* location = [info objectForKey:@"location"];
-    
-    [Chartboost cacheRewardedVideo:location];
+- (void) cacheRewardedVideo: (NSString*) locationID {
+    [Chartboost cacheRewardedVideo:locationID];
 }
 
 - (NSString*) getSDKVersion {
@@ -192,6 +173,7 @@ using namespace cocos2d::plugin;
 }
 
 - (void)didCacheInterstitial:(CBLocation)location {
+    NSLog(@"CHARTBOOST INTERSTITIAL did cached at location: %@", location);
 //    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsReceived withMsg:location];
 }
 
@@ -217,11 +199,12 @@ using namespace cocos2d::plugin;
 }
 
 - (void)didCacheMoreApps:(CBLocation)location {
+    NSLog(@"CHARTBOOST MORE APPS did cached at location: %@", location);
 //    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsReceived withMsg:location];
 }
 
 - (void)didDismissMoreApps:(CBLocation)location {
-//    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsDismissed withMsg:location];
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kMoreAppsDismissed withMsg:location];
 }
 
 - (void)didFailToLoadMoreApps:(CBLocation)location

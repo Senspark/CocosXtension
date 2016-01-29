@@ -91,6 +91,7 @@ PluginProtocol* PluginFactory::createPlugin(const char* name)
 		jClassName.append(name);
 		PluginUtils::outputLog("PluginFactory", "Java class name of plugin %s is : %s", name, jClassName.c_str());
 
+		//make Java object
 		PluginJniMethodInfo t;
 		if (! PluginJniHelper::getStaticMethodInfo(t
 			, "org/cocos2dx/plugin/PluginWrapper"
@@ -110,6 +111,7 @@ PluginProtocol* PluginFactory::createPlugin(const char* name)
 			PluginUtils::outputLog("PluginFactory", "Can't find java class %s", jClassName.c_str());
 			break;
 		}
+		//-----------------
 
 		if (! PluginJniHelper::getStaticMethodInfo(t
 			, "org/cocos2dx/plugin/PluginWrapper"
@@ -123,6 +125,7 @@ PluginProtocol* PluginFactory::createPlugin(const char* name)
 		t.env->DeleteLocalRef(t.classID);
 		PluginUtils::outputLog("PluginFactory", "The type of plugin %s is : %d", name, curType);
 
+		// make C++ object
 		switch (curType)
 		{
 		case kPluginAds:
@@ -152,7 +155,7 @@ PluginProtocol* PluginFactory::createPlugin(const char* name)
 		default:
 			break;
 		}
-
+		//------------------
 		if (pRet != NULL)
 		{
 			pRet->setPluginName(name);

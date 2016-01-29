@@ -28,12 +28,16 @@ public class UserWrapper {
     public static final int ACTION_RET_LOGIN_FAILED = 1;
     public static final int ACTION_RET_LOGOUT_SUCCEED = 2;
     public static final int ACTION_RET_LOGOUT_FAILED = 3;
-    public static final int ACTION_RET_SHARE_SUCCEED = 4;
-    public static final int ACTION_RET_SHARE_FAILED = 5;
-    
-    public static final int GRAPH_RET_SUCCESS = 0;
-    public static final int GRAPH_RET_FAILED = 0;
-    public static final int GRAPH_RET_TIMEOUT = 0;
+
+    public static final int GRAPH_RET_SUCCESS = 4;
+    public static final int GRAPH_RET_FAILED = 5;
+	public static final int GRAPH_RET_CANCEL = 6;
+    public static final int GRAPH_RET_TIMEOUT = 7;
+
+	public static final int PERMISSION_LIST_RET_SUCCESS = 8;
+	public static final int PERMISSION_LIST_RET_FAILED = 9;
+	public static final int PERMISSION_USER_RET_SUCCESS = 10;
+	public static final int PERMISSION_USER_RET_FAILED = 11;
 
 	public static void onActionResult(InterfaceUser obj, int ret, String msg) {
 		final int curRet = ret;
@@ -48,6 +52,22 @@ public class UserWrapper {
 			}
 		});
 	}
+
+	public static void onGraphRequestResult(InterfaceUser obj, int ret, String msg, int cbId) {
+		final int curRet = ret;
+		final int curCBId = cbId;
+		final String curMsg = msg;
+		final InterfaceUser curAdapter = obj;
+		PluginWrapper.runOnGLThread(new Runnable() {
+			@Override
+			public void run() {
+				String name = curAdapter.getClass().getName();
+				name = name.replace('.', '/');
+				nativeOnGraphRequestResultFrom(name, curRet, curMsg, curCBId);
+			}
+		});
+	}
 	
 	private static native void nativeOnActionResult(String className, int ret, String msg);
+	private static native void nativeOnGraphRequestResultFrom(String className, int ret, String msg, int cbId);
 }

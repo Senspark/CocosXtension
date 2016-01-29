@@ -1,7 +1,9 @@
 #include "AdColonyProtocolAds.h"
 #include "PluginUtils.h"
+#include "PluginJniHelper.h"
 
 using namespace cocos2d::plugin;
+using namespace cocos2d;
 
 AdColonyProtocolAds::~AdColonyProtocolAds() {
     PluginUtils::erasePluginJavaData(this);
@@ -14,7 +16,16 @@ void AdColonyProtocolAds::configureAds(const std::string& appID, const std::stri
 
     PluginParam param(info);
 
-    callFuncWithParam("configDeveloperInfo", &param, nullptr);
+    PluginJavaData *pData = PluginUtils::getPluginJavaData(this);
+    PluginJniMethodInfo t;
+    if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(),
+                                       "configDeveloperInfo", "(Ljava/util/Hashtable;)V")) {
+        jobject obj_Map = PluginUtils::createJavaMapObject(&info);
+
+        t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map);
+        t.env->DeleteLocalRef(obj_Map);
+        t.env->DeleteLocalRef(t.classID);
+    }
 }
 
 bool AdColonyProtocolAds::hasInterstitial(const std::string& zoneID) {

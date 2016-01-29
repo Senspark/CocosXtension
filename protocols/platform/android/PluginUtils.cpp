@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include <android/log.h>
 #include <map>
 
-#define MAX_LOG_LEN			256
+#define MAX_LOG_LEN			1024
 
 namespace cocos2d { namespace plugin {
 
@@ -135,6 +135,7 @@ PluginProtocol* PluginUtils::getPluginPtr(std::string className)
 
 void PluginUtils::setPluginJavaData(PluginProtocol* pKeyObj, PluginJavaData* pData)
 {
+	PluginUtils::outputLog("PluginUtils", "PluginName: %s", pData->jclassName.c_str());
     erasePluginJavaData(pKeyObj);
     s_PluginObjMap.insert(std::pair<PluginProtocol*, PluginJavaData*>(pKeyObj, pData));
     s_JObjPluginMap.insert(std::pair<std::string, PluginProtocol*>(pData->jclassName, pKeyObj));
@@ -196,6 +197,13 @@ jobject PluginUtils::getJObjFromParam(PluginParam* param)
 			t.env->DeleteLocalRef(t.classID);
 		}
 		break;
+	case PluginParam::kParamTypeLong:
+		if (PluginJniHelper::getStaticMethodInfo(t, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;"))
+		{
+			obj = t.env->CallStaticObjectMethod(t.classID, t.methodID, param->getIntValue());
+			t.env->DeleteLocalRef(t.classID);
+		}
+		break;
 	case PluginParam::kParamTypeFloat:
 		if (PluginJniHelper::getStaticMethodInfo(t, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;"))
 		{
@@ -215,7 +223,12 @@ jobject PluginUtils::getJObjFromParam(PluginParam* param)
 		break;
 	case PluginParam::kParamTypeStringMap:
 	    {
+	    	if (env->ExceptionCheck()) {
+	   			PluginUtils::outputLog("PluginUtils", "WTF! There's an exception here!");
+	   			env->ExceptionClear();
+	    	}
 	        jclass cls = env->FindClass("org/json/JSONObject");
+
             jmethodID mid = env->GetMethodID(cls,"<init>","()V");
             obj = env->NewObject(cls,mid);
             env->DeleteLocalRef(cls);
@@ -232,25 +245,23 @@ jobject PluginUtils::getJObjFromParam(PluginParam* param)
                     tInfo.env->CallObjectMethod(obj, tInfo.methodID, strKey, strValue);
                     tInfo.env->DeleteLocalRef(tInfo.classID);
 
-                    tInfo.env->DeleteLocalRef(strKey);
-                    tInfo.env->DeleteLocalRef(strValue);
-                }
-            }
-        }
-	    break;
-	case PluginParam::kParamTypeMap:
-		{
+					tInfo.env->DeleteLocalRef(strKey);
+					tInfo.env->DeleteLocalRef(strValue);
+				}
+			}
+		}
+			break;
+		case PluginParam::kParamTypeMap: {
 			jclass cls = env->FindClass("org/json/JSONObject");
-			jmethodID mid = env->GetMethodID(cls,"<init>","()V");
-			obj = env->NewObject(cls,mid);
-            env->DeleteLocalRef(cls);
-			std::map<std::string, PluginParam*>::iterator it;
-			std::map<std::string, PluginParam*> mapParam = param->getMapValue();
-			for (it = mapParam.begin(); it != mapParam.end(); it++)
-			{
+			jmethodID mid = env->GetMethodID(cls, "<init>", "()V");
+			obj = env->NewObject(cls, mid);
+			env->DeleteLocalRef(cls);
+			std::map<std::string, PluginParam *>::iterator it;
+			std::map < std::string, PluginParam * > mapParam = param->getMapValue();
+			for (it = mapParam.begin(); it != mapParam.end(); it++) {
 				PluginJniMethodInfo tInfo;
-				if (PluginJniHelper::getMethodInfo(tInfo, "org/json/JSONObject", "put", "(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;"))
-				{
+				if (PluginJniHelper::getMethodInfo(tInfo, "org/json/JSONObject", "put",
+												   "(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;")) {
 					jstring strKey = tInfo.env->NewStringUTF(it->first.c_str());
 					jobject objValue = PluginUtils::getJObjFromParam(it->second);
 
@@ -262,12 +273,12 @@ jobject PluginUtils::getJObjFromParam(PluginParam* param)
 				}
 			}
 		}
-		break;
-	default:
-		break;
+			break;
+		default:
+			break;
 	}
 
 	return obj;
 }
 
-}}// namespace cocos2d { namespace plugin {
+	}}// namespace cocos2d { namespace plugin {
