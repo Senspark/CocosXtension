@@ -270,27 +270,22 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 							parameter.putString(key, value);
 						}
 
-						GraphRequest request = GraphRequest
-								.newGraphPathRequest(mAccessToken, graphPath,
-										new GraphRequest.Callback() {
+						new GraphRequest(AccessToken.getCurrentAccessToken(), graphPath, parameter, HttpMethod.GET, new GraphRequest.Callback() {
+							@Override
+							public void onCompleted(GraphResponse response) {
+								LogD(response.toString());
 
-											@Override
-											public void onCompleted(
-													GraphResponse response) {
-												LogD(response.toString());
+								FacebookRequestError error = response
+										.getError();
 
-												FacebookRequestError error = response
-														.getError();
+								if (error == null) {
+									UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_SUCCESS, response.getJSONObject().toString(), nativeCallback);
+								} else {
+									UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_FAILED, "{\"error_message\":\"" + error.getErrorMessage() + "\"}", nativeCallback);
+								}
+							}
+						}).executeAsync();
 
-												if (error == null) {
-													UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_SUCCESS, response.getJSONObject().toString(), nativeCallback);
-												} else {
-													UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_FAILED, "{\"error_message\":\"" + error.getErrorMessage() + "\"}", nativeCallback);
-												}
-											}
-										});
-
-						request.executeAsync();
 					} catch (JSONException e) {
 						e.printStackTrace();
 						UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_FAILED, "{\"error_message\":\"" + e.getMessage() + "\"}", nativeCallback);
@@ -330,27 +325,22 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 							parameter.putString(key, value);
 						}
 
-						GraphRequest request = new GraphRequest(mAccessToken,
-								graphPath, parameter,
-								HttpMethod.values()[method],
-								new GraphRequest.Callback() {
-									@Override
-									public void onCompleted(
-											GraphResponse response) {
-										LogD(response.toString());
+						new GraphRequest(AccessToken.getCurrentAccessToken(), graphPath, parameter, HttpMethod.values()[method], new GraphRequest.Callback() {
+							@Override
+							public void onCompleted(GraphResponse response) {
+								LogD(response.toString());
 
-										FacebookRequestError error = response
-												.getError();
+								FacebookRequestError error = response
+										.getError();
 
-										if (error == null) {
-											UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_SUCCESS, response.getJSONObject().toString(), nativeCallback);
-										} else {
-											UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_FAILED, "{\"error_message\":\"" + error.getErrorMessage() + "\"}",	nativeCallback);
-										}
-									}
-								});
+								if (error == null) {
+									UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_SUCCESS, response.getJSONObject().toString(), nativeCallback);
+								} else {
+									UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_FAILED, "{\"error_message\":\"" + error.getErrorMessage() + "\"}",	nativeCallback);
+								}
+							}
+						}).executeAsync();
 
-						request.executeAsync();
 					} catch (JSONException e) {
 						e.printStackTrace();
 						UserWrapper.onGraphRequestResult(mAdapter, UserWrapper.GRAPH_RET_FAILED, "{\"error_message\":\"" + e.getMessage() + "\"}", nativeCallback);
