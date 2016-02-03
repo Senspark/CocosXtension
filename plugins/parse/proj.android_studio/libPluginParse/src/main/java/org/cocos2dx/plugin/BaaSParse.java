@@ -166,6 +166,7 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public String getUserID() {
+		Log.i(LOG_TAG, "BaaSParse getUserID: " + ParseUser.getCurrentUser().getObjectId());
 		return ParseUser.getCurrentUser().getObjectId();
 	}
 	
@@ -205,9 +206,9 @@ public class BaaSParse implements InterfaceBaaS {
 			@Override
 			public void done(ParseException e) {
 				if (e == null) {
-					Log.i(LOG_TAG, "PARSE PUSH SUBSCRIBE TO CHANNEL " + channelList + "SUCCEEDED");
+					Log.i(LOG_TAG, "PARSE PUSH SUBSCRIBE TO CHANNEL " + channelList + " SUCCEEDED");
 				} else {
-					Log.e(LOG_TAG, "PARSE PUSH SUBSCRIBE TO CHANNEL " + channelList + "FAILED WITH ERROR " + e.getMessage());
+					Log.e(LOG_TAG, "PARSE PUSH SUBSCRIBE TO CHANNEL " + channelList + " FAILED WITH ERROR " + e.getMessage());
 				}
 			}
 		});
@@ -312,7 +313,12 @@ public class BaaSParse implements InterfaceBaaS {
 					if (error != null) {
 						BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(error), cbID);
 					} else {
-						BaaSWrapper.onBaaSActionResult(mAdapter, true, listObjects.toArray().toString(), cbID);
+						ArrayList<JSONObject> objects = new ArrayList<>();
+						for (ParseObject obj: listObjects) {
+							objects.add(convertPFObjectToJson(obj));
+						}
+
+						BaaSWrapper.onBaaSActionResult(mAdapter, true, String.valueOf(objects), cbID);
 					}
 				}
 			});
