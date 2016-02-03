@@ -515,14 +515,21 @@ using namespace cocos2d::plugin;
 - (NSString*) getSubscribedChannels {
     PFInstallation *obj = [PFInstallation currentInstallation];
     
-    return [ParseUtils NSArrayToNSString:obj.channels];
+//    return [ParseUtils NSArrayToNSString:obj.channels];
+    return [obj.channels componentsJoinedByString:@","];
 }
 
 - (void) subscribeChannels:(NSString *)channels {
-    NSArray* array = [ParseUtils NSStringToArrayOrNSDictionary:channels];
+    NSArray* array = [channels componentsSeparatedByString:@","];
     
     [PFInstallation currentInstallation].channels = array;
-    [[PFInstallation currentInstallation] saveEventually];
+    [[PFInstallation currentInstallation] saveEventually:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
+            NSLog(@"Subscribe succeeded to channels: %@", array);
+        } else {
+            NSLog(@"Subscribe failed to channels: %@ with error: %@", array, error);
+        }
+    }];
 }
 
 - (void) unsubscribeChannels:(NSString *)channels {

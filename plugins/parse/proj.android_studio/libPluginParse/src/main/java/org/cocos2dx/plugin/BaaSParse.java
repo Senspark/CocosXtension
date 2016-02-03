@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -201,7 +202,9 @@ public class BaaSParse implements InterfaceBaaS {
 	
 	public void subscribeChannels(final String channelList) {
 
-		ParseInstallation.getCurrentInstallation().put("channels", channelList);
+		Log.e(LOG_TAG, "CHANNELS: " + Arrays.asList(channelList.split(",")));
+
+		ParseInstallation.getCurrentInstallation().addAllUnique("channels", Arrays.asList(channelList.split(",")));
 		ParseInstallation.getCurrentInstallation().saveEventually(new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
