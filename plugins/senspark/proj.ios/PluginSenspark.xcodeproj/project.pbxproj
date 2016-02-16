@@ -335,7 +335,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LIBTOOLFLAGS = "";
 				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../protocols/platform/ios";
 			};
 			name = Debug;
@@ -378,7 +378,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LIBTOOLFLAGS = "";
 				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../protocols/platform/ios";
 			};
 			name = Release;
