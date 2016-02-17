@@ -44,6 +44,7 @@ NS_CC_PLUGIN_BEGIN
 	The super class for all plugins.
 */
 class PluginFactory;
+class ProtocolPlatform;
 class PluginProtocol
 {
 public:
@@ -88,8 +89,9 @@ public:
 protected:
     PluginProtocol() {}
 
-private:
     friend class PluginFactory;
+    friend class ProtocolPlatform;
+
     inline void setPluginName(const char* name) {
     	_pluginName = name;
     }

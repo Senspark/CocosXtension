@@ -357,7 +357,7 @@ public class AdsAdmob implements InterfaceAds {
     	return interstitialAdView.isLoaded();
     }
     
-    public void setBannerAniamtionInfo(Hashtable<Integer, Integer> devInfo) {
+    public void setBannerAnimationInfo(Hashtable<Integer, Integer> devInfo) {
     	slideUpTimePeriod = devInfo.get("slideUpTimePeriod");
     	slideDownTimePeriod = devInfo.get("slideDownTimePeriod");
     }

@@ -113,7 +113,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 		}
 	}
 
-	public void trackEvent(String category, String action, String label,
+	public void trackEventWithCategory(String category, String action, String label,
 			int value) {
 		if (null != this.tracker) {
 			this.tracker.send(new HitBuilders.EventBuilder()
@@ -129,7 +129,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 		String label	= params.get("Param3");
 		int value		= Integer.parseInt(params.get("Param4"));
 		
-		trackEvent(category, action, label, value);
+		trackEventWithCategory(category, action, label, value);
 	}
 
 	public void trackException(String description, boolean fatal) {

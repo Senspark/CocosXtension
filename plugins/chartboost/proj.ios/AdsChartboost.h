@@ -12,18 +12,18 @@
 @interface AdsChartboost : NSObject <InterfaceAds>
 
 #pragma mark - More Apps
-- (BOOL) hasMoreApps: (NSDictionary*) info;
-- (void) showMoreApps: (NSDictionary*) info;
-- (void) cacheMoreApps: (NSDictionary*) info;
+- (BOOL) hasMoreApps: (NSString*) info;
+- (void) showMoreApps: (NSString*) info;
+- (void) cacheMoreApps: (NSString*) info;
 
 #pragma mark - Interstitials
-- (BOOL) hasInterstitial: (NSDictionary*) info;
-- (void) showInterstitial: (NSDictionary*) info;
-- (void) cacheInterstitial: (NSDictionary*) info;
+- (BOOL) hasInterstitial: (NSString*) info;
+- (void) showInterstitial: (NSString*) info;
+- (void) cacheInterstitial: (NSString*) info;
 
 #pragma mark - Rewarded Videos
-- (BOOL) hasRewardedVideo: (NSDictionary*) info;
-- (void) showRewardedVideo: (NSDictionary*) info;
-- (void) cacheRewardedVideo: (NSDictionary*) info;
+- (BOOL) hasRewardedVideo: (NSString*) info;
+- (void) showRewardedVideo: (NSString*) info;
+- (void) cacheRewardedVideo: (NSString*) info;
 
 @end

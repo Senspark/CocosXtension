@@ -14,11 +14,13 @@ extern "C" {
 JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_BaaSWrapper_nativeOnBaaSActionResult(JNIEnv* env, jobject thiz, jstring className, jboolean returnCode, jstring result, jlong cbID) {
 	std::string strResult = PluginJniHelper::jstring2string(result);
 	std::string strClassName = PluginJniHelper::jstring2string(className);
+	bool boolRetCode = (bool) returnCode;
 	PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
 	PluginUtils::outputLog("ProtocolBaaS", "nativeOnBaaSActionResult(), Get plugin ptr : %p", pPlugin);
 
 	if (pPlugin != nullptr) {
 		PluginUtils::outputLog("ProtocolBaaS", "nativeOnBaaSActionResult(), Get plugin name : %s", pPlugin->getPluginName());
+		PluginUtils::outputLog("ProtocolBaaS", "Class name: %s", strClassName.c_str());
 		ProtocolBaaS* pBaaS = dynamic_cast<ProtocolBaaS*>(pPlugin);
 		PluginUtils::outputLog("ProtocolBaaS", "Get pUser : %p", pBaaS);
 
@@ -27,8 +29,8 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_BaaSWrapper_nativeOnBaaSActionRe
 			PluginUtils::outputLog("ProtocolBaaS", "Wrapper: %p", wrapper);
 			PluginUtils::outputLog("ProtocolBaaS", "cbID : %p", cbID);
 
-			wrapper->fnPtr(returnCode, strResult);
-			PluginUtils::outputLog("ProtocolBaaS", "End", cbID);
+			wrapper->fnPtr(boolRetCode, strResult);
+			PluginUtils::outputLog("ProtocolBaaS", "End: %p", cbID);
 			delete wrapper;
 		} else {
 			PluginUtils::outputLog("Listener of plugin %s not set correctly", pPlugin->getPluginName());
@@ -99,7 +101,7 @@ void ProtocolBaaS::logout(BaaSCallback& cb) {
 	PluginJniMethodInfo t;
 
 	if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "logout",
-			"(J)V")) {
+			"(I)V")) {
 
 		CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
 

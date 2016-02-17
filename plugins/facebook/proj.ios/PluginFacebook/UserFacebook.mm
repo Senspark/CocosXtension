@@ -139,26 +139,21 @@ using namespace cocos2d::plugin;
     NSString *graphPath = [params objectForKey:@"Param1"];
     NSDictionary* graphParams =[params objectForKey:@"Param2"];
     long cbid = [[params objectForKey:@"Param3"] longValue];
-    
+
     [self graphRequestWithGraphPath:graphPath parameters:graphParams callback:cbid];
 }
 
 - (void) graphRequestWithGraphPath: (NSString*) graphPath parameters: (NSDictionary*) params callback: (long) cbid {
     if ([FBSDKAccessToken currentAccessToken]) {
-        [[[[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:params]
-         startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-             if (!error) {
-//                 NSLog(@"Fetch facebook info:%@", result);
-                 
-                 [UserWrapper onGraphRequestResultFrom:self withRet: (int) GraphResult::kGraphResultSuccess result:result andCallback:cbid];
-                 
-             } else {
-                 
-//                 NSLog(@"Fetch facebook info error: %@", error.description);
-                 
-                 [UserWrapper onGraphRequestResultFrom:self withRet: (int) GraphResult::kGraphResultFail result:result andCallback:cbid];
-             }
-         }] autorelease];
+        FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:params];
+        [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+            if (!error) {
+                [UserWrapper onGraphRequestResultFrom:self withRet: (int) GraphResult::kGraphResultSuccess result:result andCallback:cbid];
+
+            } else {
+                [UserWrapper onGraphRequestResultFrom:self withRet: (int) GraphResult::kGraphResultFail result:result andCallback:cbid];
+            }
+        }];
     } else {
         [UserWrapper onGraphRequestResultFrom:self withRet: (int) GraphResult::kGraphResultFail result:nil andCallback:cbid];
     }
@@ -171,7 +166,7 @@ using namespace cocos2d::plugin;
     NSDictionary *param = [params objectForKey:@"Param3"];
     long cbId = [[params objectForKey:@"Param4"] longValue];
     
-    FBSDKGraphRequest *request = [[[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:param HTTPMethod:method] autorelease];
+    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:param HTTPMethod:method];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
         
         if(!error){

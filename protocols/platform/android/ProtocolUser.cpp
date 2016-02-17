@@ -32,8 +32,8 @@ namespace cocos2d { namespace plugin {
 extern "C" {
 JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_UserWrapper_nativeOnActionResult(JNIEnv* env, jobject thiz, jstring className, jint ret, jstring msg)
 {
-	std::string strMsg = PluginJniHelper::jstring2string(msg);
 	std::string strClassName = PluginJniHelper::jstring2string(className);
+	std::string strMsg = PluginJniHelper::jstring2string(msg);
 	PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
 	PluginUtils::outputLog("ProtocolUser", "nativeOnActionResult(), Get plugin ptr : %p", pPlugin);
 	if (pPlugin != NULL)
@@ -44,13 +44,35 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_UserWrapper_nativeOnActionResult
 		{
 			ProtocolUser::UserCallback callback = pUser->getCallback();
 			if (callback) {
+				PluginUtils::outputLog("ProtocolUser", "START HERE!");
 				callback(ret, strMsg);
+				PluginUtils::outputLog("ProtocolUser", "END HERE!");
 			} else {
 				PluginUtils::outputLog("Listener of plugin %s not set correctly", pPlugin->getPluginName());
 			}
 		}
 	}
 }
+
+JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_UserWrapper_nativeOnGraphRequestResultFrom(JNIEnv* env, jobject thiz, jstring className, jint ret, jstring msg, jlong cbID)
+{
+	std::string strClassName = PluginJniHelper::jstring2string(className);
+	std::string strMsg		 = PluginJniHelper::jstring2string(msg);
+	PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
+	if (pPlugin != NULL) {
+		ProtocolUser* pUser = dynamic_cast<ProtocolUser*>(pPlugin);
+		if (pUser != NULL && cbID) {
+			ProtocolUser::CallbackWrapper* wrapper = (ProtocolUser::CallbackWrapper*) cbID;
+			PluginUtils::outputLog("UserWrapper","ABC");
+			wrapper->fnPtr((int)ret, strMsg);
+			PluginUtils::outputLog("UserWrapper","DEF");
+			delete wrapper;
+		} else {
+			PluginUtils::outputLog("ProtocolUser", "pUser null");
+		}
+	}
+}
+
 }
 
 ProtocolUser::ProtocolUser()

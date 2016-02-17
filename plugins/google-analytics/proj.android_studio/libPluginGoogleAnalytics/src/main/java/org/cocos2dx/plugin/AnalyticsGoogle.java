@@ -1,10 +1,5 @@
 package org.cocos2dx.plugin;
 
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
 import android.content.Context;
 import android.util.Log;
 
@@ -12,6 +7,14 @@ import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 public class AnalyticsGoogle implements InterfaceAnalytics {
 	protected static final String LOG_TAG = "AnalyticsGoogle";
@@ -113,23 +116,30 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 		}
 	}
 
-	public void trackEvent(String category, String action, String label,
+	public void trackEventWithCategory(String category, String action, String label,
 			int value) {
 		if (null != this.tracker) {
 			this.tracker.send(new HitBuilders.EventBuilder()
-					.setCategory(category).setAction(action).setLabel(label)
-					.setValue(value).build());
+					.setCategory(category)
+					.setAction(action)
+					.setLabel(label)
+					.setValue(value)
+					.build());
 		} else
 			Log.e(LOG_TAG, "Log Event called w/o valid tracker.");
 	}
 
-	public void trackEventWithCategory(Hashtable<String, String> params) {
-		String category = params.get("Param1");
-		String action	= params.get("Param2");
-		String label	= params.get("Param3");
-		int value		= Integer.parseInt(params.get("Param4"));
-		
-		trackEvent(category, action, label, value);
+	public void trackEventWithCategory(JSONObject jsonObject) {
+		try {
+			String category = jsonObject.getString("Param1");
+			String action = jsonObject.getString("Param2");
+			String label = jsonObject.getString("Param3");
+			int value = jsonObject.getInt("Param4");
+
+			trackEventWithCategory(category, action, label, value);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void trackException(String description, boolean fatal) {
@@ -147,7 +157,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 		trackException(description, isFatal);
 	}
 
-	public void trackTimming(String category, int interval, String name,
+	public void trackTiming(String category, int interval, String name,
 			String label) {
 		if (null != this.tracker) {
 			this.tracker.send(new HitBuilders.TimingBuilder()
@@ -163,7 +173,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 		String name		= params.get("Param3");
 		String label	= params.get("Param4");
 		
-		trackTimming(category, interval, name, label);
+		trackTiming(category, interval, name, label);
 	}
 
 	public void trackSocial(String network, String action, String target) {
