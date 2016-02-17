@@ -17,8 +17,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.facebook.android">
+    package="com.senspark.libFacebook">
 
-    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="23"/>
     <uses-sdk tools:overrideLibrary="com.facebook, com.facebook.ads" />
 </manifest>
