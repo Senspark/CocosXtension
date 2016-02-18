@@ -39,6 +39,7 @@ import com.senspark.libAdsAdmob.R;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -179,47 +180,49 @@ public class AdsAdmob implements InterfaceAds {
 
 				AdSize size = AdSize.BANNER;
 				switch (curSize) {
-				case AdsAdmob.ADMOB_SIZE_BANNER:
-					size = AdSize.BANNER;
-					break;
-				case AdsAdmob.ADMOB_SIZE_FULL_BANNER:
-					size = AdSize.FULL_BANNER;
-					break;
-				case AdsAdmob.ADMOB_SIZE_LARGE_BANNER:
-					size = AdSize.LARGE_BANNER;
-					break;
-				case AdsAdmob.ADMOB_SIZE_LEADERBOARD:
-					size = AdSize.LEADERBOARD;
-					break;
-				case AdsAdmob.ADMOB_SIZE_MEDIUM_RECTANGLE:
-				    size = AdSize.MEDIUM_RECTANGLE;
-				    break;
-				case AdsAdmob.ADMOB_SIZE_SMART_BANNER:
-				    size = AdSize.SMART_BANNER;
-				    break;
-				case AdsAdmob.ADMOB_SIZE_WIDE_SKYSCRAPER:
-				    size = AdSize.WIDE_SKYSCRAPER;
-				    break;
-				default:
-					break;
+					case AdsAdmob.ADMOB_SIZE_BANNER:
+						size = AdSize.BANNER;
+						break;
+					case AdsAdmob.ADMOB_SIZE_FULL_BANNER:
+						size = AdSize.FULL_BANNER;
+						break;
+					case AdsAdmob.ADMOB_SIZE_LARGE_BANNER:
+						size = AdSize.LARGE_BANNER;
+						break;
+					case AdsAdmob.ADMOB_SIZE_LEADERBOARD:
+						size = AdSize.LEADERBOARD;
+						break;
+					case AdsAdmob.ADMOB_SIZE_MEDIUM_RECTANGLE:
+						size = AdSize.MEDIUM_RECTANGLE;
+						break;
+					case AdsAdmob.ADMOB_SIZE_SMART_BANNER:
+						size = AdSize.SMART_BANNER;
+						break;
+					case AdsAdmob.ADMOB_SIZE_WIDE_SKYSCRAPER:
+						size = AdSize.WIDE_SKYSCRAPER;
+						break;
+					default:
+						break;
 				}
-				adView = new AdView(mContext);
+				if (adView == null) {
+					adView = new AdView(mContext);
+				}
+				adView.setBackgroundColor(Color.TRANSPARENT);
 				adView.setAdSize(size);
 				adView.setAdUnitId(mPublishID);
 				AdRequest.Builder builder = new AdRequest.Builder();
-				
+
 				try {
 					if (mTestDevices != null) {
 						Iterator<String> ir = mTestDevices.iterator();
-						while(ir.hasNext())
-						{
+						while (ir.hasNext()) {
 							builder.addTestDevice(ir.next());
 						}
 					}
 				} catch (Exception e) {
 					LogE("Error during add test device", e);
 				}
-				
+
 				adView.loadAd(builder.build());
 				adView.setAdListener(new AdmobAdsListener());
 
@@ -363,42 +366,42 @@ public class AdsAdmob implements InterfaceAds {
     }
     
     public void slideUpBannerAds() {
-    	mContext.runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				adView.setVisibility(View.VISIBLE);
-				MyUtils myUtils = new MyUtils();
-				myUtils.SlideUp(adView, mContext);
-			}
-		});
-    	
-    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
-			
-			@Override
-			public void run() {
-				slideDownBannerAds();
-			}
-		}, slideUpTimePeriod, TimeUnit.SECONDS);
+//    	mContext.runOnUiThread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				adView.setVisibility(View.VISIBLE);
+//				MyUtils myUtils = new MyUtils();
+//				myUtils.SlideUp(adView, mContext);
+//			}
+//		});
+//
+//    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				slideDownBannerAds();
+//			}
+//		}, slideUpTimePeriod, TimeUnit.SECONDS);
     }
     
     public void slideDownBannerAds() {
-    	mContext.runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				MyUtils myUtils = new MyUtils();
-				myUtils.SlideDown(adView, mContext);
-			}
-		});
-    	
-    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
-			
-			@Override
-			public void run() {
-				slideUpBannerAds();				
-			}
-		}, slideDownTimePeriod, TimeUnit.SECONDS);
+//    	mContext.runOnUiThread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				MyUtils myUtils = new MyUtils();
+//				myUtils.SlideDown(adView, mContext);
+//			}
+//		});
+//
+//    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				slideUpBannerAds();
+//			}
+//		}, slideDownTimePeriod, TimeUnit.SECONDS);
     }
         
     public class MyUtils {

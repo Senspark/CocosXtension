@@ -181,11 +181,51 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 
 	public String getUserInfo() {
+		Log.e(LOG_TAG, "ParseUser: " + convertPFUserToJson(ParseUser.getCurrentUser()).toString());
 		return convertPFUserToJson(ParseUser.getCurrentUser()).toString();
 	}
 
-	public void setUserInfo(String jsonData) {
-		Log.e(LOG_TAG, "BaaSParse does not support setUserInfo");
+	public String setUserInfo(String jsonData) {
+		Log.e(LOG_TAG, "jsonData: " + jsonData);
+		try {
+			JSONObject jObject = new JSONObject(jsonData);
+
+			ParseUser pUser = ParseUser.getCurrentUser();
+
+			if (pUser != null) {
+				Iterator<String> iter = jObject.keys();
+
+				while (iter.hasNext()) {
+					String key = iter.next();
+
+					pUser.put(key, jObject.get(key));
+				}
+
+				return getUserInfo();
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return "";
+	}
+
+	public void saveUserInfo(final int callbackID) {
+		final ParseUser pUser = ParseUser.getCurrentUser();
+		if (pUser != null) {
+			pUser.saveInBackground(new SaveCallback() {
+				@Override
+				public void done(ParseException e) {
+					if (e == null) {
+						BaaSWrapper.onBaaSActionResult(mAdapter, true, convertPFUserToJson(pUser).toString(), callbackID);
+					} else {
+						BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), callbackID);
+					}
+				}
+			});
+		} else {
+			BaaSWrapper.onBaaSActionResult(mAdapter, false, "", callbackID);
+		}
 	}
 
 	public String getInstallationInfo() {
@@ -317,7 +357,7 @@ public class BaaSParse implements InterfaceBaaS {
 						BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(error), cbID);
 					} else {
 						ArrayList<JSONObject> objects = new ArrayList<>();
-						for (ParseObject obj: listObjects) {
+						for (ParseObject obj : listObjects) {
 							objects.add(convertPFObjectToJson(obj));
 						}
 
@@ -535,6 +575,20 @@ public class BaaSParse implements InterfaceBaaS {
 			Log.e(LOG_TAG, "Error when geting parse object. " + e.getMessage());
 		}
 		return "Delete object failed";
+	}
+
+	public void fetchUserInfo(final int callbackID) {
+		ParseUser pUser = ParseUser.getCurrentUser();
+		pUser.fetchInBackground(new GetCallback<ParseObject>() {
+			@Override
+			public void done(ParseObject parseObject, ParseException e) {
+				if (e == null) {
+					BaaSWrapper.onBaaSActionResult(mAdapter, true, convertPFObjectToJson(parseObject).toString(), callbackID);
+				} else {
+					BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), callbackID);
+				}
+			}
+		});
 	}
 
 	public void fetchConfigInBackground(int callbackID) {
