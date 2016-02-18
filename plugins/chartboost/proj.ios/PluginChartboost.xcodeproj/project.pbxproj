@@ -237,7 +237,7 @@
 					"$(SRCROOT)/../../../protocols/platform/ios",
 					"$(SRCROOT)/../../../protocols/include",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = PluginChartboost;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -257,7 +257,7 @@
 					"$(SRCROOT)/../../../protocols/platform/ios",
 					"$(SRCROOT)/../../../protocols/include",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = PluginChartboost;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;

@@ -407,7 +407,7 @@
 					"$(COCOS2DX_ROOT)/external",
 					"$(COCOS2DX_ROOT)/extensions",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -438,7 +438,7 @@
 					"$(COCOS2DX_ROOT)/external",
 					"$(COCOS2DX_ROOT)/extensions",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
