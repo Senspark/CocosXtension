@@ -23,12 +23,6 @@ THE SOFTWARE.
 ****************************************************************************/
 package org.cocos2dx.plugin;
 
-import java.lang.reflect.Field;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +33,12 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+
+import java.lang.reflect.Field;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 public class PluginWrapper {
