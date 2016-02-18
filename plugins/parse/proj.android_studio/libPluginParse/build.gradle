@@ -44,8 +44,7 @@ android {
 
 dependencies {
     compile 'com.senspark:libPluginProtocol:0.9'
-    compile 'com.facebook.android:facebook-android-sdk:4.8.1'
-    compile 'com.parse.bolts:bolts-tasks:1.4.0'
+    compile ('com.facebook.android:facebook-android-sdk:4.8.1')
     compile 'com.parse:parse-android:1.13.0'
     compile 'com.parse:parsefacebookutils-v4-android:1.10.4@aar'
 }
