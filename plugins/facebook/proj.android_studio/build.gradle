@@ -15,5 +15,5 @@ allprojects {
 
 dependencies {
     compile project(':facebookSDK')
-    compile project(':libProtocols')
+    compile project(':libPluginProtocol')
 }
