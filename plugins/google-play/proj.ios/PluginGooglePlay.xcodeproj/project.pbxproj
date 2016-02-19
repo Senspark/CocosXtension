@@ -279,7 +279,7 @@
 					"$(SRCROOT)/../../../protocols/include",
 					"$(SRCROOT)/../../../protocols/platform/ios",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = PluginGooglePlay;
 				SDKROOT = iphoneos;
@@ -302,7 +302,7 @@
 					"$(SRCROOT)/../../../protocols/include",
 					"$(SRCROOT)/../../../protocols/platform/ios",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = PluginGooglePlay;
 				SDKROOT = iphoneos;
