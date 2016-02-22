@@ -1,7 +1,5 @@
 package org.cocos2dx.plugin;
 
-import java.util.Hashtable;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +13,8 @@ import com.jirbo.adcolony.AdColonyV4VCAd;
 import com.jirbo.adcolony.AdColonyV4VCListener;
 import com.jirbo.adcolony.AdColonyV4VCReward;
 import com.jirbo.adcolony.AdColonyVideoAd;
+
+import java.util.Hashtable;
 
 public class AdsColony implements InterfaceAds, PluginListener, AdColonyAdAvailabilityListener, AdColonyV4VCListener, AdColonyAdListener {
 	public static final String LOG_TAG = "AdsColony";
@@ -135,7 +135,7 @@ public class AdsColony implements InterfaceAds, PluginListener, AdColonyAdAvaila
 
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		return false;
+		return true;
 	}
 
 	@Override

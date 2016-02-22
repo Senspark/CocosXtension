@@ -1,7 +1,5 @@
 package org.cocos2dx.plugin;
 
-import java.util.Hashtable;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +7,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.google.android.gms.plus.PlusShare;
+
+import java.util.Hashtable;
 
 public class ShareGooglePlus implements InterfaceShare, PluginListener {
 	protected static final String LOG_TAG = "ShareGooglePlus";
@@ -96,6 +96,10 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
 
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.i(LOG_TAG, "RequestCode = " + requestCode);
+		Log.i(LOG_TAG, "ResultCode = " + resultCode);
+		Log.i(LOG_TAG, "Data = " + data);
+
 		if (requestCode == RC_SHARE_G_PLUS) {
 			if (resultCode == RESULT_OK) {
 				ShareWrapper.onShareResult(mShareGooglePlus,

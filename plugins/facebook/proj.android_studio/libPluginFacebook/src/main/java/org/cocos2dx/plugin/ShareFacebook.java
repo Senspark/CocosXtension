@@ -29,6 +29,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -47,22 +48,26 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.internal.CallbackManagerImpl;
 import com.facebook.share.Sharer;
 import com.facebook.share.Sharer.Result;
+import com.facebook.share.model.GameRequestContent;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.model.ShareVideo;
 import com.facebook.share.model.ShareVideoContent;
+import com.facebook.share.widget.GameRequestDialog;
 import com.facebook.share.widget.LikeView;
 import com.facebook.share.widget.ShareDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Hashtable;
 
-public class ShareFacebook implements InterfaceShare{
+public class ShareFacebook implements InterfaceShare, PluginListener {
 
 	private static Activity mContext = null;
 	private static InterfaceShare mAdapter = null;
@@ -83,25 +88,30 @@ public class ShareFacebook implements InterfaceShare{
     }
     
     public ShareFacebook(Context context) {
-		mContext = (Activity)context;		
+		mContext = (Activity)context;
+		FacebookSdk.sdkInitialize(mContext.getApplicationContext());
+		PluginWrapper.addListener(this);
 		mAdapter = this;
-		mShareDialog = new ShareDialog((Activity) mContext);
 		mCallbackManager = CallbackManager.Factory.create();
-		
+		mShareDialog = new ShareDialog(mContext);
+
 		mShareDialog.registerCallback(mCallbackManager, new FacebookCallback<Sharer.Result>() {
-			
+
 			@Override
 			public void onSuccess(Result result) {
+				Log.i(LOG_TAG, "Share fb succeeded with postID: " + result.getPostId());
 				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_SUCCESS, "{\"didComplete\":true}");
 			}
-			
+
 			@Override
 			public void onError(FacebookException error) {
+				Log.e(LOG_TAG, "Share fb failed with error: " + error.getMessage());
 				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_FAIL, "{ \"error_message\" : \"" + error.getMessage() + "\"}");
 			}
-			
+
 			@Override
 			public void onCancel() {
+				Log.i(LOG_TAG, "Share fb cancelled by user");
 				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_FAIL, "{ \"error_message\" : \" user cancelled\"}");
 			}
 		});
@@ -133,7 +143,8 @@ public class ShareFacebook implements InterfaceShare{
 						String picture = cpInfo.get("picture");
 						
 						ShareLinkContent.Builder builder = new ShareLinkContent.Builder();
-						
+
+						builder.setContentUrl(Uri.parse(link));
 						builder.setContentDescription(description);
 						builder.setContentTitle(caption);
 						builder.setImageUrl(Uri.parse(picture));
@@ -205,6 +216,56 @@ public class ShareFacebook implements InterfaceShare{
 		return bRet;
 	}
 
+	void sendGameRequest(Hashtable<String, String> info, int callbackID) {
+
+		Log.i(LOG_TAG, "Info: " + info);
+		Log.i(LOG_TAG, "CallbackID: " + callbackID);
+
+		String recipients	= info.get("recipients");
+		String[] recipientsArray = recipients.split(",");
+		String title		= info.get("title");
+		String message		= info.get("message");
+		String objectID		= info.get("object-id");
+		String data			= info.get("data");
+
+		int actionType		= 0;
+		if (Integer.parseInt(info.get("action-type")) > 0) {
+			actionType = Integer.parseInt(info.get("action-type"));
+		}
+
+		GameRequestDialog gameRequestDialog 	= new GameRequestDialog(mContext);
+		gameRequestDialog.registerCallback(mCallbackManager, new FacebookCallback<GameRequestDialog.Result>() {
+			@Override
+			public void onSuccess(GameRequestDialog.Result result) {
+				Log.i(LOG_TAG, "Send gift succeeded to: " + result.getRequestRecipients());
+				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_SUCCESS, "success");
+			}
+
+			@Override
+			public void onCancel() {
+				Log.e(LOG_TAG, "Send gift cancelled by user");
+				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_CANCEL, "cancel");
+			}
+
+			@Override
+			public void onError(FacebookException error) {
+				Log.e(LOG_TAG, "Send gift failed with error: " + error.getMessage());
+				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_FAIL, error.getMessage());
+			}
+		});
+
+		GameRequestContent gameRequestContent 	= new GameRequestContent.Builder()
+				.setActionType(GameRequestContent.ActionType.SEND)
+				.setMessage(message)
+				.setTitle(title)
+				.setObjectId(objectID)
+				.setData(data)
+				.setRecipients(Arrays.asList(recipientsArray))
+				.build();
+		gameRequestDialog.show(gameRequestContent);
+	}
+
+
 	public void likeFanpage(final String idFacebookPage) {
 
 		PluginWrapper.runOnMainThread(new Runnable() {
@@ -270,4 +331,50 @@ public class ShareFacebook implements InterfaceShare{
 			}
 		});
 	}
+
+	@Override
+	public void onStart() {
+
+	}
+
+	@Override
+	public void onResume() {
+
+	}
+
+	@Override
+	public void onPause() {
+
+	}
+
+	@Override
+	public void onStop() {
+
+	}
+
+	@Override
+	public void onDestroy() {
+
+	}
+
+	@Override
+	public void onBackPressed() {
+
+	}
+
+	@Override
+	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.i(LOG_TAG, "onActivityResult triggered");
+		Log.i(LOG_TAG, "RequestCode: " + requestCode);
+		Log.i(LOG_TAG, "ResultCode: " + resultCode);
+		Log.i(LOG_TAG, "Data: " + data);
+
+		if (requestCode == CallbackManagerImpl.RequestCodeOffset.Share.toRequestCode()) {
+			Log.i(LOG_TAG, "CallbackManager onActivityResult triggered");
+			mCallbackManager.onActivityResult(requestCode, resultCode, data);
+		}
+
+		return true;
+	}
+
 }

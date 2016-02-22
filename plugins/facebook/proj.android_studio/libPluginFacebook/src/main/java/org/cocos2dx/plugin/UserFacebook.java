@@ -41,6 +41,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
+import com.facebook.internal.CallbackManagerImpl;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
@@ -396,8 +397,13 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		mCallbackManager.onActivityResult(requestCode, resultCode, data);
-
+		Log.i(LOG_TAG, "RequestCode = " + requestCode);
+		Log.i(LOG_TAG, "ResultCode = " + resultCode);
+		Log.i(LOG_TAG, "Data = " + data);
+		if (requestCode == CallbackManagerImpl.RequestCodeOffset.Login.toRequestCode()) {
+			Log.i(LOG_TAG, "CallbackManager onActivityResult triggered");
+			mCallbackManager.onActivityResult(requestCode, resultCode, data);
+		}
 		return true;
 	}
 }

@@ -190,7 +190,7 @@ public class AdsChartboost implements InterfaceAds, PluginListener {
 
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		return false;
+		return true;
 	}
 
 	@Override
