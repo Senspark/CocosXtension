@@ -93,10 +93,11 @@ public class PluginWrapper {
     	}
     }
     
-    public static void onBackPressed() {
+    public static boolean onBackPressed() {
     	for (PluginListener listener : sListeners) {
     		listener.onBackPressed();
     	}
+        return false;
     }
     
     public static void onDestroy() {

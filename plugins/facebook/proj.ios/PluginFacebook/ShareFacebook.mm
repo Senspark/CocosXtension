@@ -246,7 +246,7 @@
 
 -(void) sendGameRequest:(NSDictionary*) params {
     NSDictionary *shareInfo = [params objectForKey:@"Param1"];
-    NSNumber *cbID               = [params objectForKey:@"Param2"];
+    NSNumber *cbID          = [params objectForKey:@"Param2"];
     
     NSString* recipients    = [shareInfo objectForKey:@"recipients"];
     NSString* title         = [shareInfo objectForKey:@"title"];

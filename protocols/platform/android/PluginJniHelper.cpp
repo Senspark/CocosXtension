@@ -243,10 +243,17 @@ string PluginJniHelper::jstring2string(jstring jstr)
     if (! pEnv) {
         return NULL;
     }
+    LOGD("LOG 0");
 
-    const char* chars = pEnv->GetStringUTFChars(jstr, NULL);
+    const char* chars = pEnv->GetStringUTFChars(jstr, JNI_FALSE);
+    LOGD("LOG 1");
+
     std::string ret(chars);
+    LOGD("LOG 2");
+
     pEnv->ReleaseStringUTFChars(jstr, chars);
+
+    LOGD("LOG 3");
 
     return ret;
 }

@@ -191,15 +191,13 @@
 
 - (void) loadInterstitial
 {
-    if (self.interstitialView == nullptr) {
-        self.interstitialView = [[GADInterstitial alloc] init];
-        self.interstitialView.adUnitID = self.strPublishID;
-        self.interstitialView.delegate = self;
+    self.interstitialView = [[GADInterstitial alloc] init];
+    self.interstitialView.adUnitID = self.strPublishID;
+    self.interstitialView.delegate = self;
 
-        GADRequest* request = [GADRequest request];
-        request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
-        [self.interstitialView loadRequest:request];
-    }
+    GADRequest* request = [GADRequest request];
+    request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
+    [self.interstitialView loadRequest:request];
 }
 
 - (void) showInterstitial

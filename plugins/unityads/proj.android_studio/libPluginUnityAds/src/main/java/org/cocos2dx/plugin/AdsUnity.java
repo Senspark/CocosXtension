@@ -1,13 +1,13 @@
 package org.cocos2dx.plugin;
 
-import java.util.Hashtable;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 import com.unity3d.ads.android.UnityAds;
+
+import java.util.Hashtable;
 
 
 public class AdsUnity implements InterfaceAds, PluginListener {
@@ -78,7 +78,7 @@ public class AdsUnity implements InterfaceAds, PluginListener {
 
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		return false;
+		return true;
 	}
 
 
