@@ -427,9 +427,6 @@ bool ProtocolBaaS::deleteObject(const std::string& className,
 	return nullptr;
 }
 
-//std::string ProtocolBaaS::getUserID() {
-//	return PluginUtils::callJavaStringFuncWithName(this, "getUserID");
-//}
 
 
 }

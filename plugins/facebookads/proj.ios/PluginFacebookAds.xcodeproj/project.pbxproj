@@ -221,9 +221,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginFacebookAds/PluginFacebookAds-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../../../protocols/platform/ios",
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../../../protocols/platform/ios",
+					"$(SRCROOT)/../../../protocols/include",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -242,9 +243,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginFacebookAds/PluginFacebookAds-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../../../protocols/platform/ios",
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../../../protocols/platform/ios",
+					"$(SRCROOT)/../../../protocols/include",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
