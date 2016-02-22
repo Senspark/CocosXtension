@@ -167,8 +167,12 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public String getUserID() {
-		Log.i(LOG_TAG, "BaaSParse getUserID: " + ParseUser.getCurrentUser().getObjectId());
-		return ParseUser.getCurrentUser().getObjectId();
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		if (currentUser != null) {
+			Log.i(LOG_TAG, "BaaSParse getUserID: " + ParseUser.getCurrentUser().getObjectId());
+			return ParseUser.getCurrentUser().getObjectId();
+		}
+		return "";
 	}
 	
 	private void updateParseObject(ParseObject parseObj, JSONObject jsonObj) throws JSONException {
