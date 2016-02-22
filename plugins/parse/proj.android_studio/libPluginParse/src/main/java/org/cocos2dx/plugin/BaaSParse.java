@@ -79,8 +79,12 @@ public class BaaSParse implements InterfaceBaaS {
 		boolean enableLocalDatastore = "true".compareTo(devInfo.get("ParseEnableLocalDatastore")) == 0;
 		boolean enableFacebookUtils  = "true".compareTo(devInfo.get("ParseEnableFacebookUtils")) == 0;
 
-		if (enableLocalDatastore) {
-			Parse.enableLocalDatastore(mContext);
+		try {
+			if (enableLocalDatastore) {
+				Parse.enableLocalDatastore(mContext);
+			}
+		} catch (IllegalStateException ex) {
+			Log.w(LOG_TAG, ex.getMessage());
 		}
 
 		Parse.initialize(mContext, appId, clientKey);
@@ -167,8 +171,15 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public String getUserID() {
-		Log.i(LOG_TAG, "BaaSParse getUserID: " + ParseUser.getCurrentUser().getObjectId());
-		return ParseUser.getCurrentUser().getObjectId();
+		ParseUser currentUser = ParseUser.getCurrentUser();
+
+		Log.i(LOG_TAG, "BaaSParse getUserID: " + currentUser != null ? currentUser.getObjectId() : "");
+
+		if (currentUser != null) {
+			return currentUser.getObjectId();
+		}
+
+		return "";
 	}
 	
 	private void updateParseObject(ParseObject parseObj, JSONObject jsonObj) throws JSONException {
