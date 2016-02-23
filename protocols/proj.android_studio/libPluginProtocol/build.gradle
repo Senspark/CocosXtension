@@ -40,7 +40,7 @@ android {
     }
 
     sourceSets.main {
-        java.srcDirs = ["src/main/java", "../../platform/android", "../../include"]
+        java.srcDirs = ["src/main/java"]
     }
 
     buildTypes {
