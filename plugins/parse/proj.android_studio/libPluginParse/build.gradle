@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         minSdkVersion 9
@@ -19,9 +19,7 @@ android {
 
 dependencies {
     compile project(':libPluginProtocol')
-    compile files('libs/bolts-android-1.2.1.jar')
-    compile files('libs/Parse-1.10.2.jar')
-    compile files('libs/ParseFacebookUtilsV4-1.10.2.jar')
-    compile files('libs/PPNS-1.10.2.jar')
     compile 'com.facebook.android:facebook-android-sdk:4.8.1'
+    compile 'com.parse:parsefacebookutils-v4-android:1.10.4@aar'
+    compile 'com.parse:parse-android:1.13.0'
 }
