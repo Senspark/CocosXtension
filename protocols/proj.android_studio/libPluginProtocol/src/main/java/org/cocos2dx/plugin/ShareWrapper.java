@@ -29,18 +29,20 @@ public class ShareWrapper {
 	public static final int SHARERESULT_CANCEL  = 2;
 	public static final int SHARERESULT_TIMEOUT = 3;
 
-	public static void onShareResult(InterfaceShare obj, int ret, String msg) {
+	public static void onShareResult(InterfaceShare obj, int ret, String msg, long callbackID) {
 		final int curRet = ret;
 		final String curMsg = msg;
 		final InterfaceShare curAdapter = obj;
+		final long cbID = callbackID;
+
 		PluginWrapper.runOnGLThread(new Runnable() {
 			@Override
 			public void run() {
 				String name = curAdapter.getClass().getName();
 				name = name.replace('.', '/');
-				nativeOnShareResult(name, curRet, curMsg);
+				nativeOnShareResult(name, curRet, curMsg, cbID);
 			}
 		});
 	}
-	private static native void nativeOnShareResult(String className, int ret, String msg);
+	private static native void nativeOnShareResult(String className, int ret, String msg, long callbackID);
 }

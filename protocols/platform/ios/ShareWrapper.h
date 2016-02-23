@@ -37,7 +37,7 @@ typedef enum {
     
 }
 
-+ (void) onShareResult:(id) obj withRet:(int) ret withContent: (NSDictionary*) content withMsg:(NSString*) msg;
+//+ (void) onShareResult:(id) obj withRet:(int) ret withContent: (NSDictionary*) content withMsg:(NSString*) msg;
 + (void) onShareResult:(id) obj withRet:(int) ret withContent: (NSDictionary*) content withMsg:(NSString*) msg andCallbackID: (long) cbID;
 
 + (UIViewController *)getCurrentRootViewController;

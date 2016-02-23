@@ -19,6 +19,7 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
 
 	private static final int RC_SHARE_G_PLUS = 8891;
 	private static final int RESULT_OK = -1;
+	private int pCallbackID;
 
 	protected void LogE(String msg, Exception e) {
 		Log.e(LOG_TAG, msg, e);
@@ -104,11 +105,11 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
 			if (resultCode == RESULT_OK) {
 				ShareWrapper.onShareResult(mShareGooglePlus,
 						ShareWrapper.SHARERESULT_SUCCESS,
-						"[Google+]: Share G+ succeeded.");
+						"[Google+]: Share G+ succeeded.", pCallbackID);
 			} else {
 				ShareWrapper.onShareResult(mShareGooglePlus,
 						ShareWrapper.SHARERESULT_FAIL,
-						"[Google+]: Share G+ failed.");
+						"[Google+]: Share G+ failed.", pCallbackID);
 			}
 		}
 		return true;
@@ -139,12 +140,14 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
 		// Set the share text.
 
 		builder.setText(prefillText);
-		((Activity) mContext).startActivityForResult(builder.getIntent(),
+		mContext.startActivityForResult(builder.getIntent(),
 				RC_SHARE_G_PLUS);
 	}
 
 	@Override
-	public void share(Hashtable<String, String> cpInfo) {
+	public void share(Hashtable<String, String> cpInfo, int callbackID) {
+		pCallbackID = callbackID;
+
 		String urlToShare = cpInfo.get("urlToShare");
 		String prefillText = cpInfo.get("prefillText");
 		String deepLinkId = cpInfo.get("deepLinkId");

@@ -79,13 +79,19 @@ public class BaaSParse implements InterfaceBaaS {
 		boolean enableLocalDatastore = "true".compareTo(devInfo.get("ParseEnableLocalDatastore")) == 0;
 		boolean enableFacebookUtils  = "true".compareTo(devInfo.get("ParseEnableFacebookUtils")) == 0;
 
-		if (enableLocalDatastore) {
-			Parse.enableLocalDatastore(mContext);
+		try {
+			if (enableLocalDatastore) {
+				Log.i(LOG_TAG, "Enable Parse Local Datastore.");
+				Parse.enableLocalDatastore(mContext);
+
+				Parse.initialize(mContext, appId, clientKey);
+			}
+		} catch (IllegalStateException ex) {
+			ex.printStackTrace();
 		}
 
-		Parse.initialize(mContext, appId, clientKey);
-
 		if (enableFacebookUtils) {
+			Log.i(LOG_TAG, "Enable Parse Facebook Utils.");
 			ParseFacebookUtils.initialize(mContext);
 		}
 
