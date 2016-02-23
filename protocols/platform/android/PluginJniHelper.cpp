@@ -51,7 +51,7 @@ extern "C"
                 break;
             }
 
-            if (JAVAVM->GetEnv((void**)env, JNI_VERSION_1_4) != JNI_OK)
+            if (JAVAVM->GetEnv((void**)env, JNI_VERSION_1_6) != JNI_OK)
             {
                 LOGD("Failed to get the environment using GetEnv()");
                 break;
@@ -244,9 +244,19 @@ string PluginJniHelper::jstring2string(jstring jstr)
         return NULL;
     }
 
+    LOGD("Get Msg pointer: %p", jstr);
+
+    LOGD("LOG 0");
+
     const char* chars = pEnv->GetStringUTFChars(jstr, NULL);
+    LOGD("LOG 1");
+
     std::string ret(chars);
+    LOGD("LOG 2");
+
     pEnv->ReleaseStringUTFChars(jstr, chars);
+
+    LOGD("LOG 3");
 
     return ret;
 }

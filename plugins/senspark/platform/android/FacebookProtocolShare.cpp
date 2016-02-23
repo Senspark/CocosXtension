@@ -9,9 +9,11 @@
 
 #include "FacebookProtocolShare.h"
 #include "PluginUtils.h"
+#include "PluginJniHelper.h"
 
 USING_NS_SENSPARK_PLUGIN_SHARE;
 using namespace cocos2d::plugin;
+using namespace cocos2d;
 
 FacebookProtocolShare::FacebookProtocolShare() {
 
@@ -44,10 +46,18 @@ void FacebookProtocolShare::openInviteDialog(FBParam &info, FacebookProtocolShar
 }
 
 void FacebookProtocolShare::sendGameRequest(FBParam &info, FacebookProtocolShare::ShareCallback& callback) {
-    FacebookProtocolShare::CallbackWrapper* wrapper = new FacebookProtocolShare::CallbackWrapper(callback);
 
-    PluginParam params(info);
-    PluginParam callbackID((long)wrapper);
+    PluginJavaData *pData = PluginUtils::getPluginJavaData(this);
+    PluginJniMethodInfo t;
+    if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(),
+                                       "sendGameRequest", "(Ljava/util/Hashtable;I)V")) {
 
-    callFuncWithParam("sendGameRequest", &params, &callbackID, nullptr);
+        jobject obj_Map = PluginUtils::createJavaMapObject(&info);
+
+        CallbackWrapper* wrapper = new CallbackWrapper(callback);
+
+        t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map, (long)wrapper);
+        t.env->DeleteLocalRef(obj_Map);
+        t.env->DeleteLocalRef(t.classID);
+    }
 }

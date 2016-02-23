@@ -1,7 +1,5 @@
 package org.cocos2dx.plugin;
 
-import java.util.Hashtable;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +7,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.google.android.gms.plus.PlusShare;
+
+import java.util.Hashtable;
 
 public class ShareGooglePlus implements InterfaceShare, PluginListener {
 	protected static final String LOG_TAG = "ShareGooglePlus";
@@ -19,6 +19,7 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
 
 	private static final int RC_SHARE_G_PLUS = 8891;
 	private static final int RESULT_OK = -1;
+	private int pCallbackID;
 
 	protected void LogE(String msg, Exception e) {
 		Log.e(LOG_TAG, msg, e);
@@ -96,15 +97,19 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
 
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.i(LOG_TAG, "RequestCode = " + requestCode);
+		Log.i(LOG_TAG, "ResultCode = " + resultCode);
+		Log.i(LOG_TAG, "Data = " + data);
+
 		if (requestCode == RC_SHARE_G_PLUS) {
 			if (resultCode == RESULT_OK) {
 				ShareWrapper.onShareResult(mShareGooglePlus,
 						ShareWrapper.SHARERESULT_SUCCESS,
-						"[Google+]: Share G+ succeeded.");
+						"[Google+]: Share G+ succeeded.", pCallbackID);
 			} else {
 				ShareWrapper.onShareResult(mShareGooglePlus,
 						ShareWrapper.SHARERESULT_FAIL,
-						"[Google+]: Share G+ failed.");
+						"[Google+]: Share G+ failed.", pCallbackID);
 			}
 		}
 		return true;
@@ -135,12 +140,14 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
 		// Set the share text.
 
 		builder.setText(prefillText);
-		((Activity) mContext).startActivityForResult(builder.getIntent(),
+		mContext.startActivityForResult(builder.getIntent(),
 				RC_SHARE_G_PLUS);
 	}
 
 	@Override
-	public void share(Hashtable<String, String> cpInfo) {
+	public void share(Hashtable<String, String> cpInfo, int callbackID) {
+		pCallbackID = callbackID;
+
 		String urlToShare = cpInfo.get("urlToShare");
 		String prefillText = cpInfo.get("prefillText");
 		String deepLinkId = cpInfo.get("deepLinkId");

@@ -258,27 +258,25 @@ public class AdsAdmob implements InterfaceAds {
 	}
 	
 	public void loadInterstitial() {
-		if (interstitialAdView == null) {
-			interstitialAdView = new InterstitialAd(mContext);
-			interstitialAdView.setAdUnitId(mPublishID);
-			interstitialAdView.setAdListener(new AdmobAdsListener());
-			
-			AdRequest.Builder builder = new AdRequest.Builder();
-			try {
-				if (mTestDevices != null) {
-					Iterator<String> ir = mTestDevices.iterator();
-					while(ir.hasNext())
-					{
-						builder.addTestDevice(ir.next());
-					}
+		interstitialAdView = new InterstitialAd(mContext);
+		interstitialAdView.setAdUnitId(mPublishID);
+		interstitialAdView.setAdListener(new AdmobAdsListener());
+
+		AdRequest.Builder builder = new AdRequest.Builder();
+		try {
+			if (mTestDevices != null) {
+				Iterator<String> ir = mTestDevices.iterator();
+				while(ir.hasNext())
+				{
+					builder.addTestDevice(ir.next());
 				}
-			} catch (Exception e) {
-				LogE("Error during add test device", e);
 			}
-			
-			//begin load interstitial ad
-			interstitialAdView.loadAd(builder.build());
+		} catch (Exception e) {
+			LogE("Error during add test device", e);
 		}
+
+		//begin load interstitial ad
+		interstitialAdView.loadAd(builder.build());
 	}
 	
 	public void showInterstitial() {

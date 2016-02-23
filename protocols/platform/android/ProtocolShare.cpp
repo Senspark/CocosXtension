@@ -30,9 +30,11 @@ THE SOFTWARE.
 namespace cocos2d { namespace plugin {
 
 extern "C" {
-JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_ShareWrapper_nativeOnShareResult(JNIEnv*  env, jobject thiz, jstring className, jint code, std::map<std::string, std::string> content, jstring msg)
+JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_ShareWrapper_nativeOnShareResult(JNIEnv*  env, jobject thiz, jstring className, jint code, std::map<std::string, std::string> content, jstring msg, jlong callbackID)
 {
+	PluginUtils::outputLog("ProtocolShare", "nativeOnShareResult(), Get Msg pointer: %p", msg);
 	std::string strMsg 			= PluginJniHelper::jstring2string(msg);
+	PluginUtils::outputLog("ProtocolShare", "nativeOnShareResult(), Get Msg pointer: %p", msg);
 	std::string strClassName 	= PluginJniHelper::jstring2string(className);
 	PluginProtocol* pPlugin 	= PluginUtils::getPluginPtr(strClassName);
 
@@ -41,13 +43,10 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_ShareWrapper_nativeOnShareResult
 	if (pPlugin != nullptr) {
 		PluginUtils::outputLog("ProtocolShare", "nativeOnShareResult(), Get plugin name : %s", pPlugin->getPluginName());
 		ProtocolShare* pShare = dynamic_cast<ProtocolShare*>(pPlugin);
-		if (pShare != nullptr) {
-        	ProtocolShare::ShareCallback callback = pShare->getCallback();
-        	if(callback) {
-        		callback(code, content, strMsg);
-        	} else {
-        		PluginUtils::outputLog("ProtocolShare", "Can't find the listener of plugin %s", pPlugin->getPluginName());
-        	}
+		if (pShare != nullptr && callbackID) {
+        	ProtocolShare::CallbackWrapper* wrapper = (ProtocolShare::CallbackWrapper*) callbackID;
+        	wrapper->fnPtr(code, content, strMsg);
+        	delete wrapper;
 		} else {
 			PluginUtils::outputLog("Listener of plugin %s not set correctly", pPlugin->getPluginName());
 		}
@@ -96,15 +95,15 @@ void ProtocolShare::share(TShareInfo& info, ShareCallback& cb)
 		if (PluginJniHelper::getMethodInfo(t
 				, pData->jclassName.c_str()
 				, "share"
-				, "(Ljava/util/Hashtable;)V"))
+				, "(Ljava/util/Hashtable;I)V"))
 		{
 			// generate the hashtable from map
 			jobject obj_Map = PluginUtils::createJavaMapObject(&info);
 
-			_callback = cb;
+			CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
 
 			// invoke java method
-			t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map);
+			t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map, (long) cbWrapper);
 			t.env->DeleteLocalRef(obj_Map);
 			t.env->DeleteLocalRef(t.classID);
 		}

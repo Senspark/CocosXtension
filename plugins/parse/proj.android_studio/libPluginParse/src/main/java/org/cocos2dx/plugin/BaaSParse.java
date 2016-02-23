@@ -81,15 +81,17 @@ public class BaaSParse implements InterfaceBaaS {
 
 		try {
 			if (enableLocalDatastore) {
+				Log.i(LOG_TAG, "Enable Parse Local Datastore.");
 				Parse.enableLocalDatastore(mContext);
+
+				Parse.initialize(mContext, appId, clientKey);
 			}
 		} catch (IllegalStateException ex) {
-			Log.w(LOG_TAG, ex.getMessage());
+			ex.printStackTrace();
 		}
 
-		Parse.initialize(mContext, appId, clientKey);
-
 		if (enableFacebookUtils) {
+			Log.i(LOG_TAG, "Enable Parse Facebook Utils.");
 			ParseFacebookUtils.initialize(mContext);
 		}
 
@@ -172,13 +174,10 @@ public class BaaSParse implements InterfaceBaaS {
 	@Override
 	public String getUserID() {
 		ParseUser currentUser = ParseUser.getCurrentUser();
-
-		Log.i(LOG_TAG, "BaaSParse getUserID: " + currentUser != null ? currentUser.getObjectId() : "");
-
 		if (currentUser != null) {
-			return currentUser.getObjectId();
+			Log.i(LOG_TAG, "BaaSParse getUserID: " + ParseUser.getCurrentUser().getObjectId());
+			return ParseUser.getCurrentUser().getObjectId();
 		}
-
 		return "";
 	}
 	

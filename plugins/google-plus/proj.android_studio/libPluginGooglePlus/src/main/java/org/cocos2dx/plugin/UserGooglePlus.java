@@ -1,6 +1,11 @@
 package org.cocos2dx.plugin;
 
-import java.util.Hashtable;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
@@ -8,12 +13,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentSender;
-import android.os.Bundle;
-import android.util.Log;
+import java.util.Hashtable;
 
 public class UserGooglePlus implements InterfaceUser, PluginListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 	protected static final String LOG_TAG = "UserGooglePlus";
@@ -113,6 +113,11 @@ public class UserGooglePlus implements InterfaceUser, PluginListener, GoogleApiC
 
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		Log.i(LOG_TAG, "RequestCode = " + requestCode);
+		Log.i(LOG_TAG, "ResultCode = " + resultCode);
+		Log.i(LOG_TAG, "Data = " + data);
+
 		if (requestCode == RC_SIGN_IN) {
 			if (resultCode != RESULT_OK) {
 				mShouldResolve = false;
