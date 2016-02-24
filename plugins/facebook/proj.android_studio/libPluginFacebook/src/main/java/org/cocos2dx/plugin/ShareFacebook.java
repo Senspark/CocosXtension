@@ -112,19 +112,19 @@ public class ShareFacebook implements InterfaceShare, PluginListener {
 				@Override
 				public void onSuccess(Result result) {
 					Log.i(LOG_TAG, "Share fb succeeded with postID: " + result.getPostId());
-					ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_SUCCESS, "Share Facebook Succeeded", callbackID);
+					ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_SUCCESS, cpInfo, "Share Facebook Succeeded", callbackID);
 				}
 
 				@Override
 				public void onError(FacebookException error) {
 					Log.e(LOG_TAG, "Share fb failed with error: " + error.getMessage());
-					ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_FAIL, "Share Facebook Failed with error: " + error.getMessage(), callbackID);
+					ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_FAIL, cpInfo, "Share Facebook Failed with error: " + error.getMessage(), callbackID);
 				}
 
 				@Override
 				public void onCancel() {
 					Log.i(LOG_TAG, "Share fb cancelled by user");
-					ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_FAIL, "Share Facebook Cancelled by user", callbackID);
+					ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_FAIL, cpInfo, "Share Facebook Cancelled by user", callbackID);
 				}
 			});
 
@@ -177,7 +177,7 @@ public class ShareFacebook implements InterfaceShare, PluginListener {
 
 				}
 
-				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_FAIL, object.toString(), callbackID);
+				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_FAIL, cpInfo, object.toString(), callbackID);
 			}
 		}
 	}
@@ -210,7 +210,7 @@ public class ShareFacebook implements InterfaceShare, PluginListener {
 		return bRet;
 	}
 
-	void sendGameRequest(Hashtable<String, String> info, final int callbackID) {
+	void sendGameRequest(final Hashtable<String, String> info, final int callbackID) {
 
 		Log.i(LOG_TAG, "Info: " + info);
 		Log.i(LOG_TAG, "CallbackID: " + callbackID);
@@ -232,19 +232,19 @@ public class ShareFacebook implements InterfaceShare, PluginListener {
 			@Override
 			public void onSuccess(GameRequestDialog.Result result) {
 				Log.i(LOG_TAG, "Send gift succeeded to: " + result.getRequestRecipients());
-				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_SUCCESS, "success", callbackID);
+				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_SUCCESS, info, "success", callbackID);
 			}
 
 			@Override
 			public void onCancel() {
 				Log.e(LOG_TAG, "Send gift cancelled by user");
-				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_CANCEL, "cancel", callbackID);
+				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_CANCEL, info, "cancel", callbackID);
 			}
 
 			@Override
 			public void onError(FacebookException error) {
 				Log.e(LOG_TAG, "Send gift failed with error: " + error.getMessage());
-				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_FAIL, error.getMessage(), callbackID);
+				ShareWrapper.onShareResult(mAdapter, ShareWrapper.SHARERESULT_FAIL, info, error.getMessage(), callbackID);
 			}
 		});
 

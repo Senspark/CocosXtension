@@ -30,12 +30,11 @@ THE SOFTWARE.
 namespace cocos2d { namespace plugin {
 
 extern "C" {
-JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_ShareWrapper_nativeOnShareResult(JNIEnv*  env, jobject thiz, jstring className, jint code, std::map<std::string, std::string> content, jstring msg, jlong callbackID)
+JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_ShareWrapper_nativeOnShareResult(JNIEnv*  env, jobject thiz, jstring className, jint code, jobject content, jstring msg, jlong callbackID)
 {
-	PluginUtils::outputLog("ProtocolShare", "nativeOnShareResult(), Get Msg pointer: %p", msg);
-	std::string strMsg 			= PluginJniHelper::jstring2string(msg);
-	PluginUtils::outputLog("ProtocolShare", "nativeOnShareResult(), Get Msg pointer: %p", msg);
-	std::string strClassName 	= PluginJniHelper::jstring2string(className);
+	std::string strMsg 			= PluginJniHelper::jstring2string(env, msg);
+	std::string strClassName 	= PluginJniHelper::jstring2string(env, className);
+	std::map<std::string, std::string> mapContent	= PluginJniHelper::JSONObject2Map(env, content);
 	PluginProtocol* pPlugin 	= PluginUtils::getPluginPtr(strClassName);
 
 	PluginUtils::outputLog("ProtocolShare", "nativeOnShareResult(), Get plugin ptr : %p", pPlugin);
@@ -45,7 +44,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_ShareWrapper_nativeOnShareResult
 		ProtocolShare* pShare = dynamic_cast<ProtocolShare*>(pPlugin);
 		if (pShare != nullptr && callbackID) {
         	ProtocolShare::CallbackWrapper* wrapper = (ProtocolShare::CallbackWrapper*) callbackID;
-        	wrapper->fnPtr(code, content, strMsg);
+        	wrapper->fnPtr(code, mapContent, strMsg);
         	delete wrapper;
 		} else {
 			PluginUtils::outputLog("Listener of plugin %s not set correctly", pPlugin->getPluginName());
