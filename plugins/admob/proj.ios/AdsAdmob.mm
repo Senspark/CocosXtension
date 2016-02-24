@@ -206,6 +206,7 @@
     if (!self.interstitialView || !self.interstitialView.isReady) {
         // Ad not ready to present.
         NSLog(@"ADMOB: Interstitial cannot show. It is not ready.");
+        [self loadInterstitial];
     } else {
         [self.interstitialView presentFromRootViewController:[AdsWrapper getCurrentRootViewController]];
         [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsShown withMsg:@"Ads is shown!"];
@@ -234,6 +235,7 @@
 // Since we've received an ad, let's go ahead and set the frame to display it.
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
     NSLog(@"Received ad");
+    [_bannerView setHidden:YES];
     [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsReceived withMsg:@"Ads request received success!"];
 }
 
@@ -307,6 +309,9 @@
 - (void) slideUpBannerAds {
     if (self.slideUpTimePeriod > 0) {
         OUTPUT_LOG(@"Show Banner Ads!");
+        if ([_bannerView isHidden]) {
+            [_bannerView setHidden: NO];
+        }
         CGRect windowBounds = [[[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]] bounds];
         [UIView animateWithDuration:1.0
                          animations:^{

@@ -72,7 +72,15 @@ public class AdsColony implements InterfaceAds, PluginListener, AdColonyAdAvaila
 		return AdColony.statusForZone(zoneID).equals("active");
 	}
 	
-	public void showRewardedVideo(final String zoneID, boolean isShowPrePopup, boolean isShowPostPopup) {
+	public void showRewardedVideo(Hashtable<String, String> adsInfo) {
+		String zoneID = adsInfo.get("Param1");
+		boolean isShowPrePopup = Boolean.parseBoolean(adsInfo.get("Param2"));
+		boolean isShowPostPopup = Boolean.parseBoolean(adsInfo.get("Param3"));
+
+		Log.i(LOG_TAG, "zoneID: " + zoneID);
+		Log.i(LOG_TAG, "isShowPre: " + isShowPrePopup);
+		Log.i(LOG_TAG, "isShowPost: " + isShowPostPopup);
+
 		AdColonyV4VCAd ad = new AdColonyV4VCAd(zoneID);
 		ad.withListener(mAdapter);
 		ad.withConfirmationDialog(isShowPrePopup);

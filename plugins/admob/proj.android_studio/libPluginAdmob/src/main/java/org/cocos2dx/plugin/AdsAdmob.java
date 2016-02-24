@@ -23,21 +23,8 @@ THE SOFTWARE.
 ****************************************************************************/
 package org.cocos2dx.plugin;
 
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import org.cocos2dx.libAdsAdmob.R;
-
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -47,20 +34,39 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+
+import org.cocos2dx.libAdsAdmob.R;
+
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class AdsAdmob implements InterfaceAds {
 
 	private static final String LOG_TAG = "AdsAdmob";
 	private static Activity mContext = null;
-	private static boolean bDebug = false;
+	private static boolean bDebug = true;
 	private static AdsAdmob mAdapter = null;
 	private int slideUpTimePeriod;
 	private int slideDownTimePeriod;
+	private static MyUtils mMyUtils;
 
 	private AdView adView = null;
 	private InterstitialAd interstitialAdView = null;
 	private String mPublishID = "";
 	private Set<String> mTestDevices = null;
 	private WindowManager mWm = null;
+
+	private ScheduledExecutorService scheduledExecutorService = null;
 
 	private static final int ADMOB_SIZE_BANNER = 1;
 	private static final int ADMOB_SIZE_FULL_BANNER = 2;
@@ -85,6 +91,8 @@ public class AdsAdmob implements InterfaceAds {
 	}
 
 	public AdsAdmob(Context context) {
+		Log.i(LOG_TAG, "Initializing AdsAdmob");
+		mMyUtils = new MyUtils();
 		mContext = (Activity) context;
 		mAdapter = this;
 	}
@@ -121,11 +129,11 @@ public class AdsAdmob implements InterfaceAds {
 	            {
 	                String strSize = info.get("AdmobSizeEnum");
 	                int sizeEnum = Integer.parseInt(strSize);
-    	            showBannerAd(sizeEnum, pos);
+					showBannerAd(sizeEnum, pos);
                     break;
 	            }
 	        case ADMOB_TYPE_FULLSCREEN:
-	            LogD("Now not support full screen view in Admob");
+	            showInterstitial();
 	            break;
 	        default:
 	            break;
@@ -205,9 +213,7 @@ public class AdsAdmob implements InterfaceAds {
 					default:
 						break;
 				}
-				if (adView == null) {
-					adView = new AdView(mContext);
-				}
+				adView = new AdView(mContext);
 				adView.setBackgroundColor(Color.TRANSPARENT);
 				adView.setAdSize(size);
 				adView.setAdUnitId(mPublishID);
@@ -259,33 +265,45 @@ public class AdsAdmob implements InterfaceAds {
 	}
 	
 	public void loadInterstitial() {
-		interstitialAdView = new InterstitialAd(mContext);
-		interstitialAdView.setAdUnitId(mPublishID);
-		interstitialAdView.setAdListener(new AdmobAdsListener());
+		mContext.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Log.i(LOG_TAG, "Start loading interstitial ad");
 
-		AdRequest.Builder builder = new AdRequest.Builder();
-		try {
-			if (mTestDevices != null) {
-				Iterator<String> ir = mTestDevices.iterator();
-				while(ir.hasNext())
-				{
-					builder.addTestDevice(ir.next());
+				interstitialAdView = new InterstitialAd(mContext);
+				interstitialAdView.setAdUnitId(mPublishID);
+				interstitialAdView.setAdListener(new AdmobAdsListener());
+
+				AdRequest.Builder builder = new AdRequest.Builder();
+				try {
+					if (mTestDevices != null) {
+						Iterator<String> ir = mTestDevices.iterator();
+						while (ir.hasNext()) {
+							builder.addTestDevice(ir.next());
+						}
+					}
+				} catch (Exception e) {
+					LogE("Error during add test device", e);
 				}
-			}
-		} catch (Exception e) {
-			LogE("Error during add test device", e);
-		}
 
-		//begin load interstitial ad
-		interstitialAdView.loadAd(builder.build());
+				//begin load interstitial ad
+				interstitialAdView.loadAd(builder.build());
+			}
+		});
 	}
 	
 	public void showInterstitial() {
-		if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
-			Log.e("PluginAdmob", "ADMOB: Interstitial cannot show. It is not ready");
-		} else {
-			interstitialAdView.show();
-		}
+		mContext.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
+					Log.e("PluginAdmob", "ADMOB: Interstitial cannot show. It is not ready: - InterstitialAdView : " + interstitialAdView + " - isLoaded: " + interstitialAdView.isLoaded());
+					loadInterstitial();
+				} else {
+					interstitialAdView.show();
+				}
+			}
+		});
 	}
 	
 	private class AdmobAdsListener extends AdListener {
@@ -359,60 +377,84 @@ public class AdsAdmob implements InterfaceAds {
     	return interstitialAdView.isLoaded();
     }
     
-    public void setBannerAnimationInfo(Hashtable<Integer, Integer> devInfo) {
-    	slideUpTimePeriod = devInfo.get("slideUpTimePeriod");
-    	slideDownTimePeriod = devInfo.get("slideDownTimePeriod");
+    public void setBannerAnimationInfo(Hashtable<String, String> devInfo) {
+    	slideUpTimePeriod = Integer.parseInt(devInfo.get("slideUpTimePeriod"));
+    	slideDownTimePeriod = Integer.parseInt(devInfo.get("slideDownTimePeriod"));
+
+		Log.i(LOG_TAG, "Slide up time period: " + slideUpTimePeriod);
+		Log.i(LOG_TAG, "Slide down time period: " + slideDownTimePeriod);
     }
     
     public void slideUpBannerAds() {
-//    	mContext.runOnUiThread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				adView.setVisibility(View.VISIBLE);
-//				MyUtils myUtils = new MyUtils();
-//				myUtils.SlideUp(adView, mContext);
-//			}
-//		});
-//
-//    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				slideDownBannerAds();
-//			}
-//		}, slideUpTimePeriod, TimeUnit.SECONDS);
-    }
-    
-    public void slideDownBannerAds() {
-//    	mContext.runOnUiThread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				MyUtils myUtils = new MyUtils();
-//				myUtils.SlideDown(adView, mContext);
-//			}
-//		});
-//
-//    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				slideUpBannerAds();
-//			}
-//		}, slideDownTimePeriod, TimeUnit.SECONDS);
+    	mContext.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				Log.i(LOG_TAG, "Slide the banner up");
+				if (adView != null) {
+					adView.setVisibility(View.VISIBLE);
+					mMyUtils.SlideUp(adView, mContext);
+				}
+
+			}
+		});
+
+		if (scheduledExecutorService != null) {
+			scheduledExecutorService.shutdownNow();
+			scheduledExecutorService = null;
+		}
+
+    	scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+		scheduledExecutorService.schedule(new Runnable() {
+
+			@Override
+			public void run() {
+				slideDownBannerAds();
+			}
+		}, slideUpTimePeriod, TimeUnit.SECONDS);
+	}
+
+	public void slideDownBannerAds() {
+		mContext.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				Log.i(LOG_TAG, "Slide the banner down");
+
+				if (adView != null) {
+					mMyUtils.SlideDown(adView, mContext);
+				}
+
+			}
+		});
+
+		if (scheduledExecutorService != null) {
+			scheduledExecutorService.shutdownNow();
+			scheduledExecutorService = null;
+		}
+
+    	scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+		scheduledExecutorService.schedule(new Runnable() {
+
+			@Override
+			public void run() {
+				slideUpBannerAds();
+			}
+		}, slideDownTimePeriod, TimeUnit.SECONDS);
     }
         
     public class MyUtils {
 
         public void SlideUp(final View view, Context context) {
+			Log.i("MyUtils", "SlideUp triggered");
+
             Animation anim = AnimationUtils.loadAnimation(context, R.anim.slide_down);
             anim.setAnimationListener(new Animation.AnimationListener() {
 
                 @Override
                 public void onAnimationStart(Animation animation) {
-                    // TODO Auto-generated method stub
-                    view.setAlpha(255);
+                    Log.i(LOG_TAG, "Start sliding up view");
+//                    view.setAlpha(255);
                     view.setVisibility(View.VISIBLE);
                 }
 
@@ -424,7 +466,7 @@ public class AdsAdmob implements InterfaceAds {
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    // TODO Auto-generated method stub
+                    Log.i(LOG_TAG, "End sliding up view");
 
                 }
             });
@@ -434,12 +476,14 @@ public class AdsAdmob implements InterfaceAds {
         }
 
         public void SlideDown(final View view, Context context) {
+			Log.i("MyUtils", "SlideDown triggered");
+
             Animation anim = AnimationUtils.loadAnimation(context, R.anim.slide_up);
             anim.setAnimationListener(new Animation.AnimationListener() {
 
                 @Override
                 public void onAnimationStart(Animation animation) {
-                    // TODO Auto-generated method stub
+                    Log.i(LOG_TAG, "Start sliding down view");
 
                 }
 
@@ -451,7 +495,7 @@ public class AdsAdmob implements InterfaceAds {
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    // TODO Auto-generated method stub
+                    Log.i(LOG_TAG, "End sliding down view");
                     view.setVisibility(View.INVISIBLE);
                 }
             });

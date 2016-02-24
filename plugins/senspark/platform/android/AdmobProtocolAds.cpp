@@ -1,10 +1,18 @@
 #include "AdmobProtocolAds.h"
 #include "PluginUtils.h"
 #include "PluginJniHelper.h"
+#include <sstream>
 
 USING_NS_SENSPARK_PLUGIN_ADS;
 using namespace cocos2d::plugin;
 using namespace cocos2d;
+
+std::string to_string(int input) {
+    std::stringstream ss;
+    ss << input;
+    std::string ret(ss.str());
+    return ret;
+}
 
 AdmobProtocolAds::AdmobProtocolAds() {
 
@@ -35,14 +43,14 @@ bool AdmobProtocolAds::hasInterstitial() {
 
 void AdmobProtocolAds::setBannerAnimationInfo(int slideUpTimePeriod, int slideDownTimePeriod) {
     TAdsInfo devInfo;
-    devInfo["slideUpTimePeriod"]    = slideUpTimePeriod;
-    devInfo["slideDownTimePeriod"]  = slideDownTimePeriod;
+    devInfo["slideUpTimePeriod"]    = to_string(slideUpTimePeriod);
+    devInfo["slideDownTimePeriod"]  = to_string(slideDownTimePeriod);
     PluginParam param(devInfo);
 
     PluginJavaData *pData = PluginUtils::getPluginJavaData(this);
     PluginJniMethodInfo t;
     if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(),
-                                       "configDeveloperInfo", "(Ljava/util/Hashtable;)V")) {
+                                       "setBannerAnimationInfo", "(Ljava/util/Hashtable;)V")) {
         jobject obj_Map = PluginUtils::createJavaMapObject(&devInfo);
 
         t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map);
