@@ -43,7 +43,9 @@ bool ProtocolPlatform::isRelease() {
 }
 
 bool ProtocolPlatform::isAppInstalled(const std::string& url) {
-    return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:[NSString stringWithUTF8String:url.c_str()]]];
+    NSString* appName = [NSString stringWithFormat:@"%s://", url.c_str()];
+    bool isInstalled = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appName]];
+    return isInstalled;
 }
 
 bool ProtocolPlatform::isConnected(const std::string& hostName) {
