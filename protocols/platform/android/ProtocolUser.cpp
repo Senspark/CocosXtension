@@ -32,8 +32,8 @@ namespace cocos2d { namespace plugin {
 extern "C" {
 JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_UserWrapper_nativeOnActionResult(JNIEnv* env, jobject thiz, jstring className, jint ret, jstring msg)
 {
-	std::string strClassName = PluginJniHelper::jstring2string(className);
-	std::string strMsg = PluginJniHelper::jstring2string(msg);
+	std::string strClassName = PluginJniHelper::jstring2string(env, className);
+	std::string strMsg = PluginJniHelper::jstring2string(env, msg);
 	PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
 	PluginUtils::outputLog("ProtocolUser", "nativeOnActionResult(), Get plugin ptr : %p", pPlugin);
 	if (pPlugin != NULL)

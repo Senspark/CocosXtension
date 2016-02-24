@@ -18,7 +18,7 @@ extern "C" {
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_DataWrapper_nativeOnDataResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jbyteArray data)
 {
-    std::string strClassName = PluginJniHelper::jstring2string(className);
+    std::string strClassName = PluginJniHelper::jstring2string(env, className);
 
     jbyte* bufferPtr = nullptr;
     jsize len = 0;

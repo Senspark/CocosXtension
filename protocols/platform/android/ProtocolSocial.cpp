@@ -33,8 +33,8 @@ namespace cocos2d { namespace plugin {
 extern "C" {
     JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_SocialWrapper_nativeOnSocialResult(JNIEnv*  env, jobject thiz, jstring className, jboolean ret, jstring msg, jint cbID)
     {
-        std::string strMsg = PluginJniHelper::jstring2string(msg);
-        std::string strClassName = PluginJniHelper::jstring2string(className);
+        std::string strMsg = PluginJniHelper::jstring2string(env, msg);
+        std::string strClassName = PluginJniHelper::jstring2string(env, className);
         PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
         PluginUtils::outputLog("ProtocolSocial", "nativeOnSocialResult(), Get plugin ptr : %p", pPlugin);
         if (pPlugin != NULL)

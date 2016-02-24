@@ -12,8 +12,8 @@ namespace plugin {
 extern "C" {
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_BaaSWrapper_nativeOnBaaSActionResult(JNIEnv* env, jobject thiz, jstring className, jboolean returnCode, jstring result, jlong cbID) {
-	std::string strResult = PluginJniHelper::jstring2string(result);
-	std::string strClassName = PluginJniHelper::jstring2string(className);
+	std::string strResult = PluginJniHelper::jstring2string(env, result);
+	std::string strClassName = PluginJniHelper::jstring2string(env, className);
 	bool boolRetCode = (bool) returnCode;
 	PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
 	PluginUtils::outputLog("ProtocolBaaS", "nativeOnBaaSActionResult(), Get plugin ptr : %p", pPlugin);
