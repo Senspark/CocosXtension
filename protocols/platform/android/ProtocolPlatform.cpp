@@ -36,7 +36,7 @@ namespace cocos2d { namespace plugin {
 extern "C" {
 JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_PlatformWrapper_nativeOnPlatformResult(JNIEnv* env, jobject thiz, jint code, jstring msg)
 {
-	std::string strMsg 			= PluginJniHelper::jstring2string(msg);
+	std::string strMsg 			= PluginJniHelper::jstring2string(env, msg);
   std::string jClassName = ANDROID_PLUGIN_PACKAGE_PREFIX;
   jClassName.append(PROTOCOL_NAME);
 

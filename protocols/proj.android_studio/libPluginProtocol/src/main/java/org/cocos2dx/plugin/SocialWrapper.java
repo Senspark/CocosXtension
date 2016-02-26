@@ -33,18 +33,31 @@ public class SocialWrapper {
     public static final int SOCIAL_RESETACH_SUCCESS = 7;
     public static final int SOCIAL_RESETACH_FAILED = 8;
 
-    public static void onSocialResult(InterfaceSocial obj, int ret, String msg) {
+    public static void onSocialResult(InterfaceSocial obj, int ret, String msg, int callbackID) {
         final int curRet = ret;
         final String curMsg = msg;
         final InterfaceSocial curAdapter = obj;
+        final int cbID = callbackID;
+
         PluginWrapper.runOnGLThread(new Runnable() {
             @Override
             public void run() {
                 String name = curAdapter.getClass().getName();
                 name = name.replace('.', '/');
-                nativeOnSocialResult(name, curRet, curMsg);
+                nativeOnSocialResult(name, curRet, curMsg, cbID);
             }
         });
     }
-    private static native void nativeOnSocialResult(String className, int ret, String msg);
+
+    public static void onDialogDissmissedWithCallback(final int callbackID) {
+        PluginWrapper.runOnGLThread(new Runnable() {
+            @Override
+            public void run() {
+                nativeOnDialogDismissed(callbackID);
+            }
+        });
+    }
+
+    private static native void nativeOnSocialResult(String className, int ret, String msg, int callbackID);
+    private static native void nativeOnDialogDismissed(int callbackID);
 }

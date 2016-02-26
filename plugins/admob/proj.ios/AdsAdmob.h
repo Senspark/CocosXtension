@@ -47,7 +47,6 @@ typedef enum {
 
 @property BOOL debug;
 
-@property (nonatomic, retain) NSTimer* showBannerAdsTimer;
 @property (copy, nonatomic) NSString* strPublishID;
 @property (assign, nonatomic) GADBannerView* bannerView;
 @property (assign, nonatomic) GADInterstitial* interstitialView;
@@ -59,7 +58,6 @@ typedef enum {
  interface for Admob SDK
  */
 - (void) addTestDevice: (NSString*) deviceID;
-- (void) setBannerAnimationInfo: (NSMutableDictionary*) info;
 - (void) slideUpBannerAds;
 - (void) slideDownBannerAds;
 - (void) loadInterstitial;
