@@ -23,14 +23,15 @@ THE SOFTWARE.
 ****************************************************************************/
 package org.cocos2dx.plugin;
 
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import org.cocos2dx.libAdsAdmob.R;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -38,14 +39,10 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 
 public class AdsAdmob implements InterfaceAds {
 
@@ -53,8 +50,6 @@ public class AdsAdmob implements InterfaceAds {
 	private static Activity mContext = null;
 	private static boolean bDebug = false;
 	private static AdsAdmob mAdapter = null;
-	private int slideUpTimePeriod;
-	private int slideDownTimePeriod;
 
 	private AdView adView = null;
 	private InterstitialAd interstitialAdView = null;
@@ -72,6 +67,8 @@ public class AdsAdmob implements InterfaceAds {
 
 	private static final int ADMOB_TYPE_BANNER = 1;
 	private static final int ADMOB_TYPE_FULLSCREEN = 2;
+
+	private volatile boolean mShouldLock = false;
 
 	protected static void LogE(String msg, Exception e) {
 		Log.e(LOG_TAG, msg, e);
@@ -162,25 +159,17 @@ public class AdsAdmob implements InterfaceAds {
         }
 	}
 
-	private void showBannerAd(int sizeEnum, int pos) {
-		final int curPos = pos;
-		final int curSize = sizeEnum;
+	private void showBannerAd(final int sizeEnum, final int pos) {
+		hideBannerAd();
+
+		mShouldLock = true;
 
 		PluginWrapper.runOnMainThread(new Runnable() {
 
 			@Override
 			public void run() {
-				// destory the ad view before
-				if (null != adView) {
-					if (null != mWm) {
-						mWm.removeView(adView);
-					}
-					adView.destroy();
-					adView = null;
-				}
-
 				AdSize size = AdSize.BANNER;
-				switch (curSize) {
+				switch (sizeEnum) {
 					case AdsAdmob.ADMOB_SIZE_BANNER:
 						size = AdSize.BANNER;
 						break;
@@ -205,9 +194,11 @@ public class AdsAdmob implements InterfaceAds {
 					default:
 						break;
 				}
+
 				if (adView == null) {
 					adView = new AdView(mContext);
 				}
+
 				adView.setBackgroundColor(Color.TRANSPARENT);
 				adView.setAdSize(size);
 				adView.setAdUnitId(mPublishID);
@@ -230,9 +221,31 @@ public class AdsAdmob implements InterfaceAds {
 				if (null == mWm) {
 					mWm = (WindowManager) mContext.getSystemService("window");
 				}
-				AdsWrapper.addAdView(mWm, adView, curPos);
+				AdsWrapper.addAdView(mWm, adView, pos);
+
+				Log.i(LOG_TAG, "Show Ad: waiting for adView: DONE");
+
+				synchronized (AdsAdmob.this) {
+					mShouldLock = false;
+					AdsAdmob.this.notify();
+				}
 			}
 		});
+
+		Log.i(LOG_TAG, "Show Ad: waiting for adView");
+
+		synchronized (this) {
+			try {
+				if (mShouldLock) {
+					wait();
+				}
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		Log.i(LOG_TAG, "Show Ad: stop waiting for adView");
+
 	}
 
 	private void hideBannerAd() {
@@ -240,8 +253,9 @@ public class AdsAdmob implements InterfaceAds {
 			@Override
 			public void run() {
 				if (null != adView) {
-					if (null != mWm) {
-						mWm.removeView(adView);
+					ViewGroup parent = (ViewGroup) adView.getParent();
+					if (parent != null) {
+						mWm.removeView(parent);
 					}
 					adView.destroy();
 					adView = null;
@@ -259,25 +273,29 @@ public class AdsAdmob implements InterfaceAds {
 	}
 	
 	public void loadInterstitial() {
-		interstitialAdView = new InterstitialAd(mContext);
-		interstitialAdView.setAdUnitId(mPublishID);
-		interstitialAdView.setAdListener(new AdmobAdsListener());
+		PluginWrapper.runOnMainThread(new Runnable() {
+			@Override
+			public void run() {
+				interstitialAdView = new InterstitialAd(mContext);
+				interstitialAdView.setAdUnitId(mPublishID);
+				interstitialAdView.setAdListener(new AdmobAdsListener());
 
-		AdRequest.Builder builder = new AdRequest.Builder();
-		try {
-			if (mTestDevices != null) {
-				Iterator<String> ir = mTestDevices.iterator();
-				while(ir.hasNext())
-				{
-					builder.addTestDevice(ir.next());
+				AdRequest.Builder builder = new AdRequest.Builder();
+				try {
+					if (mTestDevices != null) {
+						Iterator<String> ir = mTestDevices.iterator();
+						while (ir.hasNext()) {
+							builder.addTestDevice(ir.next());
+						}
+					}
+				} catch (Exception e) {
+					LogE("Error during add test device", e);
 				}
-			}
-		} catch (Exception e) {
-			LogE("Error during add test device", e);
-		}
 
-		//begin load interstitial ad
-		interstitialAdView.loadAd(builder.build());
+				//begin load interstitial ad
+				interstitialAdView.loadAd(builder.build());
+			}
+		});
 	}
 	
 	public void showInterstitial() {
@@ -358,105 +376,84 @@ public class AdsAdmob implements InterfaceAds {
     public boolean hasInterstitial() {
     	return interstitialAdView.isLoaded();
     }
-    
-    public void setBannerAnimationInfo(Hashtable<Integer, Integer> devInfo) {
-    	slideUpTimePeriod = devInfo.get("slideUpTimePeriod");
-    	slideDownTimePeriod = devInfo.get("slideDownTimePeriod");
-    }
-    
-    public void slideUpBannerAds() {
-//    	mContext.runOnUiThread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				adView.setVisibility(View.VISIBLE);
-//				MyUtils myUtils = new MyUtils();
-//				myUtils.SlideUp(adView, mContext);
-//			}
-//		});
-//
-//    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				slideDownBannerAds();
-//			}
-//		}, slideUpTimePeriod, TimeUnit.SECONDS);
-    }
-    
-    public void slideDownBannerAds() {
-//    	mContext.runOnUiThread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				MyUtils myUtils = new MyUtils();
-//				myUtils.SlideDown(adView, mContext);
-//			}
-//		});
-//
-//    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				slideUpBannerAds();
-//			}
-//		}, slideDownTimePeriod, TimeUnit.SECONDS);
-    }
-        
-    public class MyUtils {
 
-        public void SlideUp(final View view, Context context) {
-            Animation anim = AnimationUtils.loadAnimation(context, R.anim.slide_down);
-            anim.setAnimationListener(new Animation.AnimationListener() {
+	public void slideBannerUp() {
+		Log.i(LOG_TAG, "Slide Banner Up: CALL");
 
-                @Override
-                public void onAnimationStart(Animation animation) {
-                    // TODO Auto-generated method stub
-                    view.setAlpha(255);
-                    view.setVisibility(View.VISIBLE);
-                }
+		if (adView == null) {
+			Log.i(LOG_TAG, "Slide Banner Up: NO VIEW");
+		}
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                    // TODO Auto-generated method stub
+		PluginWrapper.runOnMainThread(new Runnable() {
+			@Override
+			public void run() {
+				if (adView != null) {
+					adView.setVisibility(View.INVISIBLE);
+					TranslateAnimation anim = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 1, Animation.RELATIVE_TO_PARENT, 0);
+					anim.setDuration(1000);
+					anim.setFillAfter(true);
 
-                }
+					anim.setAnimationListener(new Animation.AnimationListener() {
+						@Override
+						public void onAnimationStart(Animation animation) {
+							Log.i(LOG_TAG, "Slide Banner Up: START");
+							if (adView != null) {
+								adView.setVisibility(View.VISIBLE);
+							}
+						}
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    // TODO Auto-generated method stub
+						@Override
+						public void onAnimationEnd(Animation animation) {
+							Log.i(LOG_TAG, "Slide Banner Up: END");
+						}
 
-                }
-            });
-            view.startAnimation(anim);
+						@Override
+						public void onAnimationRepeat(Animation animation) {
+						}
+					});
+					adView.startAnimation(anim);
+				}
+			}
+		});
+	}
 
+	public void slideBannerDown() {
+		Log.i(LOG_TAG, "Slide Banner Down: CALL");
 
-        }
+		if (adView == null) {
+			Log.i(LOG_TAG, "Slide Banner Down: NO VIEW");
+			return;
+		}
 
-        public void SlideDown(final View view, Context context) {
-            Animation anim = AnimationUtils.loadAnimation(context, R.anim.slide_up);
-            anim.setAnimationListener(new Animation.AnimationListener() {
+		PluginWrapper.runOnMainThread(new Runnable() {
+			@Override
+			public void run() {
+				if (adView != null) {
+					adView.setVisibility(View.VISIBLE);
+					TranslateAnimation anim = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 1);
+					anim.setDuration(1000);
+					anim.setFillAfter(true);
 
-                @Override
-                public void onAnimationStart(Animation animation) {
-                    // TODO Auto-generated method stub
+					anim.setAnimationListener(new Animation.AnimationListener() {
+						@Override
+						public void onAnimationStart(Animation animation) {
+							Log.i(LOG_TAG, "Slide Banner Down: START");
+						}
 
-                }
+						@Override
+						public void onAnimationEnd(Animation animation) {
+							Log.i(LOG_TAG, "Slide Banner Down: END");
+							adView.setVisibility(View.GONE);
+						}
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                    // TODO Auto-generated method stub
+						@Override
+						public void onAnimationRepeat(Animation animation) {
+						}
+					});
 
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    // TODO Auto-generated method stub
-                    view.setVisibility(View.INVISIBLE);
-                }
-            });
-            view.startAnimation(anim);
-
-        }
-    }
+					adView.startAnimation(anim);
+				}
+			}
+		});
+	}
 }
