@@ -186,8 +186,10 @@ public class BaaSParse implements InterfaceBaaS {
 		for (Iterator<String> iter = jsonObj.keys(); iter.hasNext();) {
 			String key = iter.next();
 			logD("Key: " + key);
-			logD("Field: " + jsonObj.get(key).toString());
-			parseObj.put(key, jsonObj.get(key));
+			Object value = jsonObj.get(key);
+			logD("Field: " + value.toString());
+
+			parseObj.put(key, value);
 		}
 	}
 
@@ -202,18 +204,11 @@ public class BaaSParse implements InterfaceBaaS {
 			JSONObject jObject = new JSONObject(jsonData);
 
 			ParseUser pUser = ParseUser.getCurrentUser();
-
 			if (pUser != null) {
-				Iterator<String> iter = jObject.keys();
-
-				while (iter.hasNext()) {
-					String key = iter.next();
-
-					pUser.put(key, jObject.get(key));
-				}
-
-				return getUserInfo();
+				updateParseObject(pUser, jObject);
 			}
+
+			return getUserInfo();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -228,7 +223,7 @@ public class BaaSParse implements InterfaceBaaS {
 				@Override
 				public void done(ParseException e) {
 					if (e == null) {
-						BaaSWrapper.onBaaSActionResult(mAdapter, true, convertPFUserToJson(pUser).toString(), callbackID);
+						BaaSWrapper.onBaaSActionResult(mAdapter, true, getUserInfo(), callbackID);
 					} else {
 						BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), callbackID);
 					}
