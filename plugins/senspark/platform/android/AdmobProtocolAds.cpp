@@ -1,10 +1,18 @@
 #include "AdmobProtocolAds.h"
 #include "PluginUtils.h"
 #include "PluginJniHelper.h"
+#include <sstream>
 
 USING_NS_SENSPARK_PLUGIN_ADS;
 using namespace cocos2d::plugin;
 using namespace cocos2d;
+
+std::string to_string(int input) {
+    std::stringstream ss;
+    ss << input;
+    std::string ret(ss.str());
+    return ret;
+}
 
 AdmobProtocolAds::AdmobProtocolAds() {
 

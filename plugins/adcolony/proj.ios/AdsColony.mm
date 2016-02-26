@@ -82,7 +82,11 @@ using namespace cocos2d::plugin;
     return [AdColony zoneStatusForZone:zoneID] == ADCOLONY_ZONE_STATUS_ACTIVE ? YES : NO;
 }
 
-- (void) showRewardedVideo:(NSString *)zoneID showPrePopup:(BOOL)isShowPrePopup showPostPopup:(BOOL)isShowPostPopup {
+- (void) showRewardedVideo:(NSDictionary *)info {
+    NSString* zoneID = info[@"Param1"];
+    bool isShowPrePopup = [info[@"Param2"] boolValue];
+    bool isShowPostPopup = [info[@"Param3"] boolValue];
+
     [AdColony playVideoAdForZone: zoneID withDelegate:self withV4VCPrePopup: isShowPrePopup andV4VCPostPopup: isShowPostPopup];
 }
 

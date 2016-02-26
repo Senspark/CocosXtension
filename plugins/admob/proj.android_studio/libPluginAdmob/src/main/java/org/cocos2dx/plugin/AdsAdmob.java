@@ -44,18 +44,37 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+
+import org.cocos2dx.libAdsAdmob.R;
+
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class AdsAdmob implements InterfaceAds {
 
 	private static final String LOG_TAG = "AdsAdmob";
 	private static Activity mContext = null;
-	private static boolean bDebug = false;
+	private static boolean bDebug = true;
 	private static AdsAdmob mAdapter = null;
+	private static MyUtils mMyUtils;
 
 	private AdView adView = null;
 	private InterstitialAd interstitialAdView = null;
 	private String mPublishID = "";
 	private Set<String> mTestDevices = null;
 	private WindowManager mWm = null;
+
+	private ScheduledExecutorService scheduledExecutorService = null;
 
 	private static final int ADMOB_SIZE_BANNER = 1;
 	private static final int ADMOB_SIZE_FULL_BANNER = 2;
@@ -82,6 +101,8 @@ public class AdsAdmob implements InterfaceAds {
 	}
 
 	public AdsAdmob(Context context) {
+		Log.i(LOG_TAG, "Initializing AdsAdmob");
+		mMyUtils = new MyUtils();
 		mContext = (Activity) context;
 		mAdapter = this;
 	}
@@ -118,11 +139,11 @@ public class AdsAdmob implements InterfaceAds {
 	            {
 	                String strSize = info.get("AdmobSizeEnum");
 	                int sizeEnum = Integer.parseInt(strSize);
-    	            showBannerAd(sizeEnum, pos);
+					showBannerAd(sizeEnum, pos);
                     break;
 	            }
 	        case ADMOB_TYPE_FULLSCREEN:
-	            LogD("Now not support full screen view in Admob");
+	            showInterstitial();
 	            break;
 	        default:
 	            break;
@@ -195,9 +216,7 @@ public class AdsAdmob implements InterfaceAds {
 						break;
 				}
 
-				if (adView == null) {
-					adView = new AdView(mContext);
-				}
+				adView = new AdView(mContext);
 
 				adView.setBackgroundColor(Color.TRANSPARENT);
 				adView.setAdSize(size);
@@ -276,6 +295,8 @@ public class AdsAdmob implements InterfaceAds {
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
+				Log.i(LOG_TAG, "Start loading interstitial ad");
+
 				interstitialAdView = new InterstitialAd(mContext);
 				interstitialAdView.setAdUnitId(mPublishID);
 				interstitialAdView.setAdListener(new AdmobAdsListener());
@@ -299,11 +320,17 @@ public class AdsAdmob implements InterfaceAds {
 	}
 	
 	public void showInterstitial() {
-		if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
-			Log.e("PluginAdmob", "ADMOB: Interstitial cannot show. It is not ready");
-		} else {
-			interstitialAdView.show();
-		}
+		mContext.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
+					Log.e("PluginAdmob", "ADMOB: Interstitial cannot show. It is not ready: - InterstitialAdView : " + interstitialAdView + " - isLoaded: " + interstitialAdView.isLoaded());
+					loadInterstitial();
+				} else {
+					interstitialAdView.show();
+				}
+			}
+		});
 	}
 	
 	private class AdmobAdsListener extends AdListener {
