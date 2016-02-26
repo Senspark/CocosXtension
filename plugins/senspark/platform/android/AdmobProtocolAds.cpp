@@ -33,28 +33,10 @@ bool AdmobProtocolAds::hasInterstitial() {
     return callBoolFuncWithParam("hasInterstitial", nullptr);
 }
 
-void AdmobProtocolAds::setBannerAnimationInfo(int slideUpTimePeriod, int slideDownTimePeriod) {
-    TAdsInfo devInfo;
-    devInfo["slideUpTimePeriod"]    = slideUpTimePeriod;
-    devInfo["slideDownTimePeriod"]  = slideDownTimePeriod;
-    PluginParam param(devInfo);
-
-    PluginJavaData *pData = PluginUtils::getPluginJavaData(this);
-    PluginJniMethodInfo t;
-    if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(),
-                                       "configDeveloperInfo", "(Ljava/util/Hashtable;)V")) {
-        jobject obj_Map = PluginUtils::createJavaMapObject(&devInfo);
-
-        t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map);
-        t.env->DeleteLocalRef(obj_Map);
-        t.env->DeleteLocalRef(t.classID);
-    }
-}
-
 void AdmobProtocolAds::slideBannerUp() {
-    callFuncWithParam("slideUpBannerAds", nullptr);
+    callFuncWithParam("slideBannerUp", nullptr);
 }
 
 void AdmobProtocolAds::slideBannerDown() {
-    callFuncWithParam("slideDownBannerAds", nullptr);
+    callFuncWithParam("slideBannerDown", nullptr);
 }
