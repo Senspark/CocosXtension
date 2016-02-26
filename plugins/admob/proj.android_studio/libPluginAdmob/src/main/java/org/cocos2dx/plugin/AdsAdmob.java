@@ -66,7 +66,6 @@ public class AdsAdmob implements InterfaceAds {
 	private static Activity mContext = null;
 	private static boolean bDebug = true;
 	private static AdsAdmob mAdapter = null;
-	private static MyUtils mMyUtils;
 
 	private AdView adView = null;
 	private InterstitialAd interstitialAdView = null;
@@ -102,7 +101,6 @@ public class AdsAdmob implements InterfaceAds {
 
 	public AdsAdmob(Context context) {
 		Log.i(LOG_TAG, "Initializing AdsAdmob");
-		mMyUtils = new MyUtils();
 		mContext = (Activity) context;
 		mAdapter = this;
 	}

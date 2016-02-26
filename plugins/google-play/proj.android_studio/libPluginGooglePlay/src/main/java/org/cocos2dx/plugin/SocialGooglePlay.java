@@ -1,8 +1,5 @@
 package org.cocos2dx.plugin;
 
-import java.util.Hashtable;
-import java.util.concurrent.TimeUnit;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,10 +7,14 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.games.GamesStatusCodes;
 import com.google.android.gms.games.achievement.Achievements.UpdateAchievementResult;
 import com.google.android.gms.games.leaderboard.Leaderboards.SubmitScoreResult;
 import com.google.games.utils.GameHelper;
+
+import java.util.Hashtable;
+import java.util.concurrent.TimeUnit;
 
 public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 	public final static String LOG_TAG = "SocialGooglePlay";
@@ -233,6 +234,11 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 		if (requestCode == REQUEST_CODE_LEADERBOARD) {
 			SocialWrapper.onDialogDissmissedWithCallback(mCurrentCallbackID);
 			mCurrentCallbackID = 0;
+		}
+
+		if ((requestCode == REQUEST_CODE_ACHIEVEMENT || requestCode == REQUEST_CODE_LEADERBOARD) && resultCode == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED) {
+			Log.i(LOG_TAG, "It looks like that user has logged out from GooglePlay's UI. So disconnect GameHelper also to avoid crashing.");
+			mGameHelper.disconnect();
 		}
 
 		return true;
