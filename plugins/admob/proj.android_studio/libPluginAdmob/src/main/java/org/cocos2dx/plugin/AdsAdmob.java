@@ -43,22 +43,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-import com.senspark.libAdsAdmob.R;
-
-import org.cocos2dx.libAdsAdmob.R;
-
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class AdsAdmob implements InterfaceAds {
 
@@ -66,7 +51,6 @@ public class AdsAdmob implements InterfaceAds {
 	private static Activity mContext = null;
 	private static boolean bDebug = true;
 	private static AdsAdmob mAdapter = null;
-	private static MyUtils mMyUtils;
 
 	private AdView adView = null;
 	private InterstitialAd interstitialAdView = null;
@@ -102,7 +86,6 @@ public class AdsAdmob implements InterfaceAds {
 
 	public AdsAdmob(Context context) {
 		Log.i(LOG_TAG, "Initializing AdsAdmob");
-		mMyUtils = new MyUtils();
 		mContext = (Activity) context;
 		mAdapter = this;
 	}
