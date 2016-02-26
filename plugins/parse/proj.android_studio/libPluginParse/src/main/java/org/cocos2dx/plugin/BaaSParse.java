@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -679,11 +680,17 @@ public class BaaSParse implements InterfaceBaaS {
 
 			try {
 				for (String key : parseObject.keySet()) {
-					jsonObj.accumulate(key, parseObject.get(key));
+					Object o = parseObject.get(key);
+
+					if (o instanceof HashMap) {
+						jsonObj.put(key, new JSONObject((HashMap)o));
+					} else {
+						jsonObj.put(key, parseObject.get(key));
+					}
 				}
 
-				jsonObj.accumulate("createdAt", parseObject.getCreatedAt().getTime());
-				jsonObj.accumulate("updatedAt", parseObject.getUpdatedAt().getTime());
+				jsonObj.put("createdAt", parseObject.getCreatedAt().getTime());
+				jsonObj.put("updatedAt", parseObject.getUpdatedAt().getTime());
 
 				return jsonObj;
 			} catch (JSONException ex) {
