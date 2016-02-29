@@ -272,8 +272,10 @@
     
     FacebookSharingDelegate* delegate           = [[FacebookSharingDelegate alloc] initWithSharer:self andCallbackID:cbID ? [cbID longValue] : 0];
     delegate.shareInfo                          = shareInfo;
-    
+
+    [gameRequestDialog setDelegate:delegate];
     [gameRequestDialog show];
+
 }
 
 @end
