@@ -222,11 +222,6 @@ public class ShareFacebook implements InterfaceShare, PluginListener {
 		String objectID		= info.get("object-id");
 		String data			= info.get("data");
 
-		int actionType		= 0;
-		if (Integer.parseInt(info.get("action-type")) > 0) {
-			actionType = Integer.parseInt(info.get("action-type"));
-		}
-
 		GameRequestDialog gameRequestDialog 	= new GameRequestDialog(mContext);
 		gameRequestDialog.registerCallback(mCallbackManager, new FacebookCallback<GameRequestDialog.Result>() {
 			@Override
@@ -248,15 +243,25 @@ public class ShareFacebook implements InterfaceShare, PluginListener {
 			}
 		});
 
-		GameRequestContent gameRequestContent 	= new GameRequestContent.Builder()
-				.setActionType(GameRequestContent.ActionType.SEND)
-				.setMessage(message)
-				.setTitle(title)
-				.setObjectId(objectID)
-				.setData(data)
-				.setRecipients(Arrays.asList(recipientsArray))
-				.build();
-		gameRequestDialog.show(gameRequestContent);
+		if (data != null && objectID != null) { // Send gift, item, etc.
+			GameRequestContent gameRequestContent = new GameRequestContent.Builder()
+					.setMessage(message)
+					.setTitle(title)
+					.setObjectId(objectID)
+					.setActionType(GameRequestContent.ActionType.SEND)
+					.setData(data)
+					.setRecipients(Arrays.asList(recipientsArray))
+					.build();
+			gameRequestDialog.show(gameRequestContent);
+
+		} else { // Send invitation
+			GameRequestContent gameRequestContent = new GameRequestContent.Builder()
+					.setMessage(message)
+					.setTitle(title)
+					.setRecipients(Arrays.asList(recipientsArray))
+					.build();
+			gameRequestDialog.show(gameRequestContent);
+		}
 	}
 
 
@@ -363,7 +368,9 @@ public class ShareFacebook implements InterfaceShare, PluginListener {
 		Log.i(LOG_TAG, "ResultCode: " + resultCode);
 		Log.i(LOG_TAG, "Data: " + data);
 
-		if (requestCode == CallbackManagerImpl.RequestCodeOffset.Share.toRequestCode()) {
+		if (requestCode == CallbackManagerImpl.RequestCodeOffset.Share.toRequestCode() ||
+				requestCode == CallbackManagerImpl.RequestCodeOffset.GameRequest.toRequestCode() ||
+				requestCode == CallbackManagerImpl.RequestCodeOffset.AppInvite.toRequestCode()) {
 			Log.i(LOG_TAG, "CallbackManager onActivityResult triggered");
 			mCallbackManager.onActivityResult(requestCode, resultCode, data);
 		}
