@@ -1,3 +1,1 @@
 include ':libPluginParse'
-include ':libPluginProtocol'
-project(':libPluginProtocol').projectDir = new File(settingsDir, '../../../protocols/proj.android_studio/libPluginProtocol')

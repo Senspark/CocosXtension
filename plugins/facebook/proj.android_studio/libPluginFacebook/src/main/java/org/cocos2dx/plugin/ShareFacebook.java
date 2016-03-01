@@ -24,18 +24,24 @@
  
 package org.cocos2dx.plugin;
 
-import java.util.Hashtable;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -48,7 +54,13 @@ import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.model.ShareVideo;
 import com.facebook.share.model.ShareVideoContent;
+import com.facebook.share.widget.LikeView;
 import com.facebook.share.widget.ShareDialog;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Hashtable;
 
 public class ShareFacebook implements InterfaceShare{
 
@@ -191,5 +203,71 @@ public class ShareFacebook implements InterfaceShare{
 		}
 		LogD("NetWork reachable : " + bRet);
 		return bRet;
+	}
+
+	public void likeFanpage(final String idFacebookPage) {
+
+		PluginWrapper.runOnMainThread(new Runnable() {
+			@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+			@Override
+			public void run() {
+				String pageToLike = "https://www.facebook.com/" + idFacebookPage;
+				Log.i("Like API", "Page to like: " + pageToLike);
+
+				LikeView likeView = new LikeView(mContext);
+				likeView.setLikeViewStyle(LikeView.Style.STANDARD);
+				likeView.setAuxiliaryViewPosition(LikeView.AuxiliaryViewPosition.BOTTOM);
+				likeView.setObjectIdAndType(pageToLike, LikeView.ObjectType.PAGE);
+				likeView.setEnabled(true);
+
+				LinearLayout ll = new LinearLayout(mContext);
+				ll.setOrientation(LinearLayout.VERTICAL);
+				ll.addView(likeView);
+
+				TextView title = new TextView(mContext);
+				// You Can Customise your Title here
+				title.setText("Facebook Like");
+				title.setPadding(10, 10, 10, 10);
+				title.setGravity(Gravity.CENTER);
+				title.setTextColor(Color.BLACK);
+				title.setTextSize(20);
+
+				final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+						| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+						| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+						| View.SYSTEM_UI_FLAG_FULLSCREEN
+						| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
+				if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+					Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(mContext, android.R.style.Theme_Holo_Light_Dialog));
+					builder.setCustomTitle(title);
+					builder.setMessage("Like us and never miss out on awesome events!");
+					builder.setView(ll);
+
+					AlertDialog dialog = builder.create();
+					dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+					dialog.show();
+
+					dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+					TextView textView = (TextView) dialog.findViewById(android.R.id.message);
+					textView.setTextSize(17);
+
+				} else {
+					Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(mContext, android.R.style.Theme_Holo_Light_Dialog));
+					builder.setCustomTitle(title);
+					builder.setMessage("Like us and never miss out on awesome events!");
+					builder.setView(ll);
+
+					AlertDialog dialog = builder.create();
+					dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+					dialog.show();
+
+					dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+					TextView textView = (TextView) dialog.findViewById(android.R.id.message);
+					textView.setTextSize(17);
+				}
+			}
+		});
 	}
 }

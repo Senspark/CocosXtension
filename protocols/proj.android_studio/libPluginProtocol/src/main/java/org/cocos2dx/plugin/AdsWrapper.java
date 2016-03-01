@@ -64,7 +64,7 @@ public class AdsWrapper {
 
 	public static void addAdView(WindowManager mWm, View adView, int pos) {
 		WindowManager.LayoutParams mLayoutParams = new WindowManager.LayoutParams();
-		mLayoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL;
+		mLayoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
 		mLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
 		mLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 		mLayoutParams.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;

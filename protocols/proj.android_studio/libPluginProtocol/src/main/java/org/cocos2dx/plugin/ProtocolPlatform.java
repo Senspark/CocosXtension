@@ -21,6 +21,7 @@ public class ProtocolPlatform  {
 	protected Activity mActivity = null;
 	
 	public ProtocolPlatform(Context context) {
+		Log.i("ProtocolPlatform", "ProtocolPlatform constructor");
 		mContext = context;
 		mActivity = (Activity) context;
 		mAdapter = this;
@@ -30,8 +31,6 @@ public class ProtocolPlatform  {
 		try {
 			return mContext.getPackageManager().getPackageInfo(appName, PackageManager.GET_ACTIVITIES) != null ? true : false;
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			return false;
 		}
 	}
@@ -41,10 +40,11 @@ public class ProtocolPlatform  {
 		return !isDebuggable;
 	}
 	
-	public boolean isConnected(final String hostName) {
+	public boolean isConnected(String hostName) {
 		ConnectivityManager conMng = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo info = conMng.getActiveNetworkInfo();
 		boolean isConnected = info != null && info.isConnectedOrConnecting();
+		Log.i("ProtocolPlatform", "isConnected? - " + (isConnected? "YES" : "NO"));
 		if (isConnected) {
 			PlatformWrapper.onPlatformResult(PlatformWrapper.PLATFORM_RESULT_CODE_kConnected, "Network connected");
 		} else {

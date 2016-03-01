@@ -73,7 +73,7 @@ using namespace cocos2d::plugin;
     [AdColony playVideoAdForZone: zoneID withDelegate:self];
 }
 
-- (void) cacheInterstitial {
+- (void) cacheInterstitial: (NSString*) zoneID {
     NSLog(@"AdColony: Not support %s", __func__);
 }
 
@@ -86,7 +86,7 @@ using namespace cocos2d::plugin;
     [AdColony playVideoAdForZone: zoneID withDelegate:self withV4VCPrePopup: isShowPrePopup andV4VCPostPopup: isShowPostPopup];
 }
 
-- (void) cacheRewardedVideo {
+- (void) cacheRewardedVideo: (NSString*) zoneID {
     NSLog(@"AdColony: Not support %s", __func__);
 }
 
@@ -137,11 +137,5 @@ using namespace cocos2d::plugin;
         [AdsWrapper onAdsResult:self withRet: AdsResultCode::kVideoDismissed withMsg: msg];
     }
 }
-
-
-
-
-
-
 
 @end

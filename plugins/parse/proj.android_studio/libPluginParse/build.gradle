@@ -1,8 +1,33 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'plugin-parse'
+    versionName = '0.9'
+
+    publishedGroupId = 'com.senspark'
+    libraryName = 'libPluginParse'
+    artifact = 'libPluginParse'
+
+    libraryDescription = 'A Parse plugin for cocos2dx'
+
+    siteUrl = 'https://github.com/Senspark/CocosXtension/tree/v3/plugins/parse'
+    gitUrl = 'https://github.com/Senspark/CocosXtension.git'
+
+    libraryVersion = '0.9'
+
+    developerId = 'ndpduc'
+    developerName = 'Duc Nguyen'
+    developerEmail = 'ndpduc@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         minSdkVersion 9
@@ -18,8 +43,12 @@ android {
 }
 
 dependencies {
-    compile project(':libPluginProtocol')
-    compile files('libs/bolts-tasks-1.3.0.jar')
-    compile files('libs/Parse-1.12.0.jar')
-    compile files('libs/ParseFacebookUtilsV4-1.10.4.jar')
+    compile 'com.senspark:libPluginProtocol:0.9'
+    compile ('com.facebook.android:facebook-android-sdk:4.8.1')
+    compile 'com.parse:parse-android:1.13.0'
+    compile 'com.parse:parsefacebookutils-v4-android:1.10.4@aar'
 }
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+

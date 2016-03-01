@@ -1,9 +1,11 @@
 #include "ParseProtocolBaaS.h"
 #include "PluginUtils.h"
+#include "PluginJniHelper.h"
 
 USING_NS_SENSPARK_PLUGIN_BAAS;
 using namespace cocos2d::plugin;
 using namespace std;
+using namespace cocos2d;
 
 ParseProtocolBaaS::~ParseProtocolBaaS() {
     PluginUtils::erasePluginJavaData(this);
@@ -61,13 +63,33 @@ void ParseProtocolBaaS::loginWithFacebookAccessToken(BaaSCallback& cb) {
 
 
 void ParseProtocolBaaS::subscribeChannels(const std::string &channels) {
-    PluginParam channelsParam(channels.c_str());
-    callFuncWithParam("subscribeChannels", &channelsParam, nullptr);
+    PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+    PluginJniMethodInfo t;
+
+    if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "subscribeChannels",
+            "(Ljava/lang/String;)V")) {
+        jstring jchannels = t.env->NewStringUTF(channels.c_str());
+
+        t.env->CallVoidMethod(pData->jobj, t.methodID, jchannels);
+
+        t.env->DeleteLocalRef(jchannels);
+        t.env->DeleteLocalRef(t.classID);
+    }
 }
 
 void ParseProtocolBaaS::unsubscribeChannels(const std::string &channels) {
-    PluginParam channelsParam(channels.c_str());
-    callFuncWithParam("unsubscribeChannels", &channelsParam, nullptr);
+    PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+    PluginJniMethodInfo t;
+
+    if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "unsubscribeChannels",
+            "(Ljava/lang/String;)V")) {
+        jstring jchannels = t.env->NewStringUTF(channels.c_str());
+
+        t.env->CallVoidMethod(pData->jobj, t.methodID, jchannels);
+
+        t.env->DeleteLocalRef(jchannels);
+        t.env->DeleteLocalRef(t.classID);
+    }
 }
 
 std::string ParseProtocolBaaS::getSubscribedChannels() {
@@ -76,11 +98,16 @@ std::string ParseProtocolBaaS::getSubscribedChannels() {
 
 
 void ParseProtocolBaaS::fetchConfigInBackground(BaaSCallback& cb) {
-    CallbackWrapper *wrapper = new CallbackWrapper(cb);
 
-    PluginParam callbackParam((long) wrapper);
+    PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+    PluginJniMethodInfo t;
 
-    callFuncWithParam("fetchConfigInBackground", &callbackParam, nullptr);
+    if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(), "fetchConfigInBackground", "(I)V")) {
+        CallbackWrapper *wrapper = new CallbackWrapper(cb);
+
+        t.env->CallVoidMethod(pData->jobj, t.methodID, (long) wrapper);
+        t.env->DeleteLocalRef(t.classID);
+    }
 }
 
 bool ParseProtocolBaaS::getBoolConfig(const std::string &param) {

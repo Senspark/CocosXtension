@@ -27,8 +27,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -39,6 +37,7 @@ import com.senspark.libAdsAdmob.R;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -49,7 +48,7 @@ public class AdsAdmob implements InterfaceAds {
 
 	private static final String LOG_TAG = "AdsAdmob";
 	private static Activity mContext = null;
-	private static boolean bDebug = false;
+	private static boolean bDebug = true;
 	private static AdsAdmob mAdapter = null;
 	private int slideUpTimePeriod;
 	private int slideDownTimePeriod;
@@ -77,12 +76,13 @@ public class AdsAdmob implements InterfaceAds {
 	}
 
 	protected static void LogD(String msg) {
-		if (bDebug) {
+		if (bDebug == true) {
 			Log.d(LOG_TAG, msg);
 		}
 	}
 
 	public AdsAdmob(Context context) {
+		LogD("AdsAdmob()");
 		mContext = (Activity) context;
 		mAdapter = this;
 	}
@@ -99,9 +99,10 @@ public class AdsAdmob implements InterfaceAds {
 
 	@Override
 	public void configDeveloperInfo(Hashtable<String, String> devInfo) {
+		LogD("configDeveloperInfo");
 		try {
 			mPublishID = devInfo.get("AdmobID");
-			LogD("init AppInfo : " + mPublishID);
+			LogD("id interstitialAd : "+mPublishID);
 		} catch (Exception e) {
 			LogE("initAppInfo, The format of appInfo is wrong", e);
 		}
@@ -123,8 +124,10 @@ public class AdsAdmob implements InterfaceAds {
                     break;
 	            }
 	        case ADMOB_TYPE_FULLSCREEN:
-	            LogD("Now not support full screen view in Admob");
-	            break;
+				{
+					showInterstitial();
+					break;
+				}
 	        default:
 	            break;
 	        }
@@ -179,47 +182,49 @@ public class AdsAdmob implements InterfaceAds {
 
 				AdSize size = AdSize.BANNER;
 				switch (curSize) {
-				case AdsAdmob.ADMOB_SIZE_BANNER:
-					size = AdSize.BANNER;
-					break;
-				case AdsAdmob.ADMOB_SIZE_FULL_BANNER:
-					size = AdSize.FULL_BANNER;
-					break;
-				case AdsAdmob.ADMOB_SIZE_LARGE_BANNER:
-					size = AdSize.LARGE_BANNER;
-					break;
-				case AdsAdmob.ADMOB_SIZE_LEADERBOARD:
-					size = AdSize.LEADERBOARD;
-					break;
-				case AdsAdmob.ADMOB_SIZE_MEDIUM_RECTANGLE:
-				    size = AdSize.MEDIUM_RECTANGLE;
-				    break;
-				case AdsAdmob.ADMOB_SIZE_SMART_BANNER:
-				    size = AdSize.SMART_BANNER;
-				    break;
-				case AdsAdmob.ADMOB_SIZE_WIDE_SKYSCRAPER:
-				    size = AdSize.WIDE_SKYSCRAPER;
-				    break;
-				default:
-					break;
+					case AdsAdmob.ADMOB_SIZE_BANNER:
+						size = AdSize.BANNER;
+						break;
+					case AdsAdmob.ADMOB_SIZE_FULL_BANNER:
+						size = AdSize.FULL_BANNER;
+						break;
+					case AdsAdmob.ADMOB_SIZE_LARGE_BANNER:
+						size = AdSize.LARGE_BANNER;
+						break;
+					case AdsAdmob.ADMOB_SIZE_LEADERBOARD:
+						size = AdSize.LEADERBOARD;
+						break;
+					case AdsAdmob.ADMOB_SIZE_MEDIUM_RECTANGLE:
+						size = AdSize.MEDIUM_RECTANGLE;
+						break;
+					case AdsAdmob.ADMOB_SIZE_SMART_BANNER:
+						size = AdSize.SMART_BANNER;
+						break;
+					case AdsAdmob.ADMOB_SIZE_WIDE_SKYSCRAPER:
+						size = AdSize.WIDE_SKYSCRAPER;
+						break;
+					default:
+						break;
 				}
-				adView = new AdView(mContext);
+				if (adView == null) {
+					adView = new AdView(mContext);
+				}
+				adView.setBackgroundColor(Color.TRANSPARENT);
 				adView.setAdSize(size);
 				adView.setAdUnitId(mPublishID);
 				AdRequest.Builder builder = new AdRequest.Builder();
-				
+
 				try {
 					if (mTestDevices != null) {
 						Iterator<String> ir = mTestDevices.iterator();
-						while(ir.hasNext())
-						{
+						while (ir.hasNext()) {
 							builder.addTestDevice(ir.next());
 						}
 					}
 				} catch (Exception e) {
 					LogE("Error during add test device", e);
 				}
-				
+
 				adView.loadAd(builder.build());
 				adView.setAdListener(new AdmobAdsListener());
 
@@ -246,57 +251,79 @@ public class AdsAdmob implements InterfaceAds {
 		});
 	}
 
-	public void addTestDevice(String deviceID) {
-		LogD("addTestDevice invoked : " + deviceID);
-		if (null == mTestDevices) {
-			mTestDevices = new HashSet<String>();
-		}
-		mTestDevices.add(deviceID);
-	}
-	
-	public void loadInterstitial() {
-		if (interstitialAdView == null) {
-			interstitialAdView = new InterstitialAd(mContext);
-			interstitialAdView.setAdUnitId(mPublishID);
-			interstitialAdView.setAdListener(new AdmobAdsListener());
-			
-			AdRequest.Builder builder = new AdRequest.Builder();
-			try {
-				if (mTestDevices != null) {
-					Iterator<String> ir = mTestDevices.iterator();
-					while(ir.hasNext())
-					{
-						builder.addTestDevice(ir.next());
-					}
+	public void addTestDevice(final String deviceID) {
+		mContext.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				LogD("addTestDevice invoked : " + deviceID);
+				if (null == mTestDevices) {
+					mTestDevices = new HashSet<String>();
 				}
-			} catch (Exception e) {
-				LogE("Error during add test device", e);
+				mTestDevices.add(deviceID);
 			}
-			
-			//begin load interstitial ad
-			interstitialAdView.loadAd(builder.build());
-		}
+		});
+
+	}
+
+	public void loadInterstitial() {
+		mContext.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Log.d("AdsAdmob", "load interstitial");
+				interstitialAdView = new InterstitialAd(mContext);
+				interstitialAdView.setAdUnitId(mPublishID);
+				interstitialAdView.setAdListener(new AdmobAdsListener());
+
+				AdRequest.Builder builder = new AdRequest.Builder();
+				try {
+					if (mTestDevices != null) {
+						Iterator<String> ir = mTestDevices.iterator();
+						while (ir.hasNext()) {
+							builder.addTestDevice(ir.next());
+						}
+					}
+				} catch (Exception e) {
+					LogE("Error during add test device", e);
+				}
+
+				//begin load interstitial ad
+				interstitialAdView.loadAd(builder.build());
+			}
+		});
+
 	}
 	
 	public void showInterstitial() {
-		if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
-			Log.e("PluginAdmob", "ADMOB: Interstitial cannot show. It is not ready");
-		} else {
-			interstitialAdView.show();
-		}
+		mContext.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Log.d("AdsAdmob","show interstitial");
+				if(interstitialAdView == null){
+					LogD("interstitialAd is null");
+				}
+				if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
+					Log.e("PluginAdmob", "ADMOB: Interstitial cannot show. It is not ready");
+					loadInterstitial();
+				} else {
+					interstitialAdView.show();
+				}
+			}
+		});
+
 	}
 	
 	private class AdmobAdsListener extends AdListener {
 		@Override
 		public void onAdClosed() {
 			super.onAdClosed();
-			
+			loadInterstitial();
 			LogD("onDismissScreen invoked");
 			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsDismissed, "Ads view dismissed!");
 		}
 
 		@Override
 		public void onAdFailedToLoad(int errorCode) {
+			Log.e(LOG_TAG,"load interstitial failed error code "+ errorCode);
 			super.onAdFailedToLoad(errorCode);
 			
 			int errorNo = AdsWrapper.RESULT_CODE_UnknownError;
@@ -354,51 +381,51 @@ public class AdsAdmob implements InterfaceAds {
     }
     
     public boolean hasInterstitial() {
-    	return interstitialAdView.isLoaded();
+		return interstitialAdView.isLoaded();
     }
     
-    public void setBannerAniamtionInfo(Hashtable<Integer, Integer> devInfo) {
+    public void setBannerAnimationInfo(Hashtable<Integer, Integer> devInfo) {
     	slideUpTimePeriod = devInfo.get("slideUpTimePeriod");
     	slideDownTimePeriod = devInfo.get("slideDownTimePeriod");
     }
     
     public void slideUpBannerAds() {
-    	mContext.runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				adView.setVisibility(View.VISIBLE);
-				MyUtils myUtils = new MyUtils();
-				myUtils.SlideUp(adView, mContext);
-			}
-		});
-    	
-    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
-			
-			@Override
-			public void run() {
-				slideDownBannerAds();
-			}
-		}, slideUpTimePeriod, TimeUnit.SECONDS);
+//    	mContext.runOnUiThread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				adView.setVisibility(View.VISIBLE);
+//				MyUtils myUtils = new MyUtils();
+//				myUtils.SlideUp(adView, mContext);
+//			}
+//		});
+//
+//    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				slideDownBannerAds();
+//			}
+//		}, slideUpTimePeriod, TimeUnit.SECONDS);
     }
     
     public void slideDownBannerAds() {
-    	mContext.runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				MyUtils myUtils = new MyUtils();
-				myUtils.SlideDown(adView, mContext);
-			}
-		});
-    	
-    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
-			
-			@Override
-			public void run() {
-				slideUpBannerAds();				
-			}
-		}, slideDownTimePeriod, TimeUnit.SECONDS);
+//    	mContext.runOnUiThread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				MyUtils myUtils = new MyUtils();
+//				myUtils.SlideDown(adView, mContext);
+//			}
+//		});
+//
+//    	Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				slideUpBannerAds();
+//			}
+//		}, slideDownTimePeriod, TimeUnit.SECONDS);
     }
         
     public class MyUtils {

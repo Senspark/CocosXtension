@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.facebook.AccessToken;
 import com.parse.ConfigCallback;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
@@ -14,9 +15,9 @@ import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseConfig;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -27,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -70,12 +72,23 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public void configDeveloperInfo(Hashtable<String, String> devInfo) {
-		Log.e(LOG_TAG, "BAASPARSE CONFIGDEVELOPERINFO ...");
+		Log.i(LOG_TAG, "BAASPARSE CONFIGDEVELOPERINFO ...");
 		String appId = devInfo.get("ParseApplicationId");
 		String clientKey = devInfo.get("ParseClientKey");
 
-		Parse.enableLocalDatastore(mContext);
+		boolean enableLocalDatastore = "true".compareTo(devInfo.get("ParseEnableLocalDatastore")) == 0;
+		boolean enableFacebookUtils  = "true".compareTo(devInfo.get("ParseEnableFacebookUtils")) == 0;
+
+		if (enableLocalDatastore) {
+			Parse.enableLocalDatastore(mContext);
+		}
+
 		Parse.initialize(mContext, appId, clientKey);
+
+		if (enableFacebookUtils) {
+			ParseFacebookUtils.initialize(mContext);
+		}
+
 		ParseAnalytics.trackAppOpenedInBackground(mContext.getIntent());
 
 		mCurrentConfig = ParseConfig.getCurrentConfig();
@@ -83,7 +96,7 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public void signUp(Hashtable<String, String> userInfo, int callbackID) {
-		final long cbID = callbackID;
+		final int cbID = callbackID;
 		ParseUser user = new ParseUser();
 		user.setUsername(userInfo.get("username"));
 		user.setPassword(userInfo.get("password"));
@@ -110,7 +123,7 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public void login(String userName, String password, int callbackID) {
-		final long cbID = callbackID;
+		final int cbID = callbackID;
 		ParseUser.logInInBackground(userName, password, new LogInCallback() {
 
 			@Override
@@ -130,7 +143,7 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public void logout(int callbackID) {
-		final long cbID = callbackID;
+		final int cbID = callbackID;
 		ParseUser.logOutInBackground(new LogOutCallback() {
 			@Override
 			public void done(ParseException e) {
@@ -154,6 +167,7 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public String getUserID() {
+		Log.i(LOG_TAG, "BaaSParse getUserID: " + ParseUser.getCurrentUser().getObjectId());
 		return ParseUser.getCurrentUser().getObjectId();
 	}
 	
@@ -166,8 +180,55 @@ public class BaaSParse implements InterfaceBaaS {
 		}
 	}
 
+	public String getUserInfo() {
+		Log.e(LOG_TAG, "ParseUser: " + convertPFUserToJson(ParseUser.getCurrentUser()).toString());
+		return convertPFUserToJson(ParseUser.getCurrentUser()).toString();
+	}
+
+	public String setUserInfo(String jsonData) {
+		Log.e(LOG_TAG, "jsonData: " + jsonData);
+		try {
+			JSONObject jObject = new JSONObject(jsonData);
+
+			ParseUser pUser = ParseUser.getCurrentUser();
+
+			if (pUser != null) {
+				Iterator<String> iter = jObject.keys();
+
+				while (iter.hasNext()) {
+					String key = iter.next();
+
+					pUser.put(key, jObject.get(key));
+				}
+
+				return getUserInfo();
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return "";
+	}
+
+	public void saveUserInfo(final int callbackID) {
+		final ParseUser pUser = ParseUser.getCurrentUser();
+		if (pUser != null) {
+			pUser.saveInBackground(new SaveCallback() {
+				@Override
+				public void done(ParseException e) {
+					if (e == null) {
+						BaaSWrapper.onBaaSActionResult(mAdapter, true, convertPFUserToJson(pUser).toString(), callbackID);
+					} else {
+						BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), callbackID);
+					}
+				}
+			});
+		} else {
+			BaaSWrapper.onBaaSActionResult(mAdapter, false, "", callbackID);
+		}
+	}
+
 	public String getInstallationInfo() {
-		Log.e(LOG_TAG, "ParseInstallation: " + ParseInstallation.getCurrentInstallation().toString());
 		return ParseInstallation.getCurrentInstallation().toString();
 	}
 	
@@ -179,47 +240,42 @@ public class BaaSParse implements InterfaceBaaS {
 		return ParseInstallation.getCurrentInstallation().getList("channels").toArray().toString();		
 	}
 	
-	public void subscribeChannels(String channelList) throws JSONException {
-		JSONArray jArray = new JSONArray(channelList);
+	public void subscribeChannels(final String channelList) {
 
-		ArrayList<String> listdata = new ArrayList<String>();     
-		if (jArray != null) { 
-			for (int i=0; i<jArray.length(); i++){
-				listdata.add(jArray.get(i).toString());
-			} 
-		}
-		
-		ParsePush.subscribeInBackground(channelList, new SaveCallback() {
+		Log.e(LOG_TAG, "CHANNELS: " + Arrays.asList(channelList.split(",")));
 
+		ParseInstallation.getCurrentInstallation().addAllUnique("channels", Arrays.asList(channelList.split(",")));
+		ParseInstallation.getCurrentInstallation().saveEventually(new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
-				if (e != null) {
-					Log.e(LOG_TAG, "Subscribe channels failed with error: " + e.getMessage());
+				if (e == null) {
+					Log.i(LOG_TAG, "PARSE PUSH SUBSCRIBE TO CHANNEL " + channelList + " SUCCEEDED");
 				} else {
-					Log.i(LOG_TAG, "Subscribe channels succeeded");
+					Log.e(LOG_TAG, "PARSE PUSH SUBSCRIBE TO CHANNEL " + channelList + " FAILED WITH ERROR " + e.getMessage());
 				}
 			}
 		});
 	}
 	
-	public void unsubscribeChannels(String channelList) throws JSONException {
-		JSONArray jArray = new JSONArray(channelList);
+	public void unsubscribeChannels(final String channelList) throws JSONException {
+		JSONArray array = new JSONArray(channelList);
 
-		ArrayList<String> listdata = new ArrayList<String>();     
-		if (jArray != null) { 
-			for (int i=0; i<jArray.length(); i++){
-				listdata.add(jArray.get(i).toString());
-			} 
+		List<String> subcribed = ParseInstallation.getCurrentInstallation().getList("channels");
+
+		for (int i = 0; i < array.length(); i++) {
+			if (subcribed.contains(array.get(i))) {
+				subcribed.remove(array.get(i));
+			}
 		}
-		
-		ParsePush.unsubscribeInBackground(channelList, new SaveCallback() {
-			
+
+		ParseInstallation.getCurrentInstallation().put("channels", subcribed);
+		ParseInstallation.getCurrentInstallation().saveEventually(new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
-				if (e != null) {
-					Log.e(LOG_TAG, "Unsubscribe channels failed with error: " + e.getMessage());
+				if (e == null) {
+					Log.i(LOG_TAG, "PARSE PUSH UNSUBSCRIBE TO CHANNEL " + channelList + "SUCCEEDED");
 				} else {
-					Log.i(LOG_TAG, "Ubsubscribe channels succeeded");
+					Log.e(LOG_TAG, "PARSE PUSH UNSUBSCRIBE TO CHANNEL " + channelList + "FAILED WITH ERROR " + e.getMessage());
 				}
 			}
 		});
@@ -235,7 +291,7 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public void saveObjectInBackground(String className, String json, int callbackID) {
-		final long cbID = callbackID;
+		final int cbID = callbackID;
 		try {
 			JSONObject jsonObj = new JSONObject(json);
 			final ParseObject parseObj = convertJSONObject(className, jsonObj);
@@ -279,7 +335,7 @@ public class BaaSParse implements InterfaceBaaS {
 	
 	@Override
 	public void findObjectsInBackground(String className, String whereKey, String containInArray, int callbackID) {
-		final long cbID = callbackID;
+		final int cbID = callbackID;
 		try {
 			JSONArray jArray = new JSONArray(containInArray);
 
@@ -300,7 +356,12 @@ public class BaaSParse implements InterfaceBaaS {
 					if (error != null) {
 						BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(error), cbID);
 					} else {
-						BaaSWrapper.onBaaSActionResult(mAdapter, true, listObjects.toArray().toString(), cbID);
+						ArrayList<JSONObject> objects = new ArrayList<>();
+						for (ParseObject obj : listObjects) {
+							objects.add(convertPFObjectToJson(obj));
+						}
+
+						BaaSWrapper.onBaaSActionResult(mAdapter, true, String.valueOf(objects), cbID);
 					}
 				}
 			});
@@ -312,7 +373,7 @@ public class BaaSParse implements InterfaceBaaS {
 	
 	@Override
 	public void findObjectInBackground(String className, String whereKey, String equalTo, int callbackID) {
-		final long cbID = callbackID;
+		final int cbID = callbackID;
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
 		query.whereEqualTo(whereKey, equalTo);
 		query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -320,19 +381,10 @@ public class BaaSParse implements InterfaceBaaS {
 			@Override
 			public void done(ParseObject obj, ParseException e) {
 				if (e == null) {
-					JSONObject jsonObj = new JSONObject();
+					JSONObject jsonObj = convertPFObjectToJson(obj);
+					BaaSWrapper.onBaaSActionResult(mAdapter, true, jsonObj != null ? jsonObj.toString() : "", cbID);
+					Log.i(LOG_TAG, "Retrieve object successfully. ");
 
-					try {
-						for (String key : obj.keySet()) {
-							jsonObj.accumulate(key, obj.get(key));
-						}
-
-						BaaSWrapper.onBaaSActionResult(mAdapter, true, jsonObj.toString(), cbID);
-						Log.i(LOG_TAG, "Retrieve object successfully. ");
-					} catch (JSONException ex) {
-						BaaSWrapper.onBaaSActionResult(mAdapter, false, null, cbID);
-						Log.i(LOG_TAG, "Error when converting parse object to json. " + ex.getMessage());
-					}
 
 				} else {
 					BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
@@ -344,26 +396,17 @@ public class BaaSParse implements InterfaceBaaS {
 	
 	@Override
 	public void getObjectInBackground(String className, String objId, int callbackID) {
-		final long cbID = callbackID;
+		final int cbID = callbackID;
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
 		query.getInBackground(objId, new GetCallback<ParseObject>() {
 
 			@Override
 			public void done(ParseObject obj, ParseException e) {
 				if (e == null) {
-					JSONObject jsonObj = new JSONObject();
 
-					try {
-						for (String key : obj.keySet()) {
-							jsonObj.accumulate(key, obj.get(key));
-						}
-
-						BaaSWrapper.onBaaSActionResult(mAdapter, true, jsonObj.toString(), cbID);
-						Log.i(LOG_TAG, "Retrieve object successfully. ");
-					} catch (JSONException ex) {
-						BaaSWrapper.onBaaSActionResult(mAdapter, false, null, cbID);
-						Log.i(LOG_TAG, "Error when converting parse object to json. " + ex.getMessage());
-					}
+					JSONObject jsonObj = convertPFObjectToJson(obj);
+					BaaSWrapper.onBaaSActionResult(mAdapter, true, jsonObj != null ? jsonObj.toString() : "", cbID);
+					Log.i(LOG_TAG, "Retrieve object successfully. ");
 
 				} else {
 					BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
@@ -375,7 +418,7 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public void getObjectsInBackground(String className, String objIds, int callbackID) {
-		final long cbID = callbackID;
+		final int cbID = callbackID;
 		try {
 			JSONArray jArray = new JSONArray(objIds);
 
@@ -431,7 +474,7 @@ public class BaaSParse implements InterfaceBaaS {
 	@Override
 	public void updateObjectInBackground(String className, String objId,
 			final String jsonChanges, int callbackID) {
-		final long cbID = callbackID;
+		final int cbID = callbackID;
 		ParseQuery<ParseObject>	query = ParseQuery.getQuery(className);
 
 		query.getInBackground(objId, new GetCallback<ParseObject>() {
@@ -489,7 +532,7 @@ public class BaaSParse implements InterfaceBaaS {
 	
 	@Override
 	public void deleteObjectInBackground(String className, String objId, int callbackID) {
-		final long cbID = callbackID;
+		final int cbID = callbackID;
 		ParseQuery<ParseObject>	query = ParseQuery.getQuery(className);
 
 		query.getInBackground(objId, new GetCallback<ParseObject>() {
@@ -534,8 +577,22 @@ public class BaaSParse implements InterfaceBaaS {
 		return "Delete object failed";
 	}
 
+	public void fetchUserInfo(final int callbackID) {
+		ParseUser pUser = ParseUser.getCurrentUser();
+		pUser.fetchInBackground(new GetCallback<ParseObject>() {
+			@Override
+			public void done(ParseObject parseObject, ParseException e) {
+				if (e == null) {
+					BaaSWrapper.onBaaSActionResult(mAdapter, true, convertPFObjectToJson(parseObject).toString(), callbackID);
+				} else {
+					BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), callbackID);
+				}
+			}
+		});
+	}
+
 	public void fetchConfigInBackground(int callbackID) {
-		final long cbID = callbackID;
+		final int cbID = callbackID;
 
 		Log.i("BaaSParse", "Callback address: " + callbackID);
 		ParseConfig.getInBackground(new ConfigCallback() {
@@ -557,7 +614,7 @@ public class BaaSParse implements InterfaceBaaS {
 
 	public boolean getBoolConfig(String param) {
 		boolean ret = mCurrentConfig.getBoolean(param, false);
-		Log.i("Parse", "Parse Config >>> Get bool: "+ ret);
+		Log.i("Parse", "Parse Config >>> Get bool: " + ret);
 		return ret;
 	}
 
@@ -591,4 +648,57 @@ public class BaaSParse implements InterfaceBaaS {
 		return ret;
 	}
 
+	public void loginWithFacebookAccessToken(int callbackID) {
+		final int cbID = callbackID;
+		ParseFacebookUtils.logInInBackground(AccessToken.getCurrentAccessToken(), new LogInCallback() {
+			@Override
+			public void done(ParseUser parseUser, ParseException e) {
+				if (e == null) {
+					BaaSWrapper.onBaaSActionResult(mAdapter, true, parseUser.getUsername(), cbID);
+				} else {
+					BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), cbID);
+				}
+			}
+		});
+	}
+
+
+	private static JSONObject convertPFObjectToJson(ParseObject parseObject) {
+		if (parseObject != null) {
+			JSONObject jsonObj = new JSONObject();
+
+			try {
+				for (String key : parseObject.keySet()) {
+					jsonObj.accumulate(key, parseObject.get(key));
+				}
+
+				jsonObj.accumulate("createdAt", parseObject.getCreatedAt().getTime());
+				jsonObj.accumulate("updatedAt", parseObject.getUpdatedAt().getTime());
+
+				return jsonObj;
+			} catch (JSONException ex) {
+				Log.i(LOG_TAG, "Error when converting parse object to json. " + ex.getMessage());
+
+				return null;
+			}
+		}
+
+		return null;
+	}
+
+	private static JSONObject convertPFUserToJson(ParseUser parseUser) {
+		JSONObject jsonObj = convertPFObjectToJson(parseUser);
+
+		if (jsonObj != null) {
+			try {
+				jsonObj.put("isNew", parseUser.isNew());
+			} catch (JSONException e) {
+				e.printStackTrace();
+				return null;
+			}
+
+			return jsonObj;
+		}
+		return null;
+	}
 }

@@ -29,3 +29,4 @@ void GooglePlayProtocolUser::configureUser(const std::string &appId) {
     configDeveloperInfo(devInfo);
 }
 
+

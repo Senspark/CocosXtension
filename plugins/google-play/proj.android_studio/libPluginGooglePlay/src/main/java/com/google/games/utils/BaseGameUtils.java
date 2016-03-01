@@ -26,7 +26,7 @@ public class BaseGameUtils {
 
     /**
      * Resolve a connection failure from
-     * {@link com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener#onConnectionFailed(com.google.android.gms.common.ConnectionResult)}
+     * {com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener#onConnectionFailed(com.google.android.gms.common.ConnectionResult)}
      *
      * @param activity the Activity trying to resolve the connection failure.
      * @param client the GoogleAPIClient instance of the Activity.
