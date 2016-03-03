@@ -125,7 +125,6 @@ public class UserGooglePlus implements InterfaceUser, PluginListener, GoogleApiC
 			} else {
 				mIsResolving = false;
 				mGoogleApiClient.connect();
-				UserWrapper.onActionResult(mAdapter, UserWrapper.ACTION_RET_LOGIN_SUCCEED, "UserGooglePlus: Login succeeded");
 			}
 		}
 		return true;
@@ -186,8 +185,11 @@ public class UserGooglePlus implements InterfaceUser, PluginListener, GoogleApiC
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
-		mShouldResolve = false;
-		UserWrapper.onActionResult(mAdapter, UserWrapper.ACTION_RET_LOGIN_SUCCEED, "UserGooglePlus: Login succeeded");
+		Log.i(LOG_TAG, "UserGooglePlus onConnected triggered. mShouldResolve is: " + mShouldResolve);
+		if (mShouldResolve) {
+			mShouldResolve = false;
+			UserWrapper.onActionResult(mAdapter, UserWrapper.ACTION_RET_LOGIN_SUCCEED, "UserGooglePlus: Login succeeded");
+		}
 	}
 
 	@Override
