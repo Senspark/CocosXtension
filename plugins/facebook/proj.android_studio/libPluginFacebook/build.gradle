@@ -44,7 +44,7 @@ android {
 
 dependencies {
     compile 'com.senspark:libPluginProtocol:0.9'
-    compile 'com.facebook.android:facebook-android-sdk:4.8.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.10.0'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
