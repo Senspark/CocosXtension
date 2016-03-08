@@ -20,6 +20,9 @@ public:
     bool hasInterstitial();
     void showInterstitial();
     void cacheInterstitial();
+
+    bool hasRewardedVideo();
+    void showRewardedVideo();
 };
 
 #endif /* UnityProtocolAds_h */

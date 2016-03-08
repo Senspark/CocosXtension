@@ -14,7 +14,9 @@
 
 #pragma mark - Interstitials
 - (BOOL) hasInterstitial;
+- (BOOL) hasRewardedVideo;
 - (void) showInterstitial;
+- (void) showRewardedVideo;
 - (void) cacheInterstitial;
 
 @end
