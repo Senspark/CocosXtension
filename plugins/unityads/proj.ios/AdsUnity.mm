@@ -58,11 +58,26 @@ using namespace cocos2d::plugin;
 }
 
 - (BOOL) hasInterstitial {
-    return [[UnityAds sharedInstance] canShowAds];
+    return [[UnityAds sharedInstance] canShowZone:@"defaultZone"];
+}
+
+- (BOOL) hasRewardedVideo {
+    return [[UnityAds sharedInstance] canShowZone:@"rewardedVideoZone"];
 }
 
 - (void) showInterstitial {
     if ([self hasInterstitial]) {
+        [[UnityAds sharedInstance] setZone:@"defaultZone"];
+        [[UnityAds sharedInstance] show];
+
+    } else {
+        [AdsWrapper onAdsResult:self withRet:AdsResultCode::kUnknownError withMsg:@"UnityAds: Ad cannot show"];
+    }
+}
+
+- (void) showRewardedVideo {
+    if ([self hasRewardedVideo]) {
+        [[UnityAds sharedInstance] setZone:@"rewardedVideoZone"];
         [[UnityAds sharedInstance] show];
 
     } else {
