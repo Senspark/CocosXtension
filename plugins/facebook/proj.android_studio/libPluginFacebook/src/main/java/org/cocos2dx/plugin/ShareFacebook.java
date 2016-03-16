@@ -370,7 +370,8 @@ public class ShareFacebook implements InterfaceShare, PluginListener {
 
 		if (requestCode == CallbackManagerImpl.RequestCodeOffset.Share.toRequestCode() ||
 				requestCode == CallbackManagerImpl.RequestCodeOffset.GameRequest.toRequestCode() ||
-				requestCode == CallbackManagerImpl.RequestCodeOffset.AppInvite.toRequestCode()) {
+				requestCode == CallbackManagerImpl.RequestCodeOffset.AppInvite.toRequestCode() ||
+				requestCode == CallbackManagerImpl.RequestCodeOffset.Like.toRequestCode()) {
 			Log.i(LOG_TAG, "CallbackManager onActivityResult triggered");
 			mCallbackManager.onActivityResult(requestCode, resultCode, data);
 		}

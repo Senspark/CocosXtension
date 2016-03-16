@@ -37,3 +37,11 @@ void UnityProtocolAds::showInterstitial() {
 void UnityProtocolAds::cacheInterstitial() {
     callFuncWithParam("cacheInterstitial", nullptr);
 }
+
+bool UnityProtocolAds::hasRewardedVideo() {
+    return callBoolFuncWithParam("hasRewardedVideo", nullptr);
+}
+
+void UnityProtocolAds::showRewardedVideo() {
+    callFuncWithParam("showRewardedVideo", nullptr);
+}

@@ -9,7 +9,6 @@ import com.unity3d.ads.android.UnityAds;
 
 import java.util.Hashtable;
 
-
 public class AdsUnity implements InterfaceAds, PluginListener {
 	public static final String LOG_TAG = "AdsUnityAd";
 
@@ -28,14 +27,29 @@ public class AdsUnity implements InterfaceAds, PluginListener {
 	@Override
 	public void configDeveloperInfo(Hashtable<String, String> devInfo) {
 		UnityAds.init((Activity) mContext, devInfo.get("UnityAdsAppID"), mListener);
+		UnityAds.setDebugMode(true);
 	}
 
 	public boolean hasInterstitial() {
 		return UnityAds.canShow();
 	}
+
+	public boolean hasRewardedVideo() {
+		return UnityAds.canShow();
+	}
+
+	public void showRewardedVideo() {
+		if (hasRewardedVideo()) {
+			UnityAds.setZone("rewardedVideoZone");
+			UnityAds.show();
+		} else {
+			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_UnknownError, "UnityAds: Ad cannot show");
+		}
+	}
 	
 	public void showInterstitial() {
 		if (hasInterstitial()) {
+			UnityAds.setZone("defaultZone");
 			UnityAds.show();
 		} else {
 			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_UnknownError, "UnityAds: Ad cannot show");

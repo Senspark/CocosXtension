@@ -56,11 +56,11 @@ public class AdsAdmob implements InterfaceAds {
 
 	private AdView adView = null;
 	private InterstitialAd interstitialAdView = null;
+	private boolean isLoaded = false;
+
 	private String mPublishID = "";
 	private Set<String> mTestDevices = null;
 	private WindowManager mWm = null;
-
-	private ScheduledExecutorService scheduledExecutorService = null;
 
 	private static final int ADMOB_SIZE_BANNER = 1;
 	private static final int ADMOB_SIZE_FULL_BANNER = 2;
@@ -166,11 +166,10 @@ public class AdsAdmob implements InterfaceAds {
         }
 	}
 
-	private void showBannerAd(final int sizeEnum, final int pos) {
+	private synchronized void showBannerAd(final int sizeEnum, final int pos) {
 		hideBannerAd();
 
 		mShouldLock = true;
-
 		PluginWrapper.runOnMainThread(new Runnable() {
 
 			@Override
@@ -393,8 +392,33 @@ public class AdsAdmob implements InterfaceAds {
         LogD("Admob not support query points!");
     }
     
-    public boolean hasInterstitial() {
-		return interstitialAdView.isLoaded();
+    public synchronized boolean hasInterstitial() {
+		isLoaded = false;
+		mShouldLock = true;
+
+		PluginWrapper.runOnMainThread(new Runnable() {
+			@Override
+			public void run() {
+				isLoaded = interstitialAdView.isLoaded();
+
+				synchronized (AdsAdmob.this) {
+					mShouldLock = false;
+					AdsAdmob.this.notify();
+				}
+			}
+		});
+
+		synchronized (this) {
+			try {
+				if (mShouldLock) {
+					wait();
+				}
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+    	return isLoaded;
     }
 
 	public void slideBannerUp() {
