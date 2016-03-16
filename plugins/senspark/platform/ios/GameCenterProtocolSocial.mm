@@ -28,7 +28,7 @@ void GameCenterProtocolSocial::configureSocial()
 
 void GameCenterProtocolSocial::unlockAchievement(const std::string &achievementId, const GameCenterProtocolSocial::SocialCallback& pcb) {
     TAchievementInfo achievementInfo;
-    achievementInfo["achievemetId"] = achievementId;
+    achievementInfo["achievementId"] = achievementId;
     achievementInfo["percent"] = 100;
     
     ProtocolSocial::unlockAchievement(achievementInfo, pcb);
