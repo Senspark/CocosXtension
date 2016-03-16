@@ -49,10 +49,23 @@ bool AdColonyProtocolAds::hasRewardedVideo(const std::string& zoneID) {
 }
 
 void AdColonyProtocolAds::showRewardedVideo(const std::string &zoneID, bool isShowPrePopup, bool isShowPostPopup) {
-    PluginParam param1(zoneID.c_str());
-    PluginParam param2(isShowPrePopup);
-    PluginParam param3(isShowPostPopup);
-    callFuncWithParam("showRewardedVideo", &param1, &param2, &param3, nullptr);
+    TAdsInfo info;
+    info["Param1"] = zoneID;
+    info["Param2"] = isShowPrePopup;
+    info["Param3"] = isShowPostPopup;
+
+    PluginParam param(info);
+
+    PluginJavaData *pData = PluginUtils::getPluginJavaData(this);
+    PluginJniMethodInfo t;
+    if (PluginJniHelper::getMethodInfo(t, pData->jclassName.c_str(),
+                                       "showRewardedVideo", "(Ljava/util/Hashtable;)V")) {
+        jobject obj_Map = PluginUtils::createJavaMapObject(&info);
+
+        t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map);
+        t.env->DeleteLocalRef(obj_Map);
+        t.env->DeleteLocalRef(t.classID);
+    }
 }
 
 void AdColonyProtocolAds::cacheRewardedVideo(const std::string& zoneID) {

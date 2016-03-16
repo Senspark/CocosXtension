@@ -23,9 +23,11 @@ THE SOFTWARE.
 ****************************************************************************/
 package org.cocos2dx.plugin;
 
+import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 public class AdsWrapper {
 
@@ -68,6 +70,7 @@ public class AdsWrapper {
 		mLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
 		mLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 		mLayoutParams.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+		mLayoutParams.format = PixelFormat.TRANSLUCENT;
 		
 		switch (pos) {
 		case POS_CENTER:
@@ -94,7 +97,12 @@ public class AdsWrapper {
 		default:
 			break;
 		}
-		mWm.addView(adView, mLayoutParams);
+
+		FrameLayout adsContainer = new FrameLayout(PluginWrapper.getContext());
+		mWm.addView(adsContainer, mLayoutParams);
+
+		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+		adsContainer.addView(adView, params);
 	}
 
 	public static void onAdsResult(InterfaceAds adapter, int code, String msg) {

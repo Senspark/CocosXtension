@@ -47,7 +47,9 @@ public:
     static bool getStaticMethodInfo(PluginJniMethodInfo &methodinfo, const char *className, const char *methodName, const char *paramCode);
     static bool getMethodInfo(PluginJniMethodInfo &methodinfo, const char *className, const char *methodName, const char *paramCode);
     static std::string jstring2string(jstring jstr);
+    static std::string jstring2string(JNIEnv* env, jstring jstr);
     static std::map<std::string, std::string> JSONObject2Map(jobject json);
+    static std::map<std::string, std::string> JSONObject2Map(JNIEnv* env, jobject json);
 
     static bool setClassLoaderFrom(jobject nativeActivityInstance);
 

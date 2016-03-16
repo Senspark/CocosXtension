@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -79,13 +80,19 @@ public class BaaSParse implements InterfaceBaaS {
 		boolean enableLocalDatastore = "true".compareTo(devInfo.get("ParseEnableLocalDatastore")) == 0;
 		boolean enableFacebookUtils  = "true".compareTo(devInfo.get("ParseEnableFacebookUtils")) == 0;
 
-		if (enableLocalDatastore) {
-			Parse.enableLocalDatastore(mContext);
+		try {
+			if (enableLocalDatastore) {
+				Log.i(LOG_TAG, "Enable Parse Local Datastore.");
+				Parse.enableLocalDatastore(mContext);
+
+				Parse.initialize(mContext, appId, clientKey);
+			}
+		} catch (IllegalStateException ex) {
+			ex.printStackTrace();
 		}
 
-		Parse.initialize(mContext, appId, clientKey);
-
 		if (enableFacebookUtils) {
+			Log.i(LOG_TAG, "Enable Parse Facebook Utils.");
 			ParseFacebookUtils.initialize(mContext);
 		}
 
@@ -167,16 +174,22 @@ public class BaaSParse implements InterfaceBaaS {
 
 	@Override
 	public String getUserID() {
-		Log.i(LOG_TAG, "BaaSParse getUserID: " + ParseUser.getCurrentUser().getObjectId());
-		return ParseUser.getCurrentUser().getObjectId();
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		if (currentUser != null) {
+			Log.i(LOG_TAG, "BaaSParse getUserID: " + ParseUser.getCurrentUser().getObjectId());
+			return ParseUser.getCurrentUser().getObjectId();
+		}
+		return "";
 	}
 	
 	private void updateParseObject(ParseObject parseObj, JSONObject jsonObj) throws JSONException {
 		for (Iterator<String> iter = jsonObj.keys(); iter.hasNext();) {
 			String key = iter.next();
 			logD("Key: " + key);
-			logD("Field: " + jsonObj.get(key).toString());
-			parseObj.put(key, jsonObj.get(key));
+			Object value = jsonObj.get(key);
+			logD("Field: " + value.toString());
+
+			parseObj.put(key, value);
 		}
 	}
 
@@ -191,18 +204,11 @@ public class BaaSParse implements InterfaceBaaS {
 			JSONObject jObject = new JSONObject(jsonData);
 
 			ParseUser pUser = ParseUser.getCurrentUser();
-
 			if (pUser != null) {
-				Iterator<String> iter = jObject.keys();
-
-				while (iter.hasNext()) {
-					String key = iter.next();
-
-					pUser.put(key, jObject.get(key));
-				}
-
-				return getUserInfo();
+				updateParseObject(pUser, jObject);
 			}
+
+			return getUserInfo();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -217,7 +223,7 @@ public class BaaSParse implements InterfaceBaaS {
 				@Override
 				public void done(ParseException e) {
 					if (e == null) {
-						BaaSWrapper.onBaaSActionResult(mAdapter, true, convertPFUserToJson(pUser).toString(), callbackID);
+						BaaSWrapper.onBaaSActionResult(mAdapter, true, getUserInfo(), callbackID);
 					} else {
 						BaaSWrapper.onBaaSActionResult(mAdapter, false, makeErrorJsonString(e), callbackID);
 					}
@@ -669,11 +675,17 @@ public class BaaSParse implements InterfaceBaaS {
 
 			try {
 				for (String key : parseObject.keySet()) {
-					jsonObj.accumulate(key, parseObject.get(key));
+					Object o = parseObject.get(key);
+
+					if (o instanceof HashMap) {
+						jsonObj.put(key, new JSONObject((HashMap)o));
+					} else {
+						jsonObj.put(key, parseObject.get(key));
+					}
 				}
 
-				jsonObj.accumulate("createdAt", parseObject.getCreatedAt().getTime());
-				jsonObj.accumulate("updatedAt", parseObject.getUpdatedAt().getTime());
+				jsonObj.put("createdAt", parseObject.getCreatedAt().getTime());
+				jsonObj.put("updatedAt", parseObject.getUpdatedAt().getTime());
 
 				return jsonObj;
 			} catch (JSONException ex) {

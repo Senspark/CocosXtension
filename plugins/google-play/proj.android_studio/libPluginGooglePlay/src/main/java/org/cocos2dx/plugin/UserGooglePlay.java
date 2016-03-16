@@ -182,6 +182,9 @@ public class UserGooglePlay implements InterfaceUser, PluginListener {
 
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.i(LOG_TAG, "RequestCode = " + requestCode);
+		Log.i(LOG_TAG, "ResultCode = " + resultCode);
+		Log.i(LOG_TAG, "Data = " + data);
 		mGameHelper.onActivityResult(requestCode, resultCode, data);
 		return true;
 	}

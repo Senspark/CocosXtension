@@ -1,20 +1,22 @@
 package org.cocos2dx.plugin;
 
-import java.util.Hashtable;
-import java.util.concurrent.TimeUnit;
-
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.games.GamesStatusCodes;
 import com.google.android.gms.games.achievement.Achievements.UpdateAchievementResult;
 import com.google.android.gms.games.leaderboard.Leaderboards.SubmitScoreResult;
 import com.google.games.utils.GameHelper;
 
-public class SocialGooglePlay implements InterfaceSocial {
+import java.util.Hashtable;
+import java.util.concurrent.TimeUnit;
+
+public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 	public final static String LOG_TAG = "SocialGooglePlay";
 	
 	protected Context mContext;
@@ -23,11 +25,13 @@ public class SocialGooglePlay implements InterfaceSocial {
 	protected SocialGooglePlay mAdapter;
 	
 	public static final int REQUEST_CODE_LEADERBOARD = 0x1001;
-	public static final int REQUEST_CODE_ACHIEVEMENT = 0x1001;
+	public static final int REQUEST_CODE_ACHIEVEMENT = 0x1002;
 	
-	
+	protected int mCurrentCallbackID = 0;
+
 	public SocialGooglePlay(Context context) {
 		mContext = context;
+		PluginWrapper.addListener(this);
 		mAdapter = this;
 		mGameHelper = GooglePlayAgent.getInstance().getGameHelper();
 		
@@ -47,7 +51,7 @@ public class SocialGooglePlay implements InterfaceSocial {
 	}
 
 	@Override
-	public void submitScore(String leaderboard_id, long submitscore) {
+	public void submitScore(String leaderboard_id, int submitscore, final int callbackID) {
 		final String leaderboardID = leaderboard_id;
 		final long score = submitscore;
 		logD("Submit score " + score + " to leaderboard " + leaderboardID);
@@ -64,10 +68,10 @@ public class SocialGooglePlay implements InterfaceSocial {
 				super.onPostExecute(result);
 				if (result == GamesStatusCodes.STATUS_OK) {
 					logD("Submit score successfully.");
-					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_SUBMITSCORE_SUCCESS, "Submitted score " + score);
+					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_SUBMITSCORE_SUCCESS, "Submitted score " + score, callbackID);
 				} else {
 					logD("Submit score failed.");
-					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_SUBMITSCORE_FAILED, "Submitted score " + score + " failed.");
+					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_SUBMITSCORE_FAILED, "Submitted score " + score + " failed.", callbackID);
 				}
 			}
 		};
@@ -75,9 +79,9 @@ public class SocialGooglePlay implements InterfaceSocial {
 		task.execute();
 	}
 
-	public void showLeaderboards() {
+	public void showLeaderboards(int callbackID) {
+		mCurrentCallbackID = callbackID;
 		PluginWrapper.runOnMainThread(new Runnable() {
-			
 			@Override
 			public void run() {
 				((Activity) mContext).startActivityForResult(Games.Leaderboards.getAllLeaderboardsIntent(mGameHelper.getApiClient()), REQUEST_CODE_LEADERBOARD);
@@ -86,9 +90,9 @@ public class SocialGooglePlay implements InterfaceSocial {
 	}
 	
 	@Override
-	public void showLeaderboard(final String leaderboardID) {
+	public void showLeaderboard(final String leaderboardID, int callbackID) {
+		mCurrentCallbackID = callbackID;
 		PluginWrapper.runOnMainThread(new Runnable() {
-			
 			@Override
 			public void run() {
 				((Activity) mContext).startActivityForResult(Games.Leaderboards.getAllLeaderboardsIntent(mGameHelper.getApiClient()), REQUEST_CODE_LEADERBOARD);
@@ -97,7 +101,7 @@ public class SocialGooglePlay implements InterfaceSocial {
 	}
 
 	@Override
-	public void unlockAchievement(Hashtable<String, String> achInfo) {
+	public void unlockAchievement(Hashtable<String, String> achInfo, final int callbackID) {
 		final String achievementId = achInfo.get("achievementId");
 		
 		AsyncTask<Void, Void, Integer> task = new AsyncTask<Void, Void, Integer>() {
@@ -111,17 +115,17 @@ public class SocialGooglePlay implements InterfaceSocial {
 			protected void onPostExecute(Integer result) {
 				if (result == GamesStatusCodes.STATUS_OK) {
 					logD("Unlock achievement with id " + achievementId + " successfully.");
-					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_UNLOCKACH_SUCCESS, "Unlock achievement with id " + achievementId + " successfully.");
+					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_UNLOCKACH_SUCCESS, "Unlock achievement with id " + achievementId + " successfully.", callbackID);
 				} else {
 					logD("Unlock achievement with id " + achievementId + " failed.");
-					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_UNLOCKACH_FAILED, "Unlock achievement with id " + achievementId + " failed.");
+					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_UNLOCKACH_FAILED, "Unlock achievement with id " + achievementId + " failed.", callbackID);
 				}
 			};
 		};
 		task.execute();
 	}
 
-	public void revealAchievement(Hashtable<String, String> achInfo) {
+	public void revealAchievement(Hashtable<String, String> achInfo, final int callbackID) {
 		final String achievementId = achInfo.get("achievementId");
 		
 		AsyncTask<Void, Void, Integer> task = new AsyncTask<Void, Void, Integer>() {
@@ -135,24 +139,30 @@ public class SocialGooglePlay implements InterfaceSocial {
 			protected void onPostExecute(Integer result) {
 				if (result == GamesStatusCodes.STATUS_OK) {
 					logD("Unlock achievement with id " + achievementId + " successfully.");
-					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_REVEALACH_SUCCESS, "Unlock achievement with id " + achievementId + " successfully.");
+					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_REVEALACH_SUCCESS, "Unlock achievement with id " + achievementId + " successfully.", callbackID);
 				} else {
 					logD("Unlock achievement with id " + achievementId + " failed.");
-					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_REVEALACH_FAILED, "Unlock achievement with id " + achievementId + " failed.");
+					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_REVEALACH_FAILED, "Unlock achievement with id " + achievementId + " failed.", callbackID);
 				}
 			};
 		};
 		
 		task.execute();
 	}
-	
-	public void resetAchievements() {
+
+	public void resetAchievement(final String achievementID, final int callbackID) {
 		logD("Comming soon.");
-		SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_RESETACH_FAILED, "Comming soon.");
+		SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_RESETACH_FAILED, "Comming soon.", 0);
+	}
+
+	public void resetAchievements(int callbackID) {
+		logD("Comming soon.");
+		SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_RESETACH_FAILED, "Comming soon.", 0);
 	}
 	
 	@Override
-	public void showAchievements() {
+	public void showAchievements(int callbackID) {
+		mCurrentCallbackID = callbackID;
 		PluginWrapper.runOnMainThread(new Runnable() {
 			
 			@Override
@@ -177,4 +187,60 @@ public class SocialGooglePlay implements InterfaceSocial {
 		return "0.9.0";
 	}
 
+	@Override
+	public void onStart() {
+
+	}
+
+	@Override
+	public void onResume() {
+
+	}
+
+	@Override
+	public void onPause() {
+
+	}
+
+	@Override
+	public void onStop() {
+
+	}
+
+	@Override
+	public void onDestroy() {
+
+	}
+
+	@Override
+	public void onBackPressed() {
+	}
+
+	@Override
+	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.i(LOG_TAG, "RequestCode: " + requestCode);
+		Log.i(LOG_TAG, "Result Code: " + resultCode);
+
+		if (requestCode != REQUEST_CODE_ACHIEVEMENT && requestCode != REQUEST_CODE_LEADERBOARD) {
+			Log.i(LOG_TAG, "SoicalGooglePlay: request code not meant for us. Ignoring");
+			return false;
+		}
+
+		if (requestCode == REQUEST_CODE_ACHIEVEMENT) {
+			SocialWrapper.onDialogDissmissedWithCallback(mCurrentCallbackID);
+			mCurrentCallbackID = 0;
+		}
+
+		if (requestCode == REQUEST_CODE_LEADERBOARD) {
+			SocialWrapper.onDialogDissmissedWithCallback(mCurrentCallbackID);
+			mCurrentCallbackID = 0;
+		}
+
+		if ((requestCode == REQUEST_CODE_ACHIEVEMENT || requestCode == REQUEST_CODE_LEADERBOARD) && resultCode == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED) {
+			Log.i(LOG_TAG, "It looks like that user has logged out from GooglePlay's UI. So disconnect GameHelper also to avoid crashing.");
+			mGameHelper.disconnect();
+		}
+
+		return true;
+	}
 }

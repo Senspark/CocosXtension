@@ -40,12 +40,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import java.lang.reflect.Field;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 
 public class PluginWrapper {
 
@@ -99,10 +93,11 @@ public class PluginWrapper {
     	}
     }
     
-    public static void onBackPressed() {
+    public static boolean onBackPressed() {
     	for (PluginListener listener : sListeners) {
     		listener.onBackPressed();
     	}
+        return false;
     }
     
     public static void onDestroy() {

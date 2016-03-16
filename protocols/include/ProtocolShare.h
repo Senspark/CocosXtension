@@ -65,24 +65,6 @@ public:
 
     void share(TShareInfo &info, ShareCallback &cb);
 
-    /**
-     @brief set login callback function
-     */
-    inline void setCallback(const ShareCallback &cb)
-    {
-        _callback = cb;
-    }
-
-    /**
-     @brief get login callback function
-     */
-    inline ShareCallback getCallback()
-    {
-        return _callback;
-    }
-
-protected:
-    ShareCallback _callback;
 };
 
 }} // namespace cocos2d { namespace plugin {

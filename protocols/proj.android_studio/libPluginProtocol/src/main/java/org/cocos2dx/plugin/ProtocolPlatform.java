@@ -28,11 +28,19 @@ public class ProtocolPlatform  {
 	}
 	
 	public boolean isAppInstalled(final String appName) {
+		PackageManager pm = mContext.getPackageManager();
+		boolean isInstalled;
+
 		try {
-			return mContext.getPackageManager().getPackageInfo(appName, PackageManager.GET_ACTIVITIES) != null ? true : false;
+			pm.getPackageInfo(appName, PackageManager.GET_ACTIVITIES);
+			isInstalled = true;
+
 		} catch (NameNotFoundException e) {
-			return false;
+			isInstalled = false;
 		}
+
+		Log.i("ProtocolPlatform", "App " + appName + " is installed? - " + isInstalled);
+		return isInstalled;
 	}
 	
 	public boolean isRelease() {

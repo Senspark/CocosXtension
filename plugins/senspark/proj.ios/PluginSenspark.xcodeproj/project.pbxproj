@@ -16,6 +16,7 @@
 		17F51F7A1C3E3FFD00FF30A3 /* VungleProtocolAds.h in Headers */ = {isa = PBXBuildFile; fileRef = 17F51F751C3E3FFD00FF30A3 /* VungleProtocolAds.h */; };
 		2C4585E51C3B649300BA43BF /* UnityProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C4585E41C3B649300BA43BF /* UnityProtocolAds.mm */; };
 		2C8AE15B1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8AE15A1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm */; };
+		952FD2BA1C8542D4000F3848 /* GooglePlusProtocolUser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 952FD2B91C8542D4000F3848 /* GooglePlusProtocolUser.mm */; };
 		95376F611B86E83C001C62A5 /* AdColonyProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F501B86E83C001C62A5 /* AdColonyProtocolAds.mm */; };
 		95376F621B86E83C001C62A5 /* AdmobProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F511B86E83C001C62A5 /* AdmobProtocolAds.mm */; };
 		95376F631B86E83C001C62A5 /* ChartboostProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F521B86E83C001C62A5 /* ChartboostProtocolAds.mm */; };
@@ -50,6 +51,7 @@
 		2C4585E41C3B649300BA43BF /* UnityProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UnityProtocolAds.mm; sourceTree = "<group>"; };
 		2C8AE15A1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GooglePlusProtocolShare.mm; sourceTree = "<group>"; };
 		9520E0B31B46A74800B7768B /* libPluginSenspark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginSenspark.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		952FD2B91C8542D4000F3848 /* GooglePlusProtocolUser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GooglePlusProtocolUser.mm; sourceTree = "<group>"; };
 		95376F501B86E83C001C62A5 /* AdColonyProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdColonyProtocolAds.mm; sourceTree = "<group>"; };
 		95376F511B86E83C001C62A5 /* AdmobProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdmobProtocolAds.mm; sourceTree = "<group>"; };
 		95376F521B86E83C001C62A5 /* ChartboostProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChartboostProtocolAds.mm; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 				95376F5B1B86E83C001C62A5 /* GooglePlayProtocolData.mm */,
 				95376F5C1B86E83C001C62A5 /* GooglePlayProtocolSocial.mm */,
 				95376F5D1B86E83C001C62A5 /* GooglePlayProtocolUser.mm */,
+				952FD2B91C8542D4000F3848 /* GooglePlusProtocolUser.mm */,
 				2C8AE15A1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm */,
 				95376F5E1B86E83C001C62A5 /* GoogleProtocolAnalytics.mm */,
 				95376F5F1B86E83C001C62A5 /* ParseProtocolBaaS.mm */,
@@ -242,7 +245,7 @@
 		9520E0AB1B46A74800B7768B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Senspark Co., Ltd";
 				TargetAttributes = {
 					9520E0B21B46A74800B7768B = {
@@ -287,6 +290,7 @@
 				95376F6C1B86E83C001C62A5 /* GooglePlayProtocolData.mm in Sources */,
 				95376F611B86E83C001C62A5 /* AdColonyProtocolAds.mm in Sources */,
 				95376F6B1B86E83C001C62A5 /* GameCenterProtocolUser.mm in Sources */,
+				952FD2BA1C8542D4000F3848 /* GooglePlusProtocolUser.mm in Sources */,
 				95376F691B86E83C001C62A5 /* FlurryProtocolAnalytics.mm in Sources */,
 				95376F701B86E83C001C62A5 /* ParseProtocolBaaS.mm in Sources */,
 				95376F631B86E83C001C62A5 /* ChartboostProtocolAds.mm in Sources */,
@@ -318,6 +322,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;

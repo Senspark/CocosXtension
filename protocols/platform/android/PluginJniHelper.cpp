@@ -51,7 +51,7 @@ extern "C"
                 break;
             }
 
-            if (JAVAVM->GetEnv((void**)env, JNI_VERSION_1_4) != JNI_OK)
+            if (JAVAVM->GetEnv((void**)env, JNI_VERSION_1_6) != JNI_OK)
             {
                 LOGD("Failed to get the environment using GetEnv()");
                 break;
@@ -235,17 +235,23 @@ bool PluginJniHelper::getMethodInfo(PluginJniMethodInfo &methodinfo, const char 
 
 string PluginJniHelper::jstring2string(jstring jstr)
 {
+    return jstring2string(PluginJniHelper::getEnv(), jstr);
+}
+
+string PluginJniHelper::jstring2string(JNIEnv* pEnv, jstring jstr) 
+{
     if (jstr == NULL) {
         return "";
     }
 
-    JNIEnv *pEnv = PluginJniHelper::getEnv();
     if (! pEnv) {
         return NULL;
     }
 
     const char* chars = pEnv->GetStringUTFChars(jstr, NULL);
+
     std::string ret(chars);
+
     pEnv->ReleaseStringUTFChars(jstr, chars);
 
     return ret;
@@ -253,39 +259,41 @@ string PluginJniHelper::jstring2string(jstring jstr)
 
 std::map<std::string, std::string> PluginJniHelper::JSONObject2Map(jobject json)
 {
-	std::map<std::string, std::string> stdmap;
+	return JSONObject2Map(getEnv(), json);
+}
 
-	JNIEnv* env = getEnv();
+std::map<std::string, std::string> PluginJniHelper::JSONObject2Map(JNIEnv* env, jobject json) {
+    std::map<std::string, std::string> stdmap;
 
-	jclass c_json = env->FindClass("org/json/JSONObject");
-	jclass c_iterator = env->FindClass("java/util/Iterator");
+    jclass c_json = env->FindClass("org/json/JSONObject");
+    jclass c_iterator = env->FindClass("java/util/Iterator");
 
-	jmethodID m_keys = env->GetMethodID(c_json, "keys", "()Ljava/util/Iterator;");
-	jmethodID m_hasNext = env->GetMethodID(c_iterator, "hasNext", "()Z");
-	jmethodID m_next = env->GetMethodID(c_iterator, "next", "()Ljava/lang/Object;");
-	jmethodID m_getString = env->GetMethodID(c_json, "getString", "(Ljava/lang/String;)Ljava/lang/String;");
+    jmethodID m_keys = env->GetMethodID(c_json, "keys", "()Ljava/util/Iterator;");
+    jmethodID m_hasNext = env->GetMethodID(c_iterator, "hasNext", "()Z");
+    jmethodID m_next = env->GetMethodID(c_iterator, "next", "()Ljava/lang/Object;");
+    jmethodID m_getString = env->GetMethodID(c_json, "getString", "(Ljava/lang/String;)Ljava/lang/String;");
 
-	jstring jKeyString = NULL;
-	jstring jValueString = NULL;
+    jstring jKeyString = NULL;
+    jstring jValueString = NULL;
 
-	jobject jKeys = env->CallObjectMethod(json, m_keys);
-	while(env->CallBooleanMethod(jKeys, m_hasNext))
-	{
-		jKeyString = (jstring)(env->CallObjectMethod(jKeys, m_next));
-		jValueString = (jstring)(env-> CallObjectMethod(json, m_getString, jKeyString));
+    jobject jKeys = env->CallObjectMethod(json, m_keys);
+    while(env->CallBooleanMethod(jKeys, m_hasNext))
+    {
+        jKeyString = (jstring)(env->CallObjectMethod(jKeys, m_next));
+        jValueString = (jstring)(env-> CallObjectMethod(json, m_getString, jKeyString));
 
-		stdmap.insert(std::make_pair(jstring2string(jKeyString), jstring2string(jValueString)));
-	}
+        stdmap.insert(std::make_pair(jstring2string(jKeyString), jstring2string(jValueString)));
+    }
 
-	env->DeleteLocalRef(jKeys);
-	if(jKeyString)
-		env->DeleteLocalRef(jKeyString);
-	if(jValueString)
-		env->DeleteLocalRef(jValueString);
-	env->DeleteLocalRef(c_json);
-	env->DeleteLocalRef(c_iterator);
+    env->DeleteLocalRef(jKeys);
+    if(jKeyString)
+        env->DeleteLocalRef(jKeyString);
+    if(jValueString)
+        env->DeleteLocalRef(jValueString);
+    env->DeleteLocalRef(c_json);
+    env->DeleteLocalRef(c_iterator);
 
-	return stdmap;
+    return stdmap;
 }
 
 bool PluginJniHelper::setClassLoaderFrom(jobject nativeactivityinstance) {

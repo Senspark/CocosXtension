@@ -33,12 +33,12 @@ using namespace cocos2d::plugin;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-+ (void) onShareResult:(id) obj withRet:(int) ret withContent: (NSDictionary*) content withMsg:(NSString*) msg
+/*+ (void) onShareResult:(id) obj withRet:(int) ret withContent: (NSDictionary*) content withMsg:(NSString*) msg
 {
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolShare* pShare = dynamic_cast<ProtocolShare*>(pPlugin);
     if (pShare) {
-        ProtocolShare::ShareCallback callback = pShare->getCallback();
+        ProtocolShare::CallbackWrapper* wrapper = ();
         const char* chMsg = [msg UTF8String];
         if (callback)
         {
@@ -50,7 +50,7 @@ using namespace cocos2d::plugin;
     } else {
         PluginUtilsIOS::outputLog("Can't find the C++ object of the Share plugin");
     }
-}
+}*/
 
 + (void) onShareResult:(id) obj withRet:(int) ret withContent: (NSDictionary*) content withMsg:(NSString*) msg andCallbackID: (long) cbID {
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);

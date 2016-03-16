@@ -31,7 +31,6 @@ public:
 
     bool hasInterstitial();
 
-    void setBannerAnimationInfo(int slideUpTimePeriod, int slideDownTimePeriod);
     void slideBannerUp();
     void slideBannerDown();
 };
