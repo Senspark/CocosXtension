@@ -211,14 +211,18 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 
 	@Override
 	public void setCaptureUncaughtException(boolean isEnabled) {
-		mCrashUncaughtEnable = isEnabled;
-		
-		if (isEnabled) {
-			UncaughtExceptionHandler myHandler = new ExceptionReporter(tracker, Thread.getDefaultUncaughtExceptionHandler(), mContext); 
-			Thread.setDefaultUncaughtExceptionHandler(myHandler);
-		} else {
-			Thread.setDefaultUncaughtExceptionHandler(null);
-		}
+        mCrashUncaughtEnable = isEnabled;
+        
+        if (isEnabled) {
+            if (null != tracker) {
+                UncaughtExceptionHandler myHandler = new ExceptionReporter(tracker, Thread.getDefaultUncaughtExceptionHandler(), mContext);
+                Thread.setDefaultUncaughtExceptionHandler(myHandler);
+            } else {
+                Log.e(LOG_TAG, "setCaptureUncaughtException called w/o valid tracker.");
+            }
+        } else {
+            Thread.setDefaultUncaughtExceptionHandler(null);
+        }
 	}
 
 	@Override
