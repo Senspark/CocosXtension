@@ -73,7 +73,7 @@ void GoogleProtocolAnalytics::trackException(const string& description, bool isF
     PluginParam descParam(description.c_str());
     PluginParam fatalParam(isFatal);
 
-    callFuncWithParam("trackTimmingWithCategory", &descParam, &fatalParam, nullptr);
+    callFuncWithParam("trackTimingWithCategory", &descParam, &fatalParam, nullptr);
 }
 
 void GoogleProtocolAnalytics::trackTiming(const std::string& category, int interval, const std::string& name, const std::string& label)	{
@@ -83,7 +83,7 @@ void GoogleProtocolAnalytics::trackTiming(const std::string& category, int inter
     PluginParam nameParam(name.c_str());
     PluginParam labelParam(label.c_str());
 
-    callFuncWithParam("trackTimmingWithCategory", &categoryParam, &intervalParam, &nameParam, &labelParam, nullptr);
+    callFuncWithParam("trackTimingWithCategory", &categoryParam, &intervalParam, &nameParam, &labelParam, nullptr);
 }
 
 void GoogleProtocolAnalytics::trackSocial(const string& network, const string& action, const string& target) {
