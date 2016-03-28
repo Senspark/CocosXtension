@@ -49,6 +49,8 @@ public:
     void trackException(const string& description, bool isFatal);
     
     void trackTiming(const string& category, int interval, const string& name, const string& label);
+
+    void trackEcommerceTransactions(const string& identity, const string& productName, const string& productCategory, float priceValue);
     
     void trackSocial(const string& network, const string& action, const string& target);
     

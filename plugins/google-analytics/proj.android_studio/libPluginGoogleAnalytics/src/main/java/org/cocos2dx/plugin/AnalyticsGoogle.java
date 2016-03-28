@@ -7,6 +7,8 @@ import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.ecommerce.Product;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -174,6 +176,37 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 		String label	= params.get("Param4");
 		
 		trackTiming(category, interval, name, label);
+	}
+
+	public void trackEcommerceTransactions(Hashtable<String, String> params) {
+		String identity = params.get("Param1");
+		String name		= params.get("Param2");
+		String category = params.get("Param3");
+		float price		= Float.parseFloat(params.get("Param4"));
+
+		trackEcommerceTransactions(identity, name, category, price);
+	}
+
+	public void trackEcommerceTransactions(String id, String name, String category, float price) {
+		String productID 		= String.format("Product-%s", id);
+		String transactionID  	= String.format("Transaction-%s", id);
+
+		Product product =  new Product()
+				.setId(productID)
+				.setName(name)
+				.setCategory(category)
+				.setPrice(price);
+		ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
+				.setTransactionId(transactionID)
+				.setTransactionRevenue(price);
+		HitBuilders.ScreenViewBuilder builder = new HitBuilders.ScreenViewBuilder()
+				.addProduct(product)
+				.setProductAction(productAction);
+		if (this.tracker != null) {
+			this.tracker.setScreenName("transaction");
+			this.tracker.send(builder.build());
+		} else
+			Log.e(LOG_TAG, "Log Ecommerce Transactions called w/o valid tracker.");
 	}
 
 	public void trackSocial(String network, String action, String target) {

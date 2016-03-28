@@ -86,6 +86,15 @@ void GoogleProtocolAnalytics::trackTiming(const string& category, int interval, 
     callFuncWithParam("trackTimingWithCategory", &categoryParam, &intervalParam, &nameParam, &labelParam, nullptr);
 }
 
+void GoogleProtocolAnalytics::trackEcommerceTransactions(const string& identity, const string& productName, const string& productCategory, float priceValue) {
+    PluginParam identityParam(identity.c_str());
+    PluginParam nameParam(productName.c_str());
+    PluginParam categoryParam(productCategory.c_str());
+    PluginParam priceParam(priceValue);
+
+    callFuncWithParam("trackEcommerceTransactions", &identityParam, &nameParam, &categoryParam, &priceParam, nullptr);
+}
+
 void GoogleProtocolAnalytics::trackSocial(const string& network, const string& action, const string& target) {
     PluginParam networkParam(network.c_str());
     PluginParam actionParam(action.c_str());

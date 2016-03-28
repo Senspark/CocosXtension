@@ -62,11 +62,16 @@
 - (void) trackTimingWithCategory: (NSString*) category interval: (int) interval name:(NSString*) name label: (NSString*) label;
 - (void) trackTimingWithCategory: (NSMutableDictionary*) params;
 
+- (void) trackEcommerceTransactions:(NSString *)identity name:(NSString *)name category:(NSString *)category price:(NSNumber *)priceValue;
+- (void) trackEcommerceTransactions: (NSMutableDictionary*) params;
+
 - (void) trackSocialWithNetwork: (NSString*) network action: (NSString*) action target: (NSString*) target;
 - (void) trackSocialWithNetwork: (NSMutableDictionary*) params;
 
 - (void) setDryRun: (NSNumber*) isDryRun;
 - (void) enableAdvertisingTracking: (NSNumber*) enable;
+
+
 
 @end
 #endif /* defined(__PluginGoogleAnalytics__AnalyticsGoogle__) */
