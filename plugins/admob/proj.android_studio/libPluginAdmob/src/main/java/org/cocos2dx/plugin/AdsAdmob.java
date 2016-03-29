@@ -26,6 +26,8 @@ package org.cocos2dx.plugin;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,14 +40,19 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.purchase.InAppPurchaseResult;
+import com.google.android.gms.ads.purchase.PlayStorePurchaseListener;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ScheduledExecutorService;
 
-public class AdsAdmob implements InterfaceAds {
+import com.android.vending.billing.IInAppBillingService;
+
+public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 
 	private static final String LOG_TAG = "AdsAdmob";
 	private static Activity mContext = null;
@@ -60,18 +67,23 @@ public class AdsAdmob implements InterfaceAds {
 	private Set<String> mTestDevices = null;
 	private WindowManager mWm = null;
 
+	private String pAppPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxN/Sqb0Z2/phFel1JeT5yt6wcvvQjnLIRvoNZK2KOuKpGReOcXW4E6JIOQqIZuaIBVCge1RfjohrnYtcfwYMa4DPCDlFRowYK7/4oCjWHCHDucN5WazrpLZ+VU8XwohTAkhtDb4yq/fi+ITkKK0WXP/c9nyY1ULx6qM0iZXiZGEdMVkV18TRaL0EMl9sfS0ns4ZYySHg2hY3O17dPa1dGX9BBgfH12wSsqoVoCQkenhg9LWffvTIUsrFu1507nD6Qd0t2VqdJ31JJQcQEm6vJHFFWCO5ta5Blx5GfengUkveLD81Mv+xbACgNPA16xHhFkblnI36TDSkWRh0D7OgQIDAQAB";
+
 	private static final int ADMOB_SIZE_BANNER = 1;
-	private static final int ADMOB_SIZE_FULL_BANNER = 2;
+	private static final int ADMOB_SIZE_SMART_BANNER = 2;
 	private static final int ADMOB_SIZE_LARGE_BANNER = 3;
 	private static final int ADMOB_SIZE_LEADERBOARD = 4;
 	private static final int ADMOB_SIZE_MEDIUM_RECTANGLE = 5;
 	private static final int ADMOB_SIZE_WIDE_SKYSCRAPER = 6;
-	private static final int ADMOB_SIZE_SMART_BANNER = 7;
+	private static final int ADMOB_SIZE_FULL_BANNER = 7;
 
 	private static final int ADMOB_TYPE_BANNER = 1;
 	private static final int ADMOB_TYPE_FULLSCREEN = 2;
 
 	private volatile boolean mShouldLock = false;
+
+	public static final int BILLING_RESPONSE_RESULT_OK = 0;
+	private IInAppBillingService mService;
 
 	protected static void LogE(String msg, Exception e) {
 		Log.e(LOG_TAG, msg, e);
@@ -280,6 +292,7 @@ public class AdsAdmob implements InterfaceAds {
 				Log.i(LOG_TAG, "Start loading interstitial ad");
 
 				interstitialAdView = new InterstitialAd(mContext);
+				interstitialAdView.setPlayStorePurchaseParams(mAdapter, pAppPublicKey);
 				interstitialAdView.setAdUnitId(mPublishID);
 				interstitialAdView.setAdListener(new AdmobAdsListener());
 
@@ -489,5 +502,58 @@ public class AdsAdmob implements InterfaceAds {
 				}
 			}
 		});
+	}
+
+	@Override
+	public boolean isValidPurchase(String sku) {
+		// Optional: check if the product has already been purchased.
+		try {
+			if (getOwnedProducts().contains(sku)) {
+				// Handle the case if product is already purchased.
+				return false;
+			}
+		} catch (RemoteException e) {
+			Log.e("Iap-Ad", "Query purchased product failed.", e);
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void onInAppPurchaseFinished(InAppPurchaseResult result) {
+		Log.i("Iap-Ad", "onInAppPurchaseFinished Start");
+		int resultCode = result.getResultCode();
+		Log.i("Iap-Ad", "result code: " + resultCode);
+		String sku = result.getProductId();
+		if (resultCode == Activity.RESULT_OK) {
+			Log.i("Iap-Ad", "purchased product id: " + sku);
+			int responseCode = result.getPurchaseData().getIntExtra(
+					"RESPONSE_CODE", BILLING_RESPONSE_RESULT_OK);
+			String purchaseData = result.getPurchaseData().getStringExtra("INAPP_PURCHASE_DATA");
+			Log.i("Iap-Ad", "response code: " + responseCode);
+			Log.i("Iap-Ad", "purchase data: " + purchaseData);
+
+			// Finish purchase and consume product.
+			result.finishPurchase();
+			// if (responseCode == BILLING_RESPONSE_RESULT_OK) {
+			// Optional: your custom process goes here, e.g., add coins after purchase.
+			//  }
+		} else {
+			Log.w("Iap-Ad", "Failed to purchase product: " + sku);
+		}
+		Log.i("Iap-Ad", "onInAppPurchaseFinished End");
+	}
+
+	private List<String> getOwnedProducts() throws RemoteException {
+		// Query for purchased items.
+		// See http://developer.android.com/google/play/billing/billing_reference.html and
+		// http://developer.android.com/google/play/billing/billing_integrate.html
+		Bundle ownedItems = mService.getPurchases(3, mContext.getApplicationContext().getPackageName(), "inapp", null);
+		int response = ownedItems.getInt("RESPONSE_CODE");
+		Log.i("Iap-Ad", "Response code of purchased item query");
+		if (response == 0) {
+			return ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
+		}
+		return Collections.emptyList();
 	}
 }

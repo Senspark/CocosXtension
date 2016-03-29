@@ -153,6 +153,9 @@
         case kSizeBanner:
             size = kGADAdSizeBanner;
             break;
+        case kSizeSmartBannerLandscape:
+            size = kGADAdSizeSmartBannerLandscape;
+            break;
         case kSizeIABMRect:
             size = kGADAdSizeMediumRectangle;
             break;
