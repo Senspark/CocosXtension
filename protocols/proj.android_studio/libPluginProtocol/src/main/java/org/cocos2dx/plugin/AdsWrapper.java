@@ -67,11 +67,11 @@ public class AdsWrapper {
 	public static void addAdView(WindowManager mWm, View adView, int pos) {
 		WindowManager.LayoutParams mLayoutParams = new WindowManager.LayoutParams();
 		mLayoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
-		mLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+		mLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 		mLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 		mLayoutParams.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 		mLayoutParams.format = PixelFormat.TRANSLUCENT;
-		
+
 		switch (pos) {
 		case POS_CENTER:
 			mLayoutParams.gravity = Gravity.CENTER;

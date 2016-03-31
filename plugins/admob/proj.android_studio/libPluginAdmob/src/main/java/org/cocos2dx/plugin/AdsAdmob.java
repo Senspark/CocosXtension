@@ -35,6 +35,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -49,8 +50,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import com.android.vending.billing.IInAppBillingService;
 
 public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 
@@ -211,7 +210,6 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 				}
 
 				adView = new AdView(mContext);
-
 				adView.setBackgroundColor(Color.TRANSPARENT);
 				adView.setAdSize(size);
 				adView.setAdUnitId(mPublishID);
@@ -232,7 +230,7 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 				adView.setAdListener(new AdmobAdsListener());
 
 				if (null == mWm) {
-					mWm = (WindowManager) mContext.getSystemService("window");
+					mWm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 				}
 				AdsWrapper.addAdView(mWm, adView, pos);
 
