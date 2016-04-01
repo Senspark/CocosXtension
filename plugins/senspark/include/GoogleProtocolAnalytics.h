@@ -13,8 +13,6 @@
 #include "SensparkPluginMacros.h"
 #include <string>
 
-using namespace std;
-
 NS_SENSPARK_PLUGIN_ANALYTICS_BEGIN
 
 enum class GALogLevel {
@@ -30,9 +28,9 @@ public:
     GoogleProtocolAnalytics();
     virtual ~GoogleProtocolAnalytics();
     
-    void configureTracker(const string& trackerId);
-    void createTracker(const string& trackerId);
-    void enableTracker(const string& trackerId);
+    void configureTracker(const std::string& trackerId);
+    void createTracker(const std::string& trackerId);
+    void enableTracker(const std::string& trackerId);
 
     void setLogLevel(GALogLevel logLevel);
     
@@ -42,17 +40,17 @@ public:
     
     void stopPeriodicalDispatch();
     
-    void trackScreen(const string& screenName);
+    void trackScreen(const std::string& screenName);
     
-    void trackEvent(const string& category, const string& action, const string& label, float value);
+    void trackEvent(const std::string& category, const std::string& action, const std::string& label, float value);
     
-    void trackException(const string& description, bool isFatal);
+    void trackException(const std::string& description, bool isFatal);
     
-    void trackTiming(const string& category, int interval, const string& name, const string& label);
+    void trackTiming(const std::string& category, int interval, const std::string& name, const std::string& label);
 
-    void trackEcommerceTransactions(const string& identity, const string& productName, const string& productCategory, float priceValue);
+    void trackEcommerceTransactions(const std::string& identity, const std::string& productName, const std::string& productCategory, float priceValue);
     
-    void trackSocial(const string& network, const string& action, const string& target);
+    void trackSocial(const std::string& network, const std::string& action, const std::string& target);
     
     void setDryRun(bool isDryRun);
     

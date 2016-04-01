@@ -118,6 +118,7 @@ extern "C"
 
             if (pEnv->ExceptionCheck()) {
                 LOGD("WTF! THERE'S AN EXCEPTION AT THIS CLASS: %s", className);
+                pEnv->ExceptionDescribe();
                 pEnv->ExceptionClear();
             }
             ret = pEnv->FindClass(className);
