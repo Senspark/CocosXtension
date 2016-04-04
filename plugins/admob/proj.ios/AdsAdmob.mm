@@ -232,7 +232,6 @@
 // Since we've received an ad, let's go ahead and set the frame to display it.
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
     NSLog(@"Received ad");
-    [_bannerView setHidden:YES];
     [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsReceived withMsg:@"Ads request received success!"];
 }
 
