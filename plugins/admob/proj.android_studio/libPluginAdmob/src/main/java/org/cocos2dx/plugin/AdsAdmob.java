@@ -30,8 +30,6 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
@@ -64,7 +62,6 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 
 	private String mPublishID = "";
 	private Set<String> mTestDevices = null;
-	private WindowManager mWm = null;
 
 	private String pAppPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxN/Sqb0Z2/phFel1JeT5yt6wcvvQjnLIRvoNZK2KOuKpGReOcXW4E6JIOQqIZuaIBVCge1RfjohrnYtcfwYMa4DPCDlFRowYK7/4oCjWHCHDucN5WazrpLZ+VU8XwohTAkhtDb4yq/fi+ITkKK0WXP/c9nyY1ULx6qM0iZXiZGEdMVkV18TRaL0EMl9sfS0ns4ZYySHg2hY3O17dPa1dGX9BBgfH12wSsqoVoCQkenhg9LWffvTIUsrFu1507nD6Qd0t2VqdJ31JJQcQEm6vJHFFWCO5ta5Blx5GfengUkveLD81Mv+xbACgNPA16xHhFkblnI36TDSkWRh0D7OgQIDAQAB";
 
@@ -175,8 +172,6 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 	}
 
 	private synchronized void showBannerAd(final int sizeEnum, final int pos) {
-		hideBannerAd();
-
 		mShouldLock = true;
 		PluginWrapper.runOnMainThread(new Runnable() {
 
@@ -210,7 +205,6 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 				}
 
 				adView = new AdView(mContext);
-				adView.setBackgroundColor(Color.TRANSPARENT);
 				adView.setAdSize(size);
 				adView.setAdUnitId(mPublishID);
 				AdRequest.Builder builder = new AdRequest.Builder();
@@ -229,10 +223,7 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 				adView.loadAd(builder.build());
 				adView.setAdListener(new AdmobAdsListener());
 
-				if (null == mWm) {
-					mWm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-				}
-				AdsWrapper.addAdView(mWm, adView, pos);
+				AdsWrapper.addAdView(adView, pos);
 
 				Log.i(LOG_TAG, "Show Ad: waiting for adView: DONE");
 
@@ -264,10 +255,7 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 			@Override
 			public void run() {
 				if (null != adView) {
-					ViewGroup parent = (ViewGroup) adView.getParent();
-					if (parent != null) {
-						mWm.removeView(parent);
-					}
+					adView.setVisibility(View.GONE);
 					adView.destroy();
 					adView = null;
 				}
@@ -378,7 +366,16 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 		public void onAdLoaded() {
 			LogD("onReceiveAd invoked");
 			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsReceived, "Ads request received success!");
-			
+
+			if (adView != null) {
+				adView.setVisibility(View.GONE);
+				adView.setVisibility(View.VISIBLE);
+
+				if (adView.getAdSize() == AdSize.SMART_BANNER) {
+					adView.setBackgroundColor(Color.BLACK);
+				}
+			}
+
 			super.onAdLoaded();
 		}
 	}

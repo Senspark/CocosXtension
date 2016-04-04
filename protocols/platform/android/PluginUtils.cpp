@@ -116,7 +116,6 @@ typedef std::map<std::string, PluginProtocol*>::iterator JObjPluginMapIter;
 
 PluginJavaData* PluginUtils::getPluginJavaData(PluginProtocol* pKeyObj)
 {
-	outputLog("PluginUtils", "getPluginjavaData function");
     PluginJavaData* ret = NULL;
     ObjMapIter it = s_PluginObjMap.find(pKeyObj);
     if (it != s_PluginObjMap.end()) {
@@ -128,7 +127,6 @@ PluginJavaData* PluginUtils::getPluginJavaData(PluginProtocol* pKeyObj)
 
 PluginProtocol* PluginUtils::getPluginPtr(std::string className)
 {
-	outputLog("PluginUtils", "getpluginPtr function");
 	PluginProtocol* ret = NULL;
 	JObjPluginMapIter it = s_JObjPluginMap.find(className);
 	if (it != s_JObjPluginMap.end()) {
@@ -186,7 +184,6 @@ void PluginUtils::outputLog(const char* logTag, const char* pFormat, ...)
 
 jobject PluginUtils::getJObjFromParam(PluginParam* param)
 {
-	outputLog("PluginUtils", "getJObFromParam function");
 	if (NULL == param)
 	{
 		return NULL;
