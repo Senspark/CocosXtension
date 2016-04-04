@@ -33,6 +33,8 @@ THE SOFTWARE.
 - (void) unlockAchievement: (NSDictionary*) achInfo withCallback:(long) callbackID;
 - (void) showAchievements: (long) callbackID;
 
+- (void) resetAchievements: (long) callbackID;
+
 - (void) setDebugMode: (BOOL) debug;
 - (NSString*) getSDKVersion;
 - (NSString*) getPluginVersion;

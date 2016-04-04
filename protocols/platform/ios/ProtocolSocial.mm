@@ -112,6 +112,20 @@ void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo, const SocialCal
     }
 }
 
+void ProtocolSocial::resetAchievements(const SocialCallback &cb) {
+    PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);
+    assert(pData != NULL);
+
+    id ocObj = pData->obj;
+    if ([ocObj conformsToProtocol:@protocol(InterfaceSocial)]) {
+        NSObject<InterfaceSocial>* curObj = ocObj;
+
+        CallbackWrapper* wrapper = new CallbackWrapper(cb);
+
+        [curObj resetAchievements:(long) wrapper];
+    }
+}
+
 void ProtocolSocial::showAchievements(const DialogCallback &cb)
 {
     PluginOCData* pData = PluginUtilsIOS::getPluginOCData(this);

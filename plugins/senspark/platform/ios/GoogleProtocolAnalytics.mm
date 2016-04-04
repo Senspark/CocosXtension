@@ -11,6 +11,8 @@
 #include "GoogleProtocolAnalytics.h"
 #include "PluginUtilsIOS.h"
 
+using namespace std;
+
 using namespace cocos2d::plugin;
 USING_NS_SENSPARK_PLUGIN_ANALYTICS;
 
@@ -84,6 +86,15 @@ void GoogleProtocolAnalytics::trackTiming(const string& category, int interval, 
     PluginParam labelParam(label.c_str());
     
     callFuncWithParam("trackTimingWithCategory", &categoryParam, &intervalParam, &nameParam, &labelParam, nullptr);
+}
+
+void GoogleProtocolAnalytics::trackEcommerceTransactions(const string& identity, const string& productName, const string& productCategory, float priceValue) {
+    PluginParam identityParam(identity.c_str());
+    PluginParam nameParam(productName.c_str());
+    PluginParam categoryParam(productCategory.c_str());
+    PluginParam priceParam(priceValue);
+
+    callFuncWithParam("trackEcommerceTransactions", &identityParam, &nameParam, &categoryParam, &priceParam, nullptr);
 }
 
 void GoogleProtocolAnalytics::trackSocial(const string& network, const string& action, const string& target) {

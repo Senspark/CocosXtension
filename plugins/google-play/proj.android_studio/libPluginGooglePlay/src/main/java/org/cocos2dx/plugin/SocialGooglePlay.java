@@ -61,8 +61,8 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 			protected Integer doInBackground(Void... params) {
 				SubmitScoreResult mResult = Games.Leaderboards.submitScoreImmediate(mGameHelper.getApiClient(), leaderboardID, score).await(30, TimeUnit.SECONDS);
 				return mResult.getStatus().getStatusCode();
-			};
-			
+			}
+
 			@Override
 			protected void onPostExecute(Integer result) {
 				super.onPostExecute(result);
@@ -103,26 +103,51 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 	@Override
 	public void unlockAchievement(Hashtable<String, String> achInfo, final int callbackID) {
 		final String achievementId = achInfo.get("achievementId");
-		
-		AsyncTask<Void, Void, Integer> task = new AsyncTask<Void, Void, Integer>() {
-			@Override
-			protected Integer doInBackground(Void... params) {
-				UpdateAchievementResult result = Games.Achievements.unlockImmediate(mGameHelper.getApiClient(), achievementId).await(30, TimeUnit.SECONDS);
-				return result.getStatus().getStatusCode();
-			}
-			
-			@Override
-			protected void onPostExecute(Integer result) {
-				if (result == GamesStatusCodes.STATUS_OK) {
-					logD("Unlock achievement with id " + achievementId + " successfully.");
-					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_UNLOCKACH_SUCCESS, "Unlock achievement with id " + achievementId + " successfully.", callbackID);
-				} else {
-					logD("Unlock achievement with id " + achievementId + " failed.");
-					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_UNLOCKACH_FAILED, "Unlock achievement with id " + achievementId + " failed.", callbackID);
+		final int percentComplete = Integer.parseInt(achInfo.get("percent"));
+
+		if (percentComplete >= 100) {
+
+			AsyncTask<Void, Void, Integer> task = new AsyncTask<Void, Void, Integer>() {
+				@Override
+				protected Integer doInBackground(Void... params) {
+					UpdateAchievementResult result = Games.Achievements.unlockImmediate(mGameHelper.getApiClient(), achievementId).await(30, TimeUnit.SECONDS);
+					return result.getStatus().getStatusCode();
+				}
+
+				@Override
+				protected void onPostExecute(Integer result) {
+					if (result == GamesStatusCodes.STATUS_OK) {
+						logD("Unlock achievement with id " + achievementId + " successfully.");
+						SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_UNLOCKACH_SUCCESS, "Unlock achievement with id " + achievementId + " successfully.", callbackID);
+					} else {
+						logD("Unlock achievement with id " + achievementId + " failed.");
+						SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_UNLOCKACH_FAILED, "Unlock achievement with id " + achievementId + " failed.", callbackID);
+					}
 				}
 			};
-		};
-		task.execute();
+			task.execute();
+
+		} else {
+			AsyncTask<Void, Void, Integer> task = new AsyncTask<Void, Void, Integer>() {
+				@Override
+				protected Integer doInBackground(Void... params) {
+					UpdateAchievementResult result = Games.Achievements.incrementImmediate(mGameHelper.getApiClient(), achievementId, percentComplete).await(30, TimeUnit.SECONDS);
+					return result.getStatus().getStatusCode();
+				}
+
+				@Override
+				protected void onPostExecute(Integer result) {
+					if (result == GamesStatusCodes.STATUS_OK) {
+						Log.i(LOG_TAG, "Increment achievement with id " + achievementId + " successfully with percentage: " + percentComplete);
+						SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_UNLOCKACH_SUCCESS, "Increment achievement with id " + achievementId + " successfully with percentage: " + percentComplete, callbackID);
+					} else {
+						Log.i(LOG_TAG, "Increment achievement with id " + achievementId + " failed.");
+						SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_UNLOCKACH_FAILED, "Increment achievement with id " + achievementId + " failed.", callbackID);
+					}
+				}
+			};
+			task.execute();
+		}
 	}
 
 	public void revealAchievement(Hashtable<String, String> achInfo, final int callbackID) {
@@ -133,8 +158,8 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 			protected Integer doInBackground(Void... params) {
 				UpdateAchievementResult result = Games.Achievements.revealImmediate(mGameHelper.getApiClient(), achievementId).await(30, TimeUnit.SECONDS);
 				return result.getStatus().getStatusCode();
-			};
-			
+			}
+
 			@Override
 			protected void onPostExecute(Integer result) {
 				if (result == GamesStatusCodes.STATUS_OK) {
@@ -144,7 +169,7 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 					logD("Unlock achievement with id " + achievementId + " failed.");
 					SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_REVEALACH_FAILED, "Unlock achievement with id " + achievementId + " failed.", callbackID);
 				}
-			};
+			}
 		};
 		
 		task.execute();

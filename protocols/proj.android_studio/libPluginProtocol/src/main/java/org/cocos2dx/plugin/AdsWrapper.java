@@ -71,7 +71,7 @@ public class AdsWrapper {
 		mLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 		mLayoutParams.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 		mLayoutParams.format = PixelFormat.TRANSLUCENT;
-		
+
 		switch (pos) {
 		case POS_CENTER:
 			mLayoutParams.gravity = Gravity.CENTER;

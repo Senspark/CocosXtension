@@ -79,6 +79,8 @@ public:
     void unlockAchievement(TAchievementInfo achInfo, const SocialCallback& cb);
     
     void showAchievements(const DialogCallback& cb);
+
+    void resetAchievements(const SocialCallback& cb);
 };
 
 }} // namespace cocos2d { namespace plugin {

@@ -33,6 +33,7 @@ public interface InterfaceSocial {
     public void showLeaderboard(String leaderboardID, int callbackID);
     public void unlockAchievement(Hashtable<String, String> achInfo, int callbackID);
     public void showAchievements(int callbackID);
+    public void resetAchievements(int callbackID);
     public void setDebugMode(boolean debug);
     public String getSDKVersion();
     public String getPluginVersion();

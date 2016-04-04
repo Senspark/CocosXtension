@@ -30,6 +30,7 @@
 
 typedef enum {
     kSizeBanner = 1,
+    kSizeSmartBannerLandscape,
     kSizeIABMRect,
     kSizeIABBanner,
     kSizeIABLeaderboard,

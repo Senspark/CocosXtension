@@ -180,6 +180,24 @@ void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo, const SocialCal
     }
 }
 
+void ProtocolSocial::resetAchievements(const SocialCallback& cb)
+{
+
+    PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
+    PluginJniMethodInfo t;
+    if (PluginJniHelper::getMethodInfo(t
+                                       , pData->jclassName.c_str()
+                                       , "resetAchievements"
+                                       , "(I)V"))
+    {
+        // generate the hashtable from map
+        CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
+        // invoke java method
+        t.env->CallVoidMethod(pData->jobj, t.methodID, (jint) cbWrapper);
+        t.env->DeleteLocalRef(t.classID);
+    }
+}
+
 void ProtocolSocial::showAchievements(const DialogCallback& cb)
 {
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);

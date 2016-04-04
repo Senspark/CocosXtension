@@ -18,6 +18,11 @@ android {
 }
 
 dependencies {
-    compile project(':libPluginProtocol')
     compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.senspark:libPluginProtocol:0.9'
+    compile files('libs/IInAppBillingService.jar')
 }
+
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
