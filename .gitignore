@@ -34,7 +34,6 @@ ipch/
 *.opensdf
 
 # Ignore files build by ndk and eclipse
-libs/
 bin/
 obj/
 gen/
