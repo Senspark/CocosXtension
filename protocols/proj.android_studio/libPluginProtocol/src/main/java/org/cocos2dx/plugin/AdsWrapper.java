@@ -23,6 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 package org.cocos2dx.plugin;
 
+import android.app.Activity;
 import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.View;
@@ -63,14 +64,14 @@ public class AdsWrapper {
 	public static final int POS_BOTTOM       = 4;
 	public static final int POS_BOTTOM_LEFT  = 5;
 	public static final int POS_BOTTOM_RIGHT = 6;
+	public static final int POS_BOTTOM_CENTER = 7;
 
-	public static void addAdView(WindowManager mWm, View adView, int pos) {
-		WindowManager.LayoutParams mLayoutParams = new WindowManager.LayoutParams();
-		mLayoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
-		mLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-		mLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-		mLayoutParams.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-		mLayoutParams.format = PixelFormat.TRANSLUCENT;
+	public static void addAdView(View adView, int pos) {
+
+		FrameLayout mFrameLayout = (FrameLayout) ((Activity) PluginWrapper.getContext()).findViewById(
+				android.R.id.content).getRootView();
+
+		FrameLayout.LayoutParams mLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
 
 		switch (pos) {
 		case POS_CENTER:
@@ -94,15 +95,14 @@ public class AdsWrapper {
 		case POS_BOTTOM_RIGHT:
 			mLayoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
 			break;
+		case POS_BOTTOM_CENTER:
+			mLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER;
+			break;
 		default:
 			break;
 		}
 
-		FrameLayout adsContainer = new FrameLayout(PluginWrapper.getContext());
-		mWm.addView(adsContainer, mLayoutParams);
-
-		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-		adsContainer.addView(adView, params);
+		mFrameLayout.addView(adView, mLayoutParams);
 	}
 
 	public static void onAdsResult(InterfaceAds adapter, int code, String msg) {
