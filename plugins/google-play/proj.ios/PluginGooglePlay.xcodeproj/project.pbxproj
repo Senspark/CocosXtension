@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17F32E4D1C571546002DB7DA /* GooglePlus.bundle in Sources */ = {isa = PBXBuildFile; fileRef = 95175B5A1B67987A0005CC3D /* GooglePlus.bundle */; };
+		17F32E4E1C571546002DB7DA /* gpg.bundle in Sources */ = {isa = PBXBuildFile; fileRef = 95EBD8831B6613380004D448 /* gpg.bundle */; };
 		95175BBB1B67987A0005CC3D /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175B591B67987A0005CC3D /* GoogleOpenSource.framework */; };
 		95175BBC1B67987A0005CC3D /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95175B5B1B67987A0005CC3D /* GooglePlus.framework */; };
 		957727861B7851F200E532E6 /* DataGooglePlay.h in Headers */ = {isa = PBXBuildFile; fileRef = 957727841B7851F200E532E6 /* DataGooglePlay.h */; };
@@ -174,6 +176,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17F32E4D1C571546002DB7DA /* GooglePlus.bundle in Sources */,
+				17F32E4E1C571546002DB7DA /* gpg.bundle in Sources */,
 				957727871B7851F200E532E6 /* DataGooglePlay.mm in Sources */,
 				95EBD88D1B6623BA0004D448 /* UserGooglePlay.mm in Sources */,
 				95EBD8951B6648F60004D448 /* IAPGooglePlay.m in Sources */,

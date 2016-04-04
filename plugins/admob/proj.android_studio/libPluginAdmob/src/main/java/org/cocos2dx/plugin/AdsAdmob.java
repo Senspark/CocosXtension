@@ -23,6 +23,8 @@ THE SOFTWARE.
 ****************************************************************************/
 package org.cocos2dx.plugin;
 
+import android.util.Log;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -87,7 +89,7 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 	}
 
 	protected static void LogD(String msg) {
-		if (bDebug) {
+		if (bDebug == true) {
 			Log.d(LOG_TAG, msg);
 		}
 	}
@@ -110,9 +112,10 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 
 	@Override
 	public void configDeveloperInfo(Hashtable<String, String> devInfo) {
+		LogD("configDeveloperInfo");
 		try {
 			mPublishID = devInfo.get("AdmobID");
-			LogD("init AppInfo : " + mPublishID);
+			LogD("id interstitialAd : "+mPublishID);
 		} catch (Exception e) {
 			LogE("initAppInfo, The format of appInfo is wrong", e);
 		}
@@ -263,20 +266,26 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 		});
 	}
 
-	public void addTestDevice(String deviceID) {
-		LogD("addTestDevice invoked : " + deviceID);
-		if (null == mTestDevices) {
-			mTestDevices = new HashSet<String>();
-		}
-		mTestDevices.add(deviceID);
+	public void addTestDevice(final String deviceID) {
+		mContext.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				LogD("addTestDevice invoked : " + deviceID);
+				if (null == mTestDevices) {
+					mTestDevices = new HashSet<String>();
+				}
+				mTestDevices.add(deviceID);
+			}
+		});
+
 	}
-	
+
 	public void loadInterstitial() {
+
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
 				Log.i(LOG_TAG, "Start loading interstitial ad");
-
 				interstitialAdView = new InterstitialAd(mContext);
 				interstitialAdView.setPlayStorePurchaseParams(mAdapter, pAppPublicKey);
 				interstitialAdView.setAdUnitId(mPublishID);
@@ -318,13 +327,14 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 		@Override
 		public void onAdClosed() {
 			super.onAdClosed();
-			
+			loadInterstitial();
 			LogD("onDismissScreen invoked");
 			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsDismissed, "Ads view dismissed!");
 		}
 
 		@Override
 		public void onAdFailedToLoad(int errorCode) {
+			Log.e(LOG_TAG,"load interstitial failed error code "+ errorCode);
 			super.onAdFailedToLoad(errorCode);
 			
 			int errorNo = AdsWrapper.RESULT_CODE_UnknownError;

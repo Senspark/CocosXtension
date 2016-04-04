@@ -197,7 +197,6 @@
     self.interstitialView = [[GADInterstitial alloc] init];
     self.interstitialView.adUnitID = self.strPublishID;
     self.interstitialView.delegate = self;
-
     GADRequest* request = [GADRequest request];
     request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
     [self.interstitialView loadRequest:request];
