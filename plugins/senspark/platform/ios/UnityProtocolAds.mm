@@ -12,6 +12,8 @@
 
 using namespace cocos2d::plugin;
 
+NS_SENSPARK_PLUGIN_ADS_BEGIN
+
 UnityProtocolAds::~UnityProtocolAds() {
     PluginUtilsIOS::erasePluginOCData(this);
 }
@@ -43,3 +45,5 @@ bool UnityProtocolAds::hasRewardedVideo() {
 void UnityProtocolAds::showRewardedVideo() {
     callFuncWithParam("showRewardedVideo", nullptr);
 }
+
+NS_SENSPARK_PLUGIN_ADS_END

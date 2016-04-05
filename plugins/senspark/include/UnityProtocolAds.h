@@ -10,6 +10,9 @@
 #define UnityProtocolAds_h
 
 #include "ProtocolAds.h"
+#include "SensparkPluginMacros.h"
+
+NS_SENSPARK_PLUGIN_ADS_BEGIN
 
 class UnityProtocolAds : public cocos2d::plugin::ProtocolAds {
 public:
@@ -24,5 +27,7 @@ public:
     bool hasRewardedVideo();
     void showRewardedVideo();
 };
+
+NS_SENSPARK_PLUGIN_ADS_END
 
 #endif /* UnityProtocolAds_h */

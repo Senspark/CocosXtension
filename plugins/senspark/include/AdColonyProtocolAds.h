@@ -10,6 +10,9 @@
 #define PluginSenspark_AdColony_h
 
 #include "ProtocolAds.h"
+#include "SensparkPluginMacros.h"
+
+NS_SENSPARK_PLUGIN_ADS_BEGIN
 
 class AdColonyProtocolAds : public cocos2d::plugin::ProtocolAds {
 public:
@@ -25,5 +28,7 @@ public:
     void showRewardedVideo(const std::string& zoneID, bool isShowPrePopup, bool isShowPostPopup);
     void cacheRewardedVideo(const std::string& zoneID);
 };
+
+NS_SENSPARK_PLUGIN_ADS_END
 
 #endif

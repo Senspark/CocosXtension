@@ -12,6 +12,8 @@
 
 using namespace cocos2d::plugin;
 
+NS_SENSPARK_PLUGIN_ADS_BEGIN
+
 AdColonyProtocolAds::~AdColonyProtocolAds() {
     PluginUtilsIOS::erasePluginOCData(this);
 }
@@ -58,3 +60,4 @@ void AdColonyProtocolAds::cacheRewardedVideo(const std::string& zoneID) {
     callFuncWithParam("cacheRewardedVideo", &param, nullptr);
 }
 
+NS_SENSPARK_PLUGIN_ADS_END
