@@ -215,6 +215,24 @@
     }
 }
 
+- (int) getBannerWidthInPixel
+{
+    int ret = 0;
+    if (self.bannerView != nullptr) {
+        ret = [self.bannerView adSize].size.width;
+    }
+    return ret;
+}
+
+- (int) getBannerHeightInPixel
+{
+    int ret = 0;
+    if (self.bannerView != nullptr) {
+        ret = [self.bannerView adSize].size.height;
+    }
+    return ret;
+}
+
 #pragma mark interface for Admob SDK
 
 - (void) addTestDevice: (NSString*) deviceID
