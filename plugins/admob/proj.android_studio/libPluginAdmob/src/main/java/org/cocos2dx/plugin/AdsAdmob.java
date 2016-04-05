@@ -65,7 +65,7 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 	private String mPublishID = "";
 	private Set<String> mTestDevices = null;
 
-	private String pAppPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtxN/Sqb0Z2/phFel1JeT5yt6wcvvQjnLIRvoNZK2KOuKpGReOcXW4E6JIOQqIZuaIBVCge1RfjohrnYtcfwYMa4DPCDlFRowYK7/4oCjWHCHDucN5WazrpLZ+VU8XwohTAkhtDb4yq/fi+ITkKK0WXP/c9nyY1ULx6qM0iZXiZGEdMVkV18TRaL0EMl9sfS0ns4ZYySHg2hY3O17dPa1dGX9BBgfH12wSsqoVoCQkenhg9LWffvTIUsrFu1507nD6Qd0t2VqdJ31JJQcQEm6vJHFFWCO5ta5Blx5GfengUkveLD81Mv+xbACgNPA16xHhFkblnI36TDSkWRh0D7OgQIDAQAB";
+	private String pAppPublicKey = null;
 
 	private static final int ADMOB_SIZE_BANNER = 1;
 	private static final int ADMOB_SIZE_SMART_BANNER = 2;
@@ -89,7 +89,7 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 	}
 
 	protected static void LogD(String msg) {
-		if (bDebug == true) {
+		if (bDebug) {
 			Log.d(LOG_TAG, msg);
 		}
 	}
@@ -115,7 +115,8 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 		LogD("configDeveloperInfo");
 		try {
 			mPublishID = devInfo.get("AdmobID");
-			LogD("id interstitialAd : "+mPublishID);
+			LogD("id interstitialAd : " + mPublishID);
+			pAppPublicKey = devInfo.get("AppPublicKey");
 		} catch (Exception e) {
 			LogE("initAppInfo, The format of appInfo is wrong", e);
 		}
@@ -123,22 +124,21 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 
 	@Override
 	public void showAds(Hashtable<String, String> info, int pos) {
-	    try
-	    {
+	    try {
 	        String strType = info.get("AdmobType");
 	        int adsType = Integer.parseInt(strType);
 
 	        switch (adsType) {
-	        case ADMOB_TYPE_BANNER:
-	            {
-	                String strSize = info.get("AdmobSizeEnum");
-	                int sizeEnum = Integer.parseInt(strSize);
-					showBannerAd(sizeEnum, pos);
-                    break;
-	            }
-	        case ADMOB_TYPE_FULLSCREEN:
-	            showInterstitial();
-	            break;
+	        case ADMOB_TYPE_BANNER: {
+                String strSize = info.get("AdmobSizeEnum");
+                int sizeEnum = Integer.parseInt(strSize);
+                showBannerAd(sizeEnum, pos);
+                break;
+            }
+	        case ADMOB_TYPE_FULLSCREEN: {
+                showInterstitial();
+                break;
+            }
 	        default:
 	            break;
 	        }
@@ -154,18 +154,19 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 
 	@Override
 	public void hideAds(Hashtable<String, String> info) {
-	    try
-        {
+	    try {
             String strType = info.get("AdmobType");
             int adsType = Integer.parseInt(strType);
 
             switch (adsType) {
-            case ADMOB_TYPE_BANNER:
+            case ADMOB_TYPE_BANNER: {
                 hideBannerAd();
                 break;
-            case ADMOB_TYPE_FULLSCREEN:
+            }
+            case ADMOB_TYPE_FULLSCREEN: {
                 LogD("Now not support full screen view in Admob");
                 break;
+            }
             default:
                 break;
             }
@@ -272,7 +273,7 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 			public void run() {
 				LogD("addTestDevice invoked : " + deviceID);
 				if (null == mTestDevices) {
-					mTestDevices = new HashSet<String>();
+					mTestDevices = new HashSet<>();
 				}
 				mTestDevices.add(deviceID);
 			}
@@ -281,7 +282,6 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 	}
 
 	public void loadInterstitial() {
-
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
@@ -294,10 +294,9 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 				AdRequest.Builder builder = new AdRequest.Builder();
 				try {
 					if (mTestDevices != null) {
-						Iterator<String> ir = mTestDevices.iterator();
-						while (ir.hasNext()) {
-							builder.addTestDevice(ir.next());
-						}
+                        for (String mTestDevice : mTestDevices) {
+                            builder.addTestDevice(mTestDevice);
+                        }
 					}
 				} catch (Exception e) {
 					LogE("Error during add test device", e);
@@ -314,7 +313,9 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 			@Override
 			public void run() {
 				if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
-					Log.e("PluginAdmob", "ADMOB: Interstitial cannot show. It is not ready: - InterstitialAdView : " + interstitialAdView + " - isLoaded: " + interstitialAdView.isLoaded());
+					Log.e("PluginAdmob", String.format("ADMOB: Interstitial cannot show. It is not ready: - InterstitialAdView: %s - isLoaded: %b",
+                        interstitialAdView == null ? "null" : interstitialAdView.toString(),
+                        interstitialAdView != null && interstitialAdView.isLoaded());
 					loadInterstitial();
 				} else {
 					interstitialAdView.show();
