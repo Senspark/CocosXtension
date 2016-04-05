@@ -219,7 +219,7 @@
 {
     int ret = 0;
     if (self.bannerView != nullptr) {
-        ret = [self.bannerView adSize].size.width;
+        ret = _bannerView.frame.size.width;
     }
     return ret;
 }
@@ -228,7 +228,7 @@
 {
     int ret = 0;
     if (self.bannerView != nullptr) {
-        ret = [self.bannerView adSize].size.height;
+        ret = _bannerView.frame.size.height;
     }
     return ret;
 }
