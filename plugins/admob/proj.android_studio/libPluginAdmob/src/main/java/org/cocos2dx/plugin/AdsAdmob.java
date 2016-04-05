@@ -23,8 +23,6 @@ THE SOFTWARE.
 ****************************************************************************/
 package org.cocos2dx.plugin;
 
-import android.util.Log;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -225,7 +223,7 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 				}
 
 				adView.loadAd(builder.build());
-				adView.setAdListener(new AdmobAdsListener());
+				adView.setAdListener(new AdmobAdsBannerListener());
 
 				AdsWrapper.addAdView(adView, pos);
 
@@ -289,7 +287,7 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 				interstitialAdView = new InterstitialAd(mContext);
 				interstitialAdView.setPlayStorePurchaseParams(mAdapter, pAppPublicKey);
 				interstitialAdView.setAdUnitId(mPublishID);
-				interstitialAdView.setAdListener(new AdmobAdsListener());
+				interstitialAdView.setAdListener(new AdmobAdsInterstitialListener());
 
 				AdRequest.Builder builder = new AdRequest.Builder();
 				try {
@@ -315,7 +313,7 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 				if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
 					Log.e("PluginAdmob", String.format("ADMOB: Interstitial cannot show. It is not ready: - InterstitialAdView: %s - isLoaded: %b",
                         interstitialAdView == null ? "null" : interstitialAdView.toString(),
-                        interstitialAdView != null && interstitialAdView.isLoaded());
+                        interstitialAdView != null && interstitialAdView.isLoaded()));
 					loadInterstitial();
 				} else {
 					interstitialAdView.show();
@@ -324,7 +322,7 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 		});
 	}
 	
-	private class AdmobAdsListener extends AdListener {
+	private class AdmobAdsBannerListener extends AdListener {
 		@Override
 		public void onAdClosed() {
 			super.onAdClosed();
@@ -376,7 +374,7 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 		@Override
 		public void onAdLoaded() {
 			LogD("onReceiveAd invoked");
-			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsReceived, "Ads request received success!");
+			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsBannerReceived, "Ads request received success!");
 
 			if (adView != null) {
 				adView.setVisibility(View.GONE);
@@ -386,6 +384,64 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 					adView.setBackgroundColor(Color.BLACK);
 				}
 			}
+
+			super.onAdLoaded();
+		}
+	}
+
+	private class AdmobAdsInterstitialListener extends AdListener {
+		@Override
+		public void onAdClosed() {
+			super.onAdClosed();
+			loadInterstitial();
+			LogD("onDismissScreen invoked");
+			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsDismissed, "Ads view dismissed!");
+		}
+
+		@Override
+		public void onAdFailedToLoad(int errorCode) {
+			Log.e(LOG_TAG,"load interstitial failed error code "+ errorCode);
+			super.onAdFailedToLoad(errorCode);
+
+			int errorNo = AdsWrapper.RESULT_CODE_UnknownError;
+			String errorMsg = "Unknow error";
+			switch (errorCode) {
+				case AdRequest.ERROR_CODE_NETWORK_ERROR:
+					errorNo =  AdsWrapper.RESULT_CODE_NetworkError;
+					errorMsg = "Network error";
+					break;
+				case AdRequest.ERROR_CODE_INVALID_REQUEST:
+					errorNo = AdsWrapper.RESULT_CODE_NetworkError;
+					errorMsg = "The ad request is invalid";
+					break;
+				case AdRequest.ERROR_CODE_NO_FILL:
+					errorMsg = "The ad request is successful, but no ad was returned due to lack of ad inventory.";
+					break;
+				default:
+					break;
+			}
+			LogD("failed to receive ad : " + errorNo + " , " + errorMsg);
+			AdsWrapper.onAdsResult(mAdapter, errorNo, errorMsg);
+		}
+
+		@Override
+		public void onAdLeftApplication() {
+			super.onAdLeftApplication();
+			LogD("onLeaveApplication invoked");
+		}
+
+		@Override
+		public void onAdOpened() {
+			LogD("onPresentScreen invoked");
+			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsShown, "Ads view shown!");
+
+			super.onAdOpened();
+		}
+
+		@Override
+		public void onAdLoaded() {
+			LogD("onReceiveAd invoked");
+			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsInterstitialReceived, "Ads request received success!");
 
 			super.onAdLoaded();
 		}
