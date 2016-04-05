@@ -73,7 +73,12 @@ public class AdsWrapper {
 		FrameLayout mFrameLayout = (FrameLayout) ((Activity) PluginWrapper.getContext()).findViewById(
 				android.R.id.content).getRootView();
 
-		FrameLayout.LayoutParams mLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+		FrameLayout.LayoutParams mLayoutParams;
+		if (pos == POS_CENTER || pos == POS_BOTTOM_CENTER) {
+			mLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+		} else {
+			mLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+		}
 
 		switch (pos) {
 		case POS_CENTER:
