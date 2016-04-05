@@ -232,7 +232,7 @@
 // Since we've received an ad, let's go ahead and set the frame to display it.
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
     NSLog(@"Received ad");
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsReceived withMsg:@"Ads request received success!"];
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsBannerReceived withMsg:@"Ads request received success!"];
 }
 
 - (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
@@ -252,7 +252,7 @@
 
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
     OUTPUT_LOG(@"Interstitial ad was loaded. Can present now.");
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsReceived withMsg:@"Ads request received success!"];
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsInterstitialReceived withMsg:@"Ads request received success!"];
 }
 
 /// Called when an interstitial ad request completed without an interstitial to

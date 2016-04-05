@@ -34,7 +34,8 @@ namespace cocos2d { namespace plugin {
 typedef std::map<std::string, std::string> TAdsInfo;
 
 enum class AdsResultCode {
-    kAdsReceived = 0,           // The ad is received
+    kAdsBannerReceived = 0,           // The ad is received
+    kAdsInterstitialReceived, //
     kAdsShown,                  // The advertisement shown
     kAdsDismissed,              // The advertisement dismissed
     kAdsClicked,
