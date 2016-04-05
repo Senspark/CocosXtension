@@ -31,6 +31,8 @@ public:
     
     bool isConnected(const std::string& hostName);
 
+    bool isTablet();
+
     std::string getSHA1CertFingerprint();
     
     bool isRelease();

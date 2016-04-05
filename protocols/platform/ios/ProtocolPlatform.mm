@@ -79,3 +79,11 @@ void ProtocolPlatform::sendFeedback(const std::string &appName) {
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
 }
+
+bool ProtocolPlatform::isTablet() {
+    if ( [(NSString*)[UIDevice currentDevice].model hasPrefix:@"iPad"] ) {
+        return true; /* Device is iPad */
+    } else {
+        return false;
+    }
+}

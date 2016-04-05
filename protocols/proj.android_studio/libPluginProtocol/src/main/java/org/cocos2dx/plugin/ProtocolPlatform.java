@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -46,6 +47,14 @@ public class ProtocolPlatform  {
 	public boolean isRelease() {
 		boolean isDebuggable =  ( 0 != ( mContext.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
 		return !isDebuggable;
+	}
+
+	public boolean isTablet() {
+		boolean ret = false;
+		if (mContext != null) {
+			ret = (mContext.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+		}
+		return ret;
 	}
 	
 	public boolean isConnected(String hostName) {
