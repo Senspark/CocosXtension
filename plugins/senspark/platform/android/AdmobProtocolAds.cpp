@@ -49,3 +49,11 @@ void AdmobProtocolAds::slideBannerUp() {
 void AdmobProtocolAds::slideBannerDown() {
     callFuncWithParam("slideBannerDown", nullptr);
 }
+
+int AdmobProtocolAds::getBannerWidthInPixel() {
+    return callIntFuncWithParam("getBannerWidthInPixel", nullptr);
+}
+
+int AdmobProtocolAds::getBannerHeightInPixel() {
+    return callIntFuncWithParam("getBannerHeightInPixel", nullptr);
+}

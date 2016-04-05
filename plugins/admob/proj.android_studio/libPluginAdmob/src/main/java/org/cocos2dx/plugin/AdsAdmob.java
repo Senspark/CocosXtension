@@ -321,6 +321,22 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 			}
 		});
 	}
+
+	public int getBannerWidthInPixel() {
+		int ret = 0;
+		if (adView != null && mContext != null) {
+			ret = adView.getAdSize().getWidthInPixels(mContext);
+		}
+		return ret;
+	}
+
+	public int getBannerHeightInPixel() {
+		int ret = 0;
+		if (adView != null && mContext != null) {
+			ret = adView.getAdSize().getHeightInPixels(mContext);
+		}
+		return ret;
+	}
 	
 	private class AdmobAdsBannerListener extends AdListener {
 		@Override
@@ -380,7 +396,8 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 				adView.setVisibility(View.GONE);
 				adView.setVisibility(View.VISIBLE);
 
-				if (adView.getAdSize() == AdSize.SMART_BANNER) {
+				if (adView.getAdSize().isAutoHeight()) {
+					Log.i(LOG_TAG, "AdSize is SMART BANNER. Set its background color BLACK");
 					adView.setBackgroundColor(Color.BLACK);
 				}
 			}

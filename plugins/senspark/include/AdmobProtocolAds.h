@@ -33,6 +33,9 @@ public:
 
     void slideBannerUp();
     void slideBannerDown();
+
+    int getBannerWidthInPixel();
+    int getBannerHeightInPixel();
 };
 
 NS_SENSPARK_PLUGIN_ADS_END
