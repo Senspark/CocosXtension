@@ -22,9 +22,10 @@ AdmobProtocolAds::~AdmobProtocolAds() {
     PluginUtils::erasePluginJavaData(this);
 }
 
-void AdmobProtocolAds::configureAds(const std::string &adsId) {
+void AdmobProtocolAds::configureAds(const std::string &adsId, const std::string& appPublicKey) {
     TAdsInfo devInfo;
     devInfo["AdmobID"] = adsId;
+    devInfo["AppPublicKey"] = appPublicKey;
     configDeveloperInfo(devInfo);
 }
 
