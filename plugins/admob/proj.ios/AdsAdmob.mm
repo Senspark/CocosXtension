@@ -194,8 +194,7 @@
 
 - (void) loadInterstitial
 {
-    self.interstitialView = [[GADInterstitial alloc] init];
-    self.interstitialView.adUnitID = self.strPublishID;
+    self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strPublishID];
     self.interstitialView.delegate = self;
     GADRequest* request = [GADRequest request];
     request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
@@ -215,22 +214,22 @@
     }
 }
 
-- (int) getBannerWidthInPixel
+- (NSNumber*) getBannerWidthInPixel
 {
     int ret = 0;
-    if (self.bannerView != nullptr) {
-        ret = _bannerView.frame.size.width;
+    if (self.bannerView) {
+        ret = self.bannerView.frame.size.width;
     }
-    return ret;
+    return [NSNumber numberWithInt:ret];
 }
 
-- (int) getBannerHeightInPixel
+- (NSNumber*) getBannerHeightInPixel
 {
     int ret = 0;
-    if (self.bannerView != nullptr) {
-        ret = _bannerView.frame.size.height;
+    if (self.bannerView) {
+        ret = self.bannerView.frame.size.height;
     }
-    return ret;
+    return [NSNumber numberWithInt:ret];
 }
 
 #pragma mark interface for Admob SDK

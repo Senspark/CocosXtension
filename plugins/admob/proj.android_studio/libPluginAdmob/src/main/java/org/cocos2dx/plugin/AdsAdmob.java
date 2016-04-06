@@ -60,6 +60,9 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 	private InterstitialAd interstitialAdView = null;
 	private boolean isLoaded = false;
 
+	private int mBannerWidthInPixel = 0;
+	private int mBannerHeightInPixel = 0;
+
 	private String mPublishID = "";
 	private Set<String> mTestDevices = null;
 
@@ -292,9 +295,9 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 				AdRequest.Builder builder = new AdRequest.Builder();
 				try {
 					if (mTestDevices != null) {
-                        for (String mTestDevice : mTestDevices) {
-                            builder.addTestDevice(mTestDevice);
-                        }
+						for (String mTestDevice : mTestDevices) {
+							builder.addTestDevice(mTestDevice);
+						}
 					}
 				} catch (Exception e) {
 					LogE("Error during add test device", e);
@@ -322,20 +325,67 @@ public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
 		});
 	}
 
-	public int getBannerWidthInPixel() {
-		int ret = 0;
-		if (adView != null && mContext != null) {
-			ret = adView.getAdSize().getWidthInPixels(mContext);
+	public synchronized int getBannerWidthInPixel() {
+
+		mBannerWidthInPixel = 0;
+		mShouldLock = true;
+
+		PluginWrapper.runOnMainThread(new Runnable() {
+			@Override
+			public void run() {
+				if (adView != null && mContext != null)
+					mBannerWidthInPixel = adView.getAdSize().getWidthInPixels(mContext);
+
+				synchronized (AdsAdmob.this) {
+					mShouldLock = false;
+					AdsAdmob.this.notify();
+				}
+			}
+		});
+
+		synchronized (this) {
+			try {
+				if (mShouldLock) {
+					wait();
+				}
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
 		}
-		return ret;
+
+		return mBannerWidthInPixel;
 	}
 
-	public int getBannerHeightInPixel() {
-		int ret = 0;
-		if (adView != null && mContext != null) {
-			ret = adView.getAdSize().getHeightInPixels(mContext);
+
+	public synchronized int getBannerHeightInPixel() {
+
+		mBannerHeightInPixel = 0;
+		mShouldLock = true;
+
+		PluginWrapper.runOnMainThread(new Runnable() {
+			@Override
+			public void run() {
+				if (adView != null && mContext != null)
+					mBannerHeightInPixel = adView.getAdSize().getHeightInPixels(mContext);
+
+				synchronized (AdsAdmob.this) {
+					mShouldLock = false;
+					AdsAdmob.this.notify();
+				}
+			}
+		});
+
+		synchronized (this) {
+			try {
+				if (mShouldLock) {
+					wait();
+				}
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
 		}
-		return ret;
+
+		return mBannerHeightInPixel;
 	}
 	
 	private class AdmobAdsBannerListener extends AdListener {
