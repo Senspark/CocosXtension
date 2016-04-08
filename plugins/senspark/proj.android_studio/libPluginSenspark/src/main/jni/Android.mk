@@ -8,7 +8,7 @@ LOCAL_MODULE_FILENAME := libPluginSensparkStatic
 
 LOCAL_SRC_FILES :=\
 $(addprefix ../../../../../platform/android/, \
-	AdColonyProtocolAds.cpp \
+    AdColonyProtocolAds.cpp \
     AdmobProtocolAds.cpp \
     ChartboostProtocolAds.cpp \
     UnityProtocolAds.cpp \
@@ -27,9 +27,10 @@ $(addprefix ../../../../../platform/android/, \
     ParseProtocolBaaS.cpp \
     BaasboxProtocolBaas.cpp \
 ) \
-../../../../../classes/SensparkPluginManager.cpp
+../../../../../classes/SensparkPluginManager.cpp \
+../../../../../classes/AdMobProtocolAdsImpl.cpp
 
-LOCAL_CFLAGS := -std=c++11 -Wno-psabi
+LOCAL_CFLAGS := -std=c++14 -Wno-psabi
 LOCAL_EXPORT_CFLAGS := -Wno-psabi
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../../../include

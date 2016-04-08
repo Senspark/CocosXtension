@@ -59,6 +59,10 @@ public class AdsWrapper {
     public static final int RESULT_CODE_NetworkError 		= 20;              // Network error
     public static final int RESULT_CODE_UnknownError 		= 21;              // Unknown error
 
+    /// Called when an interstitial ad was shown and user click on
+    /// an in-app purchase butotn
+    public static final int RESULT_CODE_InAppPurchaseRequested = 22;
+
 	public static final int POS_CENTER 	     = 0;
 	public static final int POS_TOP		     = 1;
 	public static final int POS_TOP_LEFT     = 2;

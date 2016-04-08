@@ -22,6 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#include <array>
+
 #import "AdsAdmob.h"
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
@@ -146,31 +148,18 @@
     return @"0.3.0";
 }
 
-- (void) showBanner: (int) sizeEnum atPos:(int) pos
-{
-    GADAdSize size = kGADAdSizeBanner;
-    switch (sizeEnum) {
-        case kSizeBanner:
-            size = kGADAdSizeBanner;
-            break;
-        case kSizeSmartBannerLandscape:
-            size = kGADAdSizeSmartBannerLandscape;
-            break;
-        case kSizeIABMRect:
-            size = kGADAdSizeMediumRectangle;
-            break;
-        case kSizeIABBanner:
-            size = kGADAdSizeFullBanner;
-            break;
-        case kSizeIABLeaderboard:
-            size = kGADAdSizeLeaderboard;
-            break;
-        case kSizeSkyscraper:
-            size = kGADAdSizeSkyscraper;
-            break;
-        default:
-            break;
-    }
+- (void) showBanner: (int) sizeEnum atPos:(int) pos {
+    const std::array<GADAdSize, 7> AdSizes {{
+        kGADAdSizeBanner,
+        kGADAdSizeLargeBanner,
+        kGADAdSizeMediumRectangle,
+        kGADAdSizeFullBanner,
+        kGADAdSizeLeaderboard,
+        kGADAdSizeSkyscraper,
+        kGADAdSizeSmartBannerLandscape
+    }};
+    auto size = AdSizes.at(sizeEnum);
+    
     if (nil != self.bannerView) {
         [self.bannerView removeFromSuperview];
         [self.bannerView release];
