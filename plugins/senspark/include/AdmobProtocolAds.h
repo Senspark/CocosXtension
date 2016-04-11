@@ -28,14 +28,22 @@ public:
     void addTestDevice(const std::string& deviceId);
 
     void loadInterstitial();
-
     bool hasInterstitial();
+
+    void loadRewardedAd();
+    void showRewardedAd();
+    bool hasRewardedAd();
 
     void slideBannerUp();
     void slideBannerDown();
 
     int getBannerWidthInPixel();
     int getBannerHeightInPixel();
+
+    void configMediationAdColony(const cocos2d::plugin::TAdsInfo &params);
+    void configMediationAdVungle(const cocos2d::plugin::TAdsInfo &params);
+    void configMediationAdUnity(const cocos2d::plugin::TAdsInfo &params);
+    
 };
 
 NS_SENSPARK_PLUGIN_ADS_END
