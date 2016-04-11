@@ -59,7 +59,8 @@ enum class AdsResultCode {
     kPointsSpendFailed,         // The points spend failed
     
     kNetworkError,              // Network error
-    kUnknownError,              // Unknown error
+    kAdsUnknownError,              // Unknown error
+    kVideoUnknownError,
 };
 
 class ProtocolAds;

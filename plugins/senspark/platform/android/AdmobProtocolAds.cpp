@@ -14,8 +14,19 @@ std::string to_string(int input) {
     return ret;
 }
 
-AdmobProtocolAds::AdmobProtocolAds() {
+void AdmobProtocolAds::configMediationAdColony(const cocos2d::plugin::TAdsInfo &params) {
+    PluginParam pParam(params);
+    callFuncWithParam("configMediationAdColony", &pParam);
+}
 
+void AdmobProtocolAds::configMediationAdUnity(const cocos2d::plugin::TAdsInfo &params) {
+    PluginParam pParam(params);
+    callFuncWithParam("configMediationAdUnity", &pParam);
+}
+
+void AdmobProtocolAds::configMediationAdVungle(const cocos2d::plugin::TAdsInfo &params) {
+    PluginParam pParam(params);
+    callFuncWithParam("configMediationAdVungle", &pParam);
 }
 
 AdmobProtocolAds::~AdmobProtocolAds() {
@@ -40,6 +51,18 @@ void AdmobProtocolAds::loadInterstitial() {
 
 bool AdmobProtocolAds::hasInterstitial() {
     return callBoolFuncWithParam("hasInterstitial", nullptr);
+}
+
+void AdmobProtocolAds::loadRewardedAd() {
+    callFuncWithParam("loadRewardedAd", nullptr);
+}
+
+void AdmobProtocolAds::showRewardedAd() {
+    callFuncWithParam("showRewardedAd", nullptr);
+}
+
+bool AdmobProtocolAds::hasRewardedAd() {
+    return callBoolFuncWithParam("hasRewardedAd", nullptr);
 }
 
 void AdmobProtocolAds::slideBannerUp() {

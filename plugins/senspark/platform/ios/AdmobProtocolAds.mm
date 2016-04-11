@@ -23,6 +23,21 @@ AdmobProtocolAds::~AdmobProtocolAds() {
     PluginUtilsIOS::erasePluginOCData(this);
 }
 
+void AdmobProtocolAds::configMediationAdColony(const cocos2d::plugin::TAdsInfo &params) {
+    PluginParam pParam(params);
+    callFuncWithParam("configMediationAdColony", &pParam, nullptr);
+}
+
+void AdmobProtocolAds::configMediationAdUnity(const cocos2d::plugin::TAdsInfo &params) {
+    PluginParam pParam(params);
+    callFuncWithParam("configMediationAdUnity", &pParam, nullptr);
+}
+
+void AdmobProtocolAds::configMediationAdVungle(const cocos2d::plugin::TAdsInfo &params) {
+    PluginParam pParam(params);
+    callFuncWithParam("configMediationAdVungle", &pParam, nullptr);
+}
+
 void AdmobProtocolAds::configureAds(const std::string &adsId, const std::string& appPublicKey) {
     TAdsInfo devInfo;
     devInfo["AdmobID"] = adsId;
@@ -41,6 +56,18 @@ void AdmobProtocolAds::loadInterstitial() {
 
 bool AdmobProtocolAds::hasInterstitial() {
     return callBoolFuncWithParam("hasInterstitial", nullptr);
+}
+
+void AdmobProtocolAds::loadRewardedAd() {
+    callFuncWithParam("loadRewardedAd", nullptr);
+}
+
+void AdmobProtocolAds::showRewardedAd() {
+    callFuncWithParam("showRewardedAd", nullptr);
+}
+
+bool AdmobProtocolAds::hasRewardedAd() {
+    return callBoolFuncWithParam("hasRewardedAd", nullptr);
 }
 
 void AdmobProtocolAds::slideBannerUp() {

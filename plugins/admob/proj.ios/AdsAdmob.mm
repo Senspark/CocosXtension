@@ -23,14 +23,17 @@
  ****************************************************************************/
 
 #import "AdsAdmob.h"
+#import <GADMAdapterAdColonyExtras.h>
+#import <GADMAdapterAdColonyInitializer.h>
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
 @implementation AdsAdmob
 
-@synthesize debug           = __debug;
-@synthesize strPublishID    = __strPublishID;
-@synthesize testDeviceIDs   = __TestDeviceIDs;
+@synthesize debug                       = __debug;
+@synthesize strPublishID                = __strPublishID;
+@synthesize testDeviceIDs               = __TestDeviceIDs;
+@synthesize strAdColonyRewardedAdZoneID = __strAdColonyRewardedAdZoneID;
 
 - (void) dealloc
 {
@@ -50,6 +53,25 @@
     }
     
     [super dealloc];
+}
+
+#pragma mark Mediation Ads impl
+- (void) configMediationAdColony:(NSDictionary *)params
+{
+    //initialize AdColony SDK
+    NSString* adColonyID                    = (NSString*) [params objectForKey:@"AdColonyAppID"];
+    NSString* interstitialAdColonyZoneID    = (NSString*) [params objectForKey:@"AdColonyInterstitialAdID"];
+    NSString* rewardedAdColonyZoneID        = (NSString*) [params objectForKey:@"AdColonyRewardedAdID"];
+    self.strAdColonyRewardedAdZoneID        = rewardedAdColonyZoneID;
+
+    if (nil != adColonyID) {
+        [GADMAdapterAdColonyInitializer startWithAppID:adColonyID andZones: [NSArray arrayWithObjects:interstitialAdColonyZoneID, rewardedAdColonyZoneID, nil] andCustomID:nullptr];
+    }
+}
+
+- (void) configMediationAdUnity:(NSDictionary *)params
+{
+    NSLog(@"No config is required for UnityAds");
 }
 
 #pragma mark InterfaceAds impl
@@ -214,6 +236,36 @@
     }
 }
 
+#pragma mark - Rewarded Video Ad
+
+- (BOOL) hasRewardedAd {
+    return [[GADRewardBasedVideoAd sharedInstance] isReady];
+}
+
+- (void) loadRewardedAd {
+
+    [[GADRewardBasedVideoAd sharedInstance] setDelegate:self];
+    GADRequest *request = [GADRequest request];
+    [request setTestDevices: [NSArray arrayWithArray: self.testDeviceIDs]];
+
+    if (self.strAdColonyRewardedAdZoneID.length > 0) {
+        GADMAdapterAdColonyExtras *extras = [[GADMAdapterAdColonyExtras alloc] initWithZone: self.strAdColonyRewardedAdZoneID];
+        [request registerAdNetworkExtras: extras];
+    }
+
+    [[GADRewardBasedVideoAd sharedInstance] loadRequest: request
+                                           withAdUnitID: self.strPublishID];
+
+}
+
+- (void) showRewardedAd {
+    if ([[GADRewardBasedVideoAd sharedInstance] isReady]) {
+        [[GADRewardBasedVideoAd sharedInstance] presentFromRootViewController:[AdsWrapper getCurrentRootViewController]];
+    } else {
+        [self loadRewardedAd];
+    }
+}
+
 - (NSNumber*) getBannerWidthInPixel
 {
     int ret = 0;
@@ -254,7 +306,7 @@
 
 - (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"Failed to receive ad with error: %@", [error localizedFailureReason]);
-    AdsResultCode errorNo = AdsResultCode::kUnknownError;
+    AdsResultCode errorNo = AdsResultCode::kAdsUnknownError;
     switch ([error code]) {
     case kGADErrorNetworkError:
         errorNo = AdsResultCode::kNetworkError;
@@ -276,7 +328,7 @@
 /// show. This is common since interstitials are shown sparingly to users.
 - (void)interstitial:(GADInterstitial *)ad didFailToReceiveAdWithError:(GADRequestError *)error {
     OUTPUT_LOG(@"Interstitial failed to load with error: %@", error.description);
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kUnknownError withMsg:error.description];
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsUnknownError withMsg:error.description];
 }
 
 #pragma mark Display-Time Lifecycle Notifications
@@ -297,6 +349,41 @@
 
 - (void)interstitialWillLeaveApplication:(GADInterstitial *)ad {
     OUTPUT_LOG(@"Interstitial will leave application.");
+}
+
+#pragma mark - Rewarded Video Ad Delegate
+- (void)rewardBasedVideoAdDidReceiveAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    NSLog(@"Reward based video ad is received.");
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoReceived withMsg:@"Reward based video ad is received."];
+}
+
+- (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    NSLog(@"Opened reward based video ad.");
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoShown withMsg:@"Opened reward based video ad."];
+}
+
+- (void)rewardBasedVideoAdDidStartPlaying:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    NSLog(@"Reward based video ad started playing.");
+}
+
+- (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    NSLog(@"Reward based video ad is closed.");
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoClosed withMsg:@"Reward based video ad is closed."];
+}
+
+- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didRewardUserWithReward:(GADAdReward *)reward {
+    NSString *rewardMessage = [NSString stringWithFormat:@"Reward received with currency %@ , amount %lf", reward.type, [reward.amount doubleValue]];
+    NSLog(@"%@", rewardMessage);
+    // Reward the user for watching the video.
+}
+
+- (void)rewardBasedVideoAdWillLeaveApplication:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    NSLog(@"Reward based video ad will leave application.");
+}
+
+- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didFailToLoadWithError:(NSError *)error {
+    NSLog(@"Reward based video ad failed to load.");
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoUnknownError withMsg:[NSString stringWithFormat:@"Reward based video ad failed to load with error: %@", error]];
 }
 
 #pragma mark - Animation banner ads

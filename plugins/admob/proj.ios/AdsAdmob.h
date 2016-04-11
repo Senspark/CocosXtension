@@ -43,13 +43,15 @@ typedef enum {
     kTypeFullScreen,
 } AdmobType;
 
-@interface AdsAdmob : NSObject <InterfaceAds, GADBannerViewDelegate, GADInterstitialDelegate>
+@interface AdsAdmob : NSObject <InterfaceAds, GADBannerViewDelegate, GADInterstitialDelegate, GADRewardBasedVideoAdDelegate>
 {
 }
 
 @property BOOL debug;
 
 @property (copy, nonatomic) NSString* strPublishID;
+@property (copy, nonatomic) NSString* strAdColonyRewardedAdZoneID;
+
 @property (assign, nonatomic) GADBannerView* bannerView;
 @property (assign, nonatomic) GADInterstitial* interstitialView;
 @property (assign, nonatomic) NSMutableArray* testDeviceIDs;
@@ -64,5 +66,13 @@ typedef enum {
 - (void) slideDownBannerAds;
 - (void) loadInterstitial;
 - (BOOL) hasInterstitial;
+
+- (BOOL) hasRewardedAd;
+- (void) loadRewardedAd;
+- (void) showRewardedAd;
+
+- (void) configMediationAdColony: (NSDictionary* __nullable) params;
+- (void) configMediationAdVungle: (NSDictionary* __nullable) params;
+- (void) configMediationAdUnity: (NSDictionary* __nullable) params;
 
 @end
