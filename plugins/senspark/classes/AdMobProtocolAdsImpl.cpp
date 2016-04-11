@@ -32,11 +32,9 @@ const std::string AdmobProtocolAds::AdSizeKey("AdmobSizeEnum");
 
 AdmobProtocolAds::AdmobProtocolAds() = default;
 
-void AdmobProtocolAds::configureAds(const std::string& adsId,
-                                    const std::string& appPublicKey) {
+void AdmobProtocolAds::configureAds(const std::string& adsId) {
     cocos2d::plugin::TAdsInfo devInfo;
-    devInfo["AdmobID"] = adsId;
-    devInfo["AppPublicKey"] = appPublicKey;
+    devInfo[AdIdKey] = adsId;
     configDeveloperInfo(devInfo);
 }
 
@@ -48,8 +46,9 @@ void AdmobProtocolAds::addTestDevice(const std::string &deviceId) {
 void AdmobProtocolAds::showBannerAd(const std::string& bannerAdId,
                                     AdSize bannerAdSize,
                                     AdsPos bannerAdPosition) {
+    configureAds(bannerAdId);
     cocos2d::plugin::TAdsInfo info;
-    info[AdIdKey] = bannerAdId;
+    info[AdTypeKey] = AdType::Banner;
     info[AdSizeKey] = bannerAdSize;
     showAds(info, bannerAdPosition);
 }
@@ -61,9 +60,9 @@ void AdmobProtocolAds::hideBannerAd() {
 }
 
 void AdmobProtocolAds::showInterstitialAd(const std::string& interstitialAdId) {
+    configureAds(interstitialAdId);
     cocos2d::plugin::TAdsInfo info;
     info[AdTypeKey] = AdType::Interstitial;
-    info[AdIdKey] = interstitialAdId;
     showAds(info);
 }
 
