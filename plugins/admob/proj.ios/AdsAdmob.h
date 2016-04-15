@@ -30,15 +30,6 @@
 #import "AdsWrapper.h"
 
 typedef enum {
-    kSizeBanner = 1,
-    kSizeSmartBannerLandscape,
-    kSizeIABMRect,
-    kSizeIABBanner,
-    kSizeIABLeaderboard,
-    kSizeSkyscraper,
-} AdmobSizeEnum;
-
-typedef enum {
     kTypeBanner = 1,
     kTypeFullScreen,
 } AdmobType;
