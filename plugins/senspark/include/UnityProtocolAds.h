@@ -20,12 +20,12 @@ public:
 
     void configureAds(const std::string& appID);
 
-    bool hasInterstitial();
-    void showInterstitial();
+    bool hasInterstitial(const std::string& zone);
+    void showInterstitial(const std::string& zone);
     void cacheInterstitial();
 
-    bool hasRewardedVideo();
-    void showRewardedVideo();
+    bool hasRewardedVideo(const std::string& zone);
+    void showRewardedVideo(const std::string& zone);
 };
 
 NS_SENSPARK_PLUGIN_ADS_END

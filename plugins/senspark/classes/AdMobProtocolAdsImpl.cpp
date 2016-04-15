@@ -95,4 +95,37 @@ int AdmobProtocolAds::getBannerWidthInPixel() {
 int AdmobProtocolAds::getBannerHeightInPixel() {
     return callIntFuncWithParam("getBannerHeightInPixel", nullptr);
 }
+
+void AdmobProtocolAds::loadRewardedAd(const std::string& adID) {
+    cocos2d::plugin::PluginParam param(adID.c_str());
+    callFuncWithParam("loadRewardedAd", &param, nullptr);
+}
+
+void AdmobProtocolAds::showRewardedAd() {
+    callFuncWithParam("showRewardedAd", nullptr);
+}
+
+bool AdmobProtocolAds::hasRewardedAd() {
+    return callBoolFuncWithParam("hasRewardedAd", nullptr);
+}
+
+void AdmobProtocolAds::initializeMediationAd() {
+    callFuncWithParam("initializeMediationAd", nullptr);
+}
+
+void AdmobProtocolAds::configMediationAdColony(const cocos2d::plugin::TAdsInfo &params) {
+    cocos2d::plugin::PluginParam pParam(params);
+    callFuncWithParam("configMediationAdColony", &pParam, nullptr);
+}
+
+void AdmobProtocolAds::configMediationAdUnity(const cocos2d::plugin::TAdsInfo &params) {
+    cocos2d::plugin::PluginParam pParam(params);
+    callFuncWithParam("configMediationAdUnity", &pParam, nullptr);
+}
+
+void AdmobProtocolAds::configMediationAdVungle(const cocos2d::plugin::TAdsInfo &params) {
+    cocos2d::plugin::PluginParam pParam(params);
+    callFuncWithParam("configMediationAdVungle", &pParam, nullptr);
+}
+
 NS_SENSPARK_PLUGIN_ADS_END

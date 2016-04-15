@@ -29,7 +29,7 @@ class BannerAdListener extends AdListener {
         adapter.logE("load interstitial failed error code " + errorCode);
         super.onAdFailedToLoad(errorCode);
 
-        int errorNo = AdsWrapper.RESULT_CODE_UnknownError;
+        int errorNo = AdsWrapper.RESULT_CODE_AdsUnknownError;
         String errorMsg = "Unknow error";
         switch (errorCode) {
             case AdRequest.ERROR_CODE_NETWORK_ERROR:

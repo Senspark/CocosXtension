@@ -28,6 +28,10 @@ public class ProtocolPlatform  {
 		mActivity = (Activity) context;
 		mAdapter = this;
 	}
+
+    public void finishActivity() {
+        mActivity.finish();
+    }
 	
 	public boolean isAppInstalled(final String appName) {
 		PackageManager pm = mContext.getPackageManager();

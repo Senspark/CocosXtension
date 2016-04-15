@@ -58,6 +58,10 @@
 }
 
 #pragma mark Mediation Ads impl
+- (void) initializeMediationAd {
+    NSLog(@"Not require on iOS");
+}
+
 - (void) configMediationAdColony:(NSDictionary *)params
 {
     //initialize AdColony SDK
@@ -74,6 +78,11 @@
 - (void) configMediationAdUnity:(NSDictionary *)params
 {
     NSLog(@"No config is required for UnityAds");
+}
+
+- (void) configMediationAdVungle:(NSDictionary *)params
+{
+    NSLog(@"No config is required for Vungle");
 }
 
 #pragma mark InterfaceAds impl
@@ -231,7 +240,7 @@
     return [[GADRewardBasedVideoAd sharedInstance] isReady];
 }
 
-- (void) loadRewardedAd {
+- (void) loadRewardedAd:(NSString *)adsID {
 
     [[GADRewardBasedVideoAd sharedInstance] setDelegate:self];
     GADRequest *request = [GADRequest request];
@@ -243,15 +252,13 @@
     }
 
     [[GADRewardBasedVideoAd sharedInstance] loadRequest: request
-                                           withAdUnitID: self.strPublishID];
+                                           withAdUnitID: adsID];
 
 }
 
 - (void) showRewardedAd {
     if ([[GADRewardBasedVideoAd sharedInstance] isReady]) {
         [[GADRewardBasedVideoAd sharedInstance] presentFromRootViewController:[AdsWrapper getCurrentRootViewController]];
-    } else {
-        [self loadRewardedAd];
     }
 }
 

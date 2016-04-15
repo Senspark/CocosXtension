@@ -14,6 +14,10 @@ allprojects {
     repositories {
         jcenter()
 
+        flatDir {
+            dirs 'libs'
+        }
+
         maven {
             url 'https://dl.bintray.com/ndpduc/maven/'
         }

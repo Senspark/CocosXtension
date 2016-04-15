@@ -1,1 +1,1 @@
-include ':libPluginUnityAds'
+include ':libPluginUnityAds', ':unity-ads'

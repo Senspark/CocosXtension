@@ -87,3 +87,7 @@ bool ProtocolPlatform::isTablet() {
         return false;
     }
 }
+
+void ProtocolPlatform::finishActivity() {
+    NSLog(@"Not support on iOS");
+}

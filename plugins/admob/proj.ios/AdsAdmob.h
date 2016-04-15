@@ -59,7 +59,7 @@ typedef enum {
 - (BOOL) hasInterstitial;
 
 - (BOOL) hasRewardedAd;
-- (void) loadRewardedAd;
+- (void) loadRewardedAd: (NSString*) adsID;
 - (void) showRewardedAd;
 
 - (void) configMediationAdColony: (NSDictionary* __nullable) params;

@@ -38,6 +38,8 @@ public:
     bool isRelease();
 
     double getVersionCode();
+
+    void finishActivity();
     
     void sendFeedback(const std::string& appName);
     /**

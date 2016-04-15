@@ -25,15 +25,26 @@ package org.cocos2dx.plugin;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.jirbo.adcolony.AdColony;
+import com.jirbo.adcolony.AdColonyAdapter;
+import com.jirbo.adcolony.AdColonyBundleBuilder;
+
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -41,7 +52,43 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
-public class AdsAdmob implements InterfaceAds {
+public class AdsAdmob implements InterfaceAds, PluginListener {
+
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onResume() {
+        AdColony.resume(mContext);
+    }
+
+    @Override
+    public void onPause() {
+        AdColony.pause();
+    }
+
+    @Override
+    public void onStop() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        return false;
+    }
+
     private static class AdType {
         private static final int Banner = 1;
         private static final int Interstitial = 2;
@@ -56,15 +103,24 @@ public class AdsAdmob implements InterfaceAds {
     private static final String LOG_TAG = "AdsAdmob";
 
     protected Activity mContext = null;
+    protected static AdsAdmob mAdapter = null;
 
     private boolean bDebug = true;
 
     protected AdView adView = null;
     private InterstitialAd interstitialAdView = null;
+    private RewardedVideoAd mRewardedVideoAd;
     private boolean isLoaded = false;
+    protected boolean mIsRewardedVideoLoading;
+    protected final Object mLock = new Object();
 
     private int mBannerWidthInPixel = 0;
     private int mBannerHeightInPixel = 0;
+
+    private String mAdColonyAppID = "";
+    private String mAdColonyInterstitialZoneID = "";
+    private String mAdColonyRewardedZoneID = "";
+    private String mAdColonyClientOption = "";
 
     private String mPublishID = "";
     private Set<String> mTestDevices = null;
@@ -89,6 +145,9 @@ public class AdsAdmob implements InterfaceAds {
         Log.i(LOG_TAG, "Initializing AdsAdmob");
 
         mContext = (Activity) context;
+        mAdapter = this;
+        PluginWrapper.addListener(this);
+
     }
 
     @Override
@@ -100,6 +159,51 @@ public class AdsAdmob implements InterfaceAds {
     public String getSDKVersion() {
         return "6.3.1";
     }
+
+    private void initializeMediationAd() {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mAdColonyAppID.equals("")) {
+                    Log.e(LOG_TAG, "AdColony App ID is not set. Please set it if you want to use AdColony Rewarded Ad Mediation");
+                } else {
+                    AdColony.configure(mContext, mAdColonyClientOption, mAdColonyAppID, mAdColonyInterstitialZoneID, mAdColonyRewardedZoneID);
+                }
+
+                mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(mContext);
+                mRewardedVideoAd.setRewardedVideoAdListener(new RewardedAdListener());
+            }
+        });
+    }
+
+    public void configMediationAdColony(final JSONObject devInfo) {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(LOG_TAG, "Config Mediation for AdColony");
+                try {
+                    PackageInfo pInfo       = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+                    String versionName      = pInfo.versionName;
+                    String mClientOptions   = String.format("version:" + versionName + ",store:google");
+
+                    String adcolonyAppID                = devInfo.getString("AdColonyAppID");
+                    String adcolonyInterstitialZoneID   = devInfo.getString("AdColonyInterstitialAdID");
+                    String adcolonyRewardedZoneID       = devInfo.getString("AdColonyRewardedAdID");
+
+                    mAdColonyAppID              = adcolonyAppID;
+                    mAdColonyInterstitialZoneID = adcolonyInterstitialZoneID;
+                    mAdColonyRewardedZoneID     = adcolonyRewardedZoneID;
+                    mAdColonyClientOption       = mClientOptions;
+
+                    Log.i(LOG_TAG, "### AdColony AppID: " + adcolonyAppID + " - InterstitialZoneID: " + adcolonyInterstitialZoneID + " - RewardedZoneID: " + adcolonyRewardedZoneID + " ClientOption: " + mClientOptions);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 
     @Override
     public void configDeveloperInfo(Hashtable<String, String> devInfo) {
@@ -239,7 +343,7 @@ public class AdsAdmob implements InterfaceAds {
     }
 
     public void addTestDevice(final String deviceID) {
-        mContext.runOnUiThread(new Runnable() {
+        PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
                 logD("addTestDevice invoked : " + deviceID);
@@ -263,6 +367,8 @@ public class AdsAdmob implements InterfaceAds {
                 interstitialAdView.setInAppPurchaseListener(new IAPListener(AdsAdmob.this));
 
                 AdRequest.Builder builder = new AdRequest.Builder();
+                AdColonyBundleBuilder.setZoneId(mAdColonyInterstitialZoneID);
+                builder.addNetworkExtrasBundle(AdColonyAdapter.class, AdColonyBundleBuilder.build());
                 try {
                     if (mTestDevices != null) {
                         for (String mTestDevice : mTestDevices) {
@@ -280,13 +386,13 @@ public class AdsAdmob implements InterfaceAds {
     }
 
     public void showInterstitial() {
-        mContext.runOnUiThread(new Runnable() {
+        PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
                 if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
                     Log.e("PluginAdmob", String.format("ADMOB: Interstitial cannot show. It is not ready: - InterstitialAdView: %s - isLoaded: %b",
-                        interstitialAdView == null ? "null" : interstitialAdView.toString(),
-                        interstitialAdView != null && interstitialAdView.isLoaded()));
+                            interstitialAdView == null ? "null" : interstitialAdView.toString(),
+                            interstitialAdView != null && interstitialAdView.isLoaded()));
                     loadInterstitial();
                 } else {
                     interstitialAdView.show();
@@ -393,6 +499,64 @@ public class AdsAdmob implements InterfaceAds {
         }
 
         return isLoaded;
+    }
+
+    public boolean hasRewardedAd() {
+        isLoaded = false;
+        mShouldLock = true;
+
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                isLoaded = mRewardedVideoAd.isLoaded();
+
+                synchronized (AdsAdmob.this) {
+                    mShouldLock = false;
+                    AdsAdmob.this.notify();
+                }
+            }
+        });
+
+        synchronized (this) {
+            try {
+                if (mShouldLock) {
+                    wait();
+                }
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return isLoaded;
+    }
+
+    public synchronized void loadRewardedAd(final String adID) {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mLock) {
+                    if (!mIsRewardedVideoLoading) {
+                        mIsRewardedVideoLoading = true;
+                        Bundle extras = new Bundle();
+                        extras.putBoolean("_noRefresh", true);
+                        AdColonyBundleBuilder.setZoneId(mAdColonyRewardedZoneID);
+                        AdRequest adRequest = new AdRequest.Builder()
+                                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                                .addNetworkExtrasBundle(AdColonyAdapter.class, AdColonyBundleBuilder.build())
+                                .build();
+                        mRewardedVideoAd.loadAd(adID, adRequest);
+                    }
+                }
+            }
+        });
+    }
+
+    public void showRewardedAd() {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                mRewardedVideoAd.show();
+            }
+        });
     }
 
     public void slideBannerUp() {

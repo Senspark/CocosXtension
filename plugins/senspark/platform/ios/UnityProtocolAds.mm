@@ -26,24 +26,28 @@ void UnityProtocolAds::configureAds(const std::string& appID) {
     callFuncWithParam("configDeveloperInfo", &param, nullptr);
 }
 
-bool UnityProtocolAds::hasInterstitial() {
-    return callBoolFuncWithParam("hasInterstitial", nullptr);
+bool UnityProtocolAds::hasInterstitial(const std::string &zone) {
+    PluginParam param(zone.c_str());
+    return callBoolFuncWithParam("hasInterstitial", &param, nullptr);
 }
 
-void UnityProtocolAds::showInterstitial() {
-    callFuncWithParam("showInterstitial", nullptr);
+void UnityProtocolAds::showInterstitial(const std::string &zone) {
+    PluginParam param(zone.c_str());
+    callFuncWithParam("showInterstitial", &param, nullptr);
 }
 
 void UnityProtocolAds::cacheInterstitial() {
     callFuncWithParam("cacheInterstitial", nullptr);
 }
 
-bool UnityProtocolAds::hasRewardedVideo() {
-    return callBoolFuncWithParam("hasRewardedVideo", nullptr);
+bool UnityProtocolAds::hasRewardedVideo(const std::string &zone) {
+    PluginParam param(zone.c_str());
+    return callBoolFuncWithParam("hasRewardedVideo", &param, nullptr);
 }
 
-void UnityProtocolAds::showRewardedVideo() {
-    callFuncWithParam("showRewardedVideo", nullptr);
+void UnityProtocolAds::showRewardedVideo(const std::string &zone) {
+    PluginParam param(zone.c_str());
+    callFuncWithParam("showRewardedVideo", &param, nullptr);
 }
 
 NS_SENSPARK_PLUGIN_ADS_END

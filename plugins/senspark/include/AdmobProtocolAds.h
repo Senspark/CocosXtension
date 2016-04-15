@@ -71,7 +71,7 @@ public:
     void loadInterstitial();
     bool hasInterstitial();
 
-    void loadRewardedAd();
+    void loadRewardedAd(const std::string& adID);
     void showRewardedAd();
     bool hasRewardedAd();
 
@@ -81,6 +81,7 @@ public:
     int getBannerWidthInPixel();
     int getBannerHeightInPixel();
 
+    void initializeMediationAd();
     void configMediationAdColony(const cocos2d::plugin::TAdsInfo &params);
     void configMediationAdVungle(const cocos2d::plugin::TAdsInfo &params);
     void configMediationAdUnity(const cocos2d::plugin::TAdsInfo &params);

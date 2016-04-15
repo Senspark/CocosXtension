@@ -57,11 +57,12 @@ public class AdsWrapper {
     public static final int RESULT_CODE_PointsSpendSucceed	= 18;        // The points spend succeed
     public static final int RESULT_CODE_PointsSpendFailed 	= 19;         // The points spend failed
     public static final int RESULT_CODE_NetworkError 		= 20;              // Network error
-    public static final int RESULT_CODE_UnknownError 		= 21;              // Unknown error
+    public static final int RESULT_CODE_AdsUnknownError 	= 21;              // Unknown error
+	public static final int RESULT_CODE_VideoUnknownError	= 22;
 
     /// Called when an interstitial ad was shown and user click on
     /// an in-app purchase butotn
-    public static final int RESULT_CODE_InAppPurchaseRequested = 22;
+    public static final int RESULT_CODE_InAppPurchaseRequested = 23;
 
 	public static final int POS_CENTER 	     = 0;
 	public static final int POS_TOP		     = 1;

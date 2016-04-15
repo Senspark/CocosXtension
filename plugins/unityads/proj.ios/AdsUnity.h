@@ -13,10 +13,10 @@
 @interface AdsUnity : NSObject <InterfaceAds>
 
 #pragma mark - Interstitials
-- (BOOL) hasInterstitial;
-- (BOOL) hasRewardedVideo;
-- (void) showInterstitial;
-- (void) showRewardedVideo;
+- (BOOL) hasInterstitial: (NSString*) zone;
+- (BOOL) hasRewardedVideo: (NSString*) zone;
+- (void) showInterstitial: (NSString*) zone;
+- (void) showRewardedVideo: (NSString*) zone;
 - (void) cacheInterstitial;
 
 @end

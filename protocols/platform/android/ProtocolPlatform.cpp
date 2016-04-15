@@ -120,6 +120,10 @@ bool ProtocolPlatform::isTablet() {
     return callBoolFuncWithParam("isTablet", nullptr);
 }
 
+void ProtocolPlatform::finishActivity() {
+    callFuncWithParam("finishActivity", nullptr);
+}
+
 }  // namespace plugin
 }  // namespace cocos2d
 
