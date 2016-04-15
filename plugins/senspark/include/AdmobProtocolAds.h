@@ -65,6 +65,18 @@ public:
     /// an in-app purchase.
     ///
     /// Only works on Android.
+    ///
+    /// Example.
+    /// @code
+    /// your_admob_protocol_ads_instance->showInterstitialAds(
+    ///     your_interstitial_ad_id,
+    ///     [](AdsResultCode code, const std::string& msg) {
+    ///         if (code == AdsResultCode::kIapPurchaseRequested) {
+    ///             auto productId = msg;
+    ///             /// Process your iap mechanism with productId here.
+    ///         }
+    /// });
+    /// @endcode
     void showInterstitialAd(const std::string& interstitialAdId,
                             const AdsCallback& iapCallback);
 
