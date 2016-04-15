@@ -86,7 +86,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        return false;
+        return true;
     }
 
     private static class AdType {
