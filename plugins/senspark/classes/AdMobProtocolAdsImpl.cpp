@@ -81,11 +81,11 @@ bool AdmobProtocolAds::hasInterstitial() {
 }
 
 void AdmobProtocolAds::slideBannerUp() {
-    callFuncWithParam("slideUpBannerAds", nullptr);
+    callFuncWithParam("slideBannerUp", nullptr);
 }
 
 void AdmobProtocolAds::slideBannerDown() {
-    callFuncWithParam("slideDownBannerAds", nullptr);
+    callFuncWithParam("slideBannerDown", nullptr);
 }
 
 int AdmobProtocolAds::getBannerWidthInPixel() {
