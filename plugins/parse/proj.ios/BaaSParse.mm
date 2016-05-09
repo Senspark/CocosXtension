@@ -244,14 +244,23 @@ using namespace cocos2d::plugin;
         NSMutableDictionary * objectDict = [[NSMutableDictionary alloc] init];
         
         for (NSString * key in allKeys) {
-            [objectDict setObject:[object objectForKey:key] forKey:key];
+            id value = [object objectForKey:key];
+            if (value && [value isKindOfClass: [PFObject class]]) {
+                PFObject* obj = (PFObject*) value;
+                [objectDict setObject: obj.objectId forKey:key];
+            }
+            else {
+                [objectDict setObject:[object objectForKey:key] forKey:key];
+            }
         }
         
+        [objectDict setObject:object.objectId forKey:@"objectId"];
         [objectDict setObject:[NSNumber numberWithDouble:[object.createdAt timeIntervalSince1970]] forKey:@"createdAt"];
         [objectDict setObject:[NSNumber numberWithDouble:[object.updatedAt timeIntervalSince1970]] forKey:@"updatedAt"];
         
         return objectDict;
     }
+    
     return nil;
 }
 
