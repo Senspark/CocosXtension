@@ -20,602 +20,622 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-****************************************************************************/
+ ****************************************************************************/
 package org.cocos2dx.plugin;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
-import com.android.vending.billing.IInAppBillingService;
-import com.google.android.gms.ads.AdListener;
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.purchase.InAppPurchaseResult;
-import com.google.android.gms.ads.purchase.PlayStorePurchaseListener;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.jirbo.adcolony.AdColony;
+import com.jirbo.adcolony.AdColonyAdapter;
+import com.jirbo.adcolony.AdColonyBundleBuilder;
 
-import java.util.Collections;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class AdsAdmob implements InterfaceAds, PlayStorePurchaseListener {
+public class AdsAdmob implements InterfaceAds, PluginListener {
 
-	private static final String LOG_TAG = "AdsAdmob";
-	private static Activity mContext = null;
-	private static boolean bDebug = true;
-	private static AdsAdmob mAdapter = null;
+    @Override
+    public void onStart() {
 
-	private AdView adView = null;
-	private InterstitialAd interstitialAdView = null;
-	private boolean isLoaded = false;
+    }
 
-	private String mPublishID = "";
-	private Set<String> mTestDevices = null;
+    @Override
+    public void onResume() {
+        AdColony.resume(mContext);
+    }
 
-	private String pAppPublicKey = null;
+    @Override
+    public void onPause() {
+        AdColony.pause();
+    }
 
-	private static final int ADMOB_SIZE_BANNER = 1;
-	private static final int ADMOB_SIZE_SMART_BANNER = 2;
-	private static final int ADMOB_SIZE_LARGE_BANNER = 3;
-	private static final int ADMOB_SIZE_LEADERBOARD = 4;
-	private static final int ADMOB_SIZE_MEDIUM_RECTANGLE = 5;
-	private static final int ADMOB_SIZE_WIDE_SKYSCRAPER = 6;
-	private static final int ADMOB_SIZE_FULL_BANNER = 7;
+    @Override
+    public void onStop() {
 
-	private static final int ADMOB_TYPE_BANNER = 1;
-	private static final int ADMOB_TYPE_FULLSCREEN = 2;
+    }
 
-	private volatile boolean mShouldLock = false;
+    @Override
+    public void onDestroy() {
 
-	public static final int BILLING_RESPONSE_RESULT_OK = 0;
-	private IInAppBillingService mService;
+    }
 
-	protected static void LogE(String msg, Exception e) {
-		Log.e(LOG_TAG, msg, e);
-		e.printStackTrace();
-	}
+    @Override
+    public void onBackPressed() {
 
-	protected static void LogD(String msg) {
-		if (bDebug) {
-			Log.d(LOG_TAG, msg);
-		}
-	}
+    }
 
-	public AdsAdmob(Context context) {
-		Log.i(LOG_TAG, "Initializing AdsAdmob");
-		mContext = (Activity) context;
-		mAdapter = this;
-	}
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        return true;
+    }
 
-	@Override
-	public void setDebugMode(boolean debug) {
-		bDebug = debug;
-	}
+    private static class AdType {
+        private static final int Banner = 1;
+        private static final int Interstitial = 2;
+    }
 
-	@Override
-	public String getSDKVersion() {
-		return "6.3.1";
-	}
+    private static class Constants {
+        private static final String AdIdKey = "AdmobID";
+        private static final String AdTypeKey = "AdmobType";
+        private static final String AdSizeKey = "AdmobSizeEnum";
+    }
 
-	@Override
-	public void configDeveloperInfo(Hashtable<String, String> devInfo) {
-		LogD("configDeveloperInfo");
-		try {
-			mPublishID = devInfo.get("AdmobID");
-			LogD("id interstitialAd : " + mPublishID);
-			pAppPublicKey = devInfo.get("AppPublicKey");
-		} catch (Exception e) {
-			LogE("initAppInfo, The format of appInfo is wrong", e);
-		}
-	}
+    private static final String LOG_TAG = "AdsAdmob";
 
-	@Override
-	public void showAds(Hashtable<String, String> info, int pos) {
-	    try {
-	        String strType = info.get("AdmobType");
-	        int adsType = Integer.parseInt(strType);
+    protected Activity mContext = null;
+    protected static AdsAdmob mAdapter = null;
 
-	        switch (adsType) {
-	        case ADMOB_TYPE_BANNER: {
-                String strSize = info.get("AdmobSizeEnum");
+    private boolean bDebug = true;
+
+    protected AdView adView = null;
+    private InterstitialAd interstitialAdView = null;
+    private RewardedVideoAd mRewardedVideoAd;
+    private boolean isLoaded = false;
+    protected boolean mIsRewardedVideoLoading;
+    protected final Object mLock = new Object();
+
+    private int mBannerWidthInPixel = 0;
+    private int mBannerHeightInPixel = 0;
+
+    private String mAdColonyAppID = "";
+    private String mAdColonyInterstitialZoneID = "";
+    private String mAdColonyRewardedZoneID = "";
+    private String mAdColonyClientOption = "";
+
+    private String mPublishID = "";
+    private Set<String> mTestDevices = null;
+
+    private volatile boolean mShouldLock = false;
+
+    protected void logE(String msg) {
+        Log.e(LOG_TAG, msg);
+    }
+
+    protected void logE(String msg, Exception e) {
+        Log.e(LOG_TAG, msg, e);
+    }
+
+    protected void logD(String msg) {
+        if (bDebug) {
+            Log.d(LOG_TAG, msg);
+        }
+    }
+
+    public AdsAdmob(Context context) {
+        Log.i(LOG_TAG, "Initializing AdsAdmob");
+
+        mContext = (Activity) context;
+        mAdapter = this;
+        PluginWrapper.addListener(this);
+
+    }
+
+    @Override
+    public void setDebugMode(boolean debug) {
+        bDebug = debug;
+    }
+
+    @Override
+    public String getSDKVersion() {
+        return "6.3.1";
+    }
+
+    private void initializeMediationAd() {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mAdColonyAppID.equals("")) {
+                    Log.e(LOG_TAG, "AdColony App ID is not set. Please set it if you want to use AdColony Rewarded Ad Mediation");
+                } else {
+                    AdColony.configure(mContext, mAdColonyClientOption, mAdColonyAppID, mAdColonyInterstitialZoneID, mAdColonyRewardedZoneID);
+                }
+
+                mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(mContext);
+                mRewardedVideoAd.setRewardedVideoAdListener(new RewardedAdListener());
+            }
+        });
+    }
+
+    public void configMediationAdColony(final JSONObject devInfo) {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(LOG_TAG, "Config Mediation for AdColony");
+                try {
+                    PackageInfo pInfo       = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+                    String versionName      = pInfo.versionName;
+                    String mClientOptions   = String.format("version:" + versionName + ",store:google");
+
+                    String adcolonyAppID                = devInfo.getString("AdColonyAppID");
+                    String adcolonyInterstitialZoneID   = devInfo.getString("AdColonyInterstitialAdID");
+                    String adcolonyRewardedZoneID       = devInfo.getString("AdColonyRewardedAdID");
+
+                    mAdColonyAppID              = adcolonyAppID;
+                    mAdColonyInterstitialZoneID = adcolonyInterstitialZoneID;
+                    mAdColonyRewardedZoneID     = adcolonyRewardedZoneID;
+                    mAdColonyClientOption       = mClientOptions;
+
+                    Log.i(LOG_TAG, "### AdColony AppID: " + adcolonyAppID + " - InterstitialZoneID: " + adcolonyInterstitialZoneID + " - RewardedZoneID: " + adcolonyRewardedZoneID + " ClientOption: " + mClientOptions);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+    @Override
+    public void configDeveloperInfo(Hashtable<String, String> devInfo) {
+        logD("configDeveloperInfo");
+        try {
+            mPublishID = devInfo.get(Constants.AdIdKey);
+            logD("id interstitialAd : " + mPublishID);
+        } catch (Exception e) {
+            logE("initAppInfo, The format of appInfo is wrong", e);
+        }
+    }
+
+    @Override
+    public void showAds(Hashtable<String, String> info, int pos) {
+        try {
+            String strType = info.get(Constants.AdTypeKey);
+            int adsType = Integer.parseInt(strType);
+
+            switch (adsType) {
+            case AdType.Banner: {
+                String strSize = info.get(Constants.AdSizeKey);
                 int sizeEnum = Integer.parseInt(strSize);
                 showBannerAd(sizeEnum, pos);
                 break;
             }
-	        case ADMOB_TYPE_FULLSCREEN: {
+            case AdType.Interstitial: {
                 showInterstitial();
-                break;
-            }
-	        default:
-	            break;
-	        }
-	    } catch (Exception e) {
-	        LogE("Error when show Ads ( " + info.toString() + " )", e);
-	    }
-	}
-	
-	@Override
-	public void spendPoints(int points) {
-		LogD("Admob not support spend points!");
-	}
-
-	@Override
-	public void hideAds(Hashtable<String, String> info) {
-	    try {
-            String strType = info.get("AdmobType");
-            int adsType = Integer.parseInt(strType);
-
-            switch (adsType) {
-            case ADMOB_TYPE_BANNER: {
-                hideBannerAd();
-                break;
-            }
-            case ADMOB_TYPE_FULLSCREEN: {
-                LogD("Now not support full screen view in Admob");
                 break;
             }
             default:
                 break;
             }
         } catch (Exception e) {
-            LogE("Error when hide Ads ( " + info.toString() + " )", e);
+            logE("Error when show Ads ( " + info.toString() + " )", e);
         }
-	}
+    }
 
-	private synchronized void showBannerAd(final int sizeEnum, final int pos) {
-		mShouldLock = true;
-		PluginWrapper.runOnMainThread(new Runnable() {
+    @Override
+    public void spendPoints(int points) {
+        logD("Admob not support spend points!");
+    }
 
-			@Override
-			public void run() {
-				AdSize size = AdSize.BANNER;
-				switch (sizeEnum) {
-					case AdsAdmob.ADMOB_SIZE_BANNER:
-						size = AdSize.BANNER;
-						break;
-					case AdsAdmob.ADMOB_SIZE_FULL_BANNER:
-						size = AdSize.FULL_BANNER;
-						break;
-					case AdsAdmob.ADMOB_SIZE_LARGE_BANNER:
-						size = AdSize.LARGE_BANNER;
-						break;
-					case AdsAdmob.ADMOB_SIZE_LEADERBOARD:
-						size = AdSize.LEADERBOARD;
-						break;
-					case AdsAdmob.ADMOB_SIZE_MEDIUM_RECTANGLE:
-						size = AdSize.MEDIUM_RECTANGLE;
-						break;
-					case AdsAdmob.ADMOB_SIZE_SMART_BANNER:
-						size = AdSize.SMART_BANNER;
-						break;
-					case AdsAdmob.ADMOB_SIZE_WIDE_SKYSCRAPER:
-						size = AdSize.WIDE_SKYSCRAPER;
-						break;
-					default:
-						break;
-				}
+    @Override
+    public void hideAds(Hashtable<String, String> info) {
+        try {
+            String strType = info.get(Constants.AdTypeKey);
+            int adsType = Integer.parseInt(strType);
 
-				adView = new AdView(mContext);
-				adView.setAdSize(size);
-				adView.setAdUnitId(mPublishID);
-				AdRequest.Builder builder = new AdRequest.Builder();
+            switch (adsType) {
+            case AdType.Banner: {
+                hideBannerAd();
+                break;
+            }
+            case AdType.Interstitial: {
+                logD("Now not support full screen view in Admob");
+                break;
+            }
+            default:
+                break;
+            }
+        } catch (Exception e) {
+            logE("Error when hide Ads ( " + info.toString() + " )", e);
+        }
+    }
 
-				try {
-					if (mTestDevices != null) {
-						Iterator<String> ir = mTestDevices.iterator();
-						while (ir.hasNext()) {
-							builder.addTestDevice(ir.next());
-						}
-					}
-				} catch (Exception e) {
-					LogE("Error during add test device", e);
-				}
+    private synchronized void showBannerAd(final int sizeEnum, final int pos) {
+        mShouldLock = true;
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                final List<AdSize> AdSizes = Arrays.asList(
+                    AdSize.BANNER,
+                    AdSize.LARGE_BANNER,
+                    AdSize.MEDIUM_RECTANGLE,
+                    AdSize.FULL_BANNER,
+                    AdSize.LEADERBOARD,
+                    AdSize.WIDE_SKYSCRAPER,
+                    AdSize.SMART_BANNER
+                );
+                AdSize size = AdSizes.get(sizeEnum);
 
-				adView.loadAd(builder.build());
-				adView.setAdListener(new AdmobAdsBannerListener());
+                adView = new AdView(mContext);
+                adView.setAdSize(size);
+                adView.setAdUnitId(mPublishID);
+                AdRequest.Builder builder = new AdRequest.Builder();
 
-				AdsWrapper.addAdView(adView, pos);
-
-				Log.i(LOG_TAG, "Show Ad: waiting for adView: DONE");
-
-				synchronized (AdsAdmob.this) {
-					mShouldLock = false;
-					AdsAdmob.this.notify();
-				}
-			}
-		});
-
-		Log.i(LOG_TAG, "Show Ad: waiting for adView");
-
-		synchronized (this) {
-			try {
-				if (mShouldLock) {
-					wait();
-				}
-			} catch (InterruptedException ex) {
-				ex.printStackTrace();
-			}
-		}
-
-		Log.i(LOG_TAG, "Show Ad: stop waiting for adView");
-
-	}
-
-	private void hideBannerAd() {
-		PluginWrapper.runOnMainThread(new Runnable() {
-			@Override
-			public void run() {
-				if (null != adView) {
-					adView.setVisibility(View.GONE);
-					adView.destroy();
-					adView = null;
-				}
-			}
-		});
-	}
-
-	public void addTestDevice(final String deviceID) {
-		mContext.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				LogD("addTestDevice invoked : " + deviceID);
-				if (null == mTestDevices) {
-					mTestDevices = new HashSet<>();
-				}
-				mTestDevices.add(deviceID);
-			}
-		});
-
-	}
-
-	public void loadInterstitial() {
-		PluginWrapper.runOnMainThread(new Runnable() {
-			@Override
-			public void run() {
-				Log.i(LOG_TAG, "Start loading interstitial ad");
-				interstitialAdView = new InterstitialAd(mContext);
-				interstitialAdView.setPlayStorePurchaseParams(mAdapter, pAppPublicKey);
-				interstitialAdView.setAdUnitId(mPublishID);
-				interstitialAdView.setAdListener(new AdmobAdsInterstitialListener());
-
-				AdRequest.Builder builder = new AdRequest.Builder();
-				try {
-					if (mTestDevices != null) {
+                try {
+                    if (mTestDevices != null) {
                         for (String mTestDevice : mTestDevices) {
                             builder.addTestDevice(mTestDevice);
                         }
-					}
-				} catch (Exception e) {
-					LogE("Error during add test device", e);
-				}
+                    }
+                } catch (Exception e) {
+                    logE("Error during add test device", e);
+                }
 
-				//begin load interstitial ad
-				interstitialAdView.loadAd(builder.build());
-			}
-		});
-	}
-	
-	public void showInterstitial() {
-		mContext.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
-					Log.e("PluginAdmob", String.format("ADMOB: Interstitial cannot show. It is not ready: - InterstitialAdView: %s - isLoaded: %b",
-                        interstitialAdView == null ? "null" : interstitialAdView.toString(),
-                        interstitialAdView != null && interstitialAdView.isLoaded()));
-					loadInterstitial();
-				} else {
-					interstitialAdView.show();
-				}
-			}
-		});
-	}
-	
-	private class AdmobAdsBannerListener extends AdListener {
-		@Override
-		public void onAdClosed() {
-			super.onAdClosed();
-			loadInterstitial();
-			LogD("onDismissScreen invoked");
-			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsDismissed, "Ads view dismissed!");
-		}
+                adView.loadAd(builder.build());
+                adView.setAdListener(new BannerAdListener(AdsAdmob.this));
 
-		@Override
-		public void onAdFailedToLoad(int errorCode) {
-			Log.e(LOG_TAG,"load interstitial failed error code "+ errorCode);
-			super.onAdFailedToLoad(errorCode);
-			
-			int errorNo = AdsWrapper.RESULT_CODE_UnknownError;
-			String errorMsg = "Unknow error";
-			switch (errorCode) {
-			case AdRequest.ERROR_CODE_NETWORK_ERROR:
-				errorNo =  AdsWrapper.RESULT_CODE_NetworkError;
-				errorMsg = "Network error";
-				break;
-			case AdRequest.ERROR_CODE_INVALID_REQUEST:
-				errorNo = AdsWrapper.RESULT_CODE_NetworkError;
-				errorMsg = "The ad request is invalid";
-				break;
-			case AdRequest.ERROR_CODE_NO_FILL:
-				errorMsg = "The ad request is successful, but no ad was returned due to lack of ad inventory.";
-				break;
-			default:
-				break;
-			}
-			LogD("failed to receive ad : " + errorNo + " , " + errorMsg);
-			AdsWrapper.onAdsResult(mAdapter, errorNo, errorMsg);
-		}
-		
-		@Override
-		public void onAdLeftApplication() {
-			super.onAdLeftApplication();
-			LogD("onLeaveApplication invoked");
-		}
-		
-		@Override
-		public void onAdOpened() {
-			LogD("onPresentScreen invoked");
-			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsShown, "Ads view shown!");
-			
-			super.onAdOpened();
-		}
+                AdsWrapper.addAdView(adView, pos);
 
-		@Override
-		public void onAdLoaded() {
-			LogD("onReceiveAd invoked");
-			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsBannerReceived, "Ads request received success!");
+                Log.i(LOG_TAG, "Show Ad: waiting for adView: DONE");
 
-			if (adView != null) {
-				adView.setVisibility(View.GONE);
-				adView.setVisibility(View.VISIBLE);
+                synchronized (AdsAdmob.this) {
+                    mShouldLock = false;
+                    AdsAdmob.this.notify();
+                }
+            }
+        });
 
-				if (adView.getAdSize() == AdSize.SMART_BANNER) {
-					adView.setBackgroundColor(Color.BLACK);
-				}
-			}
+        Log.i(LOG_TAG, "Show Ad: waiting for adView");
 
-			super.onAdLoaded();
-		}
-	}
+        synchronized (this) {
+            try {
+                if (mShouldLock) {
+                    wait();
+                }
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
 
-	private class AdmobAdsInterstitialListener extends AdListener {
-		@Override
-		public void onAdClosed() {
-			super.onAdClosed();
-			loadInterstitial();
-			LogD("onDismissScreen invoked");
-			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsDismissed, "Ads view dismissed!");
-		}
+        Log.i(LOG_TAG, "Show Ad: stop waiting for adView");
+    }
 
-		@Override
-		public void onAdFailedToLoad(int errorCode) {
-			Log.e(LOG_TAG,"load interstitial failed error code "+ errorCode);
-			super.onAdFailedToLoad(errorCode);
+    private void hideBannerAd() {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                if (null != adView) {
+                    adView.setVisibility(View.GONE);
+                    adView.destroy();
+                    adView = null;
+                }
+            }
+        });
+    }
 
-			int errorNo = AdsWrapper.RESULT_CODE_UnknownError;
-			String errorMsg = "Unknow error";
-			switch (errorCode) {
-				case AdRequest.ERROR_CODE_NETWORK_ERROR:
-					errorNo =  AdsWrapper.RESULT_CODE_NetworkError;
-					errorMsg = "Network error";
-					break;
-				case AdRequest.ERROR_CODE_INVALID_REQUEST:
-					errorNo = AdsWrapper.RESULT_CODE_NetworkError;
-					errorMsg = "The ad request is invalid";
-					break;
-				case AdRequest.ERROR_CODE_NO_FILL:
-					errorMsg = "The ad request is successful, but no ad was returned due to lack of ad inventory.";
-					break;
-				default:
-					break;
-			}
-			LogD("failed to receive ad : " + errorNo + " , " + errorMsg);
-			AdsWrapper.onAdsResult(mAdapter, errorNo, errorMsg);
-		}
+    public void addTestDevice(final String deviceID) {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                logD("addTestDevice invoked : " + deviceID);
+                if (null == mTestDevices) {
+                    mTestDevices = new HashSet<>();
+                }
+                mTestDevices.add(deviceID);
+            }
+        });
 
-		@Override
-		public void onAdLeftApplication() {
-			super.onAdLeftApplication();
-			LogD("onLeaveApplication invoked");
-		}
+    }
 
-		@Override
-		public void onAdOpened() {
-			LogD("onPresentScreen invoked");
-			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsShown, "Ads view shown!");
+    public void loadInterstitial() {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(LOG_TAG, "Start loading interstitial ad");
+                interstitialAdView = new InterstitialAd(mContext);
+                interstitialAdView.setAdUnitId(mPublishID);
+                interstitialAdView.setAdListener(new InterstitialAdListener(AdsAdmob.this));
+                interstitialAdView.setInAppPurchaseListener(new IAPListener(AdsAdmob.this));
 
-			super.onAdOpened();
-		}
+                AdRequest.Builder builder = new AdRequest.Builder();
+                AdColonyBundleBuilder.setZoneId(mAdColonyInterstitialZoneID);
+                builder.addNetworkExtrasBundle(AdColonyAdapter.class, AdColonyBundleBuilder.build());
+                try {
+                    if (mTestDevices != null) {
+                        for (String mTestDevice : mTestDevices) {
+                            builder.addTestDevice(mTestDevice);
+                        }
+                    }
+                } catch (Exception e) {
+                    logE("Error during add test device", e);
+                }
 
-		@Override
-		public void onAdLoaded() {
-			LogD("onReceiveAd invoked");
-			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_AdsInterstitialReceived, "Ads request received success!");
+                //begin load interstitial ad
+                interstitialAdView.loadAd(builder.build());
+            }
+        });
+    }
 
-			super.onAdLoaded();
-		}
-	}
+    public void showInterstitial() {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
+                    Log.e("PluginAdmob", String.format("ADMOB: Interstitial cannot show. It is not ready: - InterstitialAdView: %s - isLoaded: %b",
+                            interstitialAdView == null ? "null" : interstitialAdView.toString(),
+                            interstitialAdView != null && interstitialAdView.isLoaded()));
+                    loadInterstitial();
+                } else {
+                    interstitialAdView.show();
+                }
+            }
+        });
+    }
 
-	@Override
-	public String getPluginVersion() {
-		return "0.2.0";
-	}
+    public synchronized int getBannerWidthInPixel() {
+        mBannerWidthInPixel = 0;
+        mShouldLock = true;
+
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                if (adView != null && mContext != null)
+                    mBannerWidthInPixel = adView.getAdSize().getWidthInPixels(mContext);
+
+                synchronized (AdsAdmob.this) {
+                    mShouldLock = false;
+                    AdsAdmob.this.notify();
+                }
+            }
+        });
+
+        synchronized (this) {
+            try {
+                if (mShouldLock) {
+                    wait();
+                }
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return mBannerWidthInPixel;
+    }
+
+
+    public synchronized int getBannerHeightInPixel() {
+        mBannerHeightInPixel = 0;
+        mShouldLock = true;
+
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                if (adView != null && mContext != null)
+                    mBannerHeightInPixel = adView.getAdSize().getHeightInPixels(mContext);
+
+                synchronized (AdsAdmob.this) {
+                    mShouldLock = false;
+                    AdsAdmob.this.notify();
+                }
+            }
+        });
+
+        synchronized (this) {
+            try {
+                if (mShouldLock) {
+                    wait();
+                }
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return mBannerHeightInPixel;
+    }
+
+    @Override
+    public String getPluginVersion() {
+        return "0.2.0";
+    }
 
     @Override
     public void queryPoints() {
-        LogD("Admob not support query points!");
+        logD("Admob not support query points!");
     }
-    
+
     public synchronized boolean hasInterstitial() {
-		isLoaded = false;
-		mShouldLock = true;
+        isLoaded = false;
+        mShouldLock = true;
 
-		PluginWrapper.runOnMainThread(new Runnable() {
-			@Override
-			public void run() {
-				isLoaded = interstitialAdView.isLoaded();
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                isLoaded = interstitialAdView.isLoaded();
 
-				synchronized (AdsAdmob.this) {
-					mShouldLock = false;
-					AdsAdmob.this.notify();
-				}
-			}
-		});
+                synchronized (AdsAdmob.this) {
+                    mShouldLock = false;
+                    AdsAdmob.this.notify();
+                }
+            }
+        });
 
-		synchronized (this) {
-			try {
-				if (mShouldLock) {
-					wait();
-				}
-			} catch (InterruptedException ex) {
-				ex.printStackTrace();
-			}
-		}
+        synchronized (this) {
+            try {
+                if (mShouldLock) {
+                    wait();
+                }
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
 
-    	return isLoaded;
+        return isLoaded;
     }
 
-	public void slideBannerUp() {
-		Log.i(LOG_TAG, "Slide Banner Up: CALL");
+    public boolean hasRewardedAd() {
+        isLoaded = false;
+        mShouldLock = true;
 
-		if (adView == null) {
-			Log.i(LOG_TAG, "Slide Banner Up: NO VIEW");
-		}
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                isLoaded = mRewardedVideoAd.isLoaded();
 
-		PluginWrapper.runOnMainThread(new Runnable() {
-			@Override
-			public void run() {
-				if (adView != null) {
-					adView.setVisibility(View.INVISIBLE);
-					TranslateAnimation anim = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 1, Animation.RELATIVE_TO_PARENT, 0);
-					anim.setDuration(1000);
-					anim.setFillAfter(true);
+                synchronized (AdsAdmob.this) {
+                    mShouldLock = false;
+                    AdsAdmob.this.notify();
+                }
+            }
+        });
 
-					anim.setAnimationListener(new Animation.AnimationListener() {
-						@Override
-						public void onAnimationStart(Animation animation) {
-							Log.i(LOG_TAG, "Slide Banner Up: START");
-							if (adView != null) {
-								adView.setVisibility(View.VISIBLE);
-							}
-						}
+        synchronized (this) {
+            try {
+                if (mShouldLock) {
+                    wait();
+                }
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return isLoaded;
+    }
 
-						@Override
-						public void onAnimationEnd(Animation animation) {
-							Log.i(LOG_TAG, "Slide Banner Up: END");
-						}
+    public synchronized void loadRewardedAd(final String adID) {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mLock) {
+                    if (!mIsRewardedVideoLoading) {
+                        mIsRewardedVideoLoading = true;
+                        Bundle extras = new Bundle();
+                        extras.putBoolean("_noRefresh", true);
+                        AdColonyBundleBuilder.setZoneId(mAdColonyRewardedZoneID);
+                        AdRequest adRequest = new AdRequest.Builder()
+                                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                                .addNetworkExtrasBundle(AdColonyAdapter.class, AdColonyBundleBuilder.build())
+                                .build();
+                        mRewardedVideoAd.loadAd(adID, adRequest);
+                    }
+                }
+            }
+        });
+    }
 
-						@Override
-						public void onAnimationRepeat(Animation animation) {
-						}
-					});
-					adView.startAnimation(anim);
-				}
-			}
-		});
-	}
+    public void showRewardedAd() {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                mRewardedVideoAd.show();
+            }
+        });
+    }
 
-	public void slideBannerDown() {
-		Log.i(LOG_TAG, "Slide Banner Down: CALL");
+    public void slideBannerUp() {
+        Log.i(LOG_TAG, "Slide Banner Up: CALL");
 
-		if (adView == null) {
-			Log.i(LOG_TAG, "Slide Banner Down: NO VIEW");
-			return;
-		}
+        if (adView == null) {
+            Log.i(LOG_TAG, "Slide Banner Up: NO VIEW");
+        }
 
-		PluginWrapper.runOnMainThread(new Runnable() {
-			@Override
-			public void run() {
-				if (adView != null) {
-					adView.setVisibility(View.VISIBLE);
-					TranslateAnimation anim = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 1);
-					anim.setDuration(1000);
-					anim.setFillAfter(true);
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                if (adView != null) {
+                    adView.setVisibility(View.INVISIBLE);
+                    TranslateAnimation anim = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 1, Animation.RELATIVE_TO_PARENT, 0);
+                    anim.setDuration(1000);
+                    anim.setFillAfter(true);
 
-					anim.setAnimationListener(new Animation.AnimationListener() {
-						@Override
-						public void onAnimationStart(Animation animation) {
-							Log.i(LOG_TAG, "Slide Banner Down: START");
-						}
+                    anim.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            Log.i(LOG_TAG, "Slide Banner Up: START");
+                            if (adView != null) {
+                                adView.setVisibility(View.VISIBLE);
+                            }
+                        }
 
-						@Override
-						public void onAnimationEnd(Animation animation) {
-							Log.i(LOG_TAG, "Slide Banner Down: END");
-							adView.setVisibility(View.GONE);
-						}
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            Log.i(LOG_TAG, "Slide Banner Up: END");
+                        }
 
-						@Override
-						public void onAnimationRepeat(Animation animation) {
-						}
-					});
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+                    });
+                    adView.startAnimation(anim);
+                }
+            }
+        });
+    }
 
-					adView.startAnimation(anim);
-				}
-			}
-		});
-	}
+    public void slideBannerDown() {
+        Log.i(LOG_TAG, "Slide Banner Down: CALL");
 
-	@Override
-	public boolean isValidPurchase(String sku) {
-		// Optional: check if the product has already been purchased.
-		try {
-			if (getOwnedProducts().contains(sku)) {
-				// Handle the case if product is already purchased.
-				return false;
-			}
-		} catch (RemoteException e) {
-			Log.e("Iap-Ad", "Query purchased product failed.", e);
-			return false;
-		}
-		return true;
-	}
+        if (adView == null) {
+            Log.i(LOG_TAG, "Slide Banner Down: NO VIEW");
+            return;
+        }
 
-	@Override
-	public void onInAppPurchaseFinished(InAppPurchaseResult result) {
-		Log.i("Iap-Ad", "onInAppPurchaseFinished Start");
-		int resultCode = result.getResultCode();
-		Log.i("Iap-Ad", "result code: " + resultCode);
-		String sku = result.getProductId();
-		if (resultCode == Activity.RESULT_OK) {
-			Log.i("Iap-Ad", "purchased product id: " + sku);
-			int responseCode = result.getPurchaseData().getIntExtra(
-					"RESPONSE_CODE", BILLING_RESPONSE_RESULT_OK);
-			String purchaseData = result.getPurchaseData().getStringExtra("INAPP_PURCHASE_DATA");
-			Log.i("Iap-Ad", "response code: " + responseCode);
-			Log.i("Iap-Ad", "purchase data: " + purchaseData);
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                if (adView != null) {
+                    adView.setVisibility(View.VISIBLE);
+                    TranslateAnimation anim = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 1);
+                    anim.setDuration(1000);
+                    anim.setFillAfter(true);
 
-			// Finish purchase and consume product.
-			result.finishPurchase();
-			// if (responseCode == BILLING_RESPONSE_RESULT_OK) {
-			// Optional: your custom process goes here, e.g., add coins after purchase.
-			//  }
-		} else {
-			Log.w("Iap-Ad", "Failed to purchase product: " + sku);
-		}
-		Log.i("Iap-Ad", "onInAppPurchaseFinished End");
-	}
+                    anim.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            Log.i(LOG_TAG, "Slide Banner Down: START");
+                        }
 
-	private List<String> getOwnedProducts() throws RemoteException {
-		// Query for purchased items.
-		// See http://developer.android.com/google/play/billing/billing_reference.html and
-		// http://developer.android.com/google/play/billing/billing_integrate.html
-		Bundle ownedItems = mService.getPurchases(3, mContext.getApplicationContext().getPackageName(), "inapp", null);
-		int response = ownedItems.getInt("RESPONSE_CODE");
-		Log.i("Iap-Ad", "Response code of purchased item query");
-		if (response == 0) {
-			return ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
-		}
-		return Collections.emptyList();
-	}
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            Log.i(LOG_TAG, "Slide Banner Down: END");
+                            adView.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+                    });
+
+                    adView.startAnimation(anim);
+                }
+            }
+        });
+    }
 }

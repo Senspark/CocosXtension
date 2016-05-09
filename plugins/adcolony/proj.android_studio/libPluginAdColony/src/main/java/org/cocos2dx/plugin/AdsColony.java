@@ -3,6 +3,8 @@ package org.cocos2dx.plugin;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.jirbo.adcolony.AdColony;
@@ -27,12 +29,23 @@ public class AdsColony implements InterfaceAds, PluginListener, AdColonyAdAvaila
 	public AdsColony(Context context) {
 		this.mContext = context;
 		mAdapter = this;
+        PluginWrapper.addListener(this);
 	}
 
 	@Override
 	public void configDeveloperInfo(Hashtable<String, String> devInfo) {
 		String appId = devInfo.get("AdColonyAppID");
 		String zoneIds = devInfo.get("AdColonyZoneIDs");
+
+		try {
+			PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+			String versionName = pInfo.versionName;
+			mClientOptions = String.format("version:" + versionName + ",store:google");
+
+			Log.i(LOG_TAG, "### AdColony client option: " + mClientOptions);
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
 		configure(appId, zoneIds);
 	}
 

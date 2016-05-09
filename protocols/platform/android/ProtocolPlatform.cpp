@@ -116,6 +116,13 @@ void ProtocolPlatform::sendFeedback(const std::string& appName) {
     callFuncWithParam("sendFeedback", &param, nullptr);
 }
 
+bool ProtocolPlatform::isTablet() {
+    return callBoolFuncWithParam("isTablet", nullptr);
+}
+
+void ProtocolPlatform::finishActivity() {
+    callFuncWithParam("finishActivity", nullptr);
+}
 
 }  // namespace plugin
 }  // namespace cocos2d

@@ -26,34 +26,48 @@ public class AdsUnity implements InterfaceAds, PluginListener {
 	
 	@Override
 	public void configDeveloperInfo(Hashtable<String, String> devInfo) {
+		Log.i(LOG_TAG, "### Initializing UnityAds with id: " + devInfo.get("UnityAdsAppID"));
 		UnityAds.init((Activity) mContext, devInfo.get("UnityAdsAppID"), mListener);
 		UnityAds.setDebugMode(true);
+		UnityAds.setListener(mListener);
 	}
 
-	public boolean hasInterstitial() {
+	public boolean hasInterstitial(final String zone) {
+		Log.i(LOG_TAG, "has interstitial in zone " + zone + UnityAds.canShow());
 		return UnityAds.canShow();
 	}
 
-	public boolean hasRewardedVideo() {
+	public boolean hasRewardedVideo(final String zone) {
+		Log.i(LOG_TAG, "has rewarded in zone " + zone + UnityAds.canShow());
 		return UnityAds.canShow();
 	}
 
-	public void showRewardedVideo() {
-		if (hasRewardedVideo()) {
-			UnityAds.setZone("rewardedVideoZone");
-			UnityAds.show();
-		} else {
-			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_UnknownError, "UnityAds: Ad cannot show");
-		}
+	public void showRewardedVideo(final String zone) {
+		PluginWrapper.runOnMainThread(new Runnable() {
+			@Override
+			public void run() {
+				if (hasRewardedVideo(zone)) {
+					UnityAds.setZone(zone);
+					UnityAds.show();
+				} else {
+					AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_UnknownError, "UnityAds: Ad cannot show");
+				}
+			}
+		});
 	}
 	
-	public void showInterstitial() {
-		if (hasInterstitial()) {
-			UnityAds.setZone("defaultZone");
-			UnityAds.show();
-		} else {
-			AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_UnknownError, "UnityAds: Ad cannot show");
-		}
+	public void showInterstitial(final String zone) {
+		PluginWrapper.runOnMainThread(new Runnable() {
+			@Override
+			public void run() {
+				if (hasInterstitial(zone)) {
+					UnityAds.setZone(zone);
+					UnityAds.show();
+				} else {
+					AdsWrapper.onAdsResult(mAdapter, AdsWrapper.RESULT_CODE_UnknownError, "UnityAds: Ad cannot show");
+				}
+			}
+		});
 	}
 	
 	public void cacheInterstitial() {
@@ -68,6 +82,7 @@ public class AdsUnity implements InterfaceAds, PluginListener {
 	@Override
 	public void onResume() {
 		UnityAds.changeActivity((Activity) mContext);
+		UnityAds.setListener(mListener);
 	}
 
 	@Override
@@ -92,7 +107,7 @@ public class AdsUnity implements InterfaceAds, PluginListener {
 
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		return true;
+		return false;
 	}
 
 

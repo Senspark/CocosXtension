@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="org.cocos2dx.libUnityAds"
-      android:versionCode="1"
-      android:versionName="1.0"
-      android:installLocation="auto">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.cocos2dx.libUnityAds"
+    android:versionCode="1"
+    android:versionName="1.0">
 
-    <uses-sdk android:minSdkVersion="9"/>
+    <uses-sdk android:minSdkVersion="9" />
     <uses-feature android:glEsVersion="0x00020000" />
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-</manifest> 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application>
+        <activity
+            android:name="com.unity3d.ads.android.view.UnityAdsFullscreenActivity"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            tools:ignore="UnusedAttribute" />
+    </application>
+
+</manifest>

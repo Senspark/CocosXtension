@@ -7,8 +7,10 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.security.MessageDigest;
@@ -26,6 +28,10 @@ public class ProtocolPlatform  {
 		mActivity = (Activity) context;
 		mAdapter = this;
 	}
+
+    public void finishActivity() {
+        mActivity.finish();
+    }
 	
 	public boolean isAppInstalled(final String appName) {
 		PackageManager pm = mContext.getPackageManager();
@@ -46,6 +52,37 @@ public class ProtocolPlatform  {
 	public boolean isRelease() {
 		boolean isDebuggable =  ( 0 != ( mContext.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
 		return !isDebuggable;
+	}
+
+	public boolean isTablet() {
+		// Verifies if the Generalized Size of the device is XLARGE to be
+		// considered a Tablet
+		boolean xlarge = ((mContext.getResources().getConfiguration().screenLayout &
+				Configuration.SCREENLAYOUT_SIZE_MASK) >=
+				Configuration.SCREENLAYOUT_SIZE_LARGE);
+
+		// If XLarge, checks if the Generalized Density is at least MDPI
+		// (160dpi)
+		if (xlarge) {
+			DisplayMetrics metrics = new DisplayMetrics();
+			Activity activity = (Activity) mContext;
+			activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+			// MDPI=160, DEFAULT=160, DENSITY_HIGH=240, DENSITY_MEDIUM=160,
+			// DENSITY_TV=213, DENSITY_XHIGH=320
+			if (metrics.densityDpi == DisplayMetrics.DENSITY_DEFAULT
+					|| metrics.densityDpi == DisplayMetrics.DENSITY_HIGH
+					|| metrics.densityDpi == DisplayMetrics.DENSITY_MEDIUM
+					|| metrics.densityDpi == DisplayMetrics.DENSITY_TV
+					|| metrics.densityDpi == DisplayMetrics.DENSITY_XHIGH) {
+
+				// Yes, this is a tablet!
+				return true;
+			}
+		}
+
+		// No, this is not a tablet!
+		return false;
 	}
 	
 	public boolean isConnected(String hostName) {

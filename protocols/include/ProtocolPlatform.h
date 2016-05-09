@@ -31,11 +31,15 @@ public:
     
     bool isConnected(const std::string& hostName);
 
+    bool isTablet();
+
     std::string getSHA1CertFingerprint();
     
     bool isRelease();
 
     double getVersionCode();
+
+    void finishActivity();
     
     void sendFeedback(const std::string& appName);
     /**

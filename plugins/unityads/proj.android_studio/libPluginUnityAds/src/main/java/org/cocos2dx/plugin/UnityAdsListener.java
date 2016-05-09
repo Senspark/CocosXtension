@@ -6,14 +6,12 @@ public class UnityAdsListener implements IUnityAdsListener {
 
 	@Override
 	public void onFetchCompleted() {
-		// TODO Auto-generated method stub
-		
+		AdsWrapper.onAdsResult(AdsUnity.mAdapter, AdsWrapper.RESULT_CODE_VideoReceived, "UnityAds: Ads did receive");
 	}
 
 	@Override
 	public void onFetchFailed() {
-		// TODO Auto-generated method stub
-		
+		AdsWrapper.onAdsResult(AdsUnity.mAdapter, AdsWrapper.RESULT_CODE_UnknownError, "UnityAds: Ads did fail to receive");
 	}
 
 	@Override
