@@ -46,10 +46,8 @@ using namespace std;
 + (NSString*) NSArrayToNSString:(id) arr {
     NSString *result = @"";
     if (arr) {
-        NSError *error;
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:arr
-                                                           options:0 // Pass 0 if you don't care about the readability of the generated string
-                                                             error:&error];
+        NSError *error = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:arr options:NSJSONWritingPrettyPrinted error:&error];
         if (! jsonData) {
             NSLog(@"Got an error: %@", error);
         } else {
@@ -64,7 +62,7 @@ using namespace std;
     if (dic) {
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic
-                                                           options:0 // Pass 0 if you don't care about the readability of the generated string
+                                                           options:NSJSONWritingPrettyPrinted
                                                              error:&error];
         if (! jsonData) {
             NSLog(@"Got an error: %@", error);
