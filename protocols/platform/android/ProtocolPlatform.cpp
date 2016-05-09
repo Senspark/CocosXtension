@@ -110,6 +110,10 @@ double ProtocolPlatform::getVersionCode() {
   return callDoubleFuncWithParam("getVersionCode", nullptr);
 }
 
+double ProtocolPlatform::getAppBuildCode() {
+    return callDoubleFuncWithParam("getAppBuildCode", nullptr);
+}
+
 void ProtocolPlatform::sendFeedback(const std::string& appName) {
     PluginParam param(appName.c_str());
 

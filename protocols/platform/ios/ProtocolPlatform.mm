@@ -64,6 +64,11 @@ double ProtocolPlatform::getVersionCode() {
     return [versionString doubleValue];
 }
 
+double ProtocolPlatform::getAppBuildCode() {
+    NSString * build = [[NSBundle mainBundle] objectForInfoDictionaryKey: (NSString *)kCFBundleVersionKey];
+    return [build doubleValue];
+}
+
 void ProtocolPlatform::sendFeedback(const std::string &appName) {
     char rep[100];
     sprintf(rep, "mailto:feedback@senspark.com?subject=Feedbacks on %s", appName.c_str());

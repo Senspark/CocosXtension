@@ -123,6 +123,10 @@ public class ProtocolPlatform  {
 	public double getVersionCode() throws NameNotFoundException {
 		return mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionCode;
 	}
+
+	public double getAppBuildCode() throws NameNotFoundException {
+        return mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
+    }
 	
 	public void sendFeedback(final String appName) {
 		final Intent emailIntent = new Intent(Intent.ACTION_SEND);

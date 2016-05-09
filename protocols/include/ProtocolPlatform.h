@@ -38,6 +38,7 @@ public:
     bool isRelease();
 
     double getVersionCode();
+    double getAppBuildCode();
 
     void finishActivity();
     
