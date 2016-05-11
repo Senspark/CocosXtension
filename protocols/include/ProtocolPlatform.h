@@ -38,7 +38,7 @@ public:
     bool isRelease();
 
     double getVersionCode();
-    double getAppBuildCode();
+    std::string getVersionName();
 
     void finishActivity();
     

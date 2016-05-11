@@ -64,9 +64,9 @@ double ProtocolPlatform::getVersionCode() {
     return [versionString doubleValue];
 }
 
-double ProtocolPlatform::getAppBuildCode() {
-    NSString * build = [[NSBundle mainBundle] objectForInfoDictionaryKey: (NSString *)kCFBundleVersionKey];
-    return [build doubleValue];
+std::string ProtocolPlatform::getVersionName() {
+    NSString *versionName = [[NSBundle mainBundle] objectForInfoDictionaryKey: (NSString *)kCFBundleNameKey];
+    return [versionName UTF8String];
 }
 
 void ProtocolPlatform::sendFeedback(const std::string &appName) {
