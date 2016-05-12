@@ -124,7 +124,7 @@ public class ProtocolPlatform  {
 		return mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionCode;
 	}
 
-	public double getAppBuildCode() throws NameNotFoundException {
+	public String getVersionName() throws NameNotFoundException {
         return mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
     }
 	
