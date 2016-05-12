@@ -249,9 +249,9 @@
 				DSTROOT = /tmp/PluginAdmob.dst;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/AdColony\"",
-					"\"$(SRCROOT)/AdColony/AdColonyAdapter1.5\"",
-					"\"$(SRCROOT)/Admob\"",
+					"$(SRCROOT)/AdColony",
+					"$(SRCROOT)/AdColony/AdColonyAdapter1.5",
+					"$(SRCROOT)/Admob",
 					"$(PROJECT_DIR)/Vungle",
 					"$(PROJECT_DIR)/Admob",
 				);
@@ -266,7 +266,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Admob\"",
+					"$(SRCROOT)/Admob",
 					"$(PROJECT_DIR)/AdColony/AdColonyAdapter1.5",
 					"$(PROJECT_DIR)/Vungle",
 					"$(PROJECT_DIR)/UnityAds",
@@ -289,9 +289,9 @@
 				DSTROOT = /tmp/PluginAdmob.dst;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/AdColony\"",
-					"\"$(SRCROOT)/AdColony/AdColonyAdapter1.5\"",
-					"\"$(SRCROOT)/Admob\"",
+					"$(SRCROOT)/AdColony",
+					"$(SRCROOT)/AdColony/AdColonyAdapter1.5",
+					"$(SRCROOT)/Admob",
 					"$(PROJECT_DIR)/Vungle",
 					"$(PROJECT_DIR)/Admob",
 				);
@@ -306,7 +306,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Admob\"",
+					"$(SRCROOT)/Admob",
 					"$(PROJECT_DIR)/AdColony/AdColonyAdapter1.5",
 					"$(PROJECT_DIR)/Vungle",
 					"$(PROJECT_DIR)/UnityAds",

@@ -36,7 +36,8 @@ public:
     class AdSize;
     
     /// Ad id key used in TAdsInfo.
-    static const std::string AdIdKey;
+    static const std::string AdBannerIdKey;
+    static const std::string AdInterstitialIdKey;
     
     /// Ad type key used in TAdsInfo.
     static const std::string AdTypeKey;
@@ -47,7 +48,8 @@ public:
     AdmobProtocolAds();
     virtual ~AdmobProtocolAds();
     
-    void configureAds(const std::string& adsId);
+    CC_DEPRECATED_ATTRIBUTE void configureAds(const std::string& adsId);
+    void configureAds(const std::string& bannerAds, const std::string& interstitialAds);
     
     void addTestDevice(const std::string& deviceId);
     
@@ -59,7 +61,8 @@ public:
     void hideBannerAd();
     
     /// Shows an interstitial ad given its id.
-    void showInterstitialAd(const std::string& interstitialAdId);
+    void showInterstitialAd();
+    CC_DEPRECATED_ATTRIBUTE void showInterstitialAd(const std::string& interstitialAdId);
     
     /// Shows an interstitial ad given its id and a callback when user requested
     /// an in-app purchase.

@@ -33,7 +33,8 @@
 @implementation AdsAdmob
 
 @synthesize debug                       = __debug;
-@synthesize strPublishID                = __strPublishID;
+@synthesize strBannerID                 = __strBannerID;
+@synthesize strInterstitialID           = __strInterstitialID;
 @synthesize testDeviceIDs               = __TestDeviceIDs;
 @synthesize strAdColonyRewardedAdZoneID = __strAdColonyRewardedAdZoneID;
 
@@ -87,24 +88,24 @@
 
 #pragma mark InterfaceAds impl
 
-- (void) configDeveloperInfo: (NSMutableDictionary*) devInfo
-{
-    NSString* adsId = (NSString*) [devInfo objectForKey:@"AdmobID"];
-
-    if (nil == adsId) {
-        OUTPUT_LOG(@"Null ads Id at configure time.");
-        return;
+- (void) configDeveloperInfo: (NSDictionary*) devInfo {
+    NSString* bannerId      = (NSString*) [devInfo objectForKey:@"AdmobID"];
+    NSString* interstiailId = (NSString*) [devInfo objectForKey:@"AdmobInterstiialID"];
+    
+    if (bannerId == nil) {
+        NSLog(@"WARNING: BannerID is nil");
     }
-
-    OUTPUT_LOG(@"Configure with adsId: %@", adsId);
-
-    self.strPublishID = adsId;
+    
+    if (interstiailId == nil) {
+        NSLog(@"WARNING: IntestitialID is nil");
+    }
+    
+    self.strBannerID        = bannerId;
+    self.strInterstitialID  = interstiailId;
 }
 
-- (void) showAds: (NSMutableDictionary*) info position:(int) pos
-{
-    if (self.strPublishID == nil ||
-        [self.strPublishID length] == 0) {
+- (void) showAds: (NSDictionary*) info position:(int) pos {
+    if (self.strBannerID == nil || self.strBannerID.length == 0) {
         OUTPUT_LOG(@"configDeveloperInfo() not correctly invoked in Admob!");
         return;
     }
@@ -113,15 +114,13 @@
     NSString* strType = [info objectForKey:@"AdmobType"];
     int type = [strType intValue];
     switch (type) {
-    case kTypeBanner:
-        {
+    case kTypeBanner: {
             NSString* strSize = [info objectForKey:@"AdmobSizeEnum"];
             int sizeEnum = [strSize intValue];
             [self showBanner:sizeEnum atPos:pos];
             break;
         }
-    case kTypeFullScreen:
-        {
+    case kTypeFullScreen: {
             [self showInterstitial];
             break;
         }
@@ -131,7 +130,7 @@
     }
 }
 
-- (void) hideAds: (NSMutableDictionary*) info
+- (void) hideAds: (NSDictionary*) info
 {
     NSString* strType = [info objectForKey:@"AdmobType"];
     int type = [strType intValue];
@@ -198,7 +197,7 @@
     }
     
     self.bannerView = [[GADBannerView alloc] initWithAdSize:size];
-    self.bannerView.adUnitID = self.strPublishID;
+    self.bannerView.adUnitID = self.strBannerID;
     self.bannerView.delegate = self;
     [self.bannerView setRootViewController:[AdsWrapper getCurrentRootViewController]];
     [AdsWrapper addAdView:self.bannerView atPos:(ProtocolAds::AdsPos)pos];
@@ -214,7 +213,7 @@
 
 - (void) loadInterstitial
 {
-    self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strPublishID];
+    self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strInterstitialID];
     self.interstitialView.delegate = self;
     GADRequest* request = [GADRequest request];
     request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];

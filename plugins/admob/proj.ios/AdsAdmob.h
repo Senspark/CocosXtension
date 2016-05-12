@@ -40,30 +40,32 @@ typedef enum {
 
 @property BOOL debug;
 
-@property (copy, nonatomic) NSString* strPublishID;
-@property (copy, nonatomic) NSString* strAdColonyRewardedAdZoneID;
+@property (retain, nonatomic)   NSString* _Nullable strBannerID;
+@property (retain, nonatomic)   NSString* _Nullable strInterstitialID;
+@property (retain, nonatomic)   NSString* _Nullable strAdColonyRewardedAdZoneID;
 
-@property (assign, nonatomic) GADBannerView* bannerView;
-@property (assign, nonatomic) GADInterstitial* interstitialView;
-@property (assign, nonatomic) NSMutableArray* testDeviceIDs;
+@property (assign, nonatomic) GADBannerView*    _Nullable bannerView;
+@property (assign, nonatomic) GADInterstitial*  _Nullable interstitialView;
+@property (assign, nonatomic) NSMutableArray*   _Nullable testDeviceIDs;
+
 @property (assign, nonatomic) int slideUpTimePeriod;
 @property (assign, nonatomic) int slideDownTimePeriod;
 
 /**
  interface for Admob SDK
  */
-- (void) addTestDevice: (NSString*) deviceID;
+- (void) addTestDevice: (NSString* _Nonnull) deviceID;
 - (void) slideUpBannerAds;
 - (void) slideDownBannerAds;
 - (void) loadInterstitial;
 - (BOOL) hasInterstitial;
 
 - (BOOL) hasRewardedAd;
-- (void) loadRewardedAd: (NSString*) adsID;
+- (void) loadRewardedAd: (NSString* _Nonnull) adsID;
 - (void) showRewardedAd;
 
 - (void) configMediationAdColony: (NSDictionary* __nullable) params;
 - (void) configMediationAdVungle: (NSDictionary* __nullable) params;
-- (void) configMediationAdUnity: (NSDictionary* __nullable) params;
+- (void) configMediationAdUnity:  (NSDictionary* __nullable) params;
 
 @end

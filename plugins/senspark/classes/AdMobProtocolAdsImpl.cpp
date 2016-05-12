@@ -26,7 +26,8 @@ const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::Leaderboard("4");
 const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::Skyscraper("5");
 const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::SmartBanner("6");
 
-const std::string AdmobProtocolAds::AdIdKey("AdmobID");
+const std::string AdmobProtocolAds::AdBannerIdKey("AdmobID");
+const std::string AdmobProtocolAds::AdInterstitialIdKey("AdmobInterstiialID");
 const std::string AdmobProtocolAds::AdTypeKey("AdmobType");
 const std::string AdmobProtocolAds::AdSizeKey("AdmobSizeEnum");
 
@@ -34,7 +35,15 @@ AdmobProtocolAds::AdmobProtocolAds() = default;
 
 void AdmobProtocolAds::configureAds(const std::string& adsId) {
     cocos2d::plugin::TAdsInfo devInfo;
-    devInfo[AdIdKey] = adsId;
+    devInfo[AdBannerIdKey] = adsId;
+    configDeveloperInfo(devInfo);
+}
+
+void AdmobProtocolAds::configureAds(const std::string &bannerAds, const std::string &interstitialAds) {
+    cocos2d::plugin::TAdsInfo devInfo;
+    devInfo[AdBannerIdKey]          = bannerAds;
+    devInfo[AdInterstitialIdKey]    = interstitialAds;
+    
     configDeveloperInfo(devInfo);
 }
 
@@ -57,6 +66,10 @@ void AdmobProtocolAds::hideBannerAd() {
     cocos2d::plugin::TAdsInfo info;
     info[AdTypeKey] = AdType::Banner;
     hideAds(info);
+}
+
+void AdmobProtocolAds::showInterstitialAd() {
+    callFuncWithParam("showInterstitial", nullptr);
 }
 
 void AdmobProtocolAds::showInterstitialAd(const std::string& interstitialAdId) {
