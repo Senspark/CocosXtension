@@ -65,7 +65,7 @@ double ProtocolPlatform::getVersionCode() {
 }
 
 std::string ProtocolPlatform::getVersionName() {
-    NSString *versionName = [[NSBundle mainBundle] objectForInfoDictionaryKey: (NSString *)kCFBundleNameKey];
+    NSString *versionName = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
     return [versionName UTF8String];
 }
 
