@@ -180,7 +180,7 @@ public class AdsColony implements InterfaceAds, PluginListener, AdColonyAdAvaila
 		if (ad.shown()) {
 			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_AdsShown, "AdColony Interstitial Ad shown");
 		} else if (ad.notShown()) {
-			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_UnknownError, "AdColony ad not show with error UNKNOWN");
+			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_AdsUnknownError, "AdColony ad not show with error UNKNOWN");
 		} else if (ad.skipped()) {
 			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_AdsDismissed, "AdColony ad DISMISS");		
 		}
