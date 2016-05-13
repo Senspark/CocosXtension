@@ -86,6 +86,10 @@ ProtocolPlatform::~ProtocolPlatform() {
 
 }
 
+float ProtocolPlatform::getMainScreenScale() {
+    return callDoubleFuncWithParam("getMainScreenScale", nullptr);
+}
+    
 bool ProtocolPlatform::isAppInstalled(const std::string& url) {
     PluginParam param(url.c_str());
 

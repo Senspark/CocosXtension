@@ -42,6 +42,32 @@ bool ProtocolPlatform::isRelease() {
     return false;
 }
 
+float ProtocolPlatform::getMainScreenScale() {
+    float scale = 1.0f;
+    
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
+        scale = [[UIScreen mainScreen] scale];
+    }
+    
+    return scale;
+}
+
+std::string ProtocolPlatform::getCurrentLanguageCode() {
+    static char code[3]={0};
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *languages = [defaults objectForKey:@"AppleLanguages"];
+    NSString *currentLanguage = [languages objectAtIndex:0];
+    
+    // get the current language code.(such as English is "en", Chinese is "zh" and so on)
+    NSDictionary* temp = [NSLocale componentsFromLocaleIdentifier:currentLanguage];
+    NSString * languageCode = [temp objectForKey:NSLocaleLanguageCode];
+    [languageCode getCString:code maxLength:3 encoding:NSASCIIStringEncoding];
+    code[2]='\0';
+    return code;
+}
+
+
 bool ProtocolPlatform::isAppInstalled(const std::string& url) {
     NSString* appName = [NSString stringWithFormat:@"%s://", url.c_str()];
     bool isInstalled = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appName]];

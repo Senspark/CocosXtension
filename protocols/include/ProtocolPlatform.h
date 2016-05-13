@@ -27,17 +27,17 @@ public:
 
     typedef std::function<void(PlatformResultCode, const std::string&)> PlatformCallback;
 
-    bool isAppInstalled(const std::string& url);
+    bool    isConnected(const std::string& hostName);
+    bool    isAppInstalled(const std::string& url);
+    bool    isTablet();
+    bool    isRelease();
     
-    bool isConnected(const std::string& hostName);
-
-    bool isTablet();
-
+    float   getMainScreenScale();
+    
+    double  getVersionCode();
+    
+    std::string getCurrentLanguageCode();
     std::string getSHA1CertFingerprint();
-    
-    bool isRelease();
-
-    double getVersionCode();
     std::string getVersionName();
 
     void finishActivity();
@@ -46,16 +46,14 @@ public:
     /**
      @brief set login callback function
      */
-    inline void setCallback(const PlatformCallback &cb)
-    {
+    inline void setCallback(const PlatformCallback &cb) {
         _callback = cb;
     }
     
     /**
      @brief get login callback function
      */
-    inline PlatformCallback& getCallback()
-    {
+    inline PlatformCallback& getCallback() {
         return _callback;
     }
     
