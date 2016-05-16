@@ -12,6 +12,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import java.security.MessageDigest;
 import java.util.Locale;
@@ -32,6 +34,19 @@ public class ProtocolPlatform  {
     public void finishActivity() {
         mActivity.finish();
     }
+
+	public boolean isConnected(String hostName) {
+		ConnectivityManager conMng = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo info = conMng.getActiveNetworkInfo();
+		boolean isConnected = info != null && info.isConnectedOrConnecting();
+		Log.i("ProtocolPlatform", "isConnected? - " + (isConnected? "YES" : "NO"));
+		if (isConnected) {
+			PlatformWrapper.onPlatformResult(PlatformWrapper.PLATFORM_RESULT_CODE_kConnected, "Network connected");
+		} else {
+			PlatformWrapper.onPlatformResult(PlatformWrapper.PLATFORM_RESULT_CODE_kUnconnected, "Network unconnected");
+		}
+		return isConnected;
+	}
 	
 	public boolean isAppInstalled(final String appName) {
 		PackageManager pm = mContext.getPackageManager();
@@ -84,18 +99,23 @@ public class ProtocolPlatform  {
 		// No, this is not a tablet!
 		return false;
 	}
-	
-	public boolean isConnected(String hostName) {
-		ConnectivityManager conMng = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo info = conMng.getActiveNetworkInfo();
-		boolean isConnected = info != null && info.isConnectedOrConnecting();
-		Log.i("ProtocolPlatform", "isConnected? - " + (isConnected? "YES" : "NO"));
-		if (isConnected) {
-			PlatformWrapper.onPlatformResult(PlatformWrapper.PLATFORM_RESULT_CODE_kConnected, "Network connected");
-		} else {
-			PlatformWrapper.onPlatformResult(PlatformWrapper.PLATFORM_RESULT_CODE_kUnconnected, "Network unconnected");
+
+	public double getMainScreenScale() {
+		if (mActivity != null) {
+			DisplayMetrics metrics = new DisplayMetrics();
+			WindowManager wm = mActivity.getWindowManager();
+
+			if (wm != null) {
+				Display d = wm.getDefaultDisplay();
+				if (d != null) {
+					d.getMetrics(metrics);
+
+					return metrics.density;
+				}
+			}
 		}
-		return isConnected;
+
+		return -1;
 	}
 	
 	public String getSHA1CertFingerprint() {

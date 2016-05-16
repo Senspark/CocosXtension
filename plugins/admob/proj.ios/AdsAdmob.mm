@@ -90,7 +90,7 @@
 
 - (void) configDeveloperInfo: (NSDictionary*) devInfo {
     NSString* bannerId      = (NSString*) [devInfo objectForKey:@"AdmobID"];
-    NSString* interstiailId = (NSString*) [devInfo objectForKey:@"AdmobInterstiialID"];
+    NSString* interstiailId = (NSString*) [devInfo objectForKey:@"AdmobInterstitialID"];
     
     if (bannerId == nil) {
         NSLog(@"WARNING: BannerID is nil");

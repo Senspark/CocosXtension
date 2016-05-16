@@ -86,32 +86,40 @@ ProtocolPlatform::~ProtocolPlatform() {
 
 }
 
-float ProtocolPlatform::getMainScreenScale() {
-    return callDoubleFuncWithParam("getMainScreenScale", nullptr);
-}
-    
-bool ProtocolPlatform::isAppInstalled(const std::string& url) {
-    PluginParam param(url.c_str());
-
-    return callBoolFuncWithParam("isAppInstalled", &param, nullptr);
-}
-
 bool ProtocolPlatform::isConnected(const std::string& hostName) {
     PluginParam param(hostName.c_str());
 
     return callBoolFuncWithParam("isConnected", &param, nullptr);
 }
 
+bool ProtocolPlatform::isAppInstalled(const std::string& url) {
+    PluginParam param(url.c_str());
+
+    return callBoolFuncWithParam("isAppInstalled", &param, nullptr);
+}
+
+bool ProtocolPlatform::isTablet() {
+    return callBoolFuncWithParam("isTablet", nullptr);
+}
+
 bool ProtocolPlatform::isRelease() {
   return callBoolFuncWithParam("isRelease", nullptr);
 }
 
-std::string ProtocolPlatform::getSHA1CertFingerprint() {
-  return callStringFuncWithParam("getSHA1CertFingerprint", nullptr);
+float ProtocolPlatform::getMainScreenScale() {
+    return callDoubleFuncWithParam("getMainScreenScale", nullptr);
+}
+    
+double ProtocolPlatform::getVersionCode() {
+    return callDoubleFuncWithParam("getVersionCode", nullptr);
 }
 
-double ProtocolPlatform::getVersionCode() {
-  return callDoubleFuncWithParam("getVersionCode", nullptr);
+std::string ProtocolPlatform::getCurrentLanguageCode() {
+    return callStringFuncWithParam("getCurrentLanguageCode", nullptr);
+}
+
+std::string ProtocolPlatform::getSHA1CertFingerprint() {
+  return callStringFuncWithParam("getSHA1CertFingerprint", nullptr);
 }
 
 std::string ProtocolPlatform::getVersionName() {
@@ -122,10 +130,6 @@ void ProtocolPlatform::sendFeedback(const std::string& appName) {
     PluginParam param(appName.c_str());
 
     callFuncWithParam("sendFeedback", &param, nullptr);
-}
-
-bool ProtocolPlatform::isTablet() {
-    return callBoolFuncWithParam("isTablet", nullptr);
 }
 
 void ProtocolPlatform::finishActivity() {

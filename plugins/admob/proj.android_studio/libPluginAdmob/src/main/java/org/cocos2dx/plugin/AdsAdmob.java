@@ -95,9 +95,10 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     private static class Constants {
-        private static final String AdIdKey = "AdmobID";
-        private static final String AdTypeKey = "AdmobType";
-        private static final String AdSizeKey = "AdmobSizeEnum";
+        private static final String AdIdKey             = "AdmobID";
+        private static final String AdIntestitialIdKey  = "AdmobInterstitialID";
+        private static final String AdTypeKey           = "AdmobType";
+        private static final String AdSizeKey           = "AdmobSizeEnum";
     }
 
     private static final String LOG_TAG = "AdsAdmob";
@@ -122,7 +123,8 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     private String mAdColonyRewardedZoneID = "";
     private String mAdColonyClientOption = "";
 
-    private String mPublishID = "";
+    private String mBannerID        = "";
+    private String mInterstitialID  = "";
     private Set<String> mTestDevices = null;
 
     private volatile boolean mShouldLock = false;
@@ -209,8 +211,10 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     public void configDeveloperInfo(Hashtable<String, String> devInfo) {
         logD("configDeveloperInfo");
         try {
-            mPublishID = devInfo.get(Constants.AdIdKey);
-            logD("id interstitialAd : " + mPublishID);
+            mBannerID       = devInfo.get(Constants.AdIdKey);
+            mInterstitialID = devInfo.get(Constants.AdIntestitialIdKey);
+            logD("id banner Ad: " + mBannerID);
+            logD("id interstitialAd: " + mInterstitialID);
         } catch (Exception e) {
             logE("initAppInfo, The format of appInfo is wrong", e);
         }
@@ -287,7 +291,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
                 adView = new AdView(mContext);
                 adView.setAdSize(size);
-                adView.setAdUnitId(mPublishID);
+                adView.setAdUnitId(mBannerID);
                 AdRequest.Builder builder = new AdRequest.Builder();
 
                 try {
@@ -362,7 +366,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             public void run() {
                 Log.i(LOG_TAG, "Start loading interstitial ad");
                 interstitialAdView = new InterstitialAd(mContext);
-                interstitialAdView.setAdUnitId(mPublishID);
+                interstitialAdView.setAdUnitId(mInterstitialID);
                 interstitialAdView.setAdListener(new InterstitialAdListener(AdsAdmob.this));
                 interstitialAdView.setInAppPurchaseListener(new IAPListener(AdsAdmob.this));
 

@@ -27,7 +27,7 @@ const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::Skyscraper("5");
 const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::SmartBanner("6");
 
 const std::string AdmobProtocolAds::AdBannerIdKey("AdmobID");
-const std::string AdmobProtocolAds::AdInterstitialIdKey("AdmobInterstiialID");
+const std::string AdmobProtocolAds::AdInterstitialIdKey("AdmobInterstitialID");
 const std::string AdmobProtocolAds::AdTypeKey("AdmobType");
 const std::string AdmobProtocolAds::AdSizeKey("AdmobSizeEnum");
 
