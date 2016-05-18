@@ -90,7 +90,7 @@ public class AdsWrapper {
 			mLayoutParams.gravity = Gravity.CENTER;
 			break;
 		case POS_TOP:
-			mLayoutParams.gravity = Gravity.TOP;
+			mLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;
 			break;
 		case POS_TOP_LEFT:
 			mLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
