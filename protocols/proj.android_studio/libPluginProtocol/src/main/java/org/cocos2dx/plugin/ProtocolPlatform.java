@@ -66,6 +66,8 @@ public class ProtocolPlatform  {
 	
 	public boolean isRelease() {
 		boolean isDebuggable =  ( 0 != ( mContext.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
+		Log.i("ProtocolPlatform", "App in DEBUG: " + isDebuggable);
+
 		return !isDebuggable;
 	}
 
