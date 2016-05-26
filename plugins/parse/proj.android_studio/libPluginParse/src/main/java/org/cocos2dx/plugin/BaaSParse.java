@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -40,12 +41,12 @@ public class BaaSParse implements InterfaceBaaS {
 	private static boolean mDebug 		= true;
 	private static BaaSParse mAdapter 	= null;
 	private static ParseConfig mCurrentConfig = null;
-		
+
 	public BaaSParse(Context context) {
 		mContext = (Activity) context;
 		mAdapter = this;
 	}
-	
+
 	public static String makeErrorJsonString(ParseException e) {
 		if (e != null) {
 			try {
@@ -64,7 +65,7 @@ public class BaaSParse implements InterfaceBaaS {
 
 		return null;
 	}
-	
+
 	public void logD(String msg) {
 		if (mDebug) {
 			Log.d(LOG_TAG, msg);
@@ -166,7 +167,7 @@ public class BaaSParse implements InterfaceBaaS {
 			}
 		});
 	}
-	
+
 	@Override
 	public boolean isLoggedIn() {
 		return ParseUser.getCurrentUser() != null;
@@ -181,7 +182,7 @@ public class BaaSParse implements InterfaceBaaS {
 		}
 		return "";
 	}
-	
+
 	private void updateParseObject(ParseObject parseObj, JSONObject jsonObj) throws JSONException {
 		for (Iterator<String> iter = jsonObj.keys(); iter.hasNext();) {
 			String key = iter.next();
@@ -237,20 +238,26 @@ public class BaaSParse implements InterfaceBaaS {
 	public String getInstallationInfo() {
 		return ParseInstallation.getCurrentInstallation().toString();
 	}
-	
+
 	public void setInstallationInfo(String jsonData) {
 		Log.e(LOG_TAG, "BaaSParse does not support setInstallationInfo");
 	}
-	
+
 	public String getSubscribedChannels() {
-		return ParseInstallation.getCurrentInstallation().getList("channels").toArray().toString();		
+		return String.valueOf(ParseInstallation.getCurrentInstallation().getList("channels").toArray().toString());
 	}
-	
-	public void subscribeChannels(final String channelList) {
 
-		Log.e(LOG_TAG, "CHANNELS: " + Arrays.asList(channelList.split(",")));
+	public void subscribeChannels(final String channelList) throws JSONException {
+		Log.e(LOG_TAG, "channelList: " + channelList);
 
-		ParseInstallation.getCurrentInstallation().addAllUnique("channels", Arrays.asList(channelList.split(",")));
+		JSONArray array = new JSONArray(channelList);
+		List<String> channels = new ArrayList<>();
+
+		for (int i = 0; i < array.length(); ++i) {
+			channels.add(array.getString(i));
+		}
+
+        ParseInstallation.getCurrentInstallation().addAllUnique("channels", channels);
 		ParseInstallation.getCurrentInstallation().saveEventually(new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
@@ -262,31 +269,33 @@ public class BaaSParse implements InterfaceBaaS {
 			}
 		});
 	}
-	
+
 	public void unsubscribeChannels(final String channelList) throws JSONException {
 		JSONArray array = new JSONArray(channelList);
 
-		List<String> subcribed = ParseInstallation.getCurrentInstallation().getList("channels");
+		final List<String> subscribed = ParseInstallation.getCurrentInstallation().getList("channels");
 
 		for (int i = 0; i < array.length(); i++) {
-			if (subcribed.contains(array.get(i))) {
-				subcribed.remove(array.get(i));
+			if (subscribed.contains(array.get(i))) {
+				subscribed.remove(array.get(i));
 			}
 		}
 
-		ParseInstallation.getCurrentInstallation().put("channels", subcribed);
+		ParseInstallation.getCurrentInstallation().put("channels", subscribed);
 		ParseInstallation.getCurrentInstallation().saveEventually(new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
 				if (e == null) {
-					Log.i(LOG_TAG, "PARSE PUSH UNSUBSCRIBE TO CHANNEL " + channelList + "SUCCEEDED");
+					Log.i(LOG_TAG, "PARSE PUSH UNSUBSCRIBE TO CHANNEL " + channelList + " SUCCEEDED");
+					Log.i(LOG_TAG, "PARSE NOW SUBSCRIBE TO: " + subscribed);
 				} else {
-					Log.e(LOG_TAG, "PARSE PUSH UNSUBSCRIBE TO CHANNEL " + channelList + "FAILED WITH ERROR " + e.getMessage());
+					Log.e(LOG_TAG, "PARSE PUSH UNSUBSCRIBE TO CHANNEL " + channelList + " FAILED WITH ERROR " + e.getMessage());
+                    Log.e(LOG_TAG, "PARSE NOW SUBSCRIBE TO: " + subscribed);
 				}
 			}
 		});
 	}
-	
+
 	private ParseObject convertJSONObject(String className, JSONObject jsonObj)  throws JSONException {
 		ParseObject parseObj = new ParseObject(className);
 
@@ -319,7 +328,7 @@ public class BaaSParse implements InterfaceBaaS {
 			Log.i(LOG_TAG, "Error when parse json string.");
 		}
 	}
-	
+
 	@Override
 	public String saveObject(String className, String json) {
 		try {
@@ -338,7 +347,7 @@ public class BaaSParse implements InterfaceBaaS {
 
 		return null;
 	}
-	
+
 	@Override
 	public void findObjectsInBackground(String className, String whereKey, String containInArray, int callbackID) {
 		final int cbID = callbackID;
@@ -376,7 +385,7 @@ public class BaaSParse implements InterfaceBaaS {
 			Log.e(LOG_TAG, "Error when parse JSONArray: " + e.getMessage());
 		}
 	}
-	
+
 	@Override
 	public void findObjectInBackground(String className, String whereKey, String equalTo, int callbackID) {
 		final int cbID = callbackID;
@@ -399,7 +408,7 @@ public class BaaSParse implements InterfaceBaaS {
 			}
 		});
 	}
-	
+
 	@Override
 	public void getObjectInBackground(String className, String objId, int callbackID) {
 		final int cbID = callbackID;
@@ -514,7 +523,7 @@ public class BaaSParse implements InterfaceBaaS {
 			}
 		});
 	}
-	
+
 	@Override
 	public String updateObject(String className, String objId,
 			String jsonChanges) {
@@ -535,7 +544,7 @@ public class BaaSParse implements InterfaceBaaS {
 
 		return null;
 	}
-	
+
 	@Override
 	public void deleteObjectInBackground(String className, String objId, int callbackID) {
 		final int cbID = callbackID;
@@ -568,7 +577,7 @@ public class BaaSParse implements InterfaceBaaS {
 			}
 		});
 	}
-	
+
 	@Override
 	public String deleteObject(String className, String objId) {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(className);
@@ -647,7 +656,7 @@ public class BaaSParse implements InterfaceBaaS {
 		Log.i("Parse", "Parse Config >>> Get String: "+ ret);
 		return ret;
 	}
-	
+
 	public String getArrayConfig(String param) {
 		String ret = mCurrentConfig.getJSONArray(param).toString();
 		Log.i("Parse", "Parse Config >>> Get Array: "+ ret);
