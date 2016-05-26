@@ -71,7 +71,6 @@ public class AdsWrapper {
 	public static final int POS_BOTTOM       = 4;
 	public static final int POS_BOTTOM_LEFT  = 5;
 	public static final int POS_BOTTOM_RIGHT = 6;
-	public static final int POS_BOTTOM_CENTER = 7;
 
 	public static void addAdView(View adView, int pos) {
 
@@ -79,7 +78,7 @@ public class AdsWrapper {
 				android.R.id.content).getRootView();
 
 		FrameLayout.LayoutParams mLayoutParams;
-		if (pos == POS_CENTER || pos == POS_BOTTOM_CENTER) {
+		if (pos == POS_CENTER || pos == POS_BOTTOM || pos == POS_TOP) {
 			mLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
 		} else {
 			mLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
@@ -90,7 +89,7 @@ public class AdsWrapper {
 			mLayoutParams.gravity = Gravity.CENTER;
 			break;
 		case POS_TOP:
-			mLayoutParams.gravity = Gravity.TOP | Gravity.CENTER;
+			mLayoutParams.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
 			break;
 		case POS_TOP_LEFT:
 			mLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
@@ -99,16 +98,13 @@ public class AdsWrapper {
 			mLayoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
 			break;
 		case POS_BOTTOM:
-			mLayoutParams.gravity = Gravity.BOTTOM;
+			mLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
 			break;
 		case POS_BOTTOM_LEFT:
 			mLayoutParams.gravity = Gravity.BOTTOM | Gravity.LEFT;
 			break;
 		case POS_BOTTOM_RIGHT:
 			mLayoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-			break;
-		case POS_BOTTOM_CENTER:
-			mLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER;
 			break;
 		default:
 			break;

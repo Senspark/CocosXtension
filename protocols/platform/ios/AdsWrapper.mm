@@ -150,10 +150,6 @@ using namespace cocos2d::plugin;
         viewOrigin.x = rootSize.width - viewSize.width;
         viewOrigin.y = rootSize.height - viewSize.height;
         break;
-    case ProtocolAds::AdsPos::kPosBottomCenter:
-        viewOrigin.x = (rootSize.width - viewSize.width) / 2;
-        viewOrigin.y = rootSize.height - viewSize.height;
-        break;
     case ProtocolAds::AdsPos::kPosCenter:
     default:
         viewOrigin.x = (rootSize.width - viewSize.width) / 2;

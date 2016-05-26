@@ -95,7 +95,6 @@ public:
         kPosBottom,
         kPosBottomLeft,
         kPosBottomRight,
-        kPosBottomCenter,
     } AdsPos;
 
     typedef std::function<void(AdsResultCode, const std::string&)> AdsCallback;

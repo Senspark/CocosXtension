@@ -101,17 +101,17 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         private static final String AdSizeKey           = "AdmobSizeEnum";
     }
 
-    private static final String LOG_TAG = "AdsAdmob";
+    private static final String LOG_TAG                 = "AdsAdmob";
 
-    protected Activity mContext = null;
-    protected static AdsAdmob mAdapter = null;
+    protected Activity mContext                         = null;
+    protected static AdsAdmob mAdapter                  = null;
 
-    private boolean bDebug = true;
+    private boolean bDebug                              = true;
 
-    protected AdView adView = null;
-    private InterstitialAd interstitialAdView = null;
-    private RewardedVideoAd mRewardedVideoAd;
-    private boolean isLoaded = false;
+    protected AdView adView                             = null;
+    private InterstitialAd interstitialAdView           = null;
+    private RewardedVideoAd mRewardedVideoAd            = null;
+    private boolean isLoaded                            = false;
     protected boolean mIsRewardedVideoLoading;
     protected final Object mLock = new Object();
 
