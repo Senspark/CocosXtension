@@ -1,1 +1,9 @@
-include ':libPluginParse'
+Properties properties = new Properties()
+properties.load(file('local.properties').newDataInputStream())
+
+def cocosDir = properties.getProperty('cocos.dir')
+def cocosxtensionDir = properties.getProperty('cocosxtension.dir')
+
+include ':libPluginParse', ':libPluginProtocol'
+
+project(':libPluginProtocol').projectDir        = new File(cocosxtensionDir, 'protocols/proj.android_studio/libPluginProtocol')

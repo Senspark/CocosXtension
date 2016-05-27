@@ -3,6 +3,6 @@
     package="com.senspark.libBaaSParse"
     android:versionCode="1"
     android:versionName="0.9" >
-    <uses-sdk tools:overrideLibrary="com.facebook" />
+    <uses-sdk tools:overrideLibrary="com.facebook, com.facebook.ads, android.support.customtabs" />
 </manifest>
 
