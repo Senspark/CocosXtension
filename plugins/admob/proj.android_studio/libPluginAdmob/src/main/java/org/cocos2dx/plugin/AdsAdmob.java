@@ -159,7 +159,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     @Override
     public String getSDKVersion() {
-        return "6.3.1";
+        return "8.4.0";
     }
 
     private void initializeMediationAd() {
@@ -274,6 +274,8 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     private synchronized void showBannerAd(final int sizeEnum, final int pos) {
+        adView = new AdView(mContext);
+
         mShouldLock = true;
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
@@ -287,11 +289,11 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                     AdSize.WIDE_SKYSCRAPER,
                     AdSize.SMART_BANNER
                 );
-                AdSize size = AdSizes.get(sizeEnum);
 
-                adView = new AdView(mContext);
+                AdSize size = AdSizes.get(sizeEnum);
                 adView.setAdSize(size);
                 adView.setAdUnitId(mBannerID);
+
                 AdRequest.Builder builder = new AdRequest.Builder();
 
                 try {
@@ -308,29 +310,8 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 adView.setAdListener(new BannerAdListener(AdsAdmob.this));
 
                 AdsWrapper.addAdView(adView, pos);
-
-                Log.i(LOG_TAG, "Show Ad: waiting for adView: DONE");
-
-                synchronized (AdsAdmob.this) {
-                    mShouldLock = false;
-                    AdsAdmob.this.notify();
-                }
             }
         });
-
-        Log.i(LOG_TAG, "Show Ad: waiting for adView");
-
-        synchronized (this) {
-            try {
-                if (mShouldLock) {
-                    wait();
-                }
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        Log.i(LOG_TAG, "Show Ad: stop waiting for adView");
     }
 
     private void hideBannerAd() {
@@ -373,14 +354,11 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 AdRequest.Builder builder = new AdRequest.Builder();
                 AdColonyBundleBuilder.setZoneId(mAdColonyInterstitialZoneID);
                 builder.addNetworkExtrasBundle(AdColonyAdapter.class, AdColonyBundleBuilder.build());
-                try {
-                    if (mTestDevices != null) {
-                        for (String mTestDevice : mTestDevices) {
-                            builder.addTestDevice(mTestDevice);
-                        }
+
+                if (mTestDevices != null) {
+                    for (String mTestDevice : mTestDevices) {
+                        builder.addTestDevice(mTestDevice);
                     }
-                } catch (Exception e) {
-                    logE("Error during add test device", e);
                 }
 
                 //begin load interstitial ad
