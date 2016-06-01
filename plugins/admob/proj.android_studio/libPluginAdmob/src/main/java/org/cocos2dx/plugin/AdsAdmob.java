@@ -276,7 +276,6 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     private synchronized void showBannerAd(final int sizeEnum, final int pos) {
         adView = new AdView(mContext);
 
-        mShouldLock = true;
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
