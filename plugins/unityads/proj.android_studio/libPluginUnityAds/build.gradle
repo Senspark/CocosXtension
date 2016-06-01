@@ -28,7 +28,7 @@ ext {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         minSdkVersion 9
@@ -44,7 +44,7 @@ android {
 }
 
 dependencies {
-    compile 'com.senspark:libPluginProtocol:0.9'
+    compile project(':libPluginProtocol')
     embedded project(':unity-ads')
 }
 
