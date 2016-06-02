@@ -341,18 +341,22 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     public void loadInterstitial() {
+        if (interstitialAdView == null || !TextUtils.equals(interstitialAdView.getAdUnitId(), mInterstitialID)) {
+            interstitialAdView = new InterstitialAd(mContext);
+
+            interstitialAdView.setAdUnitId(mInterstitialID);
+            interstitialAdView.setAdListener(new InterstitialAdListener(AdsAdmob.this));
+            interstitialAdView.setInAppPurchaseListener(new IAPListener(AdsAdmob.this));
+        }
+
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
                 Log.i(LOG_TAG, "Start loading interstitial ad");
-                interstitialAdView = new InterstitialAd(mContext);
-                interstitialAdView.setAdUnitId(mInterstitialID);
-                interstitialAdView.setAdListener(new InterstitialAdListener(AdsAdmob.this));
-                interstitialAdView.setInAppPurchaseListener(new IAPListener(AdsAdmob.this));
-
                 AdRequest.Builder builder = new AdRequest.Builder();
                 AdColonyBundleBuilder.setZoneId(mAdColonyInterstitialZoneID);
                 builder.addNetworkExtrasBundle(AdColonyAdapter.class, AdColonyBundleBuilder.build());
+
 
                 if (mTestDevices != null) {
                     for (String mTestDevice : mTestDevices) {
@@ -361,7 +365,9 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 }
 
                 //begin load interstitial ad
-                interstitialAdView.loadAd(builder.build());
+                if (interstitialAdView != null) {
+                    interstitialAdView.loadAd(builder.build());
+                }
             }
         });
     }
