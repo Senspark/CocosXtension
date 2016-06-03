@@ -32,11 +32,12 @@
 
 @implementation AdsAdmob
 
-@synthesize debug                       = __debug;
-@synthesize strBannerID                 = __strBannerID;
-@synthesize strInterstitialID           = __strInterstitialID;
-@synthesize testDeviceIDs               = __TestDeviceIDs;
-@synthesize strAdColonyRewardedAdZoneID = __strAdColonyRewardedAdZoneID;
+@synthesize debug                           = __debug;
+@synthesize strBannerID                     = __strBannerID;
+@synthesize strInterstitialID               = __strInterstitialID;
+@synthesize testDeviceIDs                   = __TestDeviceIDs;
+@synthesize strAdColonyInterstitialAdZoneID = __strAdColonyInterstitialAdZoneID;
+@synthesize strAdColonyRewardedAdZoneID     = __strAdColonyRewardedAdZoneID;
 
 - (void) dealloc
 {
@@ -69,6 +70,7 @@
     NSString* adColonyID                    = (NSString*) [params objectForKey:@"AdColonyAppID"];
     NSString* interstitialAdColonyZoneID    = (NSString*) [params objectForKey:@"AdColonyInterstitialAdID"];
     NSString* rewardedAdColonyZoneID        = (NSString*) [params objectForKey:@"AdColonyRewardedAdID"];
+    self.strAdColonyInterstitialAdZoneID    = interstitialAdColonyZoneID;
     self.strAdColonyRewardedAdZoneID        = rewardedAdColonyZoneID;
 
     if (nil != adColonyID) {
@@ -221,13 +223,15 @@
     }
     self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strInterstitialID];
     self.interstitialView.delegate = self;
+
+    GADRequest* request = [GADRequest request];
+    GADMAdapterAdColonyExtras *_extras = [[GADMAdapterAdColonyExtras alloc] initWithZone:self.strAdColonyInterstitialAdZoneID];
+    _extras.currentZone = self.strAdColonyInterstitialAdZoneID;
+    [request registerAdNetworkExtras:_extras];
     
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        GADRequest* request = [GADRequest request];
-        request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
-        
-        [self.interstitialView loadRequest:request];
-    });
+    request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
+    
+    [self.interstitialView loadRequest:request];
 }
 
 - (void) showInterstitial
