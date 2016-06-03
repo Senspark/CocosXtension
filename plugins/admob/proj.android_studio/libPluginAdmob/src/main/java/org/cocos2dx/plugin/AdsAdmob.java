@@ -179,32 +179,27 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     public void configMediationAdColony(final JSONObject devInfo) {
-        PluginWrapper.runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(LOG_TAG, "Config Mediation for AdColony");
-                try {
-                    PackageInfo pInfo       = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
-                    String versionName      = pInfo.versionName;
-                    String mClientOptions   = String.format("version:" + versionName + ",store:google");
+        Log.i(LOG_TAG, "Config Mediation for AdColony");
+        try {
+            PackageInfo pInfo       = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+            String versionName      = pInfo.versionName;
+            String mClientOptions   = "version:" + versionName + ",store:google";
+            String adcolonyAppID                = devInfo.getString("AdColonyAppID");
+            String adcolonyInterstitialZoneID   = devInfo.getString("AdColonyInterstitialAdID");
+            String adcolonyRewardedZoneID       = devInfo.getString("AdColonyRewardedAdID");
 
-                    String adcolonyAppID                = devInfo.getString("AdColonyAppID");
-                    String adcolonyInterstitialZoneID   = devInfo.getString("AdColonyInterstitialAdID");
-                    String adcolonyRewardedZoneID       = devInfo.getString("AdColonyRewardedAdID");
+            mAdColonyAppID              = adcolonyAppID;
+            mAdColonyInterstitialZoneID = adcolonyInterstitialZoneID;
+            mAdColonyRewardedZoneID     = adcolonyRewardedZoneID;
+            mAdColonyClientOption       = mClientOptions;
 
-                    mAdColonyAppID              = adcolonyAppID;
-                    mAdColonyInterstitialZoneID = adcolonyInterstitialZoneID;
-                    mAdColonyRewardedZoneID     = adcolonyRewardedZoneID;
-                    mAdColonyClientOption       = mClientOptions;
+            Log.i(LOG_TAG, "### AdColony AppID: " + adcolonyAppID + " - InterstitialZoneID: " + adcolonyInterstitialZoneID + " - RewardedZoneID: " + adcolonyRewardedZoneID + " ClientOption: " + mClientOptions);
 
-                    Log.i(LOG_TAG, "### AdColony AppID: " + adcolonyAppID + " - InterstitialZoneID: " + adcolonyInterstitialZoneID + " - RewardedZoneID: " + adcolonyRewardedZoneID + " ClientOption: " + mClientOptions);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
 
     @Override
@@ -221,28 +216,41 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     @Override
-    public void showAds(Hashtable<String, String> info, int pos) {
-        try {
-            String strType = info.get(Constants.AdTypeKey);
-            int adsType = Integer.parseInt(strType);
+    public void showAds(final Hashtable<String, String> info, final int pos) {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
 
-            switch (adsType) {
-            case AdType.Banner: {
-                String strSize = info.get(Constants.AdSizeKey);
-                int sizeEnum = Integer.parseInt(strSize);
-                showBannerAd(sizeEnum, pos);
-                break;
+                try {
+                    if (null != adView) {
+                        adView.setVisibility(View.GONE);
+                        adView.destroy();
+                        adView = null;
+                    }
+
+                    String strType = info.get(Constants.AdTypeKey);
+                    int adsType = Integer.parseInt(strType);
+
+                    switch (adsType) {
+                        case AdType.Banner: {
+                            String strSize = info.get(Constants.AdSizeKey);
+                            int sizeEnum = Integer.parseInt(strSize);
+                            showBannerAd(sizeEnum, pos);
+                            break;
+                        }
+                        case AdType.Interstitial: {
+                            showInterstitial();
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                } catch (Exception e) {
+                    logE("Error when show Ads ( " + info.toString() + " )", e);
+                }
+
             }
-            case AdType.Interstitial: {
-                showInterstitial();
-                break;
-            }
-            default:
-                break;
-            }
-        } catch (Exception e) {
-            logE("Error when show Ads ( " + info.toString() + " )", e);
-        }
+        });
     }
 
     @Override
@@ -274,11 +282,12 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     private synchronized void showBannerAd(final int sizeEnum, final int pos) {
-        adView = new AdView(mContext);
 
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
+                adView = new AdView(mContext);
+
                 final List<AdSize> AdSizes = Arrays.asList(
                     AdSize.BANNER,
                     AdSize.LARGE_BANNER,
