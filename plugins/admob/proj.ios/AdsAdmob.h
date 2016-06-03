@@ -42,6 +42,7 @@ typedef enum {
 
 @property (retain, nonatomic)   NSString* _Nullable strBannerID;
 @property (retain, nonatomic)   NSString* _Nullable strInterstitialID;
+@property (retain, nonatomic)   NSString* _Nullable strAdColonyInterstitialAdZoneID;
 @property (retain, nonatomic)   NSString* _Nullable strAdColonyRewardedAdZoneID;
 
 @property (assign, nonatomic) GADBannerView*    _Nullable bannerView;
