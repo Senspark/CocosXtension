@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -56,22 +57,18 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     @Override
     public void onStart() {
-
     }
 
     @Override
     public void onResume() {
-        AdColony.resume(mContext);
     }
 
     @Override
     public void onPause() {
-        AdColony.pause();
     }
 
     @Override
     public void onStop() {
-
     }
 
     @Override
@@ -101,6 +98,16 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         private static final String AdSizeKey           = "AdmobSizeEnum";
     }
 
+    private static final List<AdSize> AdSizes = Arrays.asList(
+            AdSize.BANNER,
+            AdSize.LARGE_BANNER,
+            AdSize.MEDIUM_RECTANGLE,
+            AdSize.FULL_BANNER,
+            AdSize.LEADERBOARD,
+            AdSize.WIDE_SKYSCRAPER,
+            AdSize.SMART_BANNER
+    );
+
     private static final String LOG_TAG                 = "AdsAdmob";
 
     protected Activity mContext                         = null;
@@ -109,14 +116,13 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     private boolean bDebug                              = true;
 
     protected AdView adView                             = null;
-    private InterstitialAd interstitialAdView           = null;
+    protected InterstitialAd interstitialAdView           = null;
     private RewardedVideoAd mRewardedVideoAd            = null;
     private boolean isLoaded                            = false;
     protected boolean mIsRewardedVideoLoading;
     protected final Object mLock = new Object();
 
-    private int mBannerWidthInPixel = 0;
-    private int mBannerHeightInPixel = 0;
+    private AdSize  mBannerSize                         = null;
 
     private String mAdColonyAppID = "";
     private String mAdColonyInterstitialZoneID = "";
@@ -159,7 +165,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     @Override
     public String getSDKVersion() {
-        return "8.4.0";
+        return "9.0.0";
     }
 
     private void initializeMediationAd() {
@@ -221,7 +227,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     @Override
-    public void showAds(Hashtable<String, String> info, int pos) {
+    public synchronized void showAds(Hashtable<String, String> info, int pos) {
         try {
             String strType = info.get(Constants.AdTypeKey);
             int adsType = Integer.parseInt(strType);
@@ -251,7 +257,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     @Override
-    public void hideAds(Hashtable<String, String> info) {
+    public synchronized void hideAds(Hashtable<String, String> info) {
         try {
             String strType = info.get(Constants.AdTypeKey);
             int adsType = Integer.parseInt(strType);
@@ -274,41 +280,32 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     private synchronized void showBannerAd(final int sizeEnum, final int pos) {
-        adView = new AdView(mContext);
+        logD("[ADS] ADSADMOB - SHOW BANNER AD");
+
+        mBannerSize = AdSizes.get(sizeEnum);
 
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
-                final List<AdSize> AdSizes = Arrays.asList(
-                    AdSize.BANNER,
-                    AdSize.LARGE_BANNER,
-                    AdSize.MEDIUM_RECTANGLE,
-                    AdSize.FULL_BANNER,
-                    AdSize.LEADERBOARD,
-                    AdSize.WIDE_SKYSCRAPER,
-                    AdSize.SMART_BANNER
-                );
+                adView = new AdView(mContext);
 
-                AdSize size = AdSizes.get(sizeEnum);
-                adView.setAdSize(size);
+
+                adView.setAdSize(mBannerSize);
                 adView.setAdUnitId(mBannerID);
+                adView.setAdListener(new BannerAdListener(AdsAdmob.this));
 
                 AdRequest.Builder builder = new AdRequest.Builder();
 
-                try {
-                    if (mTestDevices != null) {
-                        for (String mTestDevice : mTestDevices) {
-                            builder.addTestDevice(mTestDevice);
-                        }
+                if (mTestDevices != null) {
+                    for (String mTestDevice : mTestDevices) {
+                        builder.addTestDevice(mTestDevice);
                     }
-                } catch (Exception e) {
-                    logE("Error during add test device", e);
                 }
 
                 adView.loadAd(builder.build());
-                adView.setAdListener(new BannerAdListener(AdsAdmob.this));
-
                 AdsWrapper.addAdView(adView, pos);
+
+                logD("[ADS] ADSADMOB - SHOW BANNER AD DONE");
             }
         });
     }
@@ -340,7 +337,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     }
 
-    public void loadInterstitial() {
+    public synchronized void loadInterstitial() {
         if (interstitialAdView == null || !TextUtils.equals(interstitialAdView.getAdUnitId(), mInterstitialID)) {
             interstitialAdView = new InterstitialAd(mContext);
 
@@ -372,7 +369,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         });
     }
 
-    public void showInterstitial() {
+    public synchronized void showInterstitial() {
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
@@ -388,65 +385,13 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         });
     }
 
-    public synchronized int getBannerWidthInPixel() {
-        mBannerWidthInPixel = 0;
-        mShouldLock = true;
-
-        PluginWrapper.runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                if (adView != null && mContext != null)
-                    mBannerWidthInPixel = adView.getAdSize().getWidthInPixels(mContext);
-
-                synchronized (AdsAdmob.this) {
-                    mShouldLock = false;
-                    AdsAdmob.this.notify();
-                }
-            }
-        });
-
-        synchronized (this) {
-            try {
-                if (mShouldLock) {
-                    wait();
-                }
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        return mBannerWidthInPixel;
+    public int getBannerWidthInPixel() {
+        return mBannerSize.getWidthInPixels(mContext);
     }
 
 
-    public synchronized int getBannerHeightInPixel() {
-        mBannerHeightInPixel = 0;
-        mShouldLock = true;
-
-        PluginWrapper.runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                if (adView != null && mContext != null)
-                    mBannerHeightInPixel = adView.getAdSize().getHeightInPixels(mContext);
-
-                synchronized (AdsAdmob.this) {
-                    mShouldLock = false;
-                    AdsAdmob.this.notify();
-                }
-            }
-        });
-
-        synchronized (this) {
-            try {
-                if (mShouldLock) {
-                    wait();
-                }
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        return mBannerHeightInPixel;
+    public int getBannerHeightInPixel() {
+        return mBannerSize.getHeightInPixels(mContext);
     }
 
     @Override
@@ -463,6 +408,8 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         isLoaded = false;
         mShouldLock = true;
 
+        synchronized (this) {
+
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
@@ -475,7 +422,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             }
         });
 
-        synchronized (this) {
+
             try {
                 if (mShouldLock) {
                     wait();
@@ -499,6 +446,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
                 synchronized (AdsAdmob.this) {
                     mShouldLock = false;
+                    logD("[ADS] NOTIFY");
                     AdsAdmob.this.notify();
                 }
             }
@@ -507,6 +455,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         synchronized (this) {
             try {
                 if (mShouldLock) {
+                    logD("[ADS] WAIT");
                     wait();
                 }
             } catch (InterruptedException ex) {
@@ -537,7 +486,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         });
     }
 
-    public void showRewardedAd() {
+    public synchronized void showRewardedAd() {
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
@@ -546,7 +495,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         });
     }
 
-    public void slideBannerUp() {
+    public synchronized void slideBannerUp() {
         Log.i(LOG_TAG, "Slide Banner Up: CALL");
 
         if (adView == null) {
@@ -586,7 +535,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         });
     }
 
-    public void slideBannerDown() {
+    public synchronized void slideBannerDown() {
         Log.i(LOG_TAG, "Slide Banner Down: CALL");
 
         if (adView == null) {

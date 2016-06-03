@@ -19,9 +19,8 @@ class BannerAdListener extends AdListener {
     @Override
     public void onAdClosed() {
         super.onAdClosed();
-        adapter.loadInterstitial();
         adapter.logD("onDismissScreen invoked");
-        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsDismissed, "Ads view dismissed!");
+        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsClosed, "Ads view closed!");
     }
 
     @Override
@@ -54,6 +53,7 @@ class BannerAdListener extends AdListener {
     public void onAdLeftApplication() {
         super.onAdLeftApplication();
         adapter.logD("onLeaveApplication invoked");
+        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsDismissed, "Ads view dismissed!");
     }
 
     @Override

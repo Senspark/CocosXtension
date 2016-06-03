@@ -18,7 +18,8 @@ class InterstitialAdListener extends AdListener {
         super.onAdClosed();
         adapter.loadInterstitial();
         adapter.logD("onDismissScreen invoked");
-        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsDismissed, "Ads view dismissed!");
+
+        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsClosed, "[ADS] - AdWrapper Closed");
     }
 
     @Override
@@ -51,6 +52,8 @@ class InterstitialAdListener extends AdListener {
     public void onAdLeftApplication() {
         super.onAdLeftApplication();
         adapter.logD("onLeaveApplication invoked");
+
+        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsDismissed, "[ADS] - AdWrapper Dismissed");
     }
 
     @Override

@@ -44,7 +44,7 @@ android {
 
 dependencies {
     compile project(':libPluginProtocol')
-    compile 'com.facebook.android:facebook-android-sdk:4.12.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.12.1'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'

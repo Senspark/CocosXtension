@@ -236,7 +236,7 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 
 	public String getInstallationInfo() {
-		return ParseInstallation.getCurrentInstallation().toString();
+		return convertPFObjectToJson(ParseInstallation.getCurrentInstallation()).toString();
 	}
 
 	public void setInstallationInfo(String jsonData) {
@@ -244,7 +244,17 @@ public class BaaSParse implements InterfaceBaaS {
 	}
 
 	public String getSubscribedChannels() {
-		return String.valueOf(ParseInstallation.getCurrentInstallation().getList("channels").toArray().toString());
+		List<String> channels = ParseInstallation.getCurrentInstallation().getList("channels");
+
+		JSONArray json = new JSONArray();
+
+		for (String channel : channels) {
+			json.put(channel);
+		}
+
+		Log.i("PARSE", "PARSE CHANNELS " + json.toString());
+
+		return json.toString();
 	}
 
 	public void subscribeChannels(final String channelList) throws JSONException {
@@ -687,12 +697,18 @@ public class BaaSParse implements InterfaceBaaS {
 					Object o = parseObject.get(key);
 
 					if (o instanceof HashMap) {
-						jsonObj.put(key, new JSONObject((HashMap)o));
+						ParseObject obj = (ParseObject) o;
+						if (obj.getObjectId() != null) {
+							jsonObj.put(key, obj.getObjectId());
+						}
 					} else {
 						jsonObj.put(key, parseObject.get(key));
 					}
 				}
 
+				if (parseObject.getObjectId() != null) {
+					jsonObj.put("objectId", parseObject.getObjectId());
+				}
 				jsonObj.put("createdAt", parseObject.getCreatedAt().getTime());
 				jsonObj.put("updatedAt", parseObject.getUpdatedAt().getTime());
 

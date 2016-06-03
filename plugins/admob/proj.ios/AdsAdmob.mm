@@ -102,6 +102,9 @@
     
     self.strBannerID        = bannerId;
     self.strInterstitialID  = interstiailId;
+    
+    _interstitialView   = nil;
+    _bannerView         = nil;
 }
 
 - (void) showAds: (NSDictionary*) info position:(int) pos {
@@ -213,11 +216,18 @@
 
 - (void) loadInterstitial
 {
+    if (_interstitialView != nil) {
+        [_interstitialView release];
+    }
     self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strInterstitialID];
     self.interstitialView.delegate = self;
-    GADRequest* request = [GADRequest request];
-    request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
-    [self.interstitialView loadRequest:request];
+    
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        GADRequest* request = [GADRequest request];
+        request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
+        
+        [self.interstitialView loadRequest:request];
+    });
 }
 
 - (void) showInterstitial
@@ -323,6 +333,7 @@
 /// show. This is common since interstitials are shown sparingly to users.
 - (void)interstitial:(GADInterstitial *)ad didFailToReceiveAdWithError:(GADRequestError *)error {
     OUTPUT_LOG(@"Interstitial failed to load with error: %@", error.description);
+    
     [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsUnknownError withMsg:error.description];
 }
 
@@ -338,7 +349,6 @@
 
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
     OUTPUT_LOG(@"Interstitial dismissed")
-    [self loadInterstitial];
     [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsDismissed withMsg:@"Interstital dismissed."];
 }
 
