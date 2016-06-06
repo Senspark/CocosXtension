@@ -215,22 +215,22 @@
     }
 }
 
-- (int) getBannerWidthInPixel
+- (NSNumber*) getBannerWidthInPixel
 {
     int ret = 0;
-    if (self.bannerView != nullptr) {
-        ret = _bannerView.frame.size.width;
+    if (self.bannerView != nil) {
+        ret = self.bannerView.frame.size.width;
     }
-    return ret;
+    return [NSNumber numberWithInt:ret];
 }
 
-- (int) getBannerHeightInPixel
+- (NSNumber*) getBannerHeightInPixel
 {
     int ret = 0;
-    if (self.bannerView != nullptr) {
-        ret = _bannerView.frame.size.height;
+    if (self.bannerView != nil) {
+        ret = [self bannerView].frame.size.height;
     }
-    return ret;
+    return [NSNumber numberWithInt:ret];
 }
 
 #pragma mark interface for Admob SDK
