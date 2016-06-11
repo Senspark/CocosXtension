@@ -1,0 +1,3 @@
+[submodule "GameXtension"]
+	path = GameXtension
+	url = git@github.com:Senspark/GameXtension.git
