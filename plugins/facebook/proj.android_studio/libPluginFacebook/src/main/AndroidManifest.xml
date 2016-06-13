@@ -19,5 +19,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.senspark.libFacebook">
 
-    <uses-sdk tools:overrideLibrary="com.facebook, com.facebook.ads" />
+    <uses-sdk tools:overrideLibrary="com.facebook, com.facebook.ads, android.support.customtabs" />
 </manifest>

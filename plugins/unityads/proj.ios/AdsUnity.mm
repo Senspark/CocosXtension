@@ -57,31 +57,31 @@ using namespace cocos2d::plugin;
     NSLog(@"Ads Unity: Not support %s", __func__);
 }
 
-- (BOOL) hasInterstitial {
-    return [[UnityAds sharedInstance] canShowZone:@"defaultZone"];
+- (BOOL) hasInterstitial:(NSString *)zone {
+    return [[UnityAds sharedInstance] canShowZone:zone];
 }
 
-- (BOOL) hasRewardedVideo {
-    return [[UnityAds sharedInstance] canShowZone:@"rewardedVideoZone"];
+- (BOOL) hasRewardedVideo:(NSString *)zone {
+    return [[UnityAds sharedInstance] canShowZone:zone];
 }
 
-- (void) showInterstitial {
-    if ([self hasInterstitial]) {
-        [[UnityAds sharedInstance] setZone:@"defaultZone"];
+- (void) showInterstitial:(NSString *)zone {
+    if ([self hasInterstitial:zone]) {
+        [[UnityAds sharedInstance] setZone:zone];
         [[UnityAds sharedInstance] show];
 
     } else {
-        [AdsWrapper onAdsResult:self withRet:AdsResultCode::kUnknownError withMsg:@"UnityAds: Ad cannot show"];
+        [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoUnknownError withMsg:@"UnityAds: Ad cannot show"];
     }
 }
 
-- (void) showRewardedVideo {
-    if ([self hasRewardedVideo]) {
-        [[UnityAds sharedInstance] setZone:@"rewardedVideoZone"];
+- (void) showRewardedVideo:(NSString *)zone {
+    if ([self hasRewardedVideo:zone]) {
+        [[UnityAds sharedInstance] setZone:zone];
         [[UnityAds sharedInstance] show];
 
     } else {
-        [AdsWrapper onAdsResult:self withRet:AdsResultCode::kUnknownError withMsg:@"UnityAds: Ad cannot show"];
+        [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoUnknownError withMsg:@"UnityAds: Ad cannot show"];
     }
 }
 

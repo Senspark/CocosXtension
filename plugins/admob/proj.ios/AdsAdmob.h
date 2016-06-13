@@ -24,44 +24,49 @@
 
 #import <Foundation/Foundation.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
+#import <GoogleMobileAds/GADAdSize.h>
 
 #import "InterfaceAds.h"
 #import "AdsWrapper.h"
-
-typedef enum {
-    kSizeBanner = 1,
-    kSizeSmartBannerLandscape,
-    kSizeIABMRect,
-    kSizeIABBanner,
-    kSizeIABLeaderboard,
-    kSizeSkyscraper,
-} AdmobSizeEnum;
 
 typedef enum {
     kTypeBanner = 1,
     kTypeFullScreen,
 } AdmobType;
 
-@interface AdsAdmob : NSObject <InterfaceAds, GADBannerViewDelegate, GADInterstitialDelegate>
+@interface AdsAdmob : NSObject <InterfaceAds, GADBannerViewDelegate, GADInterstitialDelegate, GADRewardBasedVideoAdDelegate>
 {
 }
 
 @property BOOL debug;
 
-@property (copy, nonatomic) NSString* strPublishID;
-@property (assign, nonatomic) GADBannerView* bannerView;
-@property (assign, nonatomic) GADInterstitial* interstitialView;
-@property (assign, nonatomic) NSMutableArray* testDeviceIDs;
+@property (retain, nonatomic)   NSString* _Nullable strBannerID;
+@property (retain, nonatomic)   NSString* _Nullable strInterstitialID;
+@property (retain, nonatomic)   NSString* _Nullable strAdColonyInterstitialAdZoneID;
+@property (retain, nonatomic)   NSString* _Nullable strAdColonyRewardedAdZoneID;
+
+@property (assign, nonatomic) GADBannerView*    _Nullable bannerView;
+@property (assign, nonatomic) GADInterstitial*  _Nullable interstitialView;
+@property (assign, nonatomic) NSMutableArray*   _Nullable testDeviceIDs;
+
 @property (assign, nonatomic) int slideUpTimePeriod;
 @property (assign, nonatomic) int slideDownTimePeriod;
 
 /**
  interface for Admob SDK
  */
-- (void) addTestDevice: (NSString*) deviceID;
+- (void) addTestDevice: (NSString* _Nonnull) deviceID;
 - (void) slideUpBannerAds;
 - (void) slideDownBannerAds;
 - (void) loadInterstitial;
 - (BOOL) hasInterstitial;
+
+- (BOOL) hasRewardedAd;
+- (void) loadRewardedAd: (NSString* _Nonnull) adsID;
+- (void) showRewardedAd;
+
+- (void) configMediationAdColony: (NSDictionary* __nullable) params;
+- (void) configMediationAdVungle: (NSDictionary* __nullable) params;
+- (void) configMediationAdUnity:  (NSDictionary* __nullable) params;
 
 @end

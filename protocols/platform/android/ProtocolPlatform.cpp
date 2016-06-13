@@ -86,28 +86,44 @@ ProtocolPlatform::~ProtocolPlatform() {
 
 }
 
-bool ProtocolPlatform::isAppInstalled(const std::string& url) {
-    PluginParam param(url.c_str());
-
-    return callBoolFuncWithParam("isAppInstalled", &param, nullptr);
-}
-
 bool ProtocolPlatform::isConnected(const std::string& hostName) {
     PluginParam param(hostName.c_str());
 
     return callBoolFuncWithParam("isConnected", &param, nullptr);
 }
 
+bool ProtocolPlatform::isAppInstalled(const std::string& url) {
+    PluginParam param(url.c_str());
+
+    return callBoolFuncWithParam("isAppInstalled", &param, nullptr);
+}
+
+bool ProtocolPlatform::isTablet() {
+    return callBoolFuncWithParam("isTablet", nullptr);
+}
+
 bool ProtocolPlatform::isRelease() {
   return callBoolFuncWithParam("isRelease", nullptr);
+}
+
+float ProtocolPlatform::getMainScreenScale() {
+    return callDoubleFuncWithParam("getMainScreenScale", nullptr);
+}
+    
+double ProtocolPlatform::getVersionCode() {
+    return callDoubleFuncWithParam("getVersionCode", nullptr);
+}
+
+std::string ProtocolPlatform::getCurrentLanguageCode() {
+    return callStringFuncWithParam("getCurrentLanguageCode", nullptr);
 }
 
 std::string ProtocolPlatform::getSHA1CertFingerprint() {
   return callStringFuncWithParam("getSHA1CertFingerprint", nullptr);
 }
 
-double ProtocolPlatform::getVersionCode() {
-  return callDoubleFuncWithParam("getVersionCode", nullptr);
+std::string ProtocolPlatform::getVersionName() {
+    return callStringFuncWithParam("getVersionName", nullptr);
 }
 
 void ProtocolPlatform::sendFeedback(const std::string& appName) {
@@ -116,8 +132,8 @@ void ProtocolPlatform::sendFeedback(const std::string& appName) {
     callFuncWithParam("sendFeedback", &param, nullptr);
 }
 
-bool ProtocolPlatform::isTablet() {
-    return callBoolFuncWithParam("isTablet", nullptr);
+void ProtocolPlatform::finishActivity() {
+    callFuncWithParam("finishActivity", nullptr);
 }
 
 }  // namespace plugin

@@ -59,7 +59,9 @@ enum class AdsResultCode {
     kPointsSpendFailed,         // The points spend failed
     
     kNetworkError,              // Network error
-    kUnknownError,              // Unknown error
+    kAdsUnknownError,              // Unknown error
+    kVideoUnknownError,
+    kIapPurchaseRequested
 };
 
 class ProtocolAds;
@@ -93,7 +95,6 @@ public:
         kPosBottom,
         kPosBottomLeft,
         kPosBottomRight,
-        kPosBottomCenter,
     } AdsPos;
 
     typedef std::function<void(AdsResultCode, const std::string&)> AdsCallback;

@@ -244,7 +244,22 @@ using namespace cocos2d::plugin;
         NSMutableDictionary * objectDict = [[NSMutableDictionary alloc] init];
         
         for (NSString * key in allKeys) {
-            [objectDict setObject:[object objectForKey:key] forKey:key];
+            id value = [object objectForKey:key];
+            if (value && [value isKindOfClass: [PFObject class]]) {
+                PFObject* obj = (PFObject*) value;
+                if (obj.objectId) {
+                    [objectDict setObject: obj.objectId forKey:key];
+                }
+            }
+            else {
+                if ([object objectForKey:key]) {
+                    [objectDict setObject:[object objectForKey:key] forKey:key];
+                }
+            }
+        }
+        
+        if (object.objectId) {
+            [objectDict setObject:object.objectId forKey:@"objectId"];
         }
         
         [objectDict setObject:[NSNumber numberWithDouble:[object.createdAt timeIntervalSince1970]] forKey:@"createdAt"];
@@ -252,6 +267,7 @@ using namespace cocos2d::plugin;
         
         return objectDict;
     }
+    
     return nil;
 }
 
@@ -515,14 +531,16 @@ using namespace cocos2d::plugin;
 - (NSString*) getSubscribedChannels {
     PFInstallation *obj = [PFInstallation currentInstallation];
     
-//    return [ParseUtils NSArrayToNSString:obj.channels];
-    return [obj.channels componentsJoinedByString:@","];
+    return [ParseUtils NSArrayToNSString:obj.channels];
 }
 
 - (void) subscribeChannels:(NSString *)channels {
-    NSArray* array = [channels componentsSeparatedByString:@","];
+    NSArray* array = [ParseUtils NSStringToArrayOrNSDictionary:channels];
+
+    NSMutableArray* subcribed = [NSMutableArray arrayWithArray:[PFInstallation currentInstallation].channels];
+    [subcribed addObjectsFromArray:array];
     
-    [PFInstallation currentInstallation].channels = array;
+    [[PFInstallation currentInstallation] addUniqueObjectsFromArray:subcribed forKey:@"channels"];
     [[PFInstallation currentInstallation] saveEventually:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             NSLog(@"Subscribe succeeded to channels: %@", array);
@@ -536,15 +554,16 @@ using namespace cocos2d::plugin;
     NSArray* array = [ParseUtils NSStringToArrayOrNSDictionary:channels];
     
     NSMutableArray* subcribed = [NSMutableArray arrayWithArray:[PFInstallation currentInstallation].channels];
-    
-    for (int i = 0; i < array.count; i++) {
-        if ([subcribed containsObject:[array objectAtIndex:i]]) {
-            [subcribed removeObject:[array objectAtIndex:i]];
-        }
-    }
+    [subcribed removeObjectsInArray:array];
 
-    [PFInstallation currentInstallation].channels = array;
-    [[PFInstallation currentInstallation] saveEventually];
+    [PFInstallation currentInstallation].channels = subcribed;
+    [[PFInstallation currentInstallation] saveEventually:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
+            NSLog(@"Unsubscribe succeeded to channels: %@", array);
+        } else {
+            NSLog(@"Unsubscribe failed to channels: %@ with error: %@", array, error);
+        }
+    }];
 }
 
 - (NSString*) getSDKVersion

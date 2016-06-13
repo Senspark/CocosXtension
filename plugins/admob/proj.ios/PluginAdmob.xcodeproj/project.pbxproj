@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C4586351C3BCB5D00BA43BF /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C0E1B60EB4A000EDF84 /* GoogleMobileAds.framework */; };
+		2C26CF311CB7A3C30097A42E /* AdColony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C26CF2F1CB7A3C30097A42E /* AdColony.framework */; };
+		2C26CF331CB7A9300097A42E /* libAdapterSDKAdColony.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C26CF321CB7A9300097A42E /* libAdapterSDKAdColony.a */; };
+		2C26CF901CBB575C0097A42E /* libAdapterUnity.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C26CF8F1CBB575C0097A42E /* libAdapterUnity.a */; };
+		2C26CF951CBB843E0097A42E /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C0E1B60EB4A000EDF84 /* GoogleMobileAds.framework */; };
+		2C26CF9D1CBB86F00097A42E /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C26CF9C1CBB86F00097A42E /* GoogleMobileAds.framework */; };
 		FADC44AB176EA82000B2D5ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FADC44AA176EA82000B2D5ED /* Foundation.framework */; };
 		FADC44C6176EA84500B2D5ED /* AdsAdmob.mm in Sources */ = {isa = PBXBuildFile; fileRef = FADC44C4176EA84500B2D5ED /* AdsAdmob.mm */; };
 /* End PBXBuildFile section */
@@ -25,6 +29,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2C26CF2F1CB7A3C30097A42E /* AdColony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdColony.framework; path = AdColony/AdColony.framework; sourceTree = "<group>"; };
+		2C26CF301CB7A3C30097A42E /* AdColonyAdapter1.5 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AdColonyAdapter1.5; path = AdColony/AdColonyAdapter1.5; sourceTree = "<group>"; };
+		2C26CF321CB7A9300097A42E /* libAdapterSDKAdColony.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAdapterSDKAdColony.a; path = AdColony/AdColonyAdapter1.5/libAdapterSDKAdColony.a; sourceTree = "<group>"; };
+		2C26CF8F1CBB575C0097A42E /* libAdapterUnity.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAdapterUnity.a; path = UnityAds/libAdapterUnity.a; sourceTree = "<group>"; };
+		2C26CF9C1CBB86F00097A42E /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = Admob/GoogleMobileAds.framework; sourceTree = "<group>"; };
 		95245C0E1B60EB4A000EDF84 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 		95245C101B60EB4A000EDF84 /* GADMAdNetworkAdapterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADMAdNetworkAdapterProtocol.h; sourceTree = "<group>"; };
 		95245C111B60EB4A000EDF84 /* GADMAdNetworkConnectorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADMAdNetworkConnectorProtocol.h; sourceTree = "<group>"; };
@@ -43,14 +52,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C4586351C3BCB5D00BA43BF /* GoogleMobileAds.framework in Frameworks */,
+				2C26CF331CB7A9300097A42E /* libAdapterSDKAdColony.a in Frameworks */,
+				2C26CF951CBB843E0097A42E /* GoogleMobileAds.framework in Frameworks */,
+				2C26CF311CB7A3C30097A42E /* AdColony.framework in Frameworks */,
+				2C26CF901CBB575C0097A42E /* libAdapterUnity.a in Frameworks */,
 				FADC44AB176EA82000B2D5ED /* Foundation.framework in Frameworks */,
+				2C26CF9D1CBB86F00097A42E /* GoogleMobileAds.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C26CF2E1CB7A3760097A42E /* AdColony */ = {
+			isa = PBXGroup;
+			children = (
+				2C26CF2F1CB7A3C30097A42E /* AdColony.framework */,
+				2C26CF301CB7A3C30097A42E /* AdColonyAdapter1.5 */,
+			);
+			name = AdColony;
+			sourceTree = "<group>";
+		};
 		95245C0F1B60EB4A000EDF84 /* Mediation Adapters */ = {
 			isa = PBXGroup;
 			children = (
@@ -65,6 +87,7 @@
 		FADC449E176EA82000B2D5ED = {
 			isa = PBXGroup;
 			children = (
+				2C26CF2E1CB7A3760097A42E /* AdColony */,
 				FADC44C7176EA85F00B2D5ED /* PluginAdmob-Prefix.pch */,
 				FADC44B8176EA84500B2D5ED /* Admob */,
 				FADC44C3176EA84500B2D5ED /* AdsAdmob.h */,
@@ -85,6 +108,9 @@
 		FADC44A9176EA82000B2D5ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2C26CF9C1CBB86F00097A42E /* GoogleMobileAds.framework */,
+				2C26CF8F1CBB575C0097A42E /* libAdapterUnity.a */,
+				2C26CF321CB7A9300097A42E /* libAdapterSDKAdColony.a */,
 				FADC44AA176EA82000B2D5ED /* Foundation.framework */,
 			);
 			name = Frameworks;
@@ -216,12 +242,17 @@
 		FADC44B6176EA82000B2D5ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				DSTROOT = /tmp/PluginAdmob.dst;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/AdColony",
+					"$(SRCROOT)/AdColony/AdColonyAdapter1.5",
+					"$(SRCROOT)/Admob",
+					"$(PROJECT_DIR)/Vungle",
 					"$(PROJECT_DIR)/Admob",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -230,10 +261,15 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../protocols/platform/ios",
 					"$(SRCROOT)/../../../protocols/include",
+					"\"$(SRCROOT)/AdColony/AdColonyAdapter1.5\"",
+					"\"$(SRCROOT)/Admob\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Admob\"",
+					"$(SRCROOT)/Admob",
+					"$(PROJECT_DIR)/AdColony/AdColonyAdapter1.5",
+					"$(PROJECT_DIR)/Vungle",
+					"$(PROJECT_DIR)/UnityAds",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
@@ -246,12 +282,17 @@
 		FADC44B7176EA82000B2D5ED /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				DSTROOT = /tmp/PluginAdmob.dst;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/AdColony",
+					"$(SRCROOT)/AdColony/AdColonyAdapter1.5",
+					"$(SRCROOT)/Admob",
+					"$(PROJECT_DIR)/Vungle",
 					"$(PROJECT_DIR)/Admob",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -260,10 +301,15 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../protocols/platform/ios",
 					"$(SRCROOT)/../../../protocols/include",
+					"\"$(SRCROOT)/AdColony/AdColonyAdapter1.5\"",
+					"\"$(SRCROOT)/Admob\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Admob\"",
+					"$(SRCROOT)/Admob",
+					"$(PROJECT_DIR)/AdColony/AdColonyAdapter1.5",
+					"$(PROJECT_DIR)/Vungle",
+					"$(PROJECT_DIR)/UnityAds",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

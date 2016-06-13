@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 ext {
     bintrayRepo = 'maven'
     bintrayName = 'plugin-parse'
-    versionName = '0.9'
+    versionName = '0.9.1'
 
     publishedGroupId = 'com.senspark'
     libraryName = 'libPluginParse'
@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/Senspark/CocosXtension/tree/v3/plugins/parse'
     gitUrl = 'https://github.com/Senspark/CocosXtension.git'
 
-    libraryVersion = '0.9'
+    libraryVersion = '0.9.1'
 
     developerId = 'ndpduc'
     developerName = 'Duc Nguyen'
@@ -27,7 +27,7 @@ ext {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         minSdkVersion 9
@@ -43,8 +43,12 @@ android {
 }
 
 dependencies {
-    compile 'com.senspark:libPluginProtocol:0.9'
-    compile ('com.facebook.android:facebook-android-sdk:4.8.1')
+    compile project(':libPluginProtocol')
+    compile('com.facebook.android:facebook-android-sdk:4.12.0') {
+        exclude module: 'bolts-android'
+        exclude module: 'bolts-tasks'
+    }
+    compile 'com.parse.bolts:bolts-tasks:1.4.0'
     compile 'com.parse:parse-android:1.13.0'
     compile 'com.parse:parsefacebookutils-v4-android:1.10.4@aar'
 }

@@ -363,20 +363,26 @@ public class ShareFacebook implements InterfaceShare, PluginListener {
 
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.i(LOG_TAG, "onActivityResult triggered");
-		Log.i(LOG_TAG, "RequestCode: " + requestCode);
-		Log.i(LOG_TAG, "ResultCode: " + resultCode);
-		Log.i(LOG_TAG, "Data: " + data);
+        Log.i(LOG_TAG, "onActivityResult triggered");
+        Log.i(LOG_TAG, "RequestCode: " + requestCode);
+        Log.i(LOG_TAG, "ResultCode: " + resultCode);
+        Log.i(LOG_TAG, "Data: " + data);
 
-		if (requestCode == CallbackManagerImpl.RequestCodeOffset.Share.toRequestCode() ||
-				requestCode == CallbackManagerImpl.RequestCodeOffset.GameRequest.toRequestCode() ||
-				requestCode == CallbackManagerImpl.RequestCodeOffset.AppInvite.toRequestCode() ||
-				requestCode == CallbackManagerImpl.RequestCodeOffset.Like.toRequestCode()) {
-			Log.i(LOG_TAG, "CallbackManager onActivityResult triggered");
-			mCallbackManager.onActivityResult(requestCode, resultCode, data);
-		}
+        Log.i(LOG_TAG, "RequestCodeOffset - Share: " + CallbackManagerImpl.RequestCodeOffset.Share.toRequestCode()
+                + " - GameRequest: " + CallbackManagerImpl.RequestCodeOffset.GameRequest.toRequestCode()
+                + " - AppInvite: " + CallbackManagerImpl.RequestCodeOffset.AppInvite.toRequestCode()
+                + " - Like: " + CallbackManagerImpl.RequestCodeOffset.Like.toRequestCode());
 
-		return true;
-	}
+
+        if (requestCode == CallbackManagerImpl.RequestCodeOffset.Share.toRequestCode() ||
+                requestCode == CallbackManagerImpl.RequestCodeOffset.GameRequest.toRequestCode() ||
+                requestCode == CallbackManagerImpl.RequestCodeOffset.AppInvite.toRequestCode() ||
+                requestCode == CallbackManagerImpl.RequestCodeOffset.Like.toRequestCode()) {
+            Log.i(LOG_TAG, "CallbackManager onActivityResult triggered");
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+
+        return true;
+    }
 
 }

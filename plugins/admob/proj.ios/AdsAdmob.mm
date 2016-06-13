@@ -22,15 +22,22 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#include <array>
+
 #import "AdsAdmob.h"
+#import <GADMAdapterAdColonyExtras.h>
+#import <GADMAdapterAdColonyInitializer.h>
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
 @implementation AdsAdmob
 
-@synthesize debug           = __debug;
-@synthesize strPublishID    = __strPublishID;
-@synthesize testDeviceIDs   = __TestDeviceIDs;
+@synthesize debug                           = __debug;
+@synthesize strBannerID                     = __strBannerID;
+@synthesize strInterstitialID               = __strInterstitialID;
+@synthesize testDeviceIDs                   = __TestDeviceIDs;
+@synthesize strAdColonyInterstitialAdZoneID = __strAdColonyInterstitialAdZoneID;
+@synthesize strAdColonyRewardedAdZoneID     = __strAdColonyRewardedAdZoneID;
 
 - (void) dealloc
 {
@@ -52,26 +59,58 @@
     [super dealloc];
 }
 
-#pragma mark InterfaceAds impl
-
-- (void) configDeveloperInfo: (NSMutableDictionary*) devInfo
-{
-    NSString* adsId = (NSString*) [devInfo objectForKey:@"AdmobID"];
-
-    if (nil == adsId) {
-        OUTPUT_LOG(@"Null ads Id at configure time.");
-        return;
-    }
-
-    OUTPUT_LOG(@"Configure with adsId: %@", adsId);
-
-    self.strPublishID = adsId;
+#pragma mark Mediation Ads impl
+- (void) initializeMediationAd {
+    NSLog(@"Not require on iOS");
 }
 
-- (void) showAds: (NSMutableDictionary*) info position:(int) pos
+- (void) configMediationAdColony:(NSDictionary *)params
 {
-    if (self.strPublishID == nil ||
-        [self.strPublishID length] == 0) {
+    //initialize AdColony SDK
+    NSString* adColonyID                    = (NSString*) [params objectForKey:@"AdColonyAppID"];
+    NSString* interstitialAdColonyZoneID    = (NSString*) [params objectForKey:@"AdColonyInterstitialAdID"];
+    NSString* rewardedAdColonyZoneID        = (NSString*) [params objectForKey:@"AdColonyRewardedAdID"];
+    self.strAdColonyInterstitialAdZoneID    = interstitialAdColonyZoneID;
+    self.strAdColonyRewardedAdZoneID        = rewardedAdColonyZoneID;
+
+    if (nil != adColonyID) {
+        [GADMAdapterAdColonyInitializer startWithAppID:adColonyID andZones: [NSArray arrayWithObjects:interstitialAdColonyZoneID, rewardedAdColonyZoneID, nil] andCustomID:nullptr];
+    }
+}
+
+- (void) configMediationAdUnity:(NSDictionary *)params
+{
+    NSLog(@"No config is required for UnityAds");
+}
+
+- (void) configMediationAdVungle:(NSDictionary *)params
+{
+    NSLog(@"No config is required for Vungle");
+}
+
+#pragma mark InterfaceAds impl
+
+- (void) configDeveloperInfo: (NSDictionary*) devInfo {
+    NSString* bannerId      = (NSString*) [devInfo objectForKey:@"AdmobID"];
+    NSString* interstiailId = (NSString*) [devInfo objectForKey:@"AdmobInterstitialID"];
+    
+    if (bannerId == nil) {
+        NSLog(@"WARNING: BannerID is nil");
+    }
+    
+    if (interstiailId == nil) {
+        NSLog(@"WARNING: IntestitialID is nil");
+    }
+    
+    self.strBannerID        = bannerId;
+    self.strInterstitialID  = interstiailId;
+    
+    _interstitialView   = nil;
+    _bannerView         = nil;
+}
+
+- (void) showAds: (NSDictionary*) info position:(int) pos {
+    if (self.strBannerID == nil || self.strBannerID.length == 0) {
         OUTPUT_LOG(@"configDeveloperInfo() not correctly invoked in Admob!");
         return;
     }
@@ -80,15 +119,13 @@
     NSString* strType = [info objectForKey:@"AdmobType"];
     int type = [strType intValue];
     switch (type) {
-    case kTypeBanner:
-        {
+    case kTypeBanner: {
             NSString* strSize = [info objectForKey:@"AdmobSizeEnum"];
             int sizeEnum = [strSize intValue];
             [self showBanner:sizeEnum atPos:pos];
             break;
         }
-    case kTypeFullScreen:
-        {
+    case kTypeFullScreen: {
             [self showInterstitial];
             break;
         }
@@ -98,7 +135,7 @@
     }
 }
 
-- (void) hideAds: (NSMutableDictionary*) info
+- (void) hideAds: (NSDictionary*) info
 {
     NSString* strType = [info objectForKey:@"AdmobType"];
     int type = [strType intValue];
@@ -146,31 +183,18 @@
     return @"0.3.0";
 }
 
-- (void) showBanner: (int) sizeEnum atPos:(int) pos
-{
-    GADAdSize size = kGADAdSizeBanner;
-    switch (sizeEnum) {
-        case kSizeBanner:
-            size = kGADAdSizeBanner;
-            break;
-        case kSizeSmartBannerLandscape:
-            size = kGADAdSizeSmartBannerLandscape;
-            break;
-        case kSizeIABMRect:
-            size = kGADAdSizeMediumRectangle;
-            break;
-        case kSizeIABBanner:
-            size = kGADAdSizeFullBanner;
-            break;
-        case kSizeIABLeaderboard:
-            size = kGADAdSizeLeaderboard;
-            break;
-        case kSizeSkyscraper:
-            size = kGADAdSizeSkyscraper;
-            break;
-        default:
-            break;
-    }
+- (void) showBanner: (int) sizeEnum atPos:(int) pos {
+    const std::array<GADAdSize, 7> AdSizes {{
+        kGADAdSizeBanner,
+        kGADAdSizeLargeBanner,
+        kGADAdSizeMediumRectangle,
+        kGADAdSizeFullBanner,
+        kGADAdSizeLeaderboard,
+        kGADAdSizeSkyscraper,
+        kGADAdSizeSmartBannerLandscape
+    }};
+    auto size = AdSizes.at(sizeEnum);
+    
     if (nil != self.bannerView) {
         [self.bannerView removeFromSuperview];
         [self.bannerView release];
@@ -178,7 +202,7 @@
     }
     
     self.bannerView = [[GADBannerView alloc] initWithAdSize:size];
-    self.bannerView.adUnitID = self.strPublishID;
+    self.bannerView.adUnitID = self.strBannerID;
     self.bannerView.delegate = self;
     [self.bannerView setRootViewController:[AdsWrapper getCurrentRootViewController]];
     [AdsWrapper addAdView:self.bannerView atPos:(ProtocolAds::AdsPos)pos];
@@ -194,11 +218,19 @@
 
 - (void) loadInterstitial
 {
-    self.interstitialView = [[GADInterstitial alloc] init];
-    self.interstitialView.adUnitID = self.strPublishID;
+    if (_interstitialView != nil) {
+        [_interstitialView release];
+    }
+    self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strInterstitialID];
     self.interstitialView.delegate = self;
+
     GADRequest* request = [GADRequest request];
+    GADMAdapterAdColonyExtras *_extras = [[GADMAdapterAdColonyExtras alloc] initWithZone:self.strAdColonyInterstitialAdZoneID];
+    _extras.currentZone = self.strAdColonyInterstitialAdZoneID;
+    [request registerAdNetworkExtras:_extras];
+    
     request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
+    
     [self.interstitialView loadRequest:request];
 }
 
@@ -215,10 +247,38 @@
     }
 }
 
+#pragma mark - Rewarded Video Ad
+
+- (BOOL) hasRewardedAd {
+    return [[GADRewardBasedVideoAd sharedInstance] isReady];
+}
+
+- (void) loadRewardedAd:(NSString *)adsID {
+
+    [[GADRewardBasedVideoAd sharedInstance] setDelegate:self];
+    GADRequest *request = [GADRequest request];
+    [request setTestDevices: [NSArray arrayWithArray: self.testDeviceIDs]];
+
+    if (self.strAdColonyRewardedAdZoneID.length > 0) {
+        GADMAdapterAdColonyExtras *extras = [[GADMAdapterAdColonyExtras alloc] initWithZone: self.strAdColonyRewardedAdZoneID];
+        [request registerAdNetworkExtras: extras];
+    }
+
+    [[GADRewardBasedVideoAd sharedInstance] loadRequest: request
+                                           withAdUnitID: adsID];
+
+}
+
+- (void) showRewardedAd {
+    if ([[GADRewardBasedVideoAd sharedInstance] isReady]) {
+        [[GADRewardBasedVideoAd sharedInstance] presentFromRootViewController:[AdsWrapper getCurrentRootViewController]];
+    }
+}
+
 - (NSNumber*) getBannerWidthInPixel
 {
     int ret = 0;
-    if (self.bannerView != nil) {
+    if (self.bannerView) {
         ret = self.bannerView.frame.size.width;
     }
     return [NSNumber numberWithInt:ret];
@@ -227,8 +287,8 @@
 - (NSNumber*) getBannerHeightInPixel
 {
     int ret = 0;
-    if (self.bannerView != nil) {
-        ret = [self bannerView].frame.size.height;
+    if (self.bannerView) {
+        ret = self.bannerView.frame.size.height;
     }
     return [NSNumber numberWithInt:ret];
 }
@@ -255,7 +315,7 @@
 
 - (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"Failed to receive ad with error: %@", [error localizedFailureReason]);
-    AdsResultCode errorNo = AdsResultCode::kUnknownError;
+    AdsResultCode errorNo = AdsResultCode::kAdsUnknownError;
     switch ([error code]) {
     case kGADErrorNetworkError:
         errorNo = AdsResultCode::kNetworkError;
@@ -277,7 +337,8 @@
 /// show. This is common since interstitials are shown sparingly to users.
 - (void)interstitial:(GADInterstitial *)ad didFailToReceiveAdWithError:(GADRequestError *)error {
     OUTPUT_LOG(@"Interstitial failed to load with error: %@", error.description);
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kUnknownError withMsg:error.description];
+    
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsUnknownError withMsg:error.description];
 }
 
 #pragma mark Display-Time Lifecycle Notifications
@@ -292,12 +353,46 @@
 
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
     OUTPUT_LOG(@"Interstitial dismissed")
-    [self loadInterstitial];
     [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsDismissed withMsg:@"Interstital dismissed."];
 }
 
 - (void)interstitialWillLeaveApplication:(GADInterstitial *)ad {
     OUTPUT_LOG(@"Interstitial will leave application.");
+}
+
+#pragma mark - Rewarded Video Ad Delegate
+- (void)rewardBasedVideoAdDidReceiveAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    NSLog(@"Reward based video ad is received.");
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoReceived withMsg:@"Reward based video ad is received."];
+}
+
+- (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    NSLog(@"Opened reward based video ad.");
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoShown withMsg:@"Opened reward based video ad."];
+}
+
+- (void)rewardBasedVideoAdDidStartPlaying:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    NSLog(@"Reward based video ad started playing.");
+}
+
+- (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    NSLog(@"Reward based video ad is closed.");
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoClosed withMsg:@"Reward based video ad is closed."];
+}
+
+- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didRewardUserWithReward:(GADAdReward *)reward {
+    NSString *rewardMessage = [NSString stringWithFormat:@"Reward received with currency %@ , amount %lf", reward.type, [reward.amount doubleValue]];
+    NSLog(@"%@", rewardMessage);
+    // Reward the user for watching the video.
+}
+
+- (void)rewardBasedVideoAdWillLeaveApplication:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    NSLog(@"Reward based video ad will leave application.");
+}
+
+- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didFailToLoadWithError:(NSError *)error {
+    NSLog(@"Reward based video ad failed to load.");
+    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoUnknownError withMsg:[NSString stringWithFormat:@"Reward based video ad failed to load with error: %@", error]];
 }
 
 #pragma mark - Animation banner ads

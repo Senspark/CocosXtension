@@ -9,14 +9,14 @@
 /* Begin PBXBuildFile section */
 		2C4585DD1C3A79C200BA43BF /* AdsColony.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C4585DC1C3A79C200BA43BF /* AdsColony.mm */; };
 		2C4585E11C3A7C8D00BA43BF /* AdColony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4585DF1C3A7C8D00BA43BF /* AdColony.framework */; };
-		2C4585E21C3A7C8D00BA43BF /* libAdapterSDKAdColony.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4585E01C3A7C8D00BA43BF /* libAdapterSDKAdColony.a */; };
+		2CBE97DB1CB4CFE000E46BA1 /* libAdapterSDKAdColony.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CBE97DA1CB4CFE000E46BA1 /* libAdapterSDKAdColony.a */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2C4585DC1C3A79C200BA43BF /* AdsColony.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdsColony.mm; sourceTree = "<group>"; };
 		2C4585DE1C3A7A0700BA43BF /* AdsColony.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdsColony.h; sourceTree = "<group>"; };
 		2C4585DF1C3A7C8D00BA43BF /* AdColony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AdColony.framework; sourceTree = "<group>"; };
-		2C4585E01C3A7C8D00BA43BF /* libAdapterSDKAdColony.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAdapterSDKAdColony.a; sourceTree = "<group>"; };
+		2CBE97DA1CB4CFE000E46BA1 /* libAdapterSDKAdColony.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAdapterSDKAdColony.a; path = AdColonyAdapter1.5/libAdapterSDKAdColony.a; sourceTree = "<group>"; };
 		95EBD85B1B65ECE90004D448 /* libPluginAdColony.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginAdColony.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -26,7 +26,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C4585E11C3A7C8D00BA43BF /* AdColony.framework in Frameworks */,
-				2C4585E21C3A7C8D00BA43BF /* libAdapterSDKAdColony.a in Frameworks */,
+				2CBE97DB1CB4CFE000E46BA1 /* libAdapterSDKAdColony.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -36,8 +36,8 @@
 		2C4585DB1C3A793300BA43BF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2CBE97DA1CB4CFE000E46BA1 /* libAdapterSDKAdColony.a */,
 				2C4585DF1C3A7C8D00BA43BF /* AdColony.framework */,
-				2C4585E01C3A7C8D00BA43BF /* libAdapterSDKAdColony.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -231,9 +231,15 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../protocols/platform/ios",
+					"$(SRCROOT)/../../../protocols/include",
+					"\"$(SRCROOT)/AdColonyAdapter1.5\"",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/AdColonyAdapter1.5",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -249,9 +255,15 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../protocols/platform/ios",
+					"$(SRCROOT)/../../../protocols/include",
+					"\"$(SRCROOT)/AdColonyAdapter1.5\"",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/AdColonyAdapter1.5",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

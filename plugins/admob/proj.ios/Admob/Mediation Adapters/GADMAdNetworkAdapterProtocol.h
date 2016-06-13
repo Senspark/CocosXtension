@@ -67,6 +67,32 @@
 
 @optional
 
+/// Starts request for a native ad. |adTypes| contains the list of native ad types requested. See
+/// GADAdLoaderAdTypes.h for available ad types. |options| are any additional options configured by
+/// the publisher for requesting a native ad. See GADNativeAdImageAdLoaderOptions.h for available
+/// image options. When this method is called the receiver may start native ad request
+/// asynchronously. On completion the receiver should notify the Google Mobile Ads SDK with a native
+/// ad object using the receiver's connector method
+/// adapter:didReceiveNativeAdDataSource:mediationDelegate or adapter:didFailAd: if the ad request
+/// encountered an error.
+- (void)getNativeAdWithAdTypes:(NSArray *)adTypes options:(NSArray *)options;
+
+/// Indicates if the adapter handles user clicks. If this method returns YES, the adapter must
+/// handle user clicks and notify the Google Mobile Ads SDK of clicks using
+/// +[GADMediatedNativeAdNotificationSource mediatedNativeAdDidRecordClick:]. If this method returns
+/// NO, the Google Mobile Ads SDK handles user clicks and notifies the adapter of clicks using
+/// -[GADMediatedNativeAdDelegate
+/// mediatedNativeAd:didRecordClickOnAssetWithName:view:viewController:].
+- (BOOL)handlesUserClicks;
+
+/// Indicates if the adapter handles user impressions tracking. If this method returns YES, the
+/// Google Mobile Ads SDK will not track user impressions and the adapter must notify the
+/// Google Mobile Ads SDK of impressions using +[GADMediatedNativeAdNotificationSource
+/// mediatedNativeAdDidRecordImpression:]. If this method returns NO,
+/// the Google Mobile Ads SDK tracks user impressions and notifies the adapter of impressions
+/// using -[GADMediatedNativeAdDelegate mediatedNativeAdDidRecordImpression:].
+- (BOOL)handlesUserImpressions;
+
 /// If your ad network handles multiple ad sizes for the same banner ad, implement this method to
 /// know when the user changes the banner size. This is typically changing from
 /// kGADAdSizeSmartBannerPortrait to kGADAdSizeSmartBannerLandscape, or vice versa. If this method

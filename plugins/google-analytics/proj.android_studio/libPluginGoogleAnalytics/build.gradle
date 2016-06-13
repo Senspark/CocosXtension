@@ -29,7 +29,7 @@ ext {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         minSdkVersion 9
@@ -45,9 +45,9 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:23.1.1'
-    compile 'com.google.android.gms:play-services:8.4.0'
-    compile 'com.senspark:libPluginProtocol:0.9'
+    compile 'com.android.support:support-v4:23.0.0'
+    compile 'com.google.android.gms:play-services-analytics:8.4.0'
+    compile project(':libPluginProtocol')
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'

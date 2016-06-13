@@ -117,3 +117,4 @@ plugins/google-play/platform/android/lib
 .gradle
 .idea
 wrapper
+protocols/proj.android_studio/libPluginProtocol/src/main/cpp

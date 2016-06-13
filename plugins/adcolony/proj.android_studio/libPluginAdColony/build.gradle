@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 ext {
     bintrayRepo = 'maven'
     bintrayName = 'plugin-adcolony'
-    versionName = '0.9'
+    versionName = '0.9.1'
 
     publishedGroupId = 'com.senspark'
     libraryName = 'libPluginAdColony'
@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/Senspark/CocosXtension/tree/v3/plugins/adcolony'
     gitUrl = 'https://github.com/Senspark/CocosXtension.git'
 
-    libraryVersion = '0.9'
+    libraryVersion = '0.9.1'
 
     developerId = 'ndpduc'
     developerName = 'Duc Nguyen'
@@ -28,7 +28,7 @@ ext {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         minSdkVersion 9
@@ -44,7 +44,7 @@ android {
 }
 
 dependencies {
-    compile 'com.senspark:libPluginProtocol:0.9'
+    compile project(':libPluginProtocol')
     compile files('libs/adcolony.jar')
 }
 

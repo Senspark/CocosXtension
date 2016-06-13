@@ -3,6 +3,8 @@ package org.cocos2dx.plugin;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.jirbo.adcolony.AdColony;
@@ -27,12 +29,23 @@ public class AdsColony implements InterfaceAds, PluginListener, AdColonyAdAvaila
 	public AdsColony(Context context) {
 		this.mContext = context;
 		mAdapter = this;
+        PluginWrapper.addListener(this);
 	}
 
 	@Override
 	public void configDeveloperInfo(Hashtable<String, String> devInfo) {
 		String appId = devInfo.get("AdColonyAppID");
 		String zoneIds = devInfo.get("AdColonyZoneIDs");
+
+		try {
+			PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+			String versionName = pInfo.versionName;
+			mClientOptions = String.format("version:" + versionName + ",store:google");
+
+			Log.i(LOG_TAG, "### AdColony client option: " + mClientOptions);
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
 		configure(appId, zoneIds);
 	}
 
@@ -167,7 +180,7 @@ public class AdsColony implements InterfaceAds, PluginListener, AdColonyAdAvaila
 		if (ad.shown()) {
 			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_AdsShown, "AdColony Interstitial Ad shown");
 		} else if (ad.notShown()) {
-			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_UnknownError, "AdColony ad not show with error UNKNOWN");
+			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_AdsUnknownError, "AdColony ad not show with error UNKNOWN");
 		} else if (ad.skipped()) {
 			AdsWrapper.onAdsResult(AdsColony.mAdapter, AdsWrapper.RESULT_CODE_AdsDismissed, "AdColony ad DISMISS");		
 		}

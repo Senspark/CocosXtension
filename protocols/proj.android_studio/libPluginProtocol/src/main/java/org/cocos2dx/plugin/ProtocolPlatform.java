@@ -10,7 +10,10 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import java.security.MessageDigest;
 import java.util.Locale;
@@ -26,6 +29,23 @@ public class ProtocolPlatform  {
 		mContext = context;
 		mActivity = (Activity) context;
 		mAdapter = this;
+	}
+
+    public void finishActivity() {
+        mActivity.finish();
+    }
+
+	public boolean isConnected(String hostName) {
+		ConnectivityManager conMng = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo info = conMng.getActiveNetworkInfo();
+		boolean isConnected = info != null && info.isConnectedOrConnecting();
+		Log.i("ProtocolPlatform", "isConnected? - " + (isConnected? "YES" : "NO"));
+		if (isConnected) {
+			PlatformWrapper.onPlatformResult(PlatformWrapper.PLATFORM_RESULT_CODE_kConnected, "Network connected");
+		} else {
+			PlatformWrapper.onPlatformResult(PlatformWrapper.PLATFORM_RESULT_CODE_kUnconnected, "Network unconnected");
+		}
+		return isConnected;
 	}
 	
 	public boolean isAppInstalled(final String appName) {
@@ -46,28 +66,58 @@ public class ProtocolPlatform  {
 	
 	public boolean isRelease() {
 		boolean isDebuggable =  ( 0 != ( mContext.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
+		Log.i("ProtocolPlatform", "App in DEBUG: " + isDebuggable);
+
 		return !isDebuggable;
 	}
 
 	public boolean isTablet() {
-		boolean ret = false;
-		if (mContext != null) {
-			ret = (mContext.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+		// Verifies if the Generalized Size of the device is XLARGE to be
+		// considered a Tablet
+		boolean xlarge = ((mContext.getResources().getConfiguration().screenLayout &
+				Configuration.SCREENLAYOUT_SIZE_MASK) >=
+				Configuration.SCREENLAYOUT_SIZE_LARGE);
+
+		// If XLarge, checks if the Generalized Density is at least MDPI
+		// (160dpi)
+		if (xlarge) {
+			DisplayMetrics metrics = new DisplayMetrics();
+			Activity activity = (Activity) mContext;
+			activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+			// MDPI=160, DEFAULT=160, DENSITY_HIGH=240, DENSITY_MEDIUM=160,
+			// DENSITY_TV=213, DENSITY_XHIGH=320
+			if (metrics.densityDpi == DisplayMetrics.DENSITY_DEFAULT
+					|| metrics.densityDpi == DisplayMetrics.DENSITY_HIGH
+					|| metrics.densityDpi == DisplayMetrics.DENSITY_MEDIUM
+					|| metrics.densityDpi == DisplayMetrics.DENSITY_TV
+					|| metrics.densityDpi == DisplayMetrics.DENSITY_XHIGH) {
+
+				// Yes, this is a tablet!
+				return true;
+			}
 		}
-		return ret;
+
+		// No, this is not a tablet!
+		return false;
 	}
-	
-	public boolean isConnected(String hostName) {
-		ConnectivityManager conMng = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo info = conMng.getActiveNetworkInfo();
-		boolean isConnected = info != null && info.isConnectedOrConnecting();
-		Log.i("ProtocolPlatform", "isConnected? - " + (isConnected? "YES" : "NO"));
-		if (isConnected) {
-			PlatformWrapper.onPlatformResult(PlatformWrapper.PLATFORM_RESULT_CODE_kConnected, "Network connected");
-		} else {
-			PlatformWrapper.onPlatformResult(PlatformWrapper.PLATFORM_RESULT_CODE_kUnconnected, "Network unconnected");
+
+	public double getMainScreenScale() {
+		if (mActivity != null) {
+			DisplayMetrics metrics = new DisplayMetrics();
+			WindowManager wm = mActivity.getWindowManager();
+
+			if (wm != null) {
+				Display d = wm.getDefaultDisplay();
+				if (d != null) {
+					d.getMetrics(metrics);
+
+					return metrics.density;
+				}
+			}
 		}
-		return isConnected;
+
+		return -1;
 	}
 	
 	public String getSHA1CertFingerprint() {
@@ -95,6 +145,10 @@ public class ProtocolPlatform  {
 	public double getVersionCode() throws NameNotFoundException {
 		return mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionCode;
 	}
+
+	public String getVersionName() throws NameNotFoundException {
+        return mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
+    }
 	
 	public void sendFeedback(final String appName) {
 		final Intent emailIntent = new Intent(Intent.ACTION_SEND);

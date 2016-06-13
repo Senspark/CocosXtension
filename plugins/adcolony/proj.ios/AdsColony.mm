@@ -37,11 +37,8 @@ using namespace cocos2d::plugin;
     // Initialize the AdColony library
     [AdColony configureWithAppID: appID
                          zoneIDs: zoneList
-                        delegate:self
-                         logging:YES];
-
-    [GADMAdapterAdColonyInitializer startWithAppID: appID
-                                          andZones: zoneList];
+                        delegate: self
+                         logging: YES];
 }
 
 - (void) showAds: (NSDictionary*) info position:(int) pos {
@@ -121,9 +118,9 @@ using namespace cocos2d::plugin;
 - (void) onAdColonyAdAttemptFinished:(BOOL)shown inZone:(NSString *)zoneID {
     NSString* msg = [NSString stringWithFormat:@"AdColony: Ad attemp finished in zone %@", zoneID];
     if (shown) {
-        [AdsWrapper onAdsResult:self withRet: AdsResultCode::kAdsShown withMsg: msg];
+        [AdsWrapper onAdsResult:self withRet: AdsResultCode::kVideoCompleted withMsg: msg];
     } else {
-        [AdsWrapper onAdsResult:self withRet: AdsResultCode::kUnknownError withMsg: msg];
+        [AdsWrapper onAdsResult:self withRet: AdsResultCode::kVideoUnknownError withMsg: msg];
     }
 }
 
