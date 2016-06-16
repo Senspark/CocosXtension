@@ -696,11 +696,14 @@ public class BaaSParse implements InterfaceBaaS {
 				for (String key : parseObject.keySet()) {
 					Object o = parseObject.get(key);
 
-					if (o instanceof HashMap) {
+					if (o  instanceof ParseObject) {
 						ParseObject obj = (ParseObject) o;
 						if (obj.getObjectId() != null) {
 							jsonObj.put(key, obj.getObjectId());
 						}
+					}
+					else if (o instanceof HashMap) {
+						jsonObj.put(key, new JSONObject((HashMap)o));
 					} else {
 						jsonObj.put(key, parseObject.get(key));
 					}
