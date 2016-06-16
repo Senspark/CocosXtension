@@ -115,8 +115,13 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 			AsyncTask<Void, Void, Integer> task = new AsyncTask<Void, Void, Integer>() {
 				@Override
 				protected Integer doInBackground(Void... params) {
-					UpdateAchievementResult result = Games.Achievements.unlockImmediate(mGameHelper.getApiClient(), achievementId).await(30, TimeUnit.SECONDS);
-					return result.getStatus().getStatusCode();
+					if (mGameHelper.getApiClient() != null && mGameHelper.getApiClient().isConnected()) {
+						UpdateAchievementResult result = Games.Achievements.unlockImmediate(mGameHelper.getApiClient(), achievementId).await(30, TimeUnit.SECONDS);
+						return result.getStatus().getStatusCode();
+					} else {
+						Log.e(LOG_TAG, "mGameHelper.getApiClient NULL");
+						return GamesStatusCodes.STATUS_INTERNAL_ERROR;
+					}
 				}
 
 				@Override
