@@ -59,8 +59,13 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 			
 			@Override
 			protected Integer doInBackground(Void... params) {
-				SubmitScoreResult mResult = Games.Leaderboards.submitScoreImmediate(mGameHelper.getApiClient(), leaderboardID, score).await(30, TimeUnit.SECONDS);
-				return mResult.getStatus().getStatusCode();
+				if (mGameHelper.getApiClient() != null && mGameHelper.getApiClient().isConnected()) {  			//Fabric #2: Adding apiClient check block
+					SubmitScoreResult mResult = Games.Leaderboards.submitScoreImmediate(mGameHelper.getApiClient(), leaderboardID, score).await(30, TimeUnit.SECONDS);
+					return mResult.getStatus().getStatusCode();
+				} else {
+					Log.e(LOG_TAG, "mGameHelper.getApiClient NULL");
+					return GamesStatusCodes.STATUS_INTERNAL_ERROR;
+				}
 			}
 
 			@Override
