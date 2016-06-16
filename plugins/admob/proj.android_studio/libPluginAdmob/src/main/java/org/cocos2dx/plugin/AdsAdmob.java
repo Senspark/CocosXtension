@@ -61,10 +61,16 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     @Override
     public void onResume() {
+        if (AdColony.isConfigured()) {
+            AdColony.resume(mContext);
+        }
     }
 
     @Override
     public void onPause() {
+        if (AdColony.isConfigured()) {
+            AdColony.pause();
+        }
     }
 
     @Override
@@ -270,16 +276,16 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             int adsType = Integer.parseInt(strType);
 
             switch (adsType) {
-            case AdType.Banner: {
-                hideBannerAd();
-                break;
+                case AdType.Banner: {
+                    hideBannerAd();
+                    break;
             }
-            case AdType.Interstitial: {
-                logD("Now not support full screen view in Admob");
-                break;
+                case AdType.Interstitial: {
+                    logD("Now not support full screen view in Admob");
+                    break;
             }
-            default:
-                break;
+                default:
+                    break;
             }
         } catch (Exception e) {
             logE("Error when hide Ads ( " + info.toString() + " )", e);
