@@ -6,14 +6,32 @@
 //  Copyright © 2016 Senspark Co., Ltd. All rights reserved.
 //
 
+#include <unordered_map>
+
 #include "../include/AdMobProtocolAds.h"
 
 NS_SENSPARK_PLUGIN_ADS_BEGIN
-AdmobProtocolAds::AdType::operator std::string() const { return _s; }
-AdmobProtocolAds::AdType::AdType(const std::string& s) : _s(s) {}
+AdmobProtocolAds::AdType::AdType(const std::string& s)
+    : _s(s) {}
 
-AdmobProtocolAds::AdSize::operator std::string() const { return _s; }
-AdmobProtocolAds::AdSize::AdSize(const std::string& s) : _s(s) {}
+AdmobProtocolAds::AdType::operator const std::string&() const {
+    return getDescription();
+}
+
+const std::string& AdmobProtocolAds::AdType::getDescription() const {
+    return _s;
+}
+
+AdmobProtocolAds::AdSize::AdSize(const std::string& s)
+    : _s(s) {}
+
+AdmobProtocolAds::AdSize::operator const std::string&() const {
+    return getDescription();
+}
+
+const std::string& AdmobProtocolAds::AdSize::getDescription() const {
+    return _s;
+}
 
 const AdmobProtocolAds::AdType AdmobProtocolAds::AdType::Banner("1");
 const AdmobProtocolAds::AdType AdmobProtocolAds::AdType::Interstitial("2");
@@ -25,6 +43,8 @@ const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::FullBanner("3");
 const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::Leaderboard("4");
 const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::Skyscraper("5");
 const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::SmartBanner("6");
+const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::FullWidthPortrait("7");
+const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::FullWidthLandscape("8");
 
 const std::string AdmobProtocolAds::AdBannerIdKey("AdmobID");
 const std::string AdmobProtocolAds::AdInterstitialIdKey("AdmobInterstitialID");
@@ -91,6 +111,43 @@ void AdmobProtocolAds::loadInterstitial() {
 
 bool AdmobProtocolAds::hasInterstitial() {
     return callBoolFuncWithParam("hasInterstitial", nullptr);
+}
+
+void AdmobProtocolAds::showNativeExpressAd(const std::string& adUnitId,
+                                           float width, float height,
+                                           AdsPos position) {
+    showNativeExpressAd(adUnitId, 0, width, height, position);
+}
+
+void AdmobProtocolAds::showNativeExpressAd(const std::string& adUnitId,
+                                           const AdSize& adSize, float height,
+                                           AdsPos position) {
+    static const std::unordered_map<std::string, int> mapper{
+        {AdSize::FullWidthPortrait, 1}, {AdSize::FullWidthLandscape, 2}};
+    
+    auto iter = mapper.find(adSize);
+    if (iter == mapper.cend()) {
+        return;
+    }
+    
+    showNativeExpressAd(adUnitId, iter->second, 0, height, position);
+}
+
+void AdmobProtocolAds::showNativeExpressAd(const std::string& adUnitId,
+                                           int sizeType, float width,
+                                           float height, AdsPos position) {
+    using cocos2d::plugin::PluginParam;
+    PluginParam param0{adUnitId.c_str()};
+    PluginParam param1{sizeType};
+    PluginParam param2{width};
+    PluginParam param3{height};
+    PluginParam param4{position};
+    callFuncWithParam("showNativeExpressAd", &param0, &param1, &param2, &param3,
+                      &param4, nullptr);
+}
+
+void AdmobProtocolAds::hideNativeExpressAd() {
+    callFuncWithParam("hideNativeExpressAd", nullptr);
 }
 
 void AdmobProtocolAds::slideBannerUp() {

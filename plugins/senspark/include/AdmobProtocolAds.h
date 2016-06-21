@@ -86,6 +86,17 @@ public:
     void loadInterstitial();
     bool hasInterstitial();
 
+    void showNativeExpressAd(const std::string& adUnitId, float width,
+                             float height, AdsPos position);
+
+    /// @param orientation should be @c AdSize::FullWidthPortrait or
+    /// @c AdSize::FullWidthLandscape.
+    void showNativeExpressAd(const std::string& adUnitId,
+                             const AdSize& adSize, float height,
+                             AdsPos position);
+
+    void hideNativeExpressAd();
+
     void loadRewardedAd(const std::string& adID);
     void showRewardedAd();
     bool hasRewardedAd();
@@ -101,6 +112,9 @@ public:
     void configMediationAdVungle(const cocos2d::plugin::TAdsInfo &params);
     void configMediationAdUnity(const cocos2d::plugin::TAdsInfo &params);
     
+private:
+    void showNativeExpressAd(const std::string& adUnitId, int sizeType,
+                             float width, float height, AdsPos position);
 };
 
 class AdmobProtocolAds::AdType {
@@ -111,7 +125,9 @@ public:
     static const AdType Interstitial;
     
     /// Implicit conversion to std::string to be stored in TAdsInfo.
-    operator std::string() const;
+    operator const std::string&() const;
+    
+    const std::string& getDescription() const;
     
 private:
     explicit AdType(const std::string& s);
@@ -177,8 +193,20 @@ public:
     /// @c AdSize.SMART_BANNER on Android.
     static const AdSize SmartBanner;
     
+    /// Pass this with a custom height.
+    ///
+    /// Equivalent to @c GADAdSizeFullWidthPortraitWithHeight.
+    static const AdSize FullWidthPortrait;
+    
+    /// Pass this with a custom height.
+    ///
+    /// Equivalent to @c GADAdSizeFullWidthLandscapeWithHeight.
+    static const AdSize FullWidthLandscape;
+    
     /// Implicit conversion to std::string to be stored in TAdsInfo.
-    operator std::string() const;
+    operator const std::string&() const;
+    
+    const std::string& getDescription() const;
     
 private:
     explicit AdSize(const std::string& s);

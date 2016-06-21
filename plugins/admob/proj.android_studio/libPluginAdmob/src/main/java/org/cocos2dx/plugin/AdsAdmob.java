@@ -23,11 +23,14 @@ THE SOFTWARE.
  ****************************************************************************/
 package org.cocos2dx.plugin;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
+import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +43,7 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.jirbo.adcolony.AdColony;
 import com.jirbo.adcolony.AdColonyAdapter;
@@ -48,6 +52,7 @@ import com.jirbo.adcolony.AdColonyBundleBuilder;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
@@ -129,6 +134,8 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     protected final Object mLock = new Object();
 
     private AdSize  mBannerSize                         = null;
+
+    private NativeExpressAdView _nativeExpressAdView = null;
 
     private String mAdColonyAppID = "";
     private String mAdColonyInterstitialZoneID = "";
@@ -502,6 +509,96 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             @Override
             public void run() {
                 mRewardedVideoAd.show();
+            }
+        });
+    }
+
+    @SuppressLint("Assert")
+    private NativeExpressAdView createNativeExpressAdView(@NonNull Integer sizeType,
+                                                          @NonNull Integer width,
+                                                          @NonNull Integer height) {
+        assert (Looper.getMainLooper() == Looper.myLooper());
+        AdSize adSize = null;
+
+        switch (sizeType) {
+            case 0: {
+                adSize = new AdSize(width, height);
+                break;
+            }
+
+            case 1:
+            case 2: {
+                adSize = new AdSize(AdSize.FULL_WIDTH, height);
+                break;
+            }
+        }
+
+        assert (adSize != null);
+
+        NativeExpressAdView view = new NativeExpressAdView(mContext);
+        view.setAdSize(adSize);
+        return view;
+    }
+
+    private void _showNativeExpressAd(@NonNull final String adUnitId,
+                                         @NonNull final Integer sizeType,
+                                         @NonNull final Integer width,
+                                         @NonNull final Integer height,
+                                         @NonNull final Integer position) {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                hideNativeExpressAd();
+
+                assert(_nativeExpressAdView == null);
+                NativeExpressAdView view = createNativeExpressAdView(sizeType, width, height);
+                view.setAdUnitId(adUnitId);
+
+                AdRequest.Builder builder = new AdRequest.Builder();
+
+                if (mTestDevices != null) {
+                    for (String deviceId : mTestDevices) {
+                        builder.addTestDevice(deviceId);
+                    }
+                }
+
+                AdRequest request = builder.build();
+                view.loadAd(request);
+
+                AdsWrapper.addAdView(view, position);
+
+                _nativeExpressAdView = view;
+            }
+        });
+    }
+
+    @SuppressLint("Assert")
+    public void showNativeExpressAd(@NonNull HashMap<String, String> params) {
+        assert (params.size() == 4);
+        assert (params.containsKey("Param1"));
+        assert (params.containsKey("Param2"));
+        assert (params.containsKey("Param3"));
+        assert (params.containsKey("Param4"));
+        assert (params.containsKey("Param5"));
+
+        String adUnitId = params.get("Param1");
+        Integer sizeType = Integer.parseInt(params.get("Param2"));
+        Integer width = Integer.parseInt(params.get("Param3"));
+        Integer height = Integer.parseInt(params.get("Param4"));
+        Integer position = Integer.parseInt(params.get("Param5"));
+
+        _showNativeExpressAd(adUnitId, sizeType, width, height, position);
+    }
+
+    public void hideNativeExpressAd() {
+        PluginWrapper.runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                if (_nativeExpressAdView != null) {
+                    _nativeExpressAdView.setVisibility(View.GONE);
+                    _nativeExpressAdView.destroy();
+                    _nativeExpressAdView = null;
+                }
             }
         });
     }

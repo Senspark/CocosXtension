@@ -247,6 +247,112 @@
     }
 }
 
+- (GADNativeExpressAdView*) createNativeExpressAdView:(NSNumber* _Nonnull) sizeType
+                                                width:(NSNumber* _Nonnull) width
+                                               height:(NSNumber* _Nonnull) height {
+    GADAdSize adSize;
+    
+    enum NativeExpressAdSizeType {
+        NativeExpressAdSizeTypeCustom,
+        NativeExpressAdSizeTypeFullWidthPortrait,
+        NativeExpressAdSizeTypeFullWidthLandscape
+    };
+    
+    switch ([sizeType intValue]) {
+        case NativeExpressAdSizeTypeCustom: {
+            adSize = GADAdSizeFromCGSize(CGSizeMake([width floatValue],
+                                                    [height floatValue]));
+            break;
+        }
+            
+        case NativeExpressAdSizeTypeFullWidthPortrait: {
+            adSize = GADAdSizeFullWidthPortraitWithHeight([height floatValue]);
+            break;
+        }
+            
+        case NativeExpressAdSizeTypeFullWidthLandscape: {
+            adSize = GADAdSizeFullWidthLandscapeWithHeight([height floatValue]);
+            break;
+        }
+            
+        default: {
+            NSAssert(NO, @"...");
+        }
+    }
+    
+    // Instantiate the ad view.
+    GADNativeExpressAdView* view = [[GADNativeExpressAdView alloc] autorelease];
+    [view initWithAdSize:adSize];
+    if (view == nil) {
+        NSLog(@"%s: invalid ad size", __PRETTY_FUNCTION__);
+        return nil;
+    }
+    
+    return view;
+}
+
+- (BOOL) _showNativeExpressAd:(NSString* _Nonnull) adUnitId
+                     sizeType:(NSNumber* _Nonnull) sizeType
+                        width:(NSNumber* _Nonnull) width
+                       height:(NSNumber* _Nonnull) height
+                     position:(NSNumber* _Nonnull) position {
+    [self hideNativeExpressAd];
+    
+    GADNativeExpressAdView* view = [self createNativeExpressAdView:sizeType
+                                                             width:width
+                                                            height:height];
+    if (view == nil) {
+        return NO;
+    }
+    
+    UIViewController* controller = [AdsWrapper getCurrentRootViewController];
+    
+    [view setAdUnitID:adUnitId];
+    [view setDelegate:self];
+    [view setRootViewController:controller];
+    
+    [AdsWrapper addAdView:view atPos:(ProtocolAds::AdsPos) [position intValue]];
+    [self setNativeExpressAdView:view];
+    
+    GADRequest* request = [GADRequest request];
+    [request setTestDevices:[self testDeviceIDs]];
+    [view loadRequest:request];
+    return YES;
+}
+
+- (BOOL) showNativeExpressAd:(NSDictionary* _Nonnull) params {
+    NSAssert([params count] == 4, @"Invalid number of params");
+    
+    NSString* adUnitId = params[@"Param1"];
+    NSNumber* sizeType = params[@"Param2"];
+    NSNumber* width = params[@"Param3"];
+    NSNumber* height = params[@"Param4"];
+    NSNumber* position = params[@"Param5"];
+    
+    NSAssert(adUnitId != nil, @"...");
+    NSAssert(sizeType != nil, @"...");
+    NSAssert(width != nil, @"...");
+    NSAssert(height != nil, @"...");
+    NSAssert(position != nil, @"...");
+    
+    NSAssert([adUnitId isKindOfClass:[NSString class]], @"...");
+    NSAssert([sizeType isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([width isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([height isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([position isKindOfClass:[NSNumber class]], @"...");
+    
+    return [self _showNativeExpressAd:adUnitId
+                             sizeType:sizeType
+                                width:width
+                               height:height
+                             position:position];
+}
+
+- (void) hideNativeExpressAd {
+    [[self nativeExpressAdView] removeFromSuperview];
+    [self setNativeExpressAdView:nil];
+}
+
 #pragma mark - Rewarded Video Ad
 
 - (BOOL) hasRewardedAd {
@@ -393,6 +499,35 @@
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didFailToLoadWithError:(NSError *)error {
     NSLog(@"Reward based video ad failed to load.");
     [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoUnknownError withMsg:[NSString stringWithFormat:@"Reward based video ad failed to load with error: %@", error]];
+}
+
+#pragma mark - Native Express Ad Request Lifecycle Notifications
+
+- (void) nativeExpressAdViewDidReceiveAd:(GADNativeExpressAdView*) nativeExpressAdView {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void) nativeExpressAdView:(GADNativeExpressAdView*) nativeExpressAdView
+ didFailToReceiveAdWithError:(GADRequestError*) error {
+    NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error localizedDescription]);
+}
+
+#pragma mark Native Express Click-Time Lifecycle Notifications
+
+- (void) nativeExpressAdViewWillPresentScreen:(GADNativeExpressAdView*) nativeExpressAdView {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void) nativeExpressAdViewWillDismissScreen:(GADNativeExpressAdView*) nativeExpressAdView {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void) nativeExpressAdViewDidDismissScreen:(GADNativeExpressAdView*) nativeExpressAdView {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void) nativeExpressAdViewWillLeaveApplication:(GADNativeExpressAdView*) nativeExpressAdView {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 #pragma mark - Animation banner ads

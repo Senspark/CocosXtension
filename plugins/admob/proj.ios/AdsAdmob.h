@@ -34,8 +34,9 @@ typedef enum {
     kTypeFullScreen,
 } AdmobType;
 
-@interface AdsAdmob : NSObject <InterfaceAds, GADBannerViewDelegate, GADInterstitialDelegate, GADRewardBasedVideoAdDelegate>
-{
+@interface AdsAdmob
+    : NSObject <InterfaceAds, GADBannerViewDelegate, GADInterstitialDelegate,
+                GADRewardBasedVideoAdDelegate, GADNativeExpressAdViewDelegate> {
 }
 
 @property BOOL debug;
@@ -48,6 +49,8 @@ typedef enum {
 @property (assign, nonatomic) GADBannerView*    _Nullable bannerView;
 @property (assign, nonatomic) GADInterstitial*  _Nullable interstitialView;
 @property (assign, nonatomic) NSMutableArray*   _Nullable testDeviceIDs;
+
+@property (nonatomic, assign, nullable) GADNativeExpressAdView* nativeExpressAdView;
 
 @property (assign, nonatomic) int slideUpTimePeriod;
 @property (assign, nonatomic) int slideDownTimePeriod;
@@ -64,6 +67,9 @@ typedef enum {
 - (BOOL) hasRewardedAd;
 - (void) loadRewardedAd: (NSString* _Nonnull) adsID;
 - (void) showRewardedAd;
+
+- (BOOL) showNativeExpressAd:(NSDictionary* _Nonnull) params;
+- (void) hideNativeExpressAd;
 
 - (void) configMediationAdColony: (NSDictionary* __nullable) params;
 - (void) configMediationAdVungle: (NSDictionary* __nullable) params;
