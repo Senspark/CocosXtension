@@ -541,13 +541,15 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     private void _showNativeExpressAd(@NonNull final String adUnitId,
-                                         @NonNull final Integer sizeType,
-                                         @NonNull final Integer width,
-                                         @NonNull final Integer height,
-                                         @NonNull final Integer position) {
+                                      @NonNull final Integer sizeType,
+                                      @NonNull final Integer width,
+                                      @NonNull final Integer height,
+                                      @NonNull final Integer position) {
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
+                logD("showNativeExpressAd: main thread begin.");
+
                 hideNativeExpressAd();
 
                 assert(_nativeExpressAdView == null);
@@ -568,12 +570,16 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 AdsWrapper.addAdView(view, position);
 
                 _nativeExpressAdView = view;
+
+                logD("showNativeExpressAd: main thread end.");
             }
         });
     }
 
     @SuppressLint("Assert")
     public void showNativeExpressAd(@NonNull HashMap<String, String> params) {
+        logD("showNativeExpressAd: begin params = " + params);
+
         assert (params.size() == 4);
         assert (params.containsKey("Param1"));
         assert (params.containsKey("Param2"));
@@ -588,19 +594,25 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         Integer position = Integer.parseInt(params.get("Param5"));
 
         _showNativeExpressAd(adUnitId, sizeType, width, height, position);
+
+        logD("showNativeExpressAd: end.");
     }
 
     public void hideNativeExpressAd() {
+        logD("hideNativeExpressAd: begin.");
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
+                logD("hideNativeExpressAd: main thread begin.");
                 if (_nativeExpressAdView != null) {
                     _nativeExpressAdView.setVisibility(View.GONE);
                     _nativeExpressAdView.destroy();
                     _nativeExpressAdView = null;
                 }
+                logD("hideNativeExpressAd: main thread end.");
             }
         });
+        logD("hideNativeExpressAd: end.");
     }
 
     public synchronized void slideBannerUp() {
