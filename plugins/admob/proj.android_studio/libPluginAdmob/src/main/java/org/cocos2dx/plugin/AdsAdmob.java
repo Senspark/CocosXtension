@@ -49,13 +49,14 @@ import com.jirbo.adcolony.AdColony;
 import com.jirbo.adcolony.AdColonyAdapter;
 import com.jirbo.adcolony.AdColonyBundleBuilder;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public class AdsAdmob implements InterfaceAds, PluginListener {
@@ -530,10 +531,13 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                                       @NonNull final Integer width,
                                       @NonNull final Integer height,
                                       @NonNull final Integer position) {
+        logD(String.format(Locale.getDefault(),
+            "_showNativeExpressAd: begin adUnitId = %s sizeType = %d width = %d height = %d position = %d.",
+            adUnitId, sizeType, width, height, position));
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
-                logD("showNativeExpressAd: main thread begin.");
+                logD("_showNativeExpressAd: main thread begin.");
 
                 hideNativeExpressAd();
 
@@ -556,36 +560,37 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
                 _nativeExpressAdView = view;
 
-                logD("showNativeExpressAd: main thread end.");
+                logD("_showNativeExpressAd: main thread end.");
             }
         });
+        logD("_showNativeExpressAd: end.");
     }
 
     @SuppressLint("Assert")
-    public void showNativeExpressAd(@NonNull HashMap<String, String> params) {
-        logD("showNativeExpressAd: begin params = " + params);
+    public void showNativeExpressAd(@NonNull JSONObject json) {
+        logD("showNativeExpressAd: begin json = " + json);
 
-        assert (params.size() == 4);
-        assert (params.containsKey("Param1"));
-        assert (params.containsKey("Param2"));
-        assert (params.containsKey("Param3"));
-        assert (params.containsKey("Param4"));
-        assert (params.containsKey("Param5"));
+        assert (json.length() == 5);
 
-        String adUnitId = params.get("Param1");
-        Integer sizeType = Integer.parseInt(params.get("Param2"));
-        Integer width = Integer.parseInt(params.get("Param3"));
-        Integer height = Integer.parseInt(params.get("Param4"));
-        Integer position = Integer.parseInt(params.get("Param5"));
+        try {
+            String adUnitId = json.getString("Param1");
+            Integer sizeType = json.getInt("Param2");
+            Integer width = json.getInt("Param3");
+            Integer height = json.getInt("Param4");
+            Integer position = json.getInt("Param5");
 
-        _showNativeExpressAd(adUnitId, sizeType, width, height, position);
+            _showNativeExpressAd(adUnitId, sizeType, width, height, position);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         logD("showNativeExpressAd: end.");
     }
 
     public void hideNativeExpressAd() {
         logD("hideNativeExpressAd: begin.");
-        PluginWrapper.runOnMainThread(new Runnable() {
+
+        Runnable r = new Runnable() {
             @Override
             public void run() {
                 logD("hideNativeExpressAd: main thread begin.");
@@ -596,7 +601,14 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 }
                 logD("hideNativeExpressAd: main thread end.");
             }
-        });
+        };
+
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            r.run();
+        } else {
+            PluginWrapper.runOnMainThread(r);
+        }
+
         logD("hideNativeExpressAd: end.");
     }
 
