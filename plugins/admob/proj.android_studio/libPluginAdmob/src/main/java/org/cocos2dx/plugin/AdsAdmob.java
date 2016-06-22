@@ -502,38 +502,13 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         });
     }
 
-    @NonNull
-    private AdSize createNativeExpressAdSize(@NonNull Integer sizeType,
-                                             @NonNull Integer width,
-                                             @NonNull Integer height) {
-        assert (Looper.getMainLooper() == Looper.myLooper());
-        AdSize adSize = null;
-
-        switch (sizeType) {
-            case 0: {
-                adSize = new AdSize(width, height);
-                break;
-            }
-
-            case 1:
-            case 2: {
-                adSize = new AdSize(AdSize.FULL_WIDTH, height);
-                break;
-            }
-        }
-
-        assert (adSize != null);
-        return adSize;
-    }
-
     private void _showNativeExpressAd(@NonNull final String adUnitId,
-                                      @NonNull final Integer sizeType,
                                       @NonNull final Integer width,
                                       @NonNull final Integer height,
                                       @NonNull final Integer position) {
         logD(String.format(Locale.getDefault(),
-            "_showNativeExpressAd: begin adUnitId = %s sizeType = %d width = %d height = %d position = %d.",
-            adUnitId, sizeType, width, height, position));
+            "_showNativeExpressAd: begin adUnitId = %s width = %d height = %d position = %d.",
+            adUnitId, width, height, position));
 
         boolean isInitializing;
         synchronized (_nativeExpressAdLock) {
@@ -541,10 +516,8 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         }
 
         if (!isInitializing) {
-            synchronized (_nativeExpressAdLock) {
-                _isNativeExpressAdInitializing = true;
-            }
-            _nativeExpressAdSize = createNativeExpressAdSize(sizeType, width, height);
+            _isNativeExpressAdInitializing = true;
+            _nativeExpressAdSize = new AdSize(width, height);
 
             PluginWrapper.runOnMainThread(new Runnable() {
                 @Override
@@ -595,12 +568,11 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
         try {
             String adUnitId = json.getString("Param1");
-            Integer sizeType = json.getInt("Param2");
             Integer width = json.getInt("Param3");
             Integer height = json.getInt("Param4");
             Integer position = json.getInt("Param5");
 
-            _showNativeExpressAd(adUnitId, sizeType, width, height, position);
+            _showNativeExpressAd(adUnitId, width, height, position);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -631,6 +603,25 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         }
 
         logD("hideNativeExpressAd: end.");
+    }
+
+    public int getSizeInPixels(@NonNull Integer size) {
+        if (size == AdSize.AUTO_HEIGHT) {
+            return getAutoHeightInPixels();
+        }
+        if (size == AdSize.FULL_WIDTH) {
+            return getFullWidthInPixels();
+        }
+        AdSize adSize = new AdSize(size, size);
+        return adSize.getHeightInPixels(mContext);
+    }
+
+    public int getAutoHeightInPixels() {
+        return AdSize.SMART_BANNER.getHeightInPixels(mContext);
+    }
+
+    public int getFullWidthInPixels() {
+        return AdSize.SMART_BANNER.getWidthInPixels(mContext);
     }
 
     public synchronized void slideBannerUp() {

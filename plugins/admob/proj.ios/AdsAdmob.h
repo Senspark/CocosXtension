@@ -68,8 +68,12 @@ typedef enum {
 - (void) loadRewardedAd: (NSString* _Nonnull) adsID;
 - (void) showRewardedAd;
 
-- (BOOL) showNativeExpressAd:(NSDictionary* _Nonnull) params;
+- (void) showNativeExpressAd:(NSDictionary* _Nonnull) params;
 - (void) hideNativeExpressAd;
+
+- (NSNumber* _Nonnull) getSizeInPixels:(NSNumber* _Nonnull) size;
+- (NSNumber* _Nonnull) getAutoHeightInPixels;
+- (NSNumber* _Nonnull) getFullWidthInPixels;
 
 - (void) configMediationAdColony: (NSDictionary* __nullable) params;
 - (void) configMediationAdVungle: (NSDictionary* __nullable) params;

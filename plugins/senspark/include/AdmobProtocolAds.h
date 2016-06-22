@@ -86,13 +86,9 @@ public:
     void loadInterstitial();
     bool hasInterstitial();
 
-    void showNativeExpressAd(const std::string& adUnitId, float width,
-                             float height, AdsPos position);
-
-    /// @param orientation should be @c AdSize::FullWidthPortrait or
-    /// @c AdSize::FullWidthLandscape.
-    void showNativeExpressAd(const std::string& adUnitId,
-                             const AdSize& adSize, float height,
+    /// @param width The desired width of the ad view, pass -1 for full width.
+    /// @param height The desired width of the ad view, pass -2 for auto height.
+    void showNativeExpressAd(const std::string& adUnitId, int width, int height,
                              AdsPos position);
 
     void hideNativeExpressAd();
@@ -111,10 +107,6 @@ public:
     void configMediationAdColony(const cocos2d::plugin::TAdsInfo &params);
     void configMediationAdVungle(const cocos2d::plugin::TAdsInfo &params);
     void configMediationAdUnity(const cocos2d::plugin::TAdsInfo &params);
-    
-private:
-    void showNativeExpressAd(const std::string& adUnitId, int sizeType,
-                             float width, float height, AdsPos position);
 };
 
 class AdmobProtocolAds::AdType {
@@ -192,16 +184,6 @@ public:
     /// Equivalent to @c kGADAdSizeSmartBannerLandscape on iOS or
     /// @c AdSize.SMART_BANNER on Android.
     static const AdSize SmartBanner;
-    
-    /// Pass this with a custom height.
-    ///
-    /// Equivalent to @c GADAdSizeFullWidthPortraitWithHeight.
-    static const AdSize FullWidthPortrait;
-    
-    /// Pass this with a custom height.
-    ///
-    /// Equivalent to @c GADAdSizeFullWidthLandscapeWithHeight.
-    static const AdSize FullWidthLandscape;
     
     /// Implicit conversion to std::string to be stored in TAdsInfo.
     operator const std::string&() const;
