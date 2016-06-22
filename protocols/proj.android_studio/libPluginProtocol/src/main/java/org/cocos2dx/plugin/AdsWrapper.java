@@ -33,11 +33,11 @@ import android.widget.FrameLayout;
 
 public class AdsWrapper {
     public static class ResultCode {
-        public static final int NativeExpressAdClosed             = 50;
+        public static final int NativeExpressAdLoaded             = 50;
         public static final int NativeExpressAdFailedToLoad       = 51;
-        public static final int NativeExpressAdLeftApplication    = 52;
-        public static final int NativeExpressAdOpened             = 53;
-        public static final int NativeExpressAdLoaded             = 54;
+        public static final int NativeExpressAdOpened             = 52;
+        public static final int NativeExpressAdClosed             = 53;
+        public static final int NativeExpressAdLeftApplication    = 54;
     }
 
 	public static final int RESULT_CODE_AdsBannerReceived 	= 0;               // The ad is received

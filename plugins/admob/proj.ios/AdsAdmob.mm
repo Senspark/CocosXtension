@@ -25,6 +25,8 @@
 #include <array>
 
 #import "AdsAdmob.h"
+#import "SSNativeExpressAdListener.h"
+
 #import <GADMAdapterAdColonyExtras.h>
 #import <GADMAdapterAdColonyInitializer.h>
 
@@ -38,6 +40,18 @@
 @synthesize testDeviceIDs                   = __TestDeviceIDs;
 @synthesize strAdColonyInterstitialAdZoneID = __strAdColonyInterstitialAdZoneID;
 @synthesize strAdColonyRewardedAdZoneID     = __strAdColonyRewardedAdZoneID;
+
+- (id) init {
+    self = [super init];
+    if (self == nil) {
+        return self;
+    }
+
+    nativeExpressAdListener_ =
+        [[SSNativeExpressAdListener alloc] initWithAdsInterface:self];
+
+    return self;
+}
 
 - (void) dealloc
 {
@@ -55,6 +69,9 @@
         [self.testDeviceIDs release];
         self.testDeviceIDs = nil;
     }
+    
+    [nativeExpressAdListener_ release];
+    nativeExpressAdListener_ = nil;
     
     [super dealloc];
 }
@@ -285,7 +302,7 @@
     UIViewController* controller = [AdsWrapper getCurrentRootViewController];
     
     [view setAdUnitID:adUnitId];
-    [view setDelegate:self];
+    [view setDelegate:nativeExpressAdListener_];
     [view setRootViewController:controller];
     
     [AdsWrapper addAdView:view atPos:(ProtocolAds::AdsPos) [position intValue]];
@@ -522,35 +539,6 @@
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didFailToLoadWithError:(NSError *)error {
     NSLog(@"Reward based video ad failed to load.");
     [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoUnknownError withMsg:[NSString stringWithFormat:@"Reward based video ad failed to load with error: %@", error]];
-}
-
-#pragma mark - Native Express Ad Request Lifecycle Notifications
-
-- (void) nativeExpressAdViewDidReceiveAd:(GADNativeExpressAdView*) nativeExpressAdView {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void) nativeExpressAdView:(GADNativeExpressAdView*) nativeExpressAdView
- didFailToReceiveAdWithError:(GADRequestError*) error {
-    NSLog(@"%s: %@", __PRETTY_FUNCTION__, [error localizedDescription]);
-}
-
-#pragma mark Native Express Click-Time Lifecycle Notifications
-
-- (void) nativeExpressAdViewWillPresentScreen:(GADNativeExpressAdView*) nativeExpressAdView {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void) nativeExpressAdViewWillDismissScreen:(GADNativeExpressAdView*) nativeExpressAdView {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void) nativeExpressAdViewDidDismissScreen:(GADNativeExpressAdView*) nativeExpressAdView {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void) nativeExpressAdViewWillLeaveApplication:(GADNativeExpressAdView*) nativeExpressAdView {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 #pragma mark - Animation banner ads

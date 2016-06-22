@@ -42,15 +42,12 @@ public class NativeExpressAdListener extends AdListener {
 
         super.onAdFailedToLoad(errorCode);
 
-        int errorNo = AdsWrapper.RESULT_CODE_AdsUnknownError;
         String errorDescription = "Unknown error";
         switch (errorCode) {
             case AdRequest.ERROR_CODE_NETWORK_ERROR:
-                errorNo = AdsWrapper.RESULT_CODE_NetworkError;
                 errorDescription = "Network error";
                 break;
             case AdRequest.ERROR_CODE_INVALID_REQUEST:
-                errorNo = AdsWrapper.RESULT_CODE_NetworkError;
                 errorDescription = "The ad request is invalid";
                 break;
             case AdRequest.ERROR_CODE_NO_FILL:
@@ -60,7 +57,8 @@ public class NativeExpressAdListener extends AdListener {
                 break;
         }
         _adapter.logE("NativeExpressAdListener: onAdFailedToLoad errorDescription = " + errorDescription);
-        AdsWrapper.onAdsResult(_adapter, errorNo, errorDescription);
+        AdsWrapper.onAdsResult(_adapter, AdsWrapper.ResultCode.NativeExpressAdFailedToLoad,
+            errorDescription);
 
         _adapter.logD("NativeExpressAdListener: onAdFailedToLoad end.");
     }
@@ -72,7 +70,7 @@ public class NativeExpressAdListener extends AdListener {
 
         super.onAdLeftApplication();
         AdsWrapper.onAdsResult(_adapter, AdsWrapper.ResultCode.NativeExpressAdLeftApplication,
-            "Ads view dismissed!");
+            "Ads left application!");
 
         _adapter.logD("NativeExpressAdListener: onAdLeftApplication: end.");
     }

@@ -29,6 +29,8 @@
 #import "InterfaceAds.h"
 #import "AdsWrapper.h"
 
+@class SSNativeExpressAdListener;
+
 typedef enum {
     kTypeBanner = 1,
     kTypeFullScreen,
@@ -36,7 +38,9 @@ typedef enum {
 
 @interface AdsAdmob
     : NSObject <InterfaceAds, GADBannerViewDelegate, GADInterstitialDelegate,
-                GADRewardBasedVideoAdDelegate, GADNativeExpressAdViewDelegate> {
+                GADRewardBasedVideoAdDelegate> {
+
+    SSNativeExpressAdListener* nativeExpressAdListener_;
 }
 
 @property BOOL debug;
