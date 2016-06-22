@@ -23,7 +23,6 @@ THE SOFTWARE.
  ****************************************************************************/
 package org.cocos2dx.plugin;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -136,7 +135,11 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     private AdSize  mBannerSize                         = null;
 
+    private boolean _isNativeExpressAdInitializing = false;
+    private final Object _nativeExpressAdLock = new Object();
+    private AdSize _nativeExpressAdSize = null;
     private NativeExpressAdView _nativeExpressAdView = null;
+
 
     private String mAdColonyAppID = "";
     private String mAdColonyInterstitialZoneID = "";
@@ -499,10 +502,10 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         });
     }
 
-    @SuppressLint("Assert")
-    private NativeExpressAdView createNativeExpressAdView(@NonNull Integer sizeType,
-                                                          @NonNull Integer width,
-                                                          @NonNull Integer height) {
+    @NonNull
+    private AdSize createNativeExpressAdSize(@NonNull Integer sizeType,
+                                             @NonNull Integer width,
+                                             @NonNull Integer height) {
         assert (Looper.getMainLooper() == Looper.myLooper());
         AdSize adSize = null;
 
@@ -520,10 +523,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         }
 
         assert (adSize != null);
-
-        NativeExpressAdView view = new NativeExpressAdView(mContext);
-        view.setAdSize(adSize);
-        return view;
+        return adSize;
     }
 
     private void _showNativeExpressAd(@NonNull final String adUnitId,
@@ -534,39 +534,60 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         logD(String.format(Locale.getDefault(),
             "_showNativeExpressAd: begin adUnitId = %s sizeType = %d width = %d height = %d position = %d.",
             adUnitId, sizeType, width, height, position));
-        PluginWrapper.runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                logD("_showNativeExpressAd: main thread begin.");
 
-                hideNativeExpressAd();
+        boolean isInitializing;
+        synchronized (_nativeExpressAdLock) {
+            isInitializing = _isNativeExpressAdInitializing;
+        }
 
-                assert(_nativeExpressAdView == null);
-                NativeExpressAdView view = createNativeExpressAdView(sizeType, width, height);
-                view.setAdUnitId(adUnitId);
-
-                AdRequest.Builder builder = new AdRequest.Builder();
-
-                if (mTestDevices != null) {
-                    for (String deviceId : mTestDevices) {
-                        builder.addTestDevice(deviceId);
-                    }
-                }
-
-                AdRequest request = builder.build();
-                view.loadAd(request);
-
-                AdsWrapper.addAdView(view, position);
-
-                _nativeExpressAdView = view;
-
-                logD("_showNativeExpressAd: main thread end.");
+        if (!isInitializing) {
+            synchronized (_nativeExpressAdLock) {
+                _isNativeExpressAdInitializing = true;
             }
-        });
+            _nativeExpressAdSize = createNativeExpressAdSize(sizeType, width, height);
+
+            PluginWrapper.runOnMainThread(new Runnable() {
+                @Override
+                public void run() {
+                    logD("_showNativeExpressAd: main thread begin.");
+
+                    hideNativeExpressAd();
+
+                    assert (_nativeExpressAdView == null);
+                    NativeExpressAdView view = new NativeExpressAdView(mContext);
+                    view.setAdSize(_nativeExpressAdSize);
+                    view.setAdUnitId(adUnitId);
+                    view.setAdListener(new NativeExpressAdListener(AdsAdmob.this, view));
+
+                    AdRequest.Builder builder = new AdRequest.Builder();
+
+                    if (mTestDevices != null) {
+                        for (String deviceId : mTestDevices) {
+                            builder.addTestDevice(deviceId);
+                        }
+                    }
+
+                    AdRequest request = builder.build();
+                    view.loadAd(request);
+
+                    AdsWrapper.addAdView(view, position);
+
+                    _nativeExpressAdView = view;
+
+                    synchronized (_nativeExpressAdLock) {
+                        _isNativeExpressAdInitializing = false;
+                    }
+
+                    logD("_showNativeExpressAd: main thread end.");
+                }
+            });
+        } else {
+            logD("_showNativeExpressAd: ad initialization has not been completed!");
+        }
+
         logD("_showNativeExpressAd: end.");
     }
 
-    @SuppressLint("Assert")
     public void showNativeExpressAd(@NonNull JSONObject json) {
         logD("showNativeExpressAd: begin json = " + json);
 
