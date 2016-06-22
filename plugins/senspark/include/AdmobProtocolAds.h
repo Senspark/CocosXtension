@@ -96,6 +96,10 @@ public:
     void loadRewardedAd(const std::string& adID);
     void showRewardedAd();
     bool hasRewardedAd();
+    
+    /// Retrieves the size of the banner ad in pixels.
+    /// @param size Pass -1 for full width, -2 for auto height.
+    int getSizeInPixels(int size);
 
     void slideBannerUp();
     void slideBannerDown();

@@ -127,6 +127,12 @@ void AdmobProtocolAds::hideNativeExpressAd() {
     callFuncWithParam("hideNativeExpressAd", nullptr);
 }
 
+int AdmobProtocolAds::getSizeInPixels(int size) {
+    using cocos2d::plugin::PluginParam;
+    PluginParam param{size};
+    return callIntFuncWithParam("getSizeInPixels", &param, nullptr);
+}
+
 void AdmobProtocolAds::slideBannerUp() {
     callFuncWithParam("slideBannerUp", nullptr);
 }

@@ -568,9 +568,9 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
         try {
             String adUnitId = json.getString("Param1");
-            Integer width = json.getInt("Param3");
-            Integer height = json.getInt("Param4");
-            Integer position = json.getInt("Param5");
+            Integer width = json.getInt("Param2");
+            Integer height = json.getInt("Param3");
+            Integer position = json.getInt("Param4");
 
             _showNativeExpressAd(adUnitId, width, height, position);
         } catch (JSONException e) {
@@ -605,7 +605,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         logD("hideNativeExpressAd: end.");
     }
 
-    public int getSizeInPixels(@NonNull Integer size) {
+    public int _getSizeInPixels(@NonNull Integer size) {
         if (size == AdSize.AUTO_HEIGHT) {
             return getAutoHeightInPixels();
         }
@@ -614,6 +614,10 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         }
         AdSize adSize = new AdSize(size, size);
         return adSize.getHeightInPixels(mContext);
+    }
+
+    public int getSizeInPixels(int size) {
+        return _getSizeInPixels(size);
     }
 
     public int getAutoHeightInPixels() {
