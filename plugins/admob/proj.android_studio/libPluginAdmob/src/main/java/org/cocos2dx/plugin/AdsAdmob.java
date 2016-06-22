@@ -61,10 +61,16 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     @Override
     public void onResume() {
+        if (AdColony.isConfigured()) {
+            AdColony.resume(mContext);
+        }
     }
 
     @Override
     public void onPause() {
+        if (AdColony.isConfigured()) {
+            AdColony.pause();
+        }
     }
 
     @Override
@@ -223,39 +229,25 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     @Override
     public void showAds(final Hashtable<String, String> info, final int pos) {
-        PluginWrapper.runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
+        final String strType = info.get(Constants.AdTypeKey);
+        final int adsType = Integer.parseInt(strType);
 
-                try {
-                    if (null != adView) {
-                        adView.setVisibility(View.GONE);
-                        adView.destroy();
-                        adView = null;
-                    }
 
-                    String strType = info.get(Constants.AdTypeKey);
-                    int adsType = Integer.parseInt(strType);
-
-                    switch (adsType) {
-                        case AdType.Banner: {
-                            String strSize = info.get(Constants.AdSizeKey);
-                            int sizeEnum = Integer.parseInt(strSize);
-                            showBannerAd(sizeEnum, pos);
-                            break;
-                        }
-                        case AdType.Interstitial: {
-                            showInterstitial();
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                } catch (Exception e) {
-                    logE("Error when show Ads ( " + info.toString() + " )", e);
-                }
+        switch (adsType) {
+            case AdType.Banner: {
+                hideBannerAd();
+                String strSize = info.get(Constants.AdSizeKey);
+                int sizeEnum = Integer.parseInt(strSize);
+                showBannerAd(sizeEnum, pos);
+                break;
             }
-        });
+            case AdType.Interstitial: {
+                showInterstitial();
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     @Override
@@ -270,16 +262,16 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             int adsType = Integer.parseInt(strType);
 
             switch (adsType) {
-            case AdType.Banner: {
-                hideBannerAd();
-                break;
+                case AdType.Banner: {
+                    hideBannerAd();
+                    break;
             }
-            case AdType.Interstitial: {
-                logD("Now not support full screen view in Admob");
-                break;
+                case AdType.Interstitial: {
+                    logD("Now not support full screen view in Admob");
+                    break;
             }
-            default:
-                break;
+                default:
+                    break;
             }
         } catch (Exception e) {
             logE("Error when hide Ads ( " + info.toString() + " )", e);
@@ -288,7 +280,6 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     private synchronized void showBannerAd(final int sizeEnum, final int pos) {
         logD("[ADS] ADSADMOB - SHOW BANNER AD");
-
         mBannerSize = AdSizes.get(sizeEnum);
 
         PluginWrapper.runOnMainThread(new Runnable() {
