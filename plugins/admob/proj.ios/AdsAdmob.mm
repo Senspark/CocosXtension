@@ -242,9 +242,11 @@
     self.interstitialView.delegate = self;
 
     GADRequest* request = [GADRequest request];
-    GADMAdapterAdColonyExtras *_extras = [[GADMAdapterAdColonyExtras alloc] initWithZone:self.strAdColonyInterstitialAdZoneID];
-    _extras.currentZone = self.strAdColonyInterstitialAdZoneID;
-    [request registerAdNetworkExtras:_extras];
+    
+    if ([[self strAdColonyInterstitialAdZoneID] length] > 0) {
+        GADMAdapterAdColonyExtras *_extras = [[GADMAdapterAdColonyExtras alloc] initWithZone:self.strAdColonyInterstitialAdZoneID];
+        [request registerAdNetworkExtras:_extras];
+    }
     
     request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
     
