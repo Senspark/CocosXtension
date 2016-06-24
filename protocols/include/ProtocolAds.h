@@ -61,7 +61,13 @@ enum class AdsResultCode {
     kNetworkError,              // Network error
     kAdsUnknownError,              // Unknown error
     kVideoUnknownError,
-    kIapPurchaseRequested
+    kIapPurchaseRequested,
+    
+    NativeExpressAdLoaded             = 50,
+    NativeExpressAdFailedToLoad       = 51,
+    NativeExpressAdOpened             = 52,
+    NativeExpressAdClosed             = 53,
+    NativeExpressAdLeftApplication    = 54,
 };
 
 class ProtocolAds;

@@ -25,6 +25,8 @@
 #include <array>
 
 #import "AdsAdmob.h"
+#import "SSNativeExpressAdListener.h"
+
 #import <GADMAdapterAdColonyExtras.h>
 #import <GADMAdapterAdColonyInitializer.h>
 
@@ -38,6 +40,18 @@
 @synthesize testDeviceIDs                   = __TestDeviceIDs;
 @synthesize strAdColonyInterstitialAdZoneID = __strAdColonyInterstitialAdZoneID;
 @synthesize strAdColonyRewardedAdZoneID     = __strAdColonyRewardedAdZoneID;
+
+- (id) init {
+    self = [super init];
+    if (self == nil) {
+        return self;
+    }
+
+    nativeExpressAdListener_ =
+        [[SSNativeExpressAdListener alloc] initWithAdsInterface:self];
+
+    return self;
+}
 
 - (void) dealloc
 {
@@ -55,6 +69,9 @@
         [self.testDeviceIDs release];
         self.testDeviceIDs = nil;
     }
+    
+    [nativeExpressAdListener_ release];
+    nativeExpressAdListener_ = nil;
     
     [super dealloc];
 }
@@ -225,9 +242,11 @@
     self.interstitialView.delegate = self;
 
     GADRequest* request = [GADRequest request];
-    GADMAdapterAdColonyExtras *_extras = [[GADMAdapterAdColonyExtras alloc] initWithZone:self.strAdColonyInterstitialAdZoneID];
-    _extras.currentZone = self.strAdColonyInterstitialAdZoneID;
-    [request registerAdNetworkExtras:_extras];
+    
+    if ([[self strAdColonyInterstitialAdZoneID] length] > 0) {
+        GADMAdapterAdColonyExtras *_extras = [[GADMAdapterAdColonyExtras alloc] initWithZone:self.strAdColonyInterstitialAdZoneID];
+        [request registerAdNetworkExtras:_extras];
+    }
     
     request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
     
@@ -245,6 +264,135 @@
         [self.interstitialView presentFromRootViewController:[AdsWrapper getCurrentRootViewController]];
         [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsShown withMsg:@"Ads is shown!"];
     }
+}
+
+- (GADAdSize) createAdSize:(NSNumber* _Nonnull) width
+                    height:(NSNumber* _Nonnull) height {
+    UIInterfaceOrientation orientation =
+        [[UIApplication sharedApplication] statusBarOrientation];
+    if ([width intValue] == -1) {
+        // Full width.
+        if ([height intValue] == -2) {
+            // Auto height.
+            if (UIInterfaceOrientationIsLandscape(orientation)) {
+                return kGADAdSizeSmartBannerLandscape;
+            }
+            return kGADAdSizeSmartBannerPortrait;
+        }
+        if (UIInterfaceOrientationIsLandscape(orientation)) {
+            return GADAdSizeFullWidthLandscapeWithHeight([height intValue]);
+        }
+        return GADAdSizeFullWidthPortraitWithHeight([height intValue]);
+    }
+    return GADAdSizeFromCGSize(CGSizeMake([width intValue], [height intValue]));
+}
+
+- (void) _showNativeExpressAd:(NSString* _Nonnull) adUnitId
+                        width:(NSNumber* _Nonnull) width
+                       height:(NSNumber* _Nonnull) height
+                     position:(NSNumber* _Nonnull) position {
+    [self hideNativeExpressAd];
+    
+    GADAdSize adSize = [self createAdSize:width height:height];
+    GADNativeExpressAdView* view =
+        [[[GADNativeExpressAdView alloc] initWithAdSize:adSize] autorelease];
+    if (view == nil) {
+        NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
+        return;
+    }
+    
+    UIViewController* controller = [AdsWrapper getCurrentRootViewController];
+    
+    [view setAdUnitID:adUnitId];
+    [view setDelegate:nativeExpressAdListener_];
+    [view setRootViewController:controller];
+    
+    [AdsWrapper addAdView:view atPos:(ProtocolAds::AdsPos) [position intValue]];
+    [self setNativeExpressAdView:view];
+    
+    GADRequest* request = [GADRequest request];
+    [request setTestDevices:[self testDeviceIDs]];
+    [view loadRequest:request];
+}
+
+- (void) showNativeExpressAd:(NSDictionary* _Nonnull) params {
+    NSAssert([params count] == 4, @"Invalid number of params");
+    
+    NSString* adUnitId = params[@"Param1"];
+    NSNumber* width = params[@"Param2"];
+    NSNumber* height = params[@"Param3"];
+    NSNumber* position = params[@"Param4"];
+    
+    NSAssert(adUnitId != nil, @"...");
+    NSAssert(width != nil, @"...");
+    NSAssert(height != nil, @"...");
+    NSAssert(position != nil, @"...");
+    
+    NSAssert([adUnitId isKindOfClass:[NSString class]], @"...");
+    NSAssert([width isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([height isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([position isKindOfClass:[NSNumber class]], @"...");
+
+    [self _showNativeExpressAd:adUnitId
+                         width:width
+                        height:height
+                      position:position];
+}
+
+- (void) hideNativeExpressAd {
+    [[self nativeExpressAdView] removeFromSuperview];
+    [self setNativeExpressAdView:nil];
+}
+
+- (GADBannerView* _Nullable) createDummySmartBanner {
+    UIInterfaceOrientation orientation =
+        [[UIApplication sharedApplication] statusBarOrientation];
+    GADBannerView* banner = [GADBannerView alloc];
+    if (UIInterfaceOrientationIsLandscape(orientation)) {
+        [banner initWithAdSize:kGADAdSizeSmartBannerLandscape];
+    } else {
+        [banner initWithAdSize:kGADAdSizeSmartBannerPortrait];
+    }
+    return [banner autorelease];
+}
+
+- (NSNumber* _Nonnull) getSizeInPixels:(NSNumber* _Nonnull) size_ {
+    int size = [size_ intValue];
+    if (size == -2) {
+        return [self getAutoHeightInPixels];
+    }
+    if (size == -1) {
+        return [self getFullWidthInPixels];
+    }
+    GADAdSize adSize = GADAdSizeFromCGSize(CGSizeMake(size, size));
+    GADBannerView* banner =
+        [[[GADBannerView alloc] initWithAdSize:adSize] autorelease];
+    if (banner == nil) {
+        NSLog(@"%s: invalid ad size", __PRETTY_FUNCTION__);
+        return @(0);
+    }
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    return @([banner frame].size.height * scale);
+}
+
+- (NSNumber* _Nonnull) getAutoHeightInPixels {
+    GADBannerView* banner = [self createDummySmartBanner];
+    if (banner == nil) {
+        NSAssert(NO, @"...");
+        return @(0);
+    }
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    return @([banner frame].size.height * scale);
+}
+
+- (NSNumber* _Nonnull) getFullWidthInPixels {
+    GADBannerView* banner = [self createDummySmartBanner];
+    if (banner == nil) {
+        NSAssert(NO, @"...");
+        return @(0);
+    }
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    return @([banner frame].size.width * scale);
 }
 
 #pragma mark - Rewarded Video Ad

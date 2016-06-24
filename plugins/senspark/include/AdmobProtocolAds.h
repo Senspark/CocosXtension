@@ -86,9 +86,20 @@ public:
     void loadInterstitial();
     bool hasInterstitial();
 
+    /// @param width The desired width of the ad view, pass -1 for full width.
+    /// @param height The desired width of the ad view, pass -2 for auto height.
+    void showNativeExpressAd(const std::string& adUnitId, int width, int height,
+                             AdsPos position);
+
+    void hideNativeExpressAd();
+
     void loadRewardedAd(const std::string& adID);
     void showRewardedAd();
     bool hasRewardedAd();
+    
+    /// Retrieves the size of the banner ad in pixels.
+    /// @param size Pass -1 for full width, -2 for auto height.
+    int getSizeInPixels(int size);
 
     void slideBannerUp();
     void slideBannerDown();
@@ -100,7 +111,6 @@ public:
     void configMediationAdColony(const cocos2d::plugin::TAdsInfo &params);
     void configMediationAdVungle(const cocos2d::plugin::TAdsInfo &params);
     void configMediationAdUnity(const cocos2d::plugin::TAdsInfo &params);
-    
 };
 
 class AdmobProtocolAds::AdType {
@@ -111,7 +121,9 @@ public:
     static const AdType Interstitial;
     
     /// Implicit conversion to std::string to be stored in TAdsInfo.
-    operator std::string() const;
+    operator const std::string&() const;
+    
+    const std::string& getDescription() const;
     
 private:
     explicit AdType(const std::string& s);
@@ -178,7 +190,9 @@ public:
     static const AdSize SmartBanner;
     
     /// Implicit conversion to std::string to be stored in TAdsInfo.
-    operator std::string() const;
+    operator const std::string&() const;
+    
+    const std::string& getDescription() const;
     
 private:
     explicit AdSize(const std::string& s);

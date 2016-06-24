@@ -28,6 +28,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
+import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -40,17 +42,20 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.jirbo.adcolony.AdColony;
 import com.jirbo.adcolony.AdColonyAdapter;
 import com.jirbo.adcolony.AdColonyBundleBuilder;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public class AdsAdmob implements InterfaceAds, PluginListener {
@@ -89,7 +94,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        return true;
+        return false;
     }
 
     private static class AdType {
@@ -129,6 +134,12 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     protected final Object mLock = new Object();
 
     private AdSize  mBannerSize                         = null;
+
+    private boolean _isNativeExpressAdInitializing = false;
+    private final Object _nativeExpressAdLock = new Object();
+    private AdSize _nativeExpressAdSize = null;
+    private NativeExpressAdView _nativeExpressAdView = null;
+
 
     private String mAdColonyAppID = "";
     private String mAdColonyInterstitialZoneID = "";
@@ -489,6 +500,132 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 mRewardedVideoAd.show();
             }
         });
+    }
+
+    private void _showNativeExpressAd(@NonNull final String adUnitId,
+                                      @NonNull final Integer width,
+                                      @NonNull final Integer height,
+                                      @NonNull final Integer position) {
+        logD(String.format(Locale.getDefault(),
+            "_showNativeExpressAd: begin adUnitId = %s width = %d height = %d position = %d.",
+            adUnitId, width, height, position));
+
+        boolean isInitializing;
+        synchronized (_nativeExpressAdLock) {
+            isInitializing = _isNativeExpressAdInitializing;
+        }
+
+        if (!isInitializing) {
+            _isNativeExpressAdInitializing = true;
+            _nativeExpressAdSize = new AdSize(width, height);
+
+            PluginWrapper.runOnMainThread(new Runnable() {
+                @Override
+                public void run() {
+                    logD("_showNativeExpressAd: main thread begin.");
+
+                    hideNativeExpressAd();
+
+                    assert (_nativeExpressAdView == null);
+                    NativeExpressAdView view = new NativeExpressAdView(mContext);
+                    view.setAdSize(_nativeExpressAdSize);
+                    view.setAdUnitId(adUnitId);
+                    view.setAdListener(new NativeExpressAdListener(AdsAdmob.this, view));
+
+                    AdRequest.Builder builder = new AdRequest.Builder();
+
+                    if (mTestDevices != null) {
+                        for (String deviceId : mTestDevices) {
+                            builder.addTestDevice(deviceId);
+                        }
+                    }
+
+                    AdRequest request = builder.build();
+                    view.loadAd(request);
+
+                    AdsWrapper.addAdView(view, position);
+
+                    _nativeExpressAdView = view;
+
+                    synchronized (_nativeExpressAdLock) {
+                        _isNativeExpressAdInitializing = false;
+                    }
+
+                    logD("_showNativeExpressAd: main thread end.");
+                }
+            });
+        } else {
+            logD("_showNativeExpressAd: ad initialization has not been completed!");
+        }
+
+        logD("_showNativeExpressAd: end.");
+    }
+
+    public void showNativeExpressAd(@NonNull JSONObject json) {
+        logD("showNativeExpressAd: begin json = " + json);
+
+        assert (json.length() == 5);
+
+        try {
+            String adUnitId = json.getString("Param1");
+            Integer width = json.getInt("Param2");
+            Integer height = json.getInt("Param3");
+            Integer position = json.getInt("Param4");
+
+            _showNativeExpressAd(adUnitId, width, height, position);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        logD("showNativeExpressAd: end.");
+    }
+
+    public void hideNativeExpressAd() {
+        logD("hideNativeExpressAd: begin.");
+
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                logD("hideNativeExpressAd: main thread begin.");
+                if (_nativeExpressAdView != null) {
+                    _nativeExpressAdView.setVisibility(View.GONE);
+                    _nativeExpressAdView.destroy();
+                    _nativeExpressAdView = null;
+                }
+                logD("hideNativeExpressAd: main thread end.");
+            }
+        };
+
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            r.run();
+        } else {
+            PluginWrapper.runOnMainThread(r);
+        }
+
+        logD("hideNativeExpressAd: end.");
+    }
+
+    public int _getSizeInPixels(@NonNull Integer size) {
+        if (size == AdSize.AUTO_HEIGHT) {
+            return getAutoHeightInPixels();
+        }
+        if (size == AdSize.FULL_WIDTH) {
+            return getFullWidthInPixels();
+        }
+        AdSize adSize = new AdSize(size, size);
+        return adSize.getHeightInPixels(mContext);
+    }
+
+    public int getSizeInPixels(int size) {
+        return _getSizeInPixels(size);
+    }
+
+    public int getAutoHeightInPixels() {
+        return AdSize.SMART_BANNER.getHeightInPixels(mContext);
+    }
+
+    public int getFullWidthInPixels() {
+        return AdSize.SMART_BANNER.getWidthInPixels(mContext);
     }
 
     public synchronized void slideBannerUp() {
