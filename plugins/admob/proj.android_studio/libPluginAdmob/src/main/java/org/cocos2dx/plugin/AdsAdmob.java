@@ -632,7 +632,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     public void showNativeExpressAd(@NonNull JSONObject json) {
         logD("showNativeExpressAd: begin json = " + json);
 
-        assert (json.length() == 5);
+        assert (json.length() == 4);
 
         try {
             String adUnitId = json.getString("Param1");
