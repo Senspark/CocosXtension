@@ -481,65 +481,12 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         logD("Admob not support query points!");
     }
 
-    public synchronized boolean hasInterstitial() {
-        isLoaded = false;
-        mShouldLock = true;
-
-        synchronized (this) {
-
-        PluginWrapper.runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                isLoaded = interstitialAdView.isLoaded();
-
-                synchronized (AdsAdmob.this) {
-                    mShouldLock = false;
-                    AdsAdmob.this.notify();
-                }
-            }
-        });
-
-
-            try {
-                if (mShouldLock) {
-                    wait();
-                }
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        return isLoaded;
+    public boolean hasInterstitial() {
+        return _isInterstitialAdLoaded.get();
     }
 
     public boolean hasRewardedAd() {
-        isLoaded = false;
-        mShouldLock = true;
-
-        PluginWrapper.runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                isLoaded = mRewardedVideoAd.isLoaded();
-
-                synchronized (AdsAdmob.this) {
-                    mShouldLock = false;
-                    logD("[ADS] NOTIFY");
-                    AdsAdmob.this.notify();
-                }
-            }
-        });
-
-        synchronized (this) {
-            try {
-                if (mShouldLock) {
-                    logD("[ADS] WAIT");
-                    wait();
-                }
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return isLoaded;
+        return _isRewardedVideoAdLoaded.get();
     }
 
     public synchronized void loadRewardedAd(final String adID) {
