@@ -58,7 +58,7 @@ public class RewardedAdListener implements RewardedVideoAdListener {
     public void onRewardedVideoAdFailedToLoad(int errorCode) {
         _adapter.logD("RewardedAdListener: onRewardedVideoAdFailedToLoad: begin errorCode = " + errorCode);
 
-        _adapter._isRewardedVideoAdLoading.set(false);
+        _adapter._isRewardedVideoAdLoading = false;
         refreshAdAvailability();
 
         AdsWrapper.onAdsResult(_adapter,
@@ -72,7 +72,7 @@ public class RewardedAdListener implements RewardedVideoAdListener {
     public void onRewardedVideoAdLoaded() {
         _adapter.logD("RewardedAdListener: onRewardedVideoAdLoaded: begin.");
 
-        _adapter._isRewardedVideoAdLoading.set(false);
+        _adapter._isRewardedVideoAdLoading = false;
         refreshAdAvailability();
 
         AdsWrapper.onAdsResult(_adapter,

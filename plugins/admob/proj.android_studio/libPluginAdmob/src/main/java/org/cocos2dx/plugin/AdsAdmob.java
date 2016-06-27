@@ -206,17 +206,15 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     public void configMediationAdColony(final JSONObject devInfo) {
         logD("configMediationAdColony: json = " + devInfo);
 
-        if (_isAdColonyInitializing.get()) {
-            logE("configMediationAdColony: is initializing!");
-            return;
-        }
-
         if (_isAdColonyInitialized.get()) {
             logE("configMediationAdColony: already initialized!");
             return;
         }
 
-        _isAdColonyInitializing.set(true);
+        if (_isAdColonyInitializing.getAndSet(true)) {
+            logE("configMediationAdColony: is initializing!");
+            return;
+        }
 
         String versionName = null;
 
@@ -533,8 +531,8 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             "_showNativeExpressAd: begin adUnitId = %s width = %d height = %d position = %d.",
             adUnitId, width, height, position));
 
-        if (!_isNativeExpressAdInitializing.get()) {
-            _isNativeExpressAdInitializing.set(true);
+
+        if (!_isNativeExpressAdInitializing.getAndSet(true)) {
             _nativeExpressAdSize = new AdSize(width, height);
 
             PluginWrapper.runOnMainThread(new Runnable() {
