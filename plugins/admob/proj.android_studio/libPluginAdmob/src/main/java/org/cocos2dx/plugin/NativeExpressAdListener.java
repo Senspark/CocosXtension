@@ -1,6 +1,7 @@
 package org.cocos2dx.plugin;
 
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.google.android.gms.ads.AdListener;
@@ -16,7 +17,7 @@ public class NativeExpressAdListener extends AdListener {
     private AdsAdmob _adapter;
     private WeakReference<NativeExpressAdView> _nativeExpressAdView;
 
-    NativeExpressAdListener(AdsAdmob adapter, NativeExpressAdView adView) {
+    public NativeExpressAdListener(@NonNull AdsAdmob adapter, @NonNull NativeExpressAdView adView) {
         this._adapter = adapter;
         this._nativeExpressAdView = new WeakReference<>(adView);
     }
@@ -93,7 +94,6 @@ public class NativeExpressAdListener extends AdListener {
         assert (Looper.getMainLooper() == Looper.myLooper());
 
         super.onAdLoaded();
-
         AdsWrapper.onAdsResult(_adapter, AdsWrapper.ResultCode.NativeExpressAdLoaded,
             "Ads request received success!");
 
