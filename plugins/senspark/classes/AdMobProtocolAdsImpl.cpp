@@ -61,7 +61,6 @@ void AdmobProtocolAds::configureAds(const std::string &bannerAds, const std::str
     cocos2d::plugin::TAdsInfo devInfo;
     devInfo[AdBannerIdKey]          = bannerAds;
     devInfo[AdInterstitialIdKey]    = interstitialAds;
-    
     configDeveloperInfo(devInfo);
 }
 
@@ -73,7 +72,6 @@ void AdmobProtocolAds::addTestDevice(const std::string &deviceId) {
 void AdmobProtocolAds::showBannerAd(const std::string& bannerAdId,
                                     AdSize bannerAdSize,
                                     AdsPos bannerAdPosition) {
-    configureAds(bannerAdId);
     cocos2d::plugin::TAdsInfo info;
     info[AdTypeKey] = AdType::Banner;
     info[AdSizeKey] = bannerAdSize;

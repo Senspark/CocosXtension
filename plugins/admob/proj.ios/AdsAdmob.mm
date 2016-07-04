@@ -208,7 +208,7 @@
         kGADAdSizeFullBanner,
         kGADAdSizeLeaderboard,
         kGADAdSizeSkyscraper,
-        kGADAdSizeSmartBannerLandscape
+        [self isCurrentOrientationLandscape] ? kGADAdSizeSmartBannerLandscape : kGADAdSizeSmartBannerPortrait
     }};
     auto size = AdSizes.at(sizeEnum);
     
@@ -571,4 +571,10 @@
                      }];
 
 }
+
+- (BOOL) isCurrentOrientationLandscape {
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    return UIInterfaceOrientationIsLandscape(orientation);
+}
+
 @end
