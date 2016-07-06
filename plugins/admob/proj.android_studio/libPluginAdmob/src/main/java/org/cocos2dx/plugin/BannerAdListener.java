@@ -10,22 +10,27 @@ import com.google.android.gms.ads.AdRequest;
  * Created by enrevol on 4/8/16.
  */
 class BannerAdListener extends AdListener {
-    private AdsAdmob adapter;
+    private AdsAdmob _adapter;
 
     BannerAdListener(AdsAdmob adapter) {
-        this.adapter = adapter;
+        this._adapter = adapter;
     }
 
     @Override
     public void onAdClosed() {
+        _adapter.logD("BannerAdListener: onAdClosed: begin");
+
         super.onAdClosed();
-        adapter.logD("onDismissScreen invoked");
-        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsClosed, "Ads view closed!");
+        AdsWrapper.onAdsResult(_adapter, AdsWrapper.RESULT_CODE_AdsClosed, "Ads view closed!");
+
+        _adapter.logD("BannerAdListener: onAdClose: end.");
     }
 
     @Override
     public void onAdFailedToLoad(int errorCode) {
-        adapter.logE("load interstitial failed error code " + errorCode);
+        _adapter.logD("BannerAdListener: onAdFailedToLoad: begin.");
+        _adapter.logE("load interstitial failed error code " + errorCode);
+
         super.onAdFailedToLoad(errorCode);
 
         int errorNo = AdsWrapper.RESULT_CODE_AdsUnknownError;
@@ -45,40 +50,49 @@ class BannerAdListener extends AdListener {
             default:
                 break;
         }
-        adapter.logD("failed to receive ad : " + errorNo + " , " + errorMsg);
-        AdsWrapper.onAdsResult(adapter, errorNo, errorMsg);
+        _adapter.logD("failed to receive ad : " + errorNo + " , " + errorMsg);
+        AdsWrapper.onAdsResult(_adapter, errorNo, errorMsg);
+
+        _adapter.logD("BannerAdListener: onAdFailedToLoad: end.");
     }
 
     @Override
     public void onAdLeftApplication() {
+        _adapter.logD("BannerAdListener: onLeftApplication: begin.");
+
         super.onAdLeftApplication();
-        adapter.logD("onLeaveApplication invoked");
-        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsDismissed, "Ads view dismissed!");
+        AdsWrapper.onAdsResult(_adapter, AdsWrapper.RESULT_CODE_AdsDismissed, "Ads view dismissed!");
+
+        _adapter.logD("BannerAdListener: onLeftApplication: end.");
     }
 
     @Override
     public void onAdOpened() {
-        adapter.logD("onPresentScreen invoked");
-        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsShown, "Ads view shown!");
+        _adapter.logD("BannerAdListener: onAdOpened: begin.");
 
+        AdsWrapper.onAdsResult(_adapter, AdsWrapper.RESULT_CODE_AdsShown, "Ads view shown!");
         super.onAdOpened();
+
+        _adapter.logD("BannerAdListener: onAdOpened: end.");
     }
 
     @Override
     public void onAdLoaded() {
-        adapter.logD("onReceiveAd invoked");
-        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsBannerReceived, "Ads request received success!");
+        _adapter.logD("BannerAdListener: onAdLoaded: begin.");
 
-        if (adapter.adView != null) {
-            adapter.adView.setVisibility(View.GONE);
-            adapter.adView.setVisibility(View.VISIBLE);
+        super.onAdLoaded();
+        AdsWrapper.onAdsResult(_adapter, AdsWrapper.RESULT_CODE_AdsBannerReceived, "Ads request received success!");
 
-            if (adapter.adView.getAdSize().isAutoHeight()) {
-                adapter.logD("AdSize is SMART BANNER. Set its background color BLACK");
-                adapter.adView.setBackgroundColor(Color.BLACK);
+        if (_adapter.adView != null) {
+            _adapter.adView.setVisibility(View.GONE);
+            _adapter.adView.setVisibility(View.VISIBLE);
+
+            if (_adapter.adView.getAdSize().isAutoHeight()) {
+                _adapter.logD("AdSize is SMART BANNER. Set its background color BLACK");
+                _adapter.adView.setBackgroundColor(Color.BLACK);
             }
         }
 
-        super.onAdLoaded();
+        _adapter.logD("BannerAdListener: onAdLoaded: end.");
     }
 }

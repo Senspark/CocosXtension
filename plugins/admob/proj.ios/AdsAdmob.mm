@@ -212,6 +212,8 @@
     }};
     auto size = AdSizes.at(sizeEnum);
     
+    [self setBannerAdSize:size];
+    
     if (nil != self.bannerView) {
         [self.bannerView removeFromSuperview];
         [self.bannerView release];
@@ -423,22 +425,26 @@
     }
 }
 
-- (NSNumber*) getBannerWidthInPixel
-{
-    int ret = 0;
-    if (self.bannerView) {
-        ret = self.bannerView.frame.size.width;
+- (NSNumber*) getBannerWidthInPixel {
+    GADBannerView* banner =
+        [[GADBannerView alloc] initWithAdSize:[self bannerAdSize]];
+    if (banner == nil) {
+        return @(0);
     }
-    return [NSNumber numberWithInt:ret];
+    
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    return @([banner frame].size.width * scale);
 }
 
-- (NSNumber*) getBannerHeightInPixel
-{
-    int ret = 0;
-    if (self.bannerView) {
-        ret = self.bannerView.frame.size.height;
+- (NSNumber*) getBannerHeightInPixel {
+    GADBannerView* banner =
+        [[GADBannerView alloc] initWithAdSize:[self bannerAdSize]];
+    if (banner == nil) {
+        return @(0);
     }
-    return [NSNumber numberWithInt:ret];
+    
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    return @([banner frame].size.height * scale);
 }
 
 #pragma mark interface for Admob SDK
