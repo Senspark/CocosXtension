@@ -54,6 +54,8 @@ typedef enum {
 @property (assign, nonatomic) GADInterstitial*  _Nullable interstitialView;
 @property (assign, nonatomic) NSMutableArray*   _Nullable testDeviceIDs;
 
+@property (nonatomic) GADAdSize bannerAdSize;
+
 @property (nonatomic, assign, nullable) GADNativeExpressAdView* nativeExpressAdView;
 
 @property (assign, nonatomic) int slideUpTimePeriod;
