@@ -137,6 +137,10 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     protected final Object mLock = new Object();
 
     private AdSize  mBannerSize                         = null;
+    /** Write access in UI thread (reward ad listener), read access in Cocos thread. */
+    protected AtomicBoolean _isRewardedVideoAdLoaded = new AtomicBoolean(false);
+    protected boolean _isRewardedVideoAdLoading = false;
+    private RewardedVideoAd _rewardedVideoAd = null;
 
     private AtomicBoolean _isNativeExpressAdInitializing = new AtomicBoolean(false);
     private AdSize _nativeExpressAdSize = null;
@@ -193,14 +197,9 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         return "9.0.0";
     }
 
+    @Deprecated
     private void initializeMediationAd() {
-        PluginWrapper.runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(mContext);
-                mRewardedVideoAd.setRewardedVideoAdListener(new RewardedAdListener());
-            }
-        });
+        logE("initializeMediationAd: this method is deprecated!");
     }
 
     public void configMediationAdColony(final JSONObject devInfo) {
@@ -487,28 +486,38 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         return _isRewardedVideoAdLoaded.get();
     }
 
-    public synchronized void loadRewardedAd(final String adID) {
+    private void createRewardedAd() {
+        assert (Looper.getMainLooper() == Looper.myLooper());
+
+        if (_rewardedVideoAd == null) {
+            _rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(mContext);
+            _rewardedVideoAd.setRewardedVideoAdListener(
+                new RewardedAdListener(AdsAdmob.this, _rewardedVideoAd));
+        }
+    }
+
+    public synchronized void loadRewardedAd(final String rewardedAdId) {
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
-                synchronized (mLock) {
-                    if (!mIsRewardedVideoLoading) {
-                        mIsRewardedVideoLoading = true;
-                        Bundle extras = new Bundle();
-                        extras.putBoolean("_noRefresh", true);
+                if (!_isRewardedVideoAdLoading) {
+                    _isRewardedVideoAdLoading = true;
+                    Bundle extras = new Bundle();
+                    extras.putBoolean("_noRefresh", true);
 
-                        AdRequest.Builder builder = new AdRequest.Builder();
+                    AdRequest.Builder builder = new AdRequest.Builder();
 
-                        if (_isAdColonyInitialized.get() && _adColonyRewardedZoneId != null) {
-                            AdColonyBundleBuilder.setZoneId(_adColonyRewardedZoneId);
-                            builder.addNetworkExtrasBundle(AdMobAdapter.class, extras)
-                                .addNetworkExtrasBundle(AdColonyAdapter.class,
-                                    AdColonyBundleBuilder.build());
-                        }
-
-                        AdRequest request = builder.build();
-                        mRewardedVideoAd.loadAd(adID, request);
+                    if (_isAdColonyInitialized.get() && _adColonyRewardedZoneId != null) {
+                        AdColonyBundleBuilder.setZoneId(_adColonyRewardedZoneId);
+                        builder.addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                            .addNetworkExtrasBundle(AdColonyAdapter.class,
+                                AdColonyBundleBuilder.build());
                     }
+
+                    createRewardedAd();
+
+                    AdRequest request = builder.build();
+                    _rewardedVideoAd.loadAd(rewardedAdId, request);
                 }
             }
         });
@@ -518,7 +527,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
-                mRewardedVideoAd.show();
+                _rewardedVideoAd.show();
             }
         });
     }
