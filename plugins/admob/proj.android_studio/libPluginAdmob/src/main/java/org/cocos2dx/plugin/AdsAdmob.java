@@ -128,14 +128,15 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     private boolean bDebug                              = true;
 
-    protected AdView adView                             = null;
-    protected InterstitialAd interstitialAdView           = null;
-    private RewardedVideoAd mRewardedVideoAd            = null;
-    private boolean isLoaded                            = false;
-    protected boolean mIsRewardedVideoLoading;
-    protected final Object mLock = new Object();
+    private AdSize _bannerAdSize = null;
+    protected AdView adView = null;
 
-    private AdSize  mBannerSize                         = null;
+    /** Write access in UI thread (interstitial ad listener), read access in Cocos thread. */
+    protected AtomicBoolean _isInterstitialAdLoaded = new AtomicBoolean(false);
+    private AtomicBoolean _isIntestitialAdCreated = new AtomicBoolean(false);
+    private InterstitialAd _interstitialAd = null;
+    private String _interstitialId = null;
+
     /** Write access in UI thread (reward ad listener), read access in Cocos thread. */
     protected AtomicBoolean _isRewardedVideoAdLoaded = new AtomicBoolean(false);
     protected boolean _isRewardedVideoAdLoading = false;
@@ -145,7 +146,6 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     private AdSize _nativeExpressAdSize = null;
     private NativeExpressAdView _nativeExpressAdView = null;
 
-
     private AtomicBoolean _isAdColonyInitializing = new AtomicBoolean(false);
     private AtomicBoolean _isAdColonyInitialized = new AtomicBoolean(false);
     private String _adColonyAppId = null;
@@ -154,10 +154,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     private String _adColonyClientOptions = null;
 
     private String mBannerID        = "";
-    private String mInterstitialID  = "";
     private Set<String> mTestDevices = null;
-
-    private volatile boolean mShouldLock = false;
 
     protected void logE(String msg) {
         Log.e(LOG_TAG, msg);
@@ -294,9 +291,9 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         logD("configDeveloperInfo");
         try {
             mBannerID       = devInfo.get(Constants.AdIdKey);
-            mInterstitialID = devInfo.get(Constants.AdIntestitialIdKey);
+            _interstitialId = devInfo.get(Constants.AdIntestitialIdKey);
             logD("id banner Ad: " + mBannerID);
-            logD("id interstitialAd: " + mInterstitialID);
+            logD("id interstitialAd: " + _interstitialId);
         } catch (Exception e) {
             logE("initAppInfo, The format of appInfo is wrong", e);
         }
@@ -355,13 +352,13 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     private synchronized void showBannerAd(final int sizeEnum, final int pos) {
         logD("[ADS] ADSADMOB - SHOW BANNER AD");
-        mBannerSize = AdSizes.get(sizeEnum);
+        _bannerAdSize = AdSizes.get(sizeEnum);
 
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
                 adView = new AdView(mContext);
-                adView.setAdSize(mBannerSize);
+                adView.setAdSize(_bannerAdSize);
                 adView.setAdUnitId(mBannerID);
                 adView.setAdListener(new BannerAdListener(AdsAdmob.this));
 
@@ -405,22 +402,37 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 mTestDevices.add(deviceID);
             }
         });
+    }
 
+    private synchronized void createInterstitialAd() {
+        logD("createInterstitialAd: begin.");
+
+        if (!_isIntestitialAdCreated.get() ||
+            !TextUtils.equals(_interstitialAd.getAdUnitId(), _interstitialId)) {
+            // Only loadAd and creating AdRequest must perform on UI Thread.
+            // https://groups.google.com/forum/#!topic/google-admob-ads-sdk/a342zlMTax0
+            _interstitialAd = new InterstitialAd(mContext);
+
+            _interstitialAd.setAdUnitId(_interstitialId);
+            _interstitialAd.setAdListener(new InterstitialAdListener(this, _interstitialAd));
+            _interstitialAd.setInAppPurchaseListener(new IAPListener(this));
+
+            _isIntestitialAdCreated.set(true);
+        }
+
+        logD("createInterstitialAd: end.");
     }
 
     public synchronized void loadInterstitial() {
-        if (interstitialAdView == null || !TextUtils.equals(interstitialAdView.getAdUnitId(), mInterstitialID)) {
-            interstitialAdView = new InterstitialAd(mContext);
+        logD("loadInterstitial: begin.");
 
-            interstitialAdView.setAdUnitId(mInterstitialID);
-            interstitialAdView.setAdListener(new InterstitialAdListener(AdsAdmob.this));
-            interstitialAdView.setInAppPurchaseListener(new IAPListener(AdsAdmob.this));
-        }
+        createInterstitialAd();
 
-        PluginWrapper.runOnMainThread(new Runnable() {
+        Runnable r = new Runnable() {
             @Override
             public void run() {
-                Log.i(LOG_TAG, "Start loading interstitial ad");
+                logD("loadInterstitial: main thread begin.");
+
                 AdRequest.Builder builder = new AdRequest.Builder();
 
                 if (_isAdColonyInitialized.get() && _adColonyInterstitialZoneId != null) {
@@ -435,36 +447,56 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 }
 
                 //begin load interstitial ad
-                if (interstitialAdView != null) {
-                    interstitialAdView.loadAd(builder.build());
+                if (_interstitialAd != null) {
+                    _interstitialAd.loadAd(builder.build());
                 }
+
+                logD("loadInterstitial: main thread end.");
             }
-        });
+        };
+
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            // Run immediately if showing interstitial fails.
+            r.run();
+        } else {
+            PluginWrapper.runOnMainThread(r);
+        }
+
+        logD("loadInterstitial: end.");
     }
 
     public synchronized void showInterstitial() {
+        logD("showInterstitial: begin.");
+
         PluginWrapper.runOnMainThread(new Runnable() {
             @Override
             public void run() {
-                if (interstitialAdView == null || interstitialAdView.isLoaded() == false) {
-                    Log.e("PluginAdmob", String.format("ADMOB: Interstitial cannot show. It is not ready: - InterstitialAdView: %s - isLoaded: %b",
-                            interstitialAdView == null ? "null" : interstitialAdView.toString(),
-                            interstitialAdView != null && interstitialAdView.isLoaded()));
+                logD("showInterstitial: main thread begin.");
+
+                if (!_isIntestitialAdCreated.get()) {
+                    logE("showInterstitial: interstitial has not been created!");
+                    loadInterstitial();
+                } else if (!_interstitialAd.isLoaded()) {
+                    logE("showInterstitial: interstitial is not loaded!");
                     loadInterstitial();
                 } else {
-                    interstitialAdView.show();
+                    _interstitialAd.show();
                 }
+
+                logD("showInterstitial: main thread end.");
             }
         });
+
+        logD("showInterstitial: end.");
     }
 
     public int getBannerWidthInPixel() {
-        return mBannerSize.getWidthInPixels(mContext);
+        return _bannerAdSize.getWidthInPixels(mContext);
     }
 
 
     public int getBannerHeightInPixel() {
-        return mBannerSize.getHeightInPixels(mContext);
+        return _bannerAdSize.getHeightInPixels(mContext);
     }
 
     @Override
