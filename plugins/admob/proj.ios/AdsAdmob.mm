@@ -208,7 +208,7 @@
         kGADAdSizeFullBanner,
         kGADAdSizeLeaderboard,
         kGADAdSizeSkyscraper,
-        [self isCurrentOrientationLandscape] ? kGADAdSizeSmartBannerLandscape : kGADAdSizeSmartBannerPortrait
+        [self getSmartBannerAdSize]
     }};
     auto size = AdSizes.at(sizeEnum);
     
@@ -276,10 +276,8 @@
         // Full width.
         if ([height intValue] == -2) {
             // Auto height.
-            if (UIInterfaceOrientationIsLandscape(orientation)) {
-                return kGADAdSizeSmartBannerLandscape;
-            }
-            return kGADAdSizeSmartBannerPortrait;
+            // Smart banner.
+            return [self getSmartBannerAdSize];
         }
         if (UIInterfaceOrientationIsLandscape(orientation)) {
             return GADAdSizeFullWidthLandscapeWithHeight([height intValue]);
@@ -347,14 +345,8 @@
 }
 
 - (GADBannerView* _Nullable) createDummySmartBanner {
-    UIInterfaceOrientation orientation =
-        [[UIApplication sharedApplication] statusBarOrientation];
-    GADBannerView* banner = [GADBannerView alloc];
-    if (UIInterfaceOrientationIsLandscape(orientation)) {
-        [banner initWithAdSize:kGADAdSizeSmartBannerLandscape];
-    } else {
-        [banner initWithAdSize:kGADAdSizeSmartBannerPortrait];
-    }
+    GADBannerView* banner =
+        [[GADBannerView alloc] initWithAdSize:[self getSmartBannerAdSize]];
     return [banner autorelease];
 }
 
@@ -578,9 +570,13 @@
 
 }
 
-- (BOOL) isCurrentOrientationLandscape {
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    return UIInterfaceOrientationIsLandscape(orientation);
+- (GADAdSize) getSmartBannerAdSize {
+    UIInterfaceOrientation orientation =
+        [[UIApplication sharedApplication] statusBarOrientation];
+    
+    return UIInterfaceOrientationIsLandscape(orientation)
+               ? kGADAdSizeSmartBannerLandscape
+               : kGADAdSizeSmartBannerPortrait;
 }
 
 @end
