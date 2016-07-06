@@ -124,8 +124,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     private static final String LOG_TAG                 = AdsAdmob.class.getName();
 
-    protected Activity mContext                         = null;
-    protected static AdsAdmob mAdapter                  = null;
+    private Activity mContext                         = null;
 
     private boolean bDebug                              = true;
 
@@ -179,12 +178,12 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     public AdsAdmob(Context context) {
-        Log.i(LOG_TAG, "Initializing AdsAdmob");
+        logI("constructor: begin.");
 
         mContext = (Activity) context;
-        mAdapter = this;
         PluginWrapper.addListener(this);
 
+        logI("constructor: end.");
     }
 
     @Override
