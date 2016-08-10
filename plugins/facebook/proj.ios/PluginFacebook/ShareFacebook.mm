@@ -162,8 +162,8 @@
         sharePhoto.image = img;
         
         FBSDKSharePhotoContent* content = [[[FBSDKSharePhotoContent alloc] init] autorelease];
-        content.photos = @[sharePhoto];
         
+        content.photos = @[sharePhoto];
         
         [FBSDKShareDialog showFromViewController:[ShareWrapper getCurrentRootViewController] withContent:content delegate:[[FacebookSharingDelegate alloc] initWithSharer:self andCallbackID:cbID]];
     }
@@ -173,6 +173,7 @@
         
         FBSDKShareVideoContent *content = [[[FBSDKShareVideoContent alloc] init] autorelease];
         content.video = shareVideo;
+        
         
         [FBSDKShareDialog showFromViewController:[ShareWrapper getCurrentRootViewController] withContent:content delegate:[[FacebookSharingDelegate alloc] initWithSharer:self andCallbackID:cbID]];
     } else {

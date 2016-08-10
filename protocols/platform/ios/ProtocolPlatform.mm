@@ -16,6 +16,48 @@ static EReachability* _reachability = nullptr;
 
 USING_NS_CC_PLUGIN;
 
+@interface Utils
+
++(UIViewController*) getRootViewController;
+
+@end
+
+@implementation Utils
+
++(UIViewController*) getRootViewController {
+    
+    UIViewController *result = nil;
+    
+    // Try to find the root view controller programmically
+    
+    // Find the top window (that is not an alert view or other window)
+    UIWindow *topWindow = [[UIApplication sharedApplication] keyWindow];
+    if (topWindow.windowLevel != UIWindowLevelNormal)
+    {
+        NSArray *windows = [[UIApplication sharedApplication] windows];
+        for(topWindow in windows)
+        {
+            if (topWindow.windowLevel == UIWindowLevelNormal)
+                break;
+        }
+    }
+    
+    UIView *rootView = [[topWindow subviews] objectAtIndex:0];
+    id nextResponder = [rootView nextResponder];
+    
+    if ([nextResponder isKindOfClass:[UIViewController class]])
+        result = nextResponder;
+    else if ([topWindow respondsToSelector:@selector(rootViewController)] && topWindow.rootViewController != nil)
+        result = topWindow.rootViewController;
+    else
+        NSAssert(NO, @"Could not find a root view controller.");
+    
+    return result;
+}
+
+@end
+
+
 ProtocolPlatform::ProtocolPlatform() {
     _reachability = [[EReachability reachabilityWithHostName:@"www.google.com"] retain];
     _reachability.reachableBlock = ^void(EReachability * reachability) {
@@ -38,8 +80,11 @@ ProtocolPlatform::~ProtocolPlatform() {
 }
 
 bool ProtocolPlatform::isRelease() {
-    NSLog(@"ProtocolPlatform does not support isRelease on iOS");
+#ifdef DEBUG
     return false;
+#else
+    return true;
+#endif
 }
 
 float ProtocolPlatform::getMainScreenScale() {
@@ -93,6 +138,41 @@ double ProtocolPlatform::getVersionCode() {
 std::string ProtocolPlatform::getVersionName() {
     NSString *versionName = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
     return [versionName UTF8String];
+}
+
+void ProtocolPlatform::shareSocial(const std::string &msg, const char* image) {
+    NSMutableArray *sharingItems = [NSMutableArray new];
+    
+    // url
+    NSString* URL = [[NSString alloc] initWithUTF8String:msg.c_str()];
+    
+    if (URL) {
+        [sharingItems addObject:URL];
+    }
+    if (image) {
+        // img
+        NSString* IMG = [[NSString alloc] initWithUTF8String:image];
+        
+        if(IMG)
+        {
+            NSData *pngData = [NSData dataWithContentsOfFile:IMG];
+            if(pngData) {
+                UIImage *image = [UIImage imageWithData:pngData];
+                [sharingItems addObject:image];
+            }
+        }
+    }
+    
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:sharingItems applicationActivities:nil];
+    activityController.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll];
+
+    // it work on iOS >= 8.0
+    float iOSVer = [[UIDevice currentDevice].systemVersion floatValue];
+    if (iOSVer >= 8.0) {
+        activityController.popoverPresentationController.sourceView = [Utils getRootViewController].view;
+    }
+
+    [[Utils getRootViewController] presentViewController:activityController animated:YES completion:nil];
 }
 
 void ProtocolPlatform::sendFeedback(const std::string &appName) {

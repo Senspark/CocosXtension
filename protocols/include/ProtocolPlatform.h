@@ -39,6 +39,8 @@ public:
     std::string getCurrentLanguageCode();
     std::string getSHA1CertFingerprint();
     std::string getVersionName();
+    
+    void    shareSocial(const std::string& msg, const char* image = nullptr);
 
     void finishActivity();
     

@@ -132,6 +132,11 @@ void ProtocolPlatform::sendFeedback(const std::string& appName) {
     callFuncWithParam("sendFeedback", &param, nullptr);
 }
 
+void ProtocolPlatform::shareSocial(const std::string& msg, const char* image) {
+
+}
+
+
 void ProtocolPlatform::finishActivity() {
     callFuncWithParam("finishActivity", nullptr);
 }
