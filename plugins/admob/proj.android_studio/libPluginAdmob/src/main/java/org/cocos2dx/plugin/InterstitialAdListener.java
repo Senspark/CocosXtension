@@ -2,30 +2,50 @@ package org.cocos2dx.plugin;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by enrevol on 4/8/16.
  */
 class InterstitialAdListener extends AdListener {
-    private AdsAdmob adapter;
+    private AdsAdmob _adapter;
+    private WeakReference<InterstitialAd> _interstitialAd;
 
-    InterstitialAdListener(AdsAdmob adapter) {
-        this.adapter = adapter;
+    public InterstitialAdListener(AdsAdmob adapter, InterstitialAd ad) {
+        _adapter = adapter;
+        _interstitialAd = new WeakReference<>(ad);
+    }
+
+    private void refreshAdAvailability() {
+        assert (_interstitialAd.get() != null);
+
+        if (_interstitialAd.get() != null) {
+            _adapter._isInterstitialAdLoaded.set(_interstitialAd.get().isLoaded());
+        }
     }
 
     @Override
     public void onAdClosed() {
-        super.onAdClosed();
-        adapter.loadInterstitial();
-        adapter.logD("onDismissScreen invoked");
+        _adapter.logD("InterstitialAdListener: onAdClosed: begin.");
 
-        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsClosed, "[ADS] - AdWrapper Closed");
+        super.onAdClosed();
+        _adapter.loadInterstitial();
+        refreshAdAvailability();
+
+        AdsWrapper.onAdsResult(_adapter, AdsWrapper.RESULT_CODE_AdsClosed, "[ADS] - AdWrapper Closed");
+
+        _adapter.logD("InterstitialAdListener: onAdClosed: end.");
     }
 
     @Override
     public void onAdFailedToLoad(int errorCode) {
-        adapter.logE("load interstitial failed error code " + errorCode);
+        _adapter.logD("InterstitialAdListener: onAdFailedToLoad: begin.");
+        _adapter.logE("InterstitialAdListener: onAdFailedToLoad: errorCode = " + errorCode);
+
         super.onAdFailedToLoad(errorCode);
+        refreshAdAvailability();
 
         int errorNo = AdsWrapper.RESULT_CODE_AdsUnknownError;
         String errorMsg = "Unknow error";
@@ -44,31 +64,42 @@ class InterstitialAdListener extends AdListener {
             default:
                 break;
         }
-        adapter.logD("failed to receive ad : " + errorNo + " , " + errorMsg);
-        AdsWrapper.onAdsResult(adapter, errorNo, errorMsg);
+        _adapter.logD("failed to receive ad : " + errorNo + " , " + errorMsg);
+        AdsWrapper.onAdsResult(_adapter, errorNo, errorMsg);
+
+        _adapter.logD("InterstitialAdListener: onAdFailedToLoad: end.");
     }
 
     @Override
     public void onAdLeftApplication() {
-        super.onAdLeftApplication();
-        adapter.logD("onLeaveApplication invoked");
+        _adapter.logD("InterstitialAdListener: onAdLeftApplication: begin.");
 
-        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsDismissed, "[ADS] - AdWrapper Dismissed");
+        super.onAdLeftApplication();
+        refreshAdAvailability();
+        AdsWrapper.onAdsResult(_adapter, AdsWrapper.RESULT_CODE_AdsDismissed, "[ADS] - AdWrapper Dismissed");
+
+        _adapter.logD("InterstitialAdListener: onAdLeftApplication: end.");
     }
 
     @Override
     public void onAdOpened() {
-        adapter.logD("onPresentScreen invoked");
-        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsShown, "Ads view shown!");
+        _adapter.logD("InterstitialAdListener: onAdLeftApplication: begin.");
 
         super.onAdOpened();
+        refreshAdAvailability();
+        AdsWrapper.onAdsResult(_adapter, AdsWrapper.RESULT_CODE_AdsShown, "Ads view shown!");
+
+        _adapter.logD("InterstitialAdListener: onAdLeftApplication: end.");
     }
 
     @Override
     public void onAdLoaded() {
-        adapter.logD("onReceiveAd invoked");
-        AdsWrapper.onAdsResult(adapter, AdsWrapper.RESULT_CODE_AdsInterstitialReceived, "Ads request received success!");
+        _adapter.logD("InterstitialAdListener: onAdLoaded begin.");
 
         super.onAdLoaded();
+        refreshAdAvailability();
+        AdsWrapper.onAdsResult(_adapter, AdsWrapper.RESULT_CODE_AdsInterstitialReceived, "Ads request received success!");
+
+        _adapter.logD("InterstitialAdListener: onAdLoaded end.");
     }
 }

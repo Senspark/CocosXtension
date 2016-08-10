@@ -29,13 +29,18 @@
 #import "InterfaceAds.h"
 #import "AdsWrapper.h"
 
+@class SSNativeExpressAdListener;
+
 typedef enum {
     kTypeBanner = 1,
     kTypeFullScreen,
 } AdmobType;
 
-@interface AdsAdmob : NSObject <InterfaceAds, GADBannerViewDelegate, GADInterstitialDelegate, GADRewardBasedVideoAdDelegate>
-{
+@interface AdsAdmob
+    : NSObject <InterfaceAds, GADBannerViewDelegate, GADInterstitialDelegate,
+                GADRewardBasedVideoAdDelegate> {
+
+    SSNativeExpressAdListener* nativeExpressAdListener_;
 }
 
 @property BOOL debug;
@@ -48,6 +53,10 @@ typedef enum {
 @property (assign, nonatomic) GADBannerView*    _Nullable bannerView;
 @property (assign, nonatomic) GADInterstitial*  _Nullable interstitialView;
 @property (assign, nonatomic) NSMutableArray*   _Nullable testDeviceIDs;
+
+@property (nonatomic) GADAdSize bannerAdSize;
+
+@property (nonatomic, assign, nullable) GADNativeExpressAdView* nativeExpressAdView;
 
 @property (assign, nonatomic) int slideUpTimePeriod;
 @property (assign, nonatomic) int slideDownTimePeriod;
@@ -64,6 +73,13 @@ typedef enum {
 - (BOOL) hasRewardedAd;
 - (void) loadRewardedAd: (NSString* _Nonnull) adsID;
 - (void) showRewardedAd;
+
+- (void) showNativeExpressAd:(NSDictionary* _Nonnull) params;
+- (void) hideNativeExpressAd;
+
+- (NSNumber* _Nonnull) getSizeInPixels:(NSNumber* _Nonnull) size;
+- (NSNumber* _Nonnull) getAutoHeightInPixels;
+- (NSNumber* _Nonnull) getFullWidthInPixels;
 
 - (void) configMediationAdColony: (NSDictionary* __nullable) params;
 - (void) configMediationAdVungle: (NSDictionary* __nullable) params;

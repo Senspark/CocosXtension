@@ -12,6 +12,7 @@
 		2C26CF901CBB575C0097A42E /* libAdapterUnity.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C26CF8F1CBB575C0097A42E /* libAdapterUnity.a */; };
 		2C26CF951CBB843E0097A42E /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95245C0E1B60EB4A000EDF84 /* GoogleMobileAds.framework */; };
 		2C26CF9D1CBB86F00097A42E /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C26CF9C1CBB86F00097A42E /* GoogleMobileAds.framework */; };
+		6FBEDB7F1D1A79B80038E335 /* SSNativeExpressAdListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FBEDB7E1D1A79B80038E335 /* SSNativeExpressAdListener.mm */; };
 		FADC44AB176EA82000B2D5ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FADC44AA176EA82000B2D5ED /* Foundation.framework */; };
 		FADC44C6176EA84500B2D5ED /* AdsAdmob.mm in Sources */ = {isa = PBXBuildFile; fileRef = FADC44C4176EA84500B2D5ED /* AdsAdmob.mm */; };
 /* End PBXBuildFile section */
@@ -34,6 +35,8 @@
 		2C26CF321CB7A9300097A42E /* libAdapterSDKAdColony.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAdapterSDKAdColony.a; path = AdColony/AdColonyAdapter1.5/libAdapterSDKAdColony.a; sourceTree = "<group>"; };
 		2C26CF8F1CBB575C0097A42E /* libAdapterUnity.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAdapterUnity.a; path = UnityAds/libAdapterUnity.a; sourceTree = "<group>"; };
 		2C26CF9C1CBB86F00097A42E /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = Admob/GoogleMobileAds.framework; sourceTree = "<group>"; };
+		6FBEDB7E1D1A79B80038E335 /* SSNativeExpressAdListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SSNativeExpressAdListener.mm; sourceTree = "<group>"; };
+		6FBEDB801D1A79C50038E335 /* SSNativeExpressAdListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSNativeExpressAdListener.h; sourceTree = "<group>"; };
 		95245C0E1B60EB4A000EDF84 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 		95245C101B60EB4A000EDF84 /* GADMAdNetworkAdapterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADMAdNetworkAdapterProtocol.h; sourceTree = "<group>"; };
 		95245C111B60EB4A000EDF84 /* GADMAdNetworkConnectorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADMAdNetworkConnectorProtocol.h; sourceTree = "<group>"; };
@@ -92,6 +95,8 @@
 				FADC44B8176EA84500B2D5ED /* Admob */,
 				FADC44C3176EA84500B2D5ED /* AdsAdmob.h */,
 				FADC44C4176EA84500B2D5ED /* AdsAdmob.mm */,
+				6FBEDB801D1A79C50038E335 /* SSNativeExpressAdListener.h */,
+				6FBEDB7E1D1A79B80038E335 /* SSNativeExpressAdListener.mm */,
 				FADC44A9176EA82000B2D5ED /* Frameworks */,
 				FADC44A8176EA82000B2D5ED /* Products */,
 			);
@@ -177,6 +182,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6FBEDB7F1D1A79B80038E335 /* SSNativeExpressAdListener.mm in Sources */,
 				FADC44C6176EA84500B2D5ED /* AdsAdmob.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
