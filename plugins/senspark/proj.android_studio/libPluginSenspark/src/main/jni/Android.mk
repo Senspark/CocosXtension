@@ -28,7 +28,8 @@ $(addprefix ../../../../../platform/android/, \
     BaasboxProtocolBaas.cpp \
 ) \
 ../../../../../classes/SensparkPluginManager.cpp \
-../../../../../classes/AdMobProtocolAdsImpl.cpp
+../../../../../classes/AdMobProtocolAdsImpl.cpp \
+../../../../../classes/GoogleProtocolAnalyticsImpl.cpp
 
 LOCAL_CFLAGS := -std=c++14 -Wno-psabi
 LOCAL_EXPORT_CFLAGS := -Wno-psabi

@@ -13,7 +13,7 @@ namespace senspark {
 namespace plugin {
 namespace analytics {
 GoogleProtocolAnalytics::~GoogleProtocolAnalytics() {
-    PluginUtils::erasePluginJavaData(this);
+    cocos2d::plugin::PluginUtils::erasePluginJavaData(this);
 }
 } // namespace analytics
 } // namespace plugin
