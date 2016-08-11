@@ -9,12 +9,12 @@
 #ifndef PluginSenspark_GoogleProtocolAnalytics_h
 #define PluginSenspark_GoogleProtocolAnalytics_h
 
-#include "ProtocolAnalytics.h"
-#include "SensparkPluginMacros.h"
 #include <string>
 
-NS_SENSPARK_PLUGIN_ANALYTICS_BEGIN
+#include "ProtocolAnalytics.h"
+#include "SensparkPluginMacros.h"
 
+NS_SENSPARK_PLUGIN_ANALYTICS_BEGIN
 enum class GALogLevel {
     NONE = 0,
     ERROR = 1,
@@ -27,37 +27,61 @@ class GoogleProtocolAnalytics : public cocos2d::plugin::ProtocolAnalytics {
 public:
     GoogleProtocolAnalytics();
     virtual ~GoogleProtocolAnalytics();
-    
+
     void configureTracker(const std::string& trackerId);
     void createTracker(const std::string& trackerId);
     void enableTracker(const std::string& trackerId);
 
     void setLogLevel(GALogLevel logLevel);
-    
-    void dispatchHits();
-    
-    void dispatchPeriodically(int seconds);
-    
-    void stopPeriodicalDispatch();
-    
-    void trackScreen(const std::string& screenName);
-    
-    void trackEvent(const std::string& category, const std::string& action, const std::string& label, float value);
-    
-    void trackException(const std::string& description, bool isFatal);
-    
-    void trackTiming(const std::string& category, int interval, const std::string& name, const std::string& label);
 
-    void trackEcommerceTransactions(const std::string& identity, const std::string& productName, const std::string& productCategory, float priceValue);
-    
-    void trackSocial(const std::string& network, const std::string& action, const std::string& target);
-    
+    void dispatchHits();
+
+    void dispatchPeriodically(int seconds);
+
+    void stopPeriodicalDispatch();
+
+    void trackScreen(const std::string& screenName);
+
+    void trackEvent(const std::string& category, const std::string& action,
+                    const std::string& label, float value);
+
+    void trackException(const std::string& description, bool isFatal);
+
+    void trackTiming(const std::string& category, int interval,
+                     const std::string& name, const std::string& label);
+
+    void trackEcommerceTransactions(const std::string& identity,
+                                    const std::string& productName,
+                                    const std::string& productCategory,
+                                    float priceValue);
+
+    void trackSocial(const std::string& network, const std::string& action,
+                     const std::string& target);
+
     void setDryRun(bool isDryRun);
-    
+
     void enableAdvertisingTracking(bool enable);
+
+private:
+    template <std::size_t... S> struct Sequence {
+        static constexpr int Arity = sizeof...(S);
+    };
+
+    template <std::size_t N, std::size_t... S>
+    struct SequenceGenerator : SequenceGenerator<N - 1, N - 1, S...> {};
+
+    template <std::size_t... S> struct SequenceGenerator<0, S...> {
+        using Type = Sequence<S...>;
+    };
+
+    template <class... Args>
+    void callVoidFunction(const std::string& functionName, Args&&... args);
+
+    template <std::size_t... Indices, class... Args>
+    void callVoidFunctionImpl(const std::string& functionName,
+                              Sequence<Indices...>, Args&&... args);
 };
 
 NS_SENSPARK_PLUGIN_ANALYTICS_END
-
 
 #endif
