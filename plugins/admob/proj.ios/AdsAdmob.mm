@@ -26,9 +26,7 @@
 
 #import "AdsAdmob.h"
 #import "SSNativeExpressAdListener.h"
-
-#import <GADMAdapterAdColonyExtras.h>
-#import <GADMAdapterAdColonyInitializer.h>
+#import "SSAdColonyMediation.h"
 
 #define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
 
@@ -83,15 +81,23 @@
 
 - (void) configMediationAdColony:(NSDictionary *)params
 {
-    //initialize AdColony SDK
-    NSString* adColonyID                    = (NSString*) [params objectForKey:@"AdColonyAppID"];
-    NSString* interstitialAdColonyZoneID    = (NSString*) [params objectForKey:@"AdColonyInterstitialAdID"];
-    NSString* rewardedAdColonyZoneID        = (NSString*) [params objectForKey:@"AdColonyRewardedAdID"];
+    NSString* adColonyID                    = [params objectForKey:@"AdColonyAppID"];
+    NSString* interstitialAdColonyZoneID    = [params objectForKey:@"AdColonyInterstitialAdID"];
+    NSString* rewardedAdColonyZoneID        = [params objectForKey:@"AdColonyRewardedAdID"];
     self.strAdColonyInterstitialAdZoneID    = interstitialAdColonyZoneID;
     self.strAdColonyRewardedAdZoneID        = rewardedAdColonyZoneID;
 
-    if (nil != adColonyID) {
-        [GADMAdapterAdColonyInitializer startWithAppID:adColonyID andZones: [NSArray arrayWithObjects:interstitialAdColonyZoneID, rewardedAdColonyZoneID, nil] andCustomID:nullptr];
+    if (adColonyID != nil) {
+        if ([SSAdColonyMediation isLinkedWithAdColony]) {
+            NSArray* zones =
+                [NSArray arrayWithObjects:interstitialAdColonyZoneID,
+                                          rewardedAdColonyZoneID, nil];
+            [SSAdColonyMediation startWithAppId:adColonyID
+                                       andZones:zones
+                                    andCustomId:nil];
+        } else {
+            NSLog(@"AdColony is not linked!");
+        }
     }
 }
 
@@ -108,8 +114,8 @@
 #pragma mark InterfaceAds impl
 
 - (void) configDeveloperInfo: (NSDictionary*) devInfo {
-    NSString* bannerId      = (NSString*) [devInfo objectForKey:@"AdmobID"];
-    NSString* interstiailId = (NSString*) [devInfo objectForKey:@"AdmobInterstitialID"];
+    NSString* bannerId      = [devInfo objectForKey:@"AdmobID"];
+    NSString* interstiailId = [devInfo objectForKey:@"AdmobInterstitialID"];
     
     if (bannerId == nil) {
         NSLog(@"WARNING: BannerID is nil");
@@ -244,12 +250,13 @@
     self.interstitialView.delegate = self;
 
     GADRequest* request = [GADRequest request];
-    
-    if ([[self strAdColonyInterstitialAdZoneID] length] > 0) {
-        GADMAdapterAdColonyExtras *_extras = [[GADMAdapterAdColonyExtras alloc] initWithZone:self.strAdColonyInterstitialAdZoneID];
-        [request registerAdNetworkExtras:_extras];
+    if ([SSAdColonyMediation isLinkedWithAdColony] &&
+        [[self strAdColonyInterstitialAdZoneID] length] > 0) {
+        id<GADAdNetworkExtras> extras = [SSAdColonyMediation
+            extrasWithZoneId:[self strAdColonyInterstitialAdZoneID]];
+        [request registerAdNetworkExtras:extras];
     }
-    
+
     request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
     
     [self.interstitialView loadRequest:request];
@@ -401,9 +408,11 @@
     GADRequest *request = [GADRequest request];
     [request setTestDevices: [NSArray arrayWithArray: self.testDeviceIDs]];
 
-    if (self.strAdColonyRewardedAdZoneID.length > 0) {
-        GADMAdapterAdColonyExtras *extras = [[GADMAdapterAdColonyExtras alloc] initWithZone: self.strAdColonyRewardedAdZoneID];
-        [request registerAdNetworkExtras: extras];
+    if ([SSAdColonyMediation isLinkedWithAdColony] &&
+        [[self strAdColonyRewardedAdZoneID] length] > 0) {
+        id<GADAdNetworkExtras> extras = [SSAdColonyMediation
+            extrasWithZoneId:[self strAdColonyRewardedAdZoneID]];
+        [request registerAdNetworkExtras:extras];
     }
 
     [[GADRewardBasedVideoAd sharedInstance] loadRequest: request
@@ -570,10 +579,12 @@
 
 }
 
-- (GADAdSize) getSmartBannerAdSize {
+/// Retrieves the size of the smart banner depends on the orientation of the
+/// design resolution.
+- (GADAdSize)getSmartBannerAdSize {
     UIInterfaceOrientation orientation =
         [[UIApplication sharedApplication] statusBarOrientation];
-    
+
     return UIInterfaceOrientationIsLandscape(orientation)
                ? kGADAdSizeSmartBannerLandscape
                : kGADAdSizeSmartBannerPortrait;
