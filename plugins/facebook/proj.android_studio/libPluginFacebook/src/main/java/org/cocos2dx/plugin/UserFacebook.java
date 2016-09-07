@@ -41,6 +41,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.internal.CallbackManagerImpl;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -76,6 +77,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	public UserFacebook(Context context) {
 		mContext = (Activity) context;
 		FacebookSdk.sdkInitialize(mContext.getApplicationContext());
+		AppEventsLogger.activateApp(mContext.getApplication());
 		PluginWrapper.addListener(this);
 		mAdapter = this;
 		mCallbackManager = CallbackManager.Factory.create();
