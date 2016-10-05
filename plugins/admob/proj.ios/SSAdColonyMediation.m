@@ -45,7 +45,7 @@
         SEL method = NSSelectorFromString(@"initWithZone:");
         id extras = [clazz alloc];
         NSAssert([extras respondsToSelector:method], @"...");
-        [extras performSelector:extras withObject:zoneId];
+        [extras performSelector:method withObject:zoneId];
         return extras;
     }
     return nil;
