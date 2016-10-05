@@ -108,7 +108,7 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 	@Override
 	public void unlockAchievement(Hashtable<String, String> achInfo, final int callbackID) {
 		final String achievementId = achInfo.get("achievementId");
-		final int percentComplete = Integer.parseInt(achInfo.get("percent"));
+		final int percentComplete = Integer.parseInt(achInfo.get("percent").trim());
 
 		if (percentComplete >= 100) {
 
