@@ -17,6 +17,7 @@
 		2C4585E51C3B649300BA43BF /* UnityProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C4585E41C3B649300BA43BF /* UnityProtocolAds.mm */; };
 		2C8AE15B1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8AE15A1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm */; };
 		6C4A636E1CB75E5100E736E5 /* AdMobProtocolAdsImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A636D1CB75E5100E736E5 /* AdMobProtocolAdsImpl.cpp */; };
+		6FEE0D5A1D5C7CDA00B963C1 /* GoogleProtocolAnalyticsImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FEE0D591D5C7CDA00B963C1 /* GoogleProtocolAnalyticsImpl.cpp */; };
 		952FD2BA1C8542D4000F3848 /* GooglePlusProtocolUser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 952FD2B91C8542D4000F3848 /* GooglePlusProtocolUser.mm */; };
 		95376F611B86E83C001C62A5 /* AdColonyProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F501B86E83C001C62A5 /* AdColonyProtocolAds.mm */; };
 		95376F621B86E83C001C62A5 /* AdmobProtocolAds.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95376F511B86E83C001C62A5 /* AdmobProtocolAds.mm */; };
@@ -52,6 +53,7 @@
 		2C4585E41C3B649300BA43BF /* UnityProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UnityProtocolAds.mm; sourceTree = "<group>"; };
 		2C8AE15A1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GooglePlusProtocolShare.mm; sourceTree = "<group>"; };
 		6C4A636D1CB75E5100E736E5 /* AdMobProtocolAdsImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdMobProtocolAdsImpl.cpp; sourceTree = "<group>"; };
+		6FEE0D591D5C7CDA00B963C1 /* GoogleProtocolAnalyticsImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleProtocolAnalyticsImpl.cpp; sourceTree = "<group>"; };
 		9520E0B31B46A74800B7768B /* libPluginSenspark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginSenspark.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		952FD2B91C8542D4000F3848 /* GooglePlusProtocolUser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GooglePlusProtocolUser.mm; sourceTree = "<group>"; };
 		95376F501B86E83C001C62A5 /* AdColonyProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdColonyProtocolAds.mm; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			children = (
 				953C06EF1B57A8DD002BB1A2 /* SensparkPluginManager.cpp */,
 				6C4A636D1CB75E5100E736E5 /* AdMobProtocolAdsImpl.cpp */,
+				6FEE0D591D5C7CDA00B963C1 /* GoogleProtocolAnalyticsImpl.cpp */,
 			);
 			name = classes;
 			path = ../classes;
@@ -290,6 +293,7 @@
 				95376F651B86E83C001C62A5 /* FacebookProtocolShare.mm in Sources */,
 				95376F6F1B86E83C001C62A5 /* GoogleProtocolAnalytics.mm in Sources */,
 				95376F6A1B86E83C001C62A5 /* GameCenterProtocolSocial.mm in Sources */,
+				6FEE0D5A1D5C7CDA00B963C1 /* GoogleProtocolAnalyticsImpl.cpp in Sources */,
 				95376F6C1B86E83C001C62A5 /* GooglePlayProtocolData.mm in Sources */,
 				95376F611B86E83C001C62A5 /* AdColonyProtocolAds.mm in Sources */,
 				95376F6B1B86E83C001C62A5 /* GameCenterProtocolUser.mm in Sources */,

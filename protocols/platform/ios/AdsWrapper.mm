@@ -98,7 +98,7 @@ using namespace cocos2d::plugin;
 
 + (BOOL)wasBuiltForiOS8orLater
 {
-  return [[self buildVersion] compare:@"8.0"] != NSOrderedAscending;
+  return [[self buildVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending;
 }
 
 + (BOOL)requireRotation

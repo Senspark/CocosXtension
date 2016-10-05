@@ -41,6 +41,8 @@ public:
     std::string getVersionName();
     std::string getVersionCode();
 
+    void    shareSocial(const std::string& msg, const char* image = nullptr);
+
     void finishActivity();
     
     void sendFeedback(const std::string& appName);
