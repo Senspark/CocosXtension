@@ -67,6 +67,10 @@ std::string ProtocolPlatform::getCurrentLanguageCode() {
     return code;
 }
 
+void ProtocolPlatform::openApplication(const std::string &appName) {
+    NSString* nsAppName = [NSString stringWithFormat:@"%s://", appName.c_str()];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:nsAppName]];
+}
 
 bool ProtocolPlatform::isAppInstalled(const std::string& url) {
     NSString* appName = [NSString stringWithFormat:@"%s://", url.c_str()];
@@ -85,9 +89,9 @@ std::string ProtocolPlatform::getSHA1CertFingerprint() {
     return "";
 }
 
-double ProtocolPlatform::getVersionCode() {
+std::string ProtocolPlatform::getVersionCode() {
     NSString *versionString = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey];
-    return [versionString doubleValue];
+    return [versionString UTF8String];
 }
 
 std::string ProtocolPlatform::getVersionName() {

@@ -47,7 +47,17 @@ public class ProtocolPlatform  {
 		}
 		return isConnected;
 	}
-	
+
+	public void openApplication(final String appName) {
+		Intent launchIntent = mContext.getPackageManager().getLaunchIntentForPackage(appName);
+		if (launchIntent != null) {
+			Log.i("ProtocolPlatform", "Found! Open " + appName);
+			mContext.startActivity(launchIntent);//null pointer check in case package name was not found
+		} else {
+			Log.e("ProtocolPlatform", "App with name: " + appName + " not found");
+		}
+	}
+
 	public boolean isAppInstalled(final String appName) {
 		PackageManager pm = mContext.getPackageManager();
 		boolean isInstalled;
@@ -142,8 +152,9 @@ public class ProtocolPlatform  {
 		}
 	}
 	
-	public double getVersionCode() throws NameNotFoundException {
-		return mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionCode;
+	public String getVersionCode() throws NameNotFoundException {
+		return String.valueOf(
+            mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionCode);
 	}
 
 	public String getVersionName() throws NameNotFoundException {

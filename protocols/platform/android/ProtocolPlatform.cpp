@@ -28,31 +28,40 @@ THE SOFTWARE.
 #include "PluginJavaData.h"
 #include "PluginParam.h"
 
-#define PROTOCOL_NAME                     "ProtocolPlatform"
-#define ANDROID_PLUGIN_PACKAGE_PREFIX			"org/cocos2dx/plugin/"
+#define PROTOCOL_NAME "ProtocolPlatform"
+#define ANDROID_PLUGIN_PACKAGE_PREFIX "org/cocos2dx/plugin/"
 
-namespace cocos2d { namespace plugin {
+namespace cocos2d {
+namespace plugin {
 
 extern "C" {
-JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_PlatformWrapper_nativeOnPlatformResult(JNIEnv* env, jobject thiz, jint code, jstring msg)
-{
-	std::string strMsg 			= PluginJniHelper::jstring2string(env, msg);
-  std::string jClassName = ANDROID_PLUGIN_PACKAGE_PREFIX;
-  jClassName.append(PROTOCOL_NAME);
+JNIEXPORT void JNICALL
+Java_org_cocos2dx_plugin_PlatformWrapper_nativeOnPlatformResult(JNIEnv* env,
+                                                                jobject thiz,
+                                                                jint code,
+                                                                jstring msg) {
+    std::string strMsg = PluginJniHelper::jstring2string(env, msg);
+    std::string jClassName = ANDROID_PLUGIN_PACKAGE_PREFIX;
+    jClassName.append(PROTOCOL_NAME);
 
-	PluginProtocol* pPlugin 	= PluginUtils::getPluginPtr(jClassName);
-    PluginUtils::outputLog("PlatformWrapper", "pPlugin is null? - %s", pPlugin == nullptr? "YES":"NO");
-	ProtocolPlatform* pPlatform = dynamic_cast<ProtocolPlatform*>(pPlugin);
-	if (pPlatform != nullptr) {
-		ProtocolPlatform::PlatformCallback callback = pPlatform->getCallback();
-		if (callback) {
-			callback((PlatformResultCode)code, strMsg);
-		} else {
-			PluginUtils::outputLog("PlatformWrapper", "Cannot find callback of plugin %s", pPlugin->getPluginName());
-		}
-	} else {
-		PluginUtils::outputLog("PlatformWrapper", "Listener for plugin %s not set correctly", pPlugin->getPluginName());
-	}
+    PluginProtocol* pPlugin = PluginUtils::getPluginPtr(jClassName);
+    PluginUtils::outputLog("PlatformWrapper", "pPlugin is null? - %s",
+                           pPlugin == nullptr ? "YES" : "NO");
+    ProtocolPlatform* pPlatform = dynamic_cast<ProtocolPlatform*>(pPlugin);
+    if (pPlatform != nullptr) {
+        ProtocolPlatform::PlatformCallback callback = pPlatform->getCallback();
+        if (callback) {
+            callback((PlatformResultCode)code, strMsg);
+        } else {
+            PluginUtils::outputLog("PlatformWrapper",
+                                   "Cannot find callback of plugin %s",
+                                   pPlugin->getPluginName());
+        }
+    } else {
+        PluginUtils::outputLog("PlatformWrapper",
+                               "Listener for plugin %s not set correctly",
+                               pPlugin->getPluginName());
+    }
 }
 }
 
@@ -60,31 +69,33 @@ ProtocolPlatform::ProtocolPlatform() {
 
     std::string jClassName = ANDROID_PLUGIN_PACKAGE_PREFIX;
     jClassName.append(PROTOCOL_NAME);
-    PluginUtils::outputLog("PluginFactory", "jClassName: %s", jClassName.c_str());
-    PluginUtils::outputLog("PluginFactory", "Java class name of ProtocolPlatform : %s", jClassName.c_str());
+    PluginUtils::outputLog("PluginFactory", "jClassName: %s",
+                           jClassName.c_str());
+    PluginUtils::outputLog("PluginFactory",
+                           "Java class name of ProtocolPlatform : %s",
+                           jClassName.c_str());
 
     PluginJniMethodInfo t;
-    if (! PluginJniHelper::getStaticMethodInfo(t
-                                               , "org/cocos2dx/plugin/PluginWrapper"
-                                               , "initPlugin"
-                                               , "(Ljava/lang/String;)Ljava/lang/Object;"))
-    {
-        PluginUtils::outputLog("PluginFactory", "Can't find method initPlugin in class org.cocos2dx.plugin.PluginWrapper");
+    if (!PluginJniHelper::getStaticMethodInfo(
+            t, "org/cocos2dx/plugin/PluginWrapper", "initPlugin",
+            "(Ljava/lang/String;)Ljava/lang/Object;")) {
+        PluginUtils::outputLog("PluginFactory",
+                               "Can't find method initPlugin in class "
+                               "org.cocos2dx.plugin.PluginWrapper");
         return;
     }
 
     jstring clsName = t.env->NewStringUTF(jClassName.c_str());
-    jobject jObj = t.env->CallStaticObjectMethod(t.classID, t.methodID, clsName); //ProtocolPlatform java object
+    jobject jObj = t.env->CallStaticObjectMethod(
+        t.classID, t.methodID, clsName); // ProtocolPlatform java object
     t.env->DeleteLocalRef(clsName);
     t.env->DeleteLocalRef(t.classID);
 
-    ((PluginProtocol*) this)->setPluginName(PROTOCOL_NAME);
+    ((PluginProtocol*)this)->setPluginName(PROTOCOL_NAME);
     PluginUtils::initJavaPlugin(this, jObj, jClassName.c_str());
 }
 
-ProtocolPlatform::~ProtocolPlatform() {
-
-}
+ProtocolPlatform::~ProtocolPlatform() {}
 
 bool ProtocolPlatform::isConnected(const std::string& hostName) {
     PluginParam param(hostName.c_str());
@@ -98,20 +109,21 @@ bool ProtocolPlatform::isAppInstalled(const std::string& url) {
     return callBoolFuncWithParam("isAppInstalled", &param, nullptr);
 }
 
+void ProtocolPlatform::openApplication(const std::string& appName) {
+    PluginParam param(appName.c_str());
+    callFuncWithParam("openApplication", &param, nullptr);
+}
+
 bool ProtocolPlatform::isTablet() {
     return callBoolFuncWithParam("isTablet", nullptr);
 }
 
 bool ProtocolPlatform::isRelease() {
-  return callBoolFuncWithParam("isRelease", nullptr);
+    return callBoolFuncWithParam("isRelease", nullptr);
 }
 
 float ProtocolPlatform::getMainScreenScale() {
     return callDoubleFuncWithParam("getMainScreenScale", nullptr);
-}
-    
-double ProtocolPlatform::getVersionCode() {
-    return callDoubleFuncWithParam("getVersionCode", nullptr);
 }
 
 std::string ProtocolPlatform::getCurrentLanguageCode() {
@@ -119,11 +131,15 @@ std::string ProtocolPlatform::getCurrentLanguageCode() {
 }
 
 std::string ProtocolPlatform::getSHA1CertFingerprint() {
-  return callStringFuncWithParam("getSHA1CertFingerprint", nullptr);
+    return callStringFuncWithParam("getSHA1CertFingerprint", nullptr);
 }
 
 std::string ProtocolPlatform::getVersionName() {
     return callStringFuncWithParam("getVersionName", nullptr);
+}
+
+std::string ProtocolPlatform::getVersionCode() {
+    return callStringFuncWithParam("getVersionCode", nullptr);
 }
 
 void ProtocolPlatform::sendFeedback(const std::string& appName) {
@@ -136,8 +152,5 @@ void ProtocolPlatform::finishActivity() {
     callFuncWithParam("finishActivity", nullptr);
 }
 
-}  // namespace plugin
-}  // namespace cocos2d
-
-
-
+} // namespace plugin
+} // namespace cocos2d

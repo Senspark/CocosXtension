@@ -31,14 +31,15 @@ public:
     bool    isAppInstalled(const std::string& url);
     bool    isTablet();
     bool    isRelease();
+
+    void    openApplication(const std::string& appName);
     
     float   getMainScreenScale();
-    
-    double  getVersionCode();
-    
+
     std::string getCurrentLanguageCode();
     std::string getSHA1CertFingerprint();
     std::string getVersionName();
+    std::string getVersionCode();
 
     void finishActivity();
     
