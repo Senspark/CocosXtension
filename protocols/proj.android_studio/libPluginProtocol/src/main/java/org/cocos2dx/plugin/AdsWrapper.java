@@ -24,10 +24,6 @@
 package org.cocos2dx.plugin;
 
 import android.app.Activity;
-import android.support.percent.PercentFrameLayout;
-import android.support.percent.PercentLayoutHelper;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
