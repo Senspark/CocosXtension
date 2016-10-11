@@ -91,6 +91,12 @@ public:
     void showNativeExpressAd(const std::string& adUnitId, int width, int height,
                              AdsPos position);
 
+    /// @param width The desired width of the ad view, pass -1 for full width.
+    /// @param height The desired width of the ad view, pass -2 for auto height.
+    /// @param deltaX, deltaY The delta distance from postion
+    void showNativeExpressAd(const std::string& adUnitId, int width, int height,
+                             int deltaX, int deltaY);
+
     void hideNativeExpressAd();
 
     void loadRewardedAd(const std::string& adID);

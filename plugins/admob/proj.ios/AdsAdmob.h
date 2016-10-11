@@ -76,6 +76,7 @@ typedef enum {
 - (void) showRewardedAd;
 
 - (void) showNativeExpressAd:(NSDictionary* _Nonnull) params;
+- (void) showNativeExpressAdWithDeltaPosition:(NSDictionary* _Nonnull) params;
 - (void) hideNativeExpressAd;
 
 - (NSNumber* _Nonnull) getSizeInPixels:(NSNumber* _Nonnull) size;

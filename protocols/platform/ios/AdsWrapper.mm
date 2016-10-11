@@ -162,6 +162,33 @@ using namespace cocos2d::plugin;
     [controller.view addSubview:view];
 }
 
++ (void) addAdView:(UIView *)view withDeltaX:(NSNumber *)deltaX withDeltaY:(NSNumber *)deltaY
+{
+    UIViewController* controller = [AdsWrapper getCurrentRootViewController];
+
+    if (nil == controller) {
+        PluginUtilsIOS::outputLog("Can't get the UIViewController object");
+        return;
+    }
+
+    CGFloat X = [deltaX intValue];
+    CGFloat Y = [deltaY intValue];
+
+    CGSize rootSize = controller.view.frame.size;
+    CGSize viewSize = view.frame.size;
+    CGPoint viewOrigin;
+
+    if ([self requireRotation] && UIInterfaceOrientationIsLandscape(controller.interfaceOrientation)){
+        CGFloat temp = rootSize.width;
+        rootSize.width = rootSize.height;
+        rootSize.height = temp;
+    }
+
+    CGRect rect = CGRectMake(X, Y, viewSize.width, viewSize.height);
+    view.frame = rect;
+    [controller.view addSubview:view];
+}
+
 + (UIViewController *)getCurrentRootViewController {
     
     UIViewController *result = nil;

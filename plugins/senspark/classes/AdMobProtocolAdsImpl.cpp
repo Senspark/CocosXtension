@@ -121,6 +121,19 @@ void AdmobProtocolAds::showNativeExpressAd(const std::string& adUnitId,
                       nullptr);
 }
 
+void AdmobProtocolAds::showNativeExpressAd(const std::string& adUnitId,
+                                           int width, int height, int deltaX,
+                                           int deltaY) {
+    using cocos2d::plugin::PluginParam;
+    PluginParam param0{adUnitId.c_str()};
+    PluginParam param1{width};
+    PluginParam param2{height};
+    PluginParam param3{deltaX};
+    PluginParam param4{deltaY};
+    callFuncWithParam("showNativeExpressAdWithDeltaPosition", &param0, &param1,
+                      &param2, &param3, &param4, nullptr);
+}
+
 void AdmobProtocolAds::hideNativeExpressAd() {
     callFuncWithParam("hideNativeExpressAd", nullptr);
 }

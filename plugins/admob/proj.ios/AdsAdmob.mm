@@ -346,9 +346,64 @@
                       position:position];
 }
 
+- (void) _showNativeExpressAd:(NSString* _Nonnull) adUnitId
+                        width:(NSNumber* _Nonnull) width
+                       height:(NSNumber* _Nonnull) height
+                       deltaX:(NSNumber* _Nonnull) deltaX
+                       deltaY:(NSNumber* _Nonnull) deltaY {
+    [self hideNativeExpressAd];
+
+    GADAdSize adSize = [self createAdSize:width height:height];
+    GADNativeExpressAdView* view =
+    [[[GADNativeExpressAdView alloc] initWithAdSize:adSize] autorelease];
+    if (view == nil) {
+        NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
+        return;
+    }
+
+    UIViewController* controller = [AdsWrapper getCurrentRootViewController];
+
+    [view setAdUnitID:adUnitId];
+    [view setDelegate:nativeExpressAdListener_];
+    [view setRootViewController:controller];
+    
+    [AdsWrapper addAdView:view withDeltaX:deltaX withDeltaY:deltaY];
+    [self setNativeExpressAdView:view];
+
+    GADRequest* request = [GADRequest request];
+    [request setTestDevices:[self testDeviceIDs]];
+    [view loadRequest:request];
+}
+
+- (void) showNativeExpressAdWithDeltaPosition:(NSDictionary* _Nonnull) params {
+    NSAssert([params count] == 5, @"Invalid number of params");
+
+    NSString* adUnitId = params[@"Param1"];
+    NSNumber* width = params[@"Param2"];
+    NSNumber* height = params[@"Param3"];
+    NSNumber* deltaX = params[@"Param4"];
+    NSNumber* deltaY = params[@"Param5"];
+
+    NSAssert(adUnitId != nil, @"...");
+    NSAssert(width != nil, @"...");
+    NSAssert(height != nil, @"...");
+    NSAssert(deltaX != nil, @"...");
+    NSAssert(deltaY != nil, @"...");
+
+    NSAssert([adUnitId isKindOfClass:[NSString class]], @"...");
+    NSAssert([width isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([height isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([deltaX isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([deltaY isKindOfClass:[NSNumber class]], @"...");
+
+    [self _showNativeExpressAd:adUnitId width:width height:height deltaX:deltaX deltaY:deltaY];
+}
+
 - (void) hideNativeExpressAd {
-    [[self nativeExpressAdView] removeFromSuperview];
-    [self setNativeExpressAdView:nil];
+    if ([self nativeExpressAdView] != nil) {
+        [[self nativeExpressAdView] removeFromSuperview];
+        [self setNativeExpressAdView:nil];
+    }
 }
 
 - (GADBannerView* _Nullable) createDummySmartBanner {

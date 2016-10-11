@@ -36,6 +36,9 @@ using namespace cocos2d::plugin;
 + (void) onAdsResult:(id) obj withRet:(AdsResultCode) ret withMsg:(NSString*) msg;
 + (void) onPlayerGetPoints:(id) obj withPoints: (int) points;
 + (void) addAdView:(UIView*) view atPos:(ProtocolAds::AdsPos) pos;
-+ (UIViewController *) getCurrentRootViewController;
++ (void) addAdView:(UIView*)view
+        withDeltaX:(NSNumber*)deltaX
+        withDeltaY:(NSNumber*)deltaY;
++ (UIViewController*)getCurrentRootViewController;
 
 @end
