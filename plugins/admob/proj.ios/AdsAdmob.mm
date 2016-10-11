@@ -35,7 +35,6 @@
 @synthesize debug                           = __debug;
 @synthesize strBannerID                     = __strBannerID;
 @synthesize strInterstitialID               = __strInterstitialID;
-@synthesize testDeviceIDs                   = __TestDeviceIDs;
 
 - (id) init {
     self = [super init];
@@ -242,7 +241,7 @@
     [bannerAdView
         setRootViewController:[AdsWrapper getCurrentRootViewController]];
     [AdsWrapper addAdView:bannerAdView
-                    atPos:(ProtocolAds::AdsPos)([position integerValue])];
+                    atPos:(cocos2d::plugin::ProtocolAds::AdsPos)([position integerValue])];
 
     GADRequest* request = [GADRequest request];
     [request setTestDevices:[self testDeviceIDs]];
@@ -288,7 +287,7 @@
             presentFromRootViewController:
                 [AdsWrapper getCurrentRootViewController]];
         [AdsWrapper onAdsResult:self
-                        withRet:AdsResultCode::kAdsShown
+                        withRet:cocos2d::plugin::AdsResultCode::kAdsShown
                         withMsg:@"Ads is shown!"];
     }
 }
@@ -336,7 +335,7 @@
     [view setDelegate:nativeExpressAdListener_];
     [view setRootViewController:controller];
 
-    [AdsWrapper addAdView:view atPos:(ProtocolAds::AdsPos)[position intValue]];
+    [AdsWrapper addAdView:view atPos:(cocos2d::plugin::ProtocolAds::AdsPos)[position intValue]];
     [self setNativeExpressAdView:view];
 
     GADRequest* request = [GADRequest request];
@@ -521,131 +520,175 @@
 #pragma mark interface for Admob SDK
 
 - (void)addTestDevice:(NSString*)deviceID {
-    if (nil == self.testDeviceIDs) {
-        self.testDeviceIDs = [[NSMutableArray alloc] init];
-        [self.testDeviceIDs addObject:kDFPSimulatorID];
+    if ([self testDeviceIDs] == nil) {
+        [self setTestDeviceIDs:[NSMutableArray array]];
+        [[self testDeviceIDs] addObject:kDFPSimulatorID];
     }
 
-    [self.testDeviceIDs addObject:deviceID];
+    [[self testDeviceIDs] addObject:deviceID];
 }
 
 #pragma mark GADBannerViewDelegate impl
 
 // Since we've received an ad, let's go ahead and set the frame to display it.
-- (void)adViewDidReceiveAd:(GADBannerView *)adView {
+- (void)adViewDidReceiveAd:(GADBannerView*)adView {
     NSLog(@"Received ad");
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsBannerReceived withMsg:@"Ads request received success!"];
+    [AdsWrapper onAdsResult:self
+                    withRet:cocos2d::plugin::AdsResultCode::kAdsBannerReceived
+                    withMsg:@"Ads request received success!"];
 }
 
-- (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
-    NSLog(@"Failed to receive ad with error: %@", [error localizedFailureReason]);
-    AdsResultCode errorNo = AdsResultCode::kAdsUnknownError;
+- (void)adView:(GADBannerView*)view
+    didFailToReceiveAdWithError:(GADRequestError*)error {
+    NSLog(@"Failed to receive ad with error: %@",
+          [error localizedFailureReason]);
+    auto errorNo = cocos2d::plugin::AdsResultCode::kAdsUnknownError;
     switch ([error code]) {
     case kGADErrorNetworkError:
-        errorNo = AdsResultCode::kNetworkError;
+        errorNo = cocos2d::plugin::AdsResultCode::kNetworkError;
         break;
     default:
         break;
     }
-    [AdsWrapper onAdsResult:self withRet:errorNo withMsg:[error localizedDescription]];
+    [AdsWrapper onAdsResult:self
+                    withRet:errorNo
+                    withMsg:[error localizedDescription]];
 }
 
 #pragma mark GADInterstitialDelegate impl
 
-- (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
+- (void)interstitialDidReceiveAd:(GADInterstitial*)ad {
     OUTPUT_LOG(@"Interstitial ad was loaded. Can present now.");
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsInterstitialReceived withMsg:@"Ads request received success!"];
+    [AdsWrapper
+        onAdsResult:self
+            withRet:cocos2d::plugin::AdsResultCode::kAdsInterstitialReceived
+            withMsg:@"Ads request received success!"];
 }
 
 /// Called when an interstitial ad request completed without an interstitial to
 /// show. This is common since interstitials are shown sparingly to users.
-- (void)interstitial:(GADInterstitial *)ad didFailToReceiveAdWithError:(GADRequestError *)error {
-    OUTPUT_LOG(@"Interstitial failed to load with error: %@", error.description);
-    
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsUnknownError withMsg:error.description];
+- (void)interstitial:(GADInterstitial*)ad
+    didFailToReceiveAdWithError:(GADRequestError*)error {
+    OUTPUT_LOG(@"Interstitial failed to load with error: %@",
+               [error description]);
+
+    [AdsWrapper onAdsResult:self
+                    withRet:cocos2d::plugin::AdsResultCode::kAdsUnknownError
+                    withMsg:[error description]];
 }
 
 #pragma mark Display-Time Lifecycle Notifications
 
-- (void)interstitialWillPresentScreen:(GADInterstitial *)ad {
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsShown withMsg:@"Interstitial is showing"];
+- (void)interstitialWillPresentScreen:(GADInterstitial*)ad {
+    [AdsWrapper onAdsResult:self
+                    withRet:cocos2d::plugin::AdsResultCode::kAdsShown
+                    withMsg:@"Interstitial is showing"];
 }
 
-- (void)interstitialWillDismissScreen:(GADInterstitial *)ad {
+- (void)interstitialWillDismissScreen:(GADInterstitial*)ad {
     OUTPUT_LOG(@"Interstitial will dismiss.");
 }
 
-- (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
+- (void)interstitialDidDismissScreen:(GADInterstitial*)ad {
     OUTPUT_LOG(@"Interstitial dismissed")
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsDismissed withMsg:@"Interstital dismissed."];
+        [AdsWrapper onAdsResult:self
+                        withRet:cocos2d::plugin::AdsResultCode::kAdsDismissed
+                        withMsg:@"Interstital dismissed."];
 }
 
-- (void)interstitialWillLeaveApplication:(GADInterstitial *)ad {
+- (void)interstitialWillLeaveApplication:(GADInterstitial*)ad {
     OUTPUT_LOG(@"Interstitial will leave application.");
 }
 
 #pragma mark - Rewarded Video Ad Delegate
-- (void)rewardBasedVideoAdDidReceiveAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+
+- (void)rewardBasedVideoAdDidReceiveAd:
+        (GADRewardBasedVideoAd*)rewardBasedVideoAd {
     NSLog(@"Reward based video ad is received.");
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoReceived withMsg:@"Reward based video ad is received."];
+    [AdsWrapper onAdsResult:self
+                    withRet:cocos2d::plugin::AdsResultCode::kVideoReceived
+                    withMsg:@"Reward based video ad is received."];
 }
 
-- (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+- (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd*)rewardBasedVideoAd {
     NSLog(@"Opened reward based video ad.");
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoShown withMsg:@"Opened reward based video ad."];
+    [AdsWrapper onAdsResult:self
+                    withRet:cocos2d::plugin::AdsResultCode::kVideoShown
+                    withMsg:@"Opened reward based video ad."];
 }
 
-- (void)rewardBasedVideoAdDidStartPlaying:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+- (void)rewardBasedVideoAdDidStartPlaying:
+        (GADRewardBasedVideoAd*)rewardBasedVideoAd {
     NSLog(@"Reward based video ad started playing.");
 }
 
-- (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+- (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd*)rewardBasedVideoAd {
     NSLog(@"Reward based video ad is closed.");
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoClosed withMsg:@"Reward based video ad is closed."];
+    [AdsWrapper onAdsResult:self
+                    withRet:cocos2d::plugin::AdsResultCode::kVideoClosed
+                    withMsg:@"Reward based video ad is closed."];
 }
 
-- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didRewardUserWithReward:(GADAdReward *)reward {
-    NSString *rewardMessage = [NSString stringWithFormat:@"Reward received with currency %@ , amount %lf", reward.type, [reward.amount doubleValue]];
+- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd*)rewardBasedVideoAd
+    didRewardUserWithReward:(GADAdReward*)reward {
+    NSString* rewardMessage = [NSString
+        stringWithFormat:@"Reward received with currency %@ , amount %@",
+                         [reward type], [reward amount]];
     NSLog(@"%@", rewardMessage);
     // Reward the user for watching the video.
 }
 
-- (void)rewardBasedVideoAdWillLeaveApplication:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+- (void)rewardBasedVideoAdWillLeaveApplication:
+        (GADRewardBasedVideoAd*)rewardBasedVideoAd {
     NSLog(@"Reward based video ad will leave application.");
 }
 
-- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didFailToLoadWithError:(NSError *)error {
+- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd*)rewardBasedVideoAd
+    didFailToLoadWithError:(NSError*)error {
     NSLog(@"Reward based video ad failed to load.");
-    [AdsWrapper onAdsResult:self withRet:AdsResultCode::kVideoUnknownError withMsg:[NSString stringWithFormat:@"Reward based video ad failed to load with error: %@", error]];
+    [AdsWrapper
+        onAdsResult:self
+            withRet:cocos2d::plugin::AdsResultCode::kVideoUnknownError
+            withMsg:[NSString stringWithFormat:@"Reward based video ad failed "
+                                               @"to load with error: %@",
+                                               error]];
 }
 
 #pragma mark - Animation banner ads
-- (void) slideDownBannerAds {
-    CGRect windowBounds = [[[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]] bounds];
+
+- (void)slideDownBannerAds {
+    if ([[self bannerAdView] isHidden]) {
+        [[self bannerAdView] setHidden:NO];
+    }
+    CGSize windowSize = [[UIScreen mainScreen] bounds].size;
+    CGSize bannerAdSize = [[self bannerAdView] frame].size;
     [UIView animateWithDuration:1.0
                      animations:^{
-                         self.bannerAdView.frame = CGRectMake(windowBounds.size.width - self.bannerAdView.frame.size.width,
-                                                            windowBounds.size.height,
-                                                            self.bannerAdView.frame.size.width,
-                                                            self.bannerAdView.frame.size.height);
+                         [[self bannerAdView]
+                             setFrame:CGRectMake(
+                                          windowSize.width - bannerAdSize.width,
+                                          windowSize.height, bannerAdSize.width,
+                                          bannerAdSize.height)];
                      }];
 }
 
-- (void) slideUpBannerAds {
+- (void)slideUpBannerAds {
     OUTPUT_LOG(@"Show Banner Ads!");
-        if ([_bannerAdView isHidden]) {
-            [_bannerAdView setHidden: NO];
-        }
-    CGRect windowBounds = [[[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]] bounds];
-    [UIView animateWithDuration:1.0
-                     animations:^{
-                         self.bannerAdView.frame = CGRectMake(windowBounds.size.width - self.bannerAdView.frame.size.width,
-                                                            windowBounds.size.height - self.bannerAdView.frame.size.height,
-                                                            self.bannerAdView.frame.size.width,
-                                                            self.bannerAdView.frame.size.height);
+    if ([[self bannerAdView] isHidden]) {
+        [[self bannerAdView] setHidden:NO];
+    }
+    CGSize windowSize = [[UIScreen mainScreen] bounds].size;
+    CGSize bannerAdSize = [[self bannerAdView] frame].size;
+    [UIView
+        animateWithDuration:1.0
+                 animations:^{
+                     [[self bannerAdView]
+                         setFrame:CGRectMake(
+                                      windowSize.width - bannerAdSize.width,
+                                      windowSize.height - bannerAdSize.height,
+                                      bannerAdSize.width, bannerAdSize.height)];
 
-                     }];
-
+                 }];
 }
 
 /// Retrieves the size of the smart banner depends on the orientation of the

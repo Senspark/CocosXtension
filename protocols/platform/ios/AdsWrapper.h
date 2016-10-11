@@ -24,21 +24,22 @@ THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
 #import "ProtocolAds.h"
 
-using namespace cocos2d::plugin;
-
 @interface AdsWrapper : NSObject
-{
-    
-}
 
-+ (void) onAdsResult:(id) obj withRet:(AdsResultCode) ret withMsg:(NSString*) msg;
-+ (void) onPlayerGetPoints:(id) obj withPoints: (int) points;
-+ (void) addAdView:(UIView*) view atPos:(ProtocolAds::AdsPos) pos;
-+ (void) addAdView:(UIView*)view
-        withDeltaX:(NSNumber*)deltaX
-        withDeltaY:(NSNumber*)deltaY;
-+ (UIViewController*)getCurrentRootViewController;
++ (void)onAdsResult:(id _Nonnull)obj
+            withRet:(cocos2d::plugin::AdsResultCode)ret
+            withMsg:(NSString* _Nullable)msg;
+
++ (void)addAdView:(UIView* _Nonnull)view
+            atPos:(cocos2d::plugin::ProtocolAds::AdsPos)pos;
+
++ (void)addAdView:(UIView* _Nonnull)view
+       withDeltaX:(NSNumber* _Nonnull)deltaX
+       withDeltaY:(NSNumber* _Nonnull)deltaY;
+
++ (UIViewController* _Nullable)getCurrentRootViewController;
 
 @end
