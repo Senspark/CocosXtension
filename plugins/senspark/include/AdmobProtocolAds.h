@@ -17,6 +17,30 @@ NS_SENSPARK_PLUGIN_ADS_BEGIN
 
 #define GAD_SIMULATOR_ID "Simulator"
 
+/*
+
+ AdMobProtocolAds synopsis:
+
+ - add_test_devices
+
+ - show_banner_ad(ad_id, ad_size, position)
+ - hide_banner_ad
+
+ - show_native_express_ad(ad_id, ad_size, position)
+ - hide_native_express_ad
+
+ - show_interstitial_ad
+ - load_interstitial_ad(ad_id)
+ - has_interstitial_ad : bool
+
+ - show_rewarded_video_ad
+ - load_rewarded_video_ad(ad_id)
+ - has_rewarded_video_ad : bool
+
+ - get_size_in_pixels(dp) : int
+
+ */
+
 /// Some examples.
 /// @code
 /// TAdsInfo info;
@@ -34,36 +58,41 @@ class AdmobProtocolAds : public cocos2d::plugin::ProtocolAds {
 public:
     class AdType;
     class AdSize;
-    
+
     /// Ad id key used in TAdsInfo.
     static const std::string AdBannerIdKey;
     static const std::string AdInterstitialIdKey;
-    
+
     /// Ad type key used in TAdsInfo.
     static const std::string AdTypeKey;
-    
+
     /// Ad size key used in TAdsInfo.
     static const std::string AdSizeKey;
-    
+
     AdmobProtocolAds();
     virtual ~AdmobProtocolAds();
-    
+
     CC_DEPRECATED_ATTRIBUTE void configureAds(const std::string& adsId);
-    void configureAds(const std::string& bannerAds, const std::string& interstitialAds);
-    
+
+    CC_DEPRECATED_ATTRIBUTE void
+    configureAds(const std::string& bannerAds,
+                 const std::string& interstitialAds);
+
     void addTestDevice(const std::string& deviceId);
-    
+
     /// Shows a banner ad given its id, size and position (optional).
     void showBannerAd(const std::string& bannerAdId, AdSize bannerAdSize,
                       AdsPos bannerAdPosition = AdsPos::kPosCenter);
-    
+
     /// Hides current banner ad (if shown).
     void hideBannerAd();
-    
-    /// Shows an interstitial ad given its id.
+
+    /// Shows an interstitial ad.
     void showInterstitialAd();
-    CC_DEPRECATED_ATTRIBUTE void showInterstitialAd(const std::string& interstitialAdId);
-    
+
+    CC_DEPRECATED_ATTRIBUTE void
+    showInterstitialAd(const std::string& interstitialAdId);
+
     /// Shows an interstitial ad given its id and a callback when user requested
     /// an in-app purchase.
     ///
@@ -80,11 +109,20 @@ public:
     ///         }
     /// });
     /// @endcode
-    void showInterstitialAd(const std::string& interstitialAdId,
-                            const AdsCallback& iapCallback);
+    CC_DEPRECATED_ATTRIBUTE void
+    showInterstitialAd(const std::string& interstitialAdId,
+                       const AdsCallback& iapCallback);
 
-    void loadInterstitial();
-    bool hasInterstitial();
+    CC_DEPRECATED_ATTRIBUTE void loadInterstitial();
+
+    void loadInterstitialAd(const std::string& adId);
+
+    bool hasInterstitialAd();
+
+    /// Checks whether there is any available interstitial ad.
+    CC_DEPRECATED_ATTRIBUTE bool hasInterstitial() {
+        return hasInterstitialAd();
+    }
 
     /// @param width The desired width of the ad view, pass -1 for full width.
     /// @param height The desired width of the ad view, pass -2 for auto height.
@@ -93,47 +131,80 @@ public:
 
     /// @param width The desired width of the ad view, pass -1 for full width.
     /// @param height The desired width of the ad view, pass -2 for auto height.
-    /// @param deltaX, deltaY The delta distance from postion
+    /// @param x Horizontal distance from the left border of the device screen
+    /// in pixels.
+    /// @param y Vertical distance from the top border of the device screen in
+    /// pixels.
     void showNativeExpressAd(const std::string& adUnitId, int width, int height,
-                             int deltaX, int deltaY);
+                             int x, int y);
 
     void hideNativeExpressAd();
 
-    void loadRewardedAd(const std::string& adID);
+    /// Attempts to load a rewarded video ad with the specified id.
+    /// Ignored if the last loading try is in progress.
+    void loadRewardedAd(const std::string& adId);
+
+    /// Attempts to show the loaded rewarded video ad.
+    /// No-op if there is not any rewarded video ad.
     void showRewardedAd();
+
+    /// Checks whether there is any available rewarded video ad to show.
     bool hasRewardedAd();
-    
-    /// Retrieves the size of the banner ad in pixels.
-    /// @param size Pass -1 for full width, -2 for auto height.
+
+    /// Gets the size of the banner ad in pixels.
+    /// @param size In DP (density-independent pixel), pass -1 for full width,
+    /// -2 for auto height.
     int getSizeInPixels(int size);
 
     void slideBannerUp();
     void slideBannerDown();
 
+    /// Gets the current displaying banner ad's width in pixels.
+    /// For getting the specified banner ad size, refer @c getSizeInPixels.
+    /// @note If there is no displaying banner, returns 0.
     int getBannerWidthInPixel();
+
+    /// Gets the current displaying banner ad's height in pixels.
+    /// For getting the specified banner ad size, refer @c getSizeInPixels.
+    /// @note If there is no displaying banner, returns 0.
     int getBannerHeightInPixel();
 
-    void initializeMediationAd();
-    void configMediationAdColony(const cocos2d::plugin::TAdsInfo &params);
-    void configMediationAdVungle(const cocos2d::plugin::TAdsInfo &params);
-    void configMediationAdUnity(const cocos2d::plugin::TAdsInfo &params);
+    /// Configure AdMob mediation with AdColony.
+    /// Available keys:
+    /// - "AdColonyAppID": The AdColony application id (must have).
+    /// - "AdColonyInterstitialAdID": Interstitial zone id used to display AdMob
+    /// interstitial ads (optional).
+    /// - "AdColonyRewardedAdID": Rewarded V4VC zone id used to display AdMob
+    /// rewarded videos (optional).
+    void configMediationAdColony(const cocos2d::plugin::TAdsInfo& params);
+
+    /// No-op.
+    CC_DEPRECATED_ATTRIBUTE void initializeMediationAd() {}
+
+    /// No-op.
+    CC_DEPRECATED_ATTRIBUTE void
+    configMediationAdVungle(const cocos2d::plugin::TAdsInfo& params) {}
+
+    /// No-op.
+    CC_DEPRECATED_ATTRIBUTE void
+    configMediationAdUnity(const cocos2d::plugin::TAdsInfo& params) {}
 };
 
 class AdmobProtocolAds::AdType {
 public:
     static const AdType Banner;
-    
+
     /// Fullscreen ad.
     static const AdType Interstitial;
-    
+
     /// Implicit conversion to std::string to be stored in TAdsInfo.
     operator const std::string&() const;
-    
+
     const std::string& getDescription() const;
-    
+
 private:
     explicit AdType(const std::string& s);
-    
+
     std::string _s;
 };
 
@@ -146,7 +217,7 @@ public:
     ///
     /// Typically 320x50.
     static const AdSize Banner;
-    
+
     /// Taller version of Banner.
     ///
     /// Equivalent to @c kGADAdSizeLargeBanner on iOS or
@@ -154,7 +225,7 @@ public:
     ///
     /// Typically 320x100.
     static const AdSize LargeBanner;
-    
+
     /// Medium Rectangle size for the iPad.
     ///
     /// Equivalent to @c kGADAdSizeMediumRectangle on iOS or
@@ -162,7 +233,7 @@ public:
     ///
     /// Typically 300x250.
     static const AdSize MediumRectangle;
-    
+
     /// Full Banner size for the iPad.
     ///
     /// Equivalent to @c kGADAdSizeFullBanner on iOS or
@@ -170,7 +241,7 @@ public:
     ///
     /// Typically 468x60.
     static const AdSize FullBanner;
-    
+
     /// Leaderboard size for the iPad.
     ///
     /// Equivalent to @c kGADAdSizeLeaderboard on iOS or
@@ -178,7 +249,7 @@ public:
     ///
     /// Typically 728x90.
     static const AdSize Leaderboard;
-    
+
     /// Skyscraper size for the iPad. Mediation only.
     ///
     /// Equivalent to @c kGADAdSizeSkyscraper on iOS or
@@ -186,23 +257,25 @@ public:
     ///
     /// Typically 120x600 on @c iOS or 160x600 on @c Android.
     static const AdSize Skyscraper;
-    
-    /// An ad size that spans the full width of the application in landscape orientation.
+
+    /// An ad size that spans the full width of the application in landscape
+    /// orientation.
     ///
-    /// The height is typically 32 pixels on an iPhone/iPod UI, and 90 pixels tall on an iPad UI.
+    /// The height is typically 32 pixels on an iPhone/iPod UI, and 90 pixels
+    /// tall on an iPad UI.
     ///
     /// Equivalent to @c kGADAdSizeSmartBannerLandscape on iOS or
     /// @c AdSize.SMART_BANNER on Android.
     static const AdSize SmartBanner;
-    
+
     /// Implicit conversion to std::string to be stored in TAdsInfo.
     operator const std::string&() const;
-    
+
     const std::string& getDescription() const;
-    
+
 private:
     explicit AdSize(const std::string& s);
-    
+
     std::string _s;
 };
 

@@ -9,6 +9,7 @@
 #include <unordered_map>
 
 #include "../include/AdMobProtocolAds.h"
+#include "senspark/utility.hpp"
 
 NS_SENSPARK_PLUGIN_ADS_BEGIN
 AdmobProtocolAds::AdType::AdType(const std::string& s)
@@ -57,35 +58,29 @@ void AdmobProtocolAds::configureAds(const std::string& adsId) {
     configDeveloperInfo(devInfo);
 }
 
-void AdmobProtocolAds::configureAds(const std::string &bannerAds, const std::string &interstitialAds) {
+void AdmobProtocolAds::configureAds(const std::string& bannerAds,
+                                    const std::string& interstitialAds) {
     cocos2d::plugin::TAdsInfo devInfo;
-    devInfo[AdBannerIdKey]          = bannerAds;
-    devInfo[AdInterstitialIdKey]    = interstitialAds;
+    devInfo[AdBannerIdKey] = bannerAds;
+    devInfo[AdInterstitialIdKey] = interstitialAds;
     configDeveloperInfo(devInfo);
 }
 
-void AdmobProtocolAds::addTestDevice(const std::string &deviceId) {
-    cocos2d::plugin::PluginParam deviceIdParam(deviceId.c_str());
-    callFuncWithParam("addTestDevice", &deviceIdParam, nullptr);
+void AdmobProtocolAds::addTestDevice(const std::string& deviceId) {
+    callFunction(this, "addTestDevice", deviceId.c_str());
 }
 
 void AdmobProtocolAds::showBannerAd(const std::string& bannerAdId,
                                     AdSize bannerAdSize,
                                     AdsPos bannerAdPosition) {
-    cocos2d::plugin::TAdsInfo info;
-    info[AdTypeKey] = AdType::Banner;
-    info[AdSizeKey] = bannerAdSize;
-    showAds(info, bannerAdPosition);
+    callFunction(this, "showBannerAd", bannerAdId.c_str(),
+                 std::stoi(bannerAdSize.getDescription()), bannerAdPosition);
 }
 
-void AdmobProtocolAds::hideBannerAd() {
-    cocos2d::plugin::TAdsInfo info;
-    info[AdTypeKey] = AdType::Banner;
-    hideAds(info);
-}
+void AdmobProtocolAds::hideBannerAd() { callFunction(this, "hideBannerAd"); }
 
 void AdmobProtocolAds::showInterstitialAd() {
-    callFuncWithParam("showInterstitial", nullptr);
+    callFunction(this, "showInterstitialAd");
 }
 
 void AdmobProtocolAds::showInterstitialAd(const std::string& interstitialAdId) {
@@ -102,94 +97,67 @@ void AdmobProtocolAds::showInterstitialAd(const std::string& interstitialAdId,
 }
 
 void AdmobProtocolAds::loadInterstitial() {
-    callFuncWithParam("loadInterstitial", nullptr);
+    callFunction(this, "loadInterstitial");
 }
 
-bool AdmobProtocolAds::hasInterstitial() {
-    return callBoolFuncWithParam("hasInterstitial", nullptr);
+void AdmobProtocolAds::loadInterstitialAd(const std::string& adId) {
+    callFunction(this, "loadInterstitialAd", adId.c_str());
+}
+
+bool AdmobProtocolAds::hasInterstitialAd() {
+    return callFunction<bool>(this, "hasInterstitialAd");
 }
 
 void AdmobProtocolAds::showNativeExpressAd(const std::string& adUnitId,
                                            int width, int height,
                                            AdsPos position) {
-    using cocos2d::plugin::PluginParam;
-    PluginParam param0{adUnitId.c_str()};
-    PluginParam param1{width};
-    PluginParam param2{height};
-    PluginParam param3{position};
-    callFuncWithParam("showNativeExpressAd", &param0, &param1, &param2, &param3,
-                      nullptr);
+    callFunction(this, "showNativeExpressAd", adUnitId.c_str(), width, height,
+                 position);
 }
 
 void AdmobProtocolAds::showNativeExpressAd(const std::string& adUnitId,
-                                           int width, int height, int deltaX,
-                                           int deltaY) {
-    using cocos2d::plugin::PluginParam;
-    PluginParam param0{adUnitId.c_str()};
-    PluginParam param1{width};
-    PluginParam param2{height};
-    PluginParam param3{deltaX};
-    PluginParam param4{deltaY};
-    callFuncWithParam("showNativeExpressAdWithDeltaPosition", &param0, &param1,
-                      &param2, &param3, &param4, nullptr);
+                                           int width, int height, int x,
+                                           int y) {
+    callFunction(this, "showNativeExpressAdWithDeltaPosition", adUnitId.c_str(),
+                 width, height, x, y);
 }
 
 void AdmobProtocolAds::hideNativeExpressAd() {
-    callFuncWithParam("hideNativeExpressAd", nullptr);
+    callFunction(this, "hideNativeExpressAd");
 }
 
 int AdmobProtocolAds::getSizeInPixels(int size) {
-    using cocos2d::plugin::PluginParam;
-    PluginParam param{size};
-    return callIntFuncWithParam("getSizeInPixels", &param, nullptr);
+    return callFunction<int>(this, "getSizeInPixels", size);
 }
 
-void AdmobProtocolAds::slideBannerUp() {
-    callFuncWithParam("slideBannerUp", nullptr);
-}
+void AdmobProtocolAds::slideBannerUp() { callFunction(this, "slideBannerUp"); }
 
 void AdmobProtocolAds::slideBannerDown() {
-    callFuncWithParam("slideBannerDown", nullptr);
+    callFunction(this, "slideBannerDown");
 }
 
 int AdmobProtocolAds::getBannerWidthInPixel() {
-    return callIntFuncWithParam("getBannerWidthInPixel", nullptr);
+    return callFunction<int>(this, "getBannerWidthInPixel");
 }
 
 int AdmobProtocolAds::getBannerHeightInPixel() {
-    return callIntFuncWithParam("getBannerHeightInPixel", nullptr);
+    return callFunction<int>(this, "getBannerHeightInPixel");
 }
 
-void AdmobProtocolAds::loadRewardedAd(const std::string& adID) {
-    cocos2d::plugin::PluginParam param(adID.c_str());
-    callFuncWithParam("loadRewardedAd", &param, nullptr);
+void AdmobProtocolAds::loadRewardedAd(const std::string& adId) {
+    callFunction(this, "loadRewardedAd", adId.c_str());
 }
 
 void AdmobProtocolAds::showRewardedAd() {
-    callFuncWithParam("showRewardedAd", nullptr);
+    callFunction(this, "showRewardedAd");
 }
 
 bool AdmobProtocolAds::hasRewardedAd() {
-    return callBoolFuncWithParam("hasRewardedAd", nullptr);
+    return callFunction<bool>(this, "hasRewardedAd");
 }
 
-void AdmobProtocolAds::initializeMediationAd() {
-    callFuncWithParam("initializeMediationAd", nullptr);
+void AdmobProtocolAds::configMediationAdColony(
+    const cocos2d::plugin::TAdsInfo& params) {
+    callFunction(this, "configMediationAdColony", params);
 }
-
-void AdmobProtocolAds::configMediationAdColony(const cocos2d::plugin::TAdsInfo &params) {
-    cocos2d::plugin::PluginParam pParam(params);
-    callFuncWithParam("configMediationAdColony", &pParam, nullptr);
-}
-
-void AdmobProtocolAds::configMediationAdUnity(const cocos2d::plugin::TAdsInfo &params) {
-    cocos2d::plugin::PluginParam pParam(params);
-    callFuncWithParam("configMediationAdUnity", &pParam, nullptr);
-}
-
-void AdmobProtocolAds::configMediationAdVungle(const cocos2d::plugin::TAdsInfo &params) {
-    cocos2d::plugin::PluginParam pParam(params);
-    callFuncWithParam("configMediationAdVungle", &pParam, nullptr);
-}
-
 NS_SENSPARK_PLUGIN_ADS_END

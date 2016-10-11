@@ -36,8 +36,6 @@
 @synthesize strBannerID                     = __strBannerID;
 @synthesize strInterstitialID               = __strInterstitialID;
 @synthesize testDeviceIDs                   = __TestDeviceIDs;
-@synthesize strAdColonyInterstitialAdZoneID = __strAdColonyInterstitialAdZoneID;
-@synthesize strAdColonyRewardedAdZoneID     = __strAdColonyRewardedAdZoneID;
 
 - (id) init {
     self = [super init];
@@ -53,14 +51,14 @@
 
 - (void) dealloc
 {
-    if (self.bannerView != nil) {
-        [self.bannerView release];
-        self.bannerView = nil;
+    if (self.bannerAdView != nil) {
+        [self.bannerAdView release];
+        self.bannerAdView = nil;
     }
 
-    if (self.interstitialView != nil) {
-        [self.interstitialView release];
-        self.interstitialView = nil;
+    if (self.interstitialAdView != nil) {
+        [self.interstitialAdView release];
+        self.interstitialAdView = nil;
     }
     
     if (self.testDeviceIDs != nil) {
@@ -75,45 +73,40 @@
 }
 
 #pragma mark Mediation Ads impl
-- (void) initializeMediationAd {
-    NSLog(@"Not require on iOS");
-}
 
-- (void) configMediationAdColony:(NSDictionary *)params
-{
-    NSString* adColonyID                    = [params objectForKey:@"AdColonyAppID"];
-    NSString* interstitialAdColonyZoneID    = [params objectForKey:@"AdColonyInterstitialAdID"];
-    NSString* rewardedAdColonyZoneID        = [params objectForKey:@"AdColonyRewardedAdID"];
-    self.strAdColonyInterstitialAdZoneID    = interstitialAdColonyZoneID;
-    self.strAdColonyRewardedAdZoneID        = rewardedAdColonyZoneID;
+- (void)configMediationAdColony:(NSDictionary*)params {
+    // clang-format off
+    NSString* appId                = [params objectForKey:@"AdColonyAppID"];
+    NSString* interstitialAdZoneId = [params objectForKey:@"AdColonyInterstitialAdID"];
+    NSString* rewardedAdZoneId     = [params objectForKey:@"AdColonyRewardedAdID"];
+    // clang-format on
 
-    if (adColonyID != nil) {
+    // Reset old values.
+    [self setAdColonyRewardedAdZoneId:nil];
+    [self setAdColonyInterstitialAdZoneId:nil];
+
+    if (appId != nil) {
         if ([SSAdColonyMediation isLinkedWithAdColony]) {
-            NSArray* zones =
-                [NSArray arrayWithObjects:interstitialAdColonyZoneID,
-                                          rewardedAdColonyZoneID, nil];
-            [SSAdColonyMediation startWithAppId:adColonyID
+            NSArray* zones = [NSArray
+                arrayWithObjects:interstitialAdZoneId, rewardedAdZoneId, nil];
+            [SSAdColonyMediation startWithAppId:appId
                                        andZones:zones
                                     andCustomId:nil];
+
+            // Assigns new values.
+            [self setAdColonyInterstitialAdZoneId:interstitialAdZoneId];
+            [self setAdColonyRewardedAdZoneId:rewardedAdZoneId];
         } else {
             NSLog(@"AdColony is not linked!");
         }
     }
 }
 
-- (void) configMediationAdUnity:(NSDictionary *)params
-{
-    NSLog(@"No config is required for UnityAds");
-}
-
-- (void) configMediationAdVungle:(NSDictionary *)params
-{
-    NSLog(@"No config is required for Vungle");
-}
-
 #pragma mark InterfaceAds impl
 
 - (void) configDeveloperInfo: (NSDictionary*) devInfo {
+    NSLog(@"Deprecated: Use showBannerAd(adId) and loadInterstitialAd(adId) instead!");
+    
     NSString* bannerId      = [devInfo objectForKey:@"AdmobID"];
     NSString* interstiailId = [devInfo objectForKey:@"AdmobInterstitialID"];
     
@@ -128,11 +121,13 @@
     self.strBannerID        = bannerId;
     self.strInterstitialID  = interstiailId;
     
-    _interstitialView   = nil;
-    _bannerView         = nil;
+    _interstitialAdView   = nil;
+    _bannerAdView         = nil;
 }
 
 - (void) showAds: (NSDictionary*) info position:(int) pos {
+    NSLog(@"Deprecated: Use showBannerAd(adId) and showInterstitialAd instead!");
+    
     if (self.strBannerID == nil || self.strBannerID.length == 0) {
         OUTPUT_LOG(@"configDeveloperInfo() not correctly invoked in Admob!");
         return;
@@ -145,11 +140,13 @@
     case kTypeBanner: {
             NSString* strSize = [info objectForKey:@"AdmobSizeEnum"];
             int sizeEnum = [strSize intValue];
-            [self showBanner:sizeEnum atPos:pos];
+            [self _showBannerAd:[self strBannerID]
+                           size:@(sizeEnum)
+                       position:@(pos)];
             break;
         }
     case kTypeFullScreen: {
-            [self showInterstitial];
+            [self showInterstitialAd];
             break;
         }
     default:
@@ -160,16 +157,14 @@
 
 - (void) hideAds: (NSDictionary*) info
 {
+    NSLog(@"Deprecated: Use hideBannerAd(adId) instead!");
+    
     NSString* strType = [info objectForKey:@"AdmobType"];
     int type = [strType intValue];
     switch (type) {
     case kTypeBanner:
         {
-            if (nil != self.bannerView) {
-                [self.bannerView removeFromSuperview];
-                [self.bannerView release];
-                self.bannerView = nil;
-            }
+            [self hideBannerAd];
             break;
         }
     case kTypeFullScreen:
@@ -206,73 +201,100 @@
     return @"0.3.0";
 }
 
-- (void) showBanner: (int) sizeEnum atPos:(int) pos {
-    const std::array<GADAdSize, 7> AdSizes {{
-        kGADAdSizeBanner,
-        kGADAdSizeLargeBanner,
-        kGADAdSizeMediumRectangle,
-        kGADAdSizeFullBanner,
-        kGADAdSizeLeaderboard,
-        kGADAdSizeSkyscraper,
-        [self getSmartBannerAdSize]
-    }};
-    auto size = AdSizes.at(sizeEnum);
-    
+- (void)showBannerAd:(NSDictionary*)params {
+    NSAssert([params count] == 3, @"Invalid number of params");
+
+    NSString* adId = params[@"Param1"];
+    NSNumber* size = params[@"Param2"];
+    NSNumber* position = params[@"Param3"];
+
+    NSAssert([adId isKindOfClass:[NSString class]], @"...");
+    NSAssert([size isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([position isKindOfClass:[NSNumber class]], @"...");
+
+    [self _showBannerAd:adId size:size position:position];
+}
+
+- (void)hideBannerAd {
+    if ([self bannerAdView] != nil) {
+        [[self bannerAdView] removeFromSuperview];
+        [[self bannerAdView] release];
+        [self setBannerAdView:nil];
+        [self setBannerAdSize:GADAdSizeFromCGSize(CGSizeMake(0, 0))];
+    }
+}
+
+- (void)_showBannerAd:(NSString* _Nonnull)adId
+                 size:(NSNumber* _Nonnull)_size
+             position:(NSNumber* _Nonnull)position {
+    [self hideBannerAd];
+
+    const std::array<GADAdSize, 7> AdSizes{
+        {kGADAdSizeBanner, kGADAdSizeLargeBanner, kGADAdSizeMediumRectangle,
+         kGADAdSizeFullBanner, kGADAdSizeLeaderboard, kGADAdSizeSkyscraper,
+         [self getSmartBannerAdSize]}};
+    auto size = AdSizes.at([_size unsignedIntegerValue]);
     [self setBannerAdSize:size];
-    
-    if (nil != self.bannerView) {
-        [self.bannerView removeFromSuperview];
-        [self.bannerView release];
-        self.bannerView = nil;
-    }
-    
-    self.bannerView = [[GADBannerView alloc] initWithAdSize:size];
-    self.bannerView.adUnitID = self.strBannerID;
-    self.bannerView.delegate = self;
-    [self.bannerView setRootViewController:[AdsWrapper getCurrentRootViewController]];
-    [AdsWrapper addAdView:self.bannerView atPos:(ProtocolAds::AdsPos)pos];
-    
-    GADRequest* request = [GADRequest request];
-    request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
-    [self.bannerView loadRequest:request];
-}
 
-- (BOOL) hasInterstitial {
-    return [self.interstitialView isReady];
-}
-
-- (void) loadInterstitial
-{
-    if (_interstitialView != nil) {
-        [_interstitialView release];
-    }
-    self.interstitialView = [[GADInterstitial alloc] initWithAdUnitID:self.strInterstitialID];
-    self.interstitialView.delegate = self;
+    GADBannerView* bannerAdView = [[GADBannerView alloc] initWithAdSize:size];
+    [bannerAdView setAdUnitID:adId];
+    [bannerAdView setDelegate:self];
+    [bannerAdView
+        setRootViewController:[AdsWrapper getCurrentRootViewController]];
+    [AdsWrapper addAdView:bannerAdView
+                    atPos:(ProtocolAds::AdsPos)([position integerValue])];
 
     GADRequest* request = [GADRequest request];
+    [request setTestDevices:[self testDeviceIDs]];
+    [bannerAdView loadRequest:request];
+
+    [self setBannerAdView:bannerAdView];
+}
+
+- (void)loadInterstitial {
+    [self loadInterstitialAd:[self strInterstitialID]];
+}
+
+- (void)loadInterstitialAd:(NSString* _Nonnull)adId {
+    if ([self interstitialAdView] != nil) {
+        [[self interstitialAdView] release];
+    }
+    GADInterstitial* interstitialAdView =
+        [[GADInterstitial alloc] initWithAdUnitID:adId];
+    [interstitialAdView setDelegate:self];
+
+    GADRequest* request = [GADRequest request];
+    [request setTestDevices:[self testDeviceIDs]];
     if ([SSAdColonyMediation isLinkedWithAdColony] &&
-        [[self strAdColonyInterstitialAdZoneID] length] > 0) {
+        [[self adColonyInterstitialAdZoneId] length] > 0) {
         id<GADAdNetworkExtras> extras = [SSAdColonyMediation
-            extrasWithZoneId:[self strAdColonyInterstitialAdZoneID]];
+            extrasWithZoneId:[self adColonyInterstitialAdZoneId]];
         [request registerAdNetworkExtras:extras];
     }
-
-    request.testDevices = [NSArray arrayWithArray:self.testDeviceIDs];
+    [interstitialAdView loadRequest:request];
     
-    [self.interstitialView loadRequest:request];
+    [self setInterstitialAdView:interstitialAdView];
 }
 
-- (void) showInterstitial
-{
-    NSLog(@"Interstitial view: %@", _interstitialView);
-    if (!self.interstitialView || !self.interstitialView.isReady) {
+- (void)showInterstitialAd {
+    NSLog(@"Interstitial view: %@", [self interstitialAdView]);
+
+    if (not[self hasInterstitialAd]) {
         // Ad not ready to present.
         NSLog(@"ADMOB: Interstitial cannot show. It is not ready.");
         [self loadInterstitial];
     } else {
-        [self.interstitialView presentFromRootViewController:[AdsWrapper getCurrentRootViewController]];
-        [AdsWrapper onAdsResult:self withRet:AdsResultCode::kAdsShown withMsg:@"Ads is shown!"];
+        [[self interstitialAdView]
+            presentFromRootViewController:
+                [AdsWrapper getCurrentRootViewController]];
+        [AdsWrapper onAdsResult:self
+                        withRet:AdsResultCode::kAdsShown
+                        withMsg:@"Ads is shown!"];
     }
+}
+
+- (BOOL)hasInterstitialAd {
+    return [[self interstitialAdView] isReady];
 }
 
 - (GADAdSize) createAdSize:(NSNumber* _Nonnull) width
@@ -294,12 +316,12 @@
     return GADAdSizeFromCGSize(CGSizeMake([width intValue], [height intValue]));
 }
 
-- (void) _showNativeExpressAd:(NSString* _Nonnull) adUnitId
-                        width:(NSNumber* _Nonnull) width
-                       height:(NSNumber* _Nonnull) height
-                     position:(NSNumber* _Nonnull) position {
+- (void)_showNativeExpressAd:(NSString* _Nonnull)adUnitId
+                       width:(NSNumber* _Nonnull)width
+                      height:(NSNumber* _Nonnull)height
+                    position:(NSNumber* _Nonnull)position {
     [self hideNativeExpressAd];
-    
+
     GADAdSize adSize = [self createAdSize:width height:height];
     GADNativeExpressAdView* view =
         [[[GADNativeExpressAdView alloc] initWithAdSize:adSize] autorelease];
@@ -307,34 +329,29 @@
         NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
         return;
     }
-    
+
     UIViewController* controller = [AdsWrapper getCurrentRootViewController];
-    
+
     [view setAdUnitID:adUnitId];
     [view setDelegate:nativeExpressAdListener_];
     [view setRootViewController:controller];
-    
-    [AdsWrapper addAdView:view atPos:(ProtocolAds::AdsPos) [position intValue]];
+
+    [AdsWrapper addAdView:view atPos:(ProtocolAds::AdsPos)[position intValue]];
     [self setNativeExpressAdView:view];
-    
+
     GADRequest* request = [GADRequest request];
     [request setTestDevices:[self testDeviceIDs]];
     [view loadRequest:request];
 }
 
-- (void) showNativeExpressAd:(NSDictionary* _Nonnull) params {
+- (void)showNativeExpressAd:(NSDictionary* _Nonnull)params {
     NSAssert([params count] == 4, @"Invalid number of params");
-    
+
     NSString* adUnitId = params[@"Param1"];
     NSNumber* width = params[@"Param2"];
     NSNumber* height = params[@"Param3"];
     NSNumber* position = params[@"Param4"];
-    
-    NSAssert(adUnitId != nil, @"...");
-    NSAssert(width != nil, @"...");
-    NSAssert(height != nil, @"...");
-    NSAssert(position != nil, @"...");
-    
+
     NSAssert([adUnitId isKindOfClass:[NSString class]], @"...");
     NSAssert([width isKindOfClass:[NSNumber class]], @"...");
     NSAssert([height isKindOfClass:[NSNumber class]], @"...");
@@ -346,16 +363,16 @@
                       position:position];
 }
 
-- (void) _showNativeExpressAd:(NSString* _Nonnull) adUnitId
-                        width:(NSNumber* _Nonnull) width
-                       height:(NSNumber* _Nonnull) height
-                       deltaX:(NSNumber* _Nonnull) deltaX
-                       deltaY:(NSNumber* _Nonnull) deltaY {
+- (void)_showNativeExpressAd:(NSString* _Nonnull)adUnitId
+                       width:(NSNumber* _Nonnull)width
+                      height:(NSNumber* _Nonnull)height
+                      deltaX:(NSNumber* _Nonnull)deltaX
+                      deltaY:(NSNumber* _Nonnull)deltaY {
     [self hideNativeExpressAd];
 
     GADAdSize adSize = [self createAdSize:width height:height];
     GADNativeExpressAdView* view =
-    [[[GADNativeExpressAdView alloc] initWithAdSize:adSize] autorelease];
+        [[[GADNativeExpressAdView alloc] initWithAdSize:adSize] autorelease];
     if (view == nil) {
         NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
         return;
@@ -366,7 +383,7 @@
     [view setAdUnitID:adUnitId];
     [view setDelegate:nativeExpressAdListener_];
     [view setRootViewController:controller];
-    
+
     [AdsWrapper addAdView:view withDeltaX:deltaX withDeltaY:deltaY];
     [self setNativeExpressAdView:view];
 
@@ -375,7 +392,7 @@
     [view loadRequest:request];
 }
 
-- (void) showNativeExpressAdWithDeltaPosition:(NSDictionary* _Nonnull) params {
+- (void)showNativeExpressAdWithDeltaPosition:(NSDictionary* _Nonnull)params {
     NSAssert([params count] == 5, @"Invalid number of params");
 
     NSString* adUnitId = params[@"Param1"];
@@ -384,35 +401,33 @@
     NSNumber* deltaX = params[@"Param4"];
     NSNumber* deltaY = params[@"Param5"];
 
-    NSAssert(adUnitId != nil, @"...");
-    NSAssert(width != nil, @"...");
-    NSAssert(height != nil, @"...");
-    NSAssert(deltaX != nil, @"...");
-    NSAssert(deltaY != nil, @"...");
-
     NSAssert([adUnitId isKindOfClass:[NSString class]], @"...");
     NSAssert([width isKindOfClass:[NSNumber class]], @"...");
     NSAssert([height isKindOfClass:[NSNumber class]], @"...");
     NSAssert([deltaX isKindOfClass:[NSNumber class]], @"...");
     NSAssert([deltaY isKindOfClass:[NSNumber class]], @"...");
 
-    [self _showNativeExpressAd:adUnitId width:width height:height deltaX:deltaX deltaY:deltaY];
+    [self _showNativeExpressAd:adUnitId
+                         width:width
+                        height:height
+                        deltaX:deltaX
+                        deltaY:deltaY];
 }
 
-- (void) hideNativeExpressAd {
+- (void)hideNativeExpressAd {
     if ([self nativeExpressAdView] != nil) {
         [[self nativeExpressAdView] removeFromSuperview];
         [self setNativeExpressAdView:nil];
     }
 }
 
-- (GADBannerView* _Nullable) createDummySmartBanner {
+- (GADBannerView* _Nullable)createDummySmartBanner {
     GADBannerView* banner =
         [[GADBannerView alloc] initWithAdSize:[self getSmartBannerAdSize]];
     return [banner autorelease];
 }
 
-- (NSNumber* _Nonnull) getSizeInPixels:(NSNumber* _Nonnull) size_ {
+- (NSNumber* _Nonnull)getSizeInPixels:(NSNumber* _Nonnull)size_ {
     int size = [size_ intValue];
     if (size == -2) {
         return [self getAutoHeightInPixels];
@@ -431,7 +446,7 @@
     return @([banner frame].size.height * scale);
 }
 
-- (NSNumber* _Nonnull) getAutoHeightInPixels {
+- (NSNumber* _Nonnull)getAutoHeightInPixels {
     GADBannerView* banner = [self createDummySmartBanner];
     if (banner == nil) {
         NSAssert(NO, @"...");
@@ -441,7 +456,7 @@
     return @([banner frame].size.height * scale);
 }
 
-- (NSNumber* _Nonnull) getFullWidthInPixels {
+- (NSNumber* _Nonnull)getFullWidthInPixels {
     GADBannerView* banner = [self createDummySmartBanner];
     if (banner == nil) {
         NSAssert(NO, @"...");
@@ -453,65 +468,64 @@
 
 #pragma mark - Rewarded Video Ad
 
-- (BOOL) hasRewardedAd {
-    return [[GADRewardBasedVideoAd sharedInstance] isReady];
-}
-
-- (void) loadRewardedAd:(NSString *)adsID {
-
+- (void)loadRewardedAd:(NSString* _Nonnull)adId {
     [[GADRewardBasedVideoAd sharedInstance] setDelegate:self];
-    GADRequest *request = [GADRequest request];
-    [request setTestDevices: [NSArray arrayWithArray: self.testDeviceIDs]];
+    GADRequest* request = [GADRequest request];
+    [request setTestDevices:[self testDeviceIDs]];
 
     if ([SSAdColonyMediation isLinkedWithAdColony] &&
-        [[self strAdColonyRewardedAdZoneID] length] > 0) {
+        [[self adColonyRewardedAdZoneId] length] > 0) {
         id<GADAdNetworkExtras> extras = [SSAdColonyMediation
-            extrasWithZoneId:[self strAdColonyRewardedAdZoneID]];
+            extrasWithZoneId:[self adColonyRewardedAdZoneId]];
         [request registerAdNetworkExtras:extras];
     }
 
-    [[GADRewardBasedVideoAd sharedInstance] loadRequest: request
-                                           withAdUnitID: adsID];
-
+    [[GADRewardBasedVideoAd sharedInstance] loadRequest:request
+                                           withAdUnitID:adId];
 }
 
-- (void) showRewardedAd {
+- (void)showRewardedAd {
     if ([[GADRewardBasedVideoAd sharedInstance] isReady]) {
-        [[GADRewardBasedVideoAd sharedInstance] presentFromRootViewController:[AdsWrapper getCurrentRootViewController]];
+        [[GADRewardBasedVideoAd sharedInstance]
+            presentFromRootViewController:
+                [AdsWrapper getCurrentRootViewController]];
     }
 }
 
-- (NSNumber*) getBannerWidthInPixel {
+- (BOOL)hasRewardedAd {
+    return [[GADRewardBasedVideoAd sharedInstance] isReady];
+}
+
+- (NSNumber*)getBannerWidthInPixel {
     GADBannerView* banner =
         [[GADBannerView alloc] initWithAdSize:[self bannerAdSize]];
     if (banner == nil) {
         return @(0);
     }
-    
+
     CGFloat scale = [[UIScreen mainScreen] scale];
     return @([banner frame].size.width * scale);
 }
 
-- (NSNumber*) getBannerHeightInPixel {
+- (NSNumber*)getBannerHeightInPixel {
     GADBannerView* banner =
         [[GADBannerView alloc] initWithAdSize:[self bannerAdSize]];
     if (banner == nil) {
         return @(0);
     }
-    
+
     CGFloat scale = [[UIScreen mainScreen] scale];
     return @([banner frame].size.height * scale);
 }
 
 #pragma mark interface for Admob SDK
 
-- (void) addTestDevice: (NSString*) deviceID
-{
+- (void)addTestDevice:(NSString*)deviceID {
     if (nil == self.testDeviceIDs) {
         self.testDeviceIDs = [[NSMutableArray alloc] init];
         [self.testDeviceIDs addObject:kDFPSimulatorID];
     }
-    
+
     [self.testDeviceIDs addObject:deviceID];
 }
 
@@ -610,25 +624,25 @@
     CGRect windowBounds = [[[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]] bounds];
     [UIView animateWithDuration:1.0
                      animations:^{
-                         self.bannerView.frame = CGRectMake(windowBounds.size.width - self.bannerView.frame.size.width,
+                         self.bannerAdView.frame = CGRectMake(windowBounds.size.width - self.bannerAdView.frame.size.width,
                                                             windowBounds.size.height,
-                                                            self.bannerView.frame.size.width,
-                                                            self.bannerView.frame.size.height);
+                                                            self.bannerAdView.frame.size.width,
+                                                            self.bannerAdView.frame.size.height);
                      }];
 }
 
 - (void) slideUpBannerAds {
     OUTPUT_LOG(@"Show Banner Ads!");
-        if ([_bannerView isHidden]) {
-            [_bannerView setHidden: NO];
+        if ([_bannerAdView isHidden]) {
+            [_bannerAdView setHidden: NO];
         }
     CGRect windowBounds = [[[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]] bounds];
     [UIView animateWithDuration:1.0
                      animations:^{
-                         self.bannerView.frame = CGRectMake(windowBounds.size.width - self.bannerView.frame.size.width,
-                                                            windowBounds.size.height - self.bannerView.frame.size.height,
-                                                            self.bannerView.frame.size.width,
-                                                            self.bannerView.frame.size.height);
+                         self.bannerAdView.frame = CGRectMake(windowBounds.size.width - self.bannerAdView.frame.size.width,
+                                                            windowBounds.size.height - self.bannerAdView.frame.size.height,
+                                                            self.bannerAdView.frame.size.width,
+                                                            self.bannerAdView.frame.size.height);
 
                      }];
 

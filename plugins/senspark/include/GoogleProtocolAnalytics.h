@@ -61,25 +61,6 @@ public:
     void setDryRun(bool isDryRun);
 
     void enableAdvertisingTracking(bool enable);
-
-private:
-    template <std::size_t... S> struct Sequence {
-        static constexpr int Arity = sizeof...(S);
-    };
-
-    template <std::size_t N, std::size_t... S>
-    struct SequenceGenerator : SequenceGenerator<N - 1, N - 1, S...> {};
-
-    template <std::size_t... S> struct SequenceGenerator<0, S...> {
-        using Type = Sequence<S...>;
-    };
-
-    template <class... Args>
-    void callVoidFunction(const std::string& functionName, Args&&... args);
-
-    template <std::size_t... Indices, class... Args>
-    void callVoidFunctionImpl(const std::string& functionName,
-                              Sequence<Indices...>, Args&&... args);
 };
 
 NS_SENSPARK_PLUGIN_ANALYTICS_END

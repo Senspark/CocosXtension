@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -46,45 +46,52 @@ typedef enum {
 
 @property BOOL debug;
 
-@property (retain, nonatomic)   NSString* _Nullable strBannerID;
-@property (retain, nonatomic)   NSString* _Nullable strInterstitialID;
-@property (retain, nonatomic)   NSString* _Nullable strAdColonyInterstitialAdZoneID;
-@property (retain, nonatomic)   NSString* _Nullable strAdColonyRewardedAdZoneID;
+// clang-format off
+@property (nonatomic, retain, nullable) NSString* strBannerID DEPRECATED_ATTRIBUTE;
+@property (nonatomic, retain, nullable) NSString* strInterstitialID DEPRECATED_ATTRIBUTE;
 
-@property (assign, nonatomic) GADBannerView*    _Nullable bannerView;
-@property (assign, nonatomic) GADInterstitial*  _Nullable interstitialView;
-@property (assign, nonatomic) NSMutableArray*   _Nullable testDeviceIDs;
+@property (nonatomic, copy, nullable) NSString* adColonyInterstitialAdZoneId;
+@property (nonatomic, copy, nullable) NSString* adColonyRewardedAdZoneId;
+
+@property (nonatomic, assign, nullable) GADBannerView* bannerAdView;
+@property (nonatomic, assign, nullable) GADInterstitial* interstitialAdView;
+@property (nonatomic, assign, nullable) GADNativeExpressAdView* nativeExpressAdView;
+
+@property (nonatomic, assign, nullable) NSMutableArray* testDeviceIDs;
 
 @property (nonatomic) GADAdSize bannerAdSize;
 
-@property (nonatomic, assign, nullable) GADNativeExpressAdView* nativeExpressAdView;
-
-@property (assign, nonatomic) int slideUpTimePeriod;
-@property (assign, nonatomic) int slideDownTimePeriod;
+@property (nonatomic, assign) int slideUpTimePeriod;
+@property (nonatomic, assign) int slideDownTimePeriod;
+// clang-format on
 
 /**
  interface for Admob SDK
  */
-- (void) addTestDevice: (NSString* _Nonnull) deviceID;
-- (void) slideUpBannerAds;
-- (void) slideDownBannerAds;
-- (void) loadInterstitial;
-- (BOOL) hasInterstitial;
+- (void)addTestDevice:(NSString* _Nonnull)deviceID;
+- (void)slideUpBannerAds;
+- (void)slideDownBannerAds;
 
-- (BOOL) hasRewardedAd;
-- (void) loadRewardedAd: (NSString* _Nonnull) adsID;
-- (void) showRewardedAd;
+- (void)showBannerAd:(NSDictionary* _Nonnull)params;
+- (void)hideBannerAd;
 
-- (void) showNativeExpressAd:(NSDictionary* _Nonnull) params;
-- (void) showNativeExpressAdWithDeltaPosition:(NSDictionary* _Nonnull) params;
-- (void) hideNativeExpressAd;
+- (void)showNativeExpressAd:(NSDictionary* _Nonnull)params;
+- (void)showNativeExpressAdWithDeltaPosition:(NSDictionary* _Nonnull)params;
+- (void)hideNativeExpressAd;
 
-- (NSNumber* _Nonnull) getSizeInPixels:(NSNumber* _Nonnull) size;
-- (NSNumber* _Nonnull) getAutoHeightInPixels;
-- (NSNumber* _Nonnull) getFullWidthInPixels;
+- (void)loadInterstitial DEPRECATED_ATTRIBUTE;
+- (void)loadInterstitialAd:(NSString* _Nonnull)adId;
+- (void)showInterstitialAd;
+- (BOOL)hasInterstitialAd;
 
-- (void) configMediationAdColony: (NSDictionary* __nullable) params;
-- (void) configMediationAdVungle: (NSDictionary* __nullable) params;
-- (void) configMediationAdUnity:  (NSDictionary* __nullable) params;
+- (void)loadRewardedAd:(NSString* _Nonnull)adID;
+- (void)showRewardedAd;
+- (BOOL)hasRewardedAd;
+
+- (NSNumber* _Nonnull)getSizeInPixels:(NSNumber* _Nonnull)size;
+- (NSNumber* _Nonnull)getAutoHeightInPixels;
+- (NSNumber* _Nonnull)getFullWidthInPixels;
+
+- (void)configMediationAdColony:(NSDictionary* __nullable)params;
 
 @end
