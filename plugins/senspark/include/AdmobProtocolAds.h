@@ -60,14 +60,14 @@ public:
     class AdSize;
 
     /// Ad id key used in TAdsInfo.
-    static const std::string AdBannerIdKey;
-    static const std::string AdInterstitialIdKey;
+    CC_DEPRECATED_ATTRIBUTE static const std::string AdBannerIdKey;
+    CC_DEPRECATED_ATTRIBUTE static const std::string AdInterstitialIdKey;
 
     /// Ad type key used in TAdsInfo.
-    static const std::string AdTypeKey;
+    CC_DEPRECATED_ATTRIBUTE static const std::string AdTypeKey;
 
     /// Ad size key used in TAdsInfo.
-    static const std::string AdSizeKey;
+    CC_DEPRECATED_ATTRIBUTE static const std::string AdSizeKey;
 
     AdmobProtocolAds();
     virtual ~AdmobProtocolAds();
@@ -80,12 +80,43 @@ public:
 
     void addTestDevice(const std::string& deviceId);
 
+    /// Configure AdMob mediation with AdColony.
+    /// Available keys:
+    /// - "AdColonyAppID": The AdColony application id (must have).
+    /// - "AdColonyInterstitialAdID": Interstitial zone id used to display AdMob
+    /// interstitial ads (optional).
+    /// - "AdColonyRewardedAdID": Rewarded V4VC zone id used to display AdMob
+    /// rewarded videos (optional).
+    void configMediationAdColony(const cocos2d::plugin::TAdsInfo& params);
+
     /// Shows a banner ad given its id, size and position (optional).
     void showBannerAd(const std::string& bannerAdId, AdSize bannerAdSize,
                       AdsPos bannerAdPosition = AdsPos::kPosCenter);
 
     /// Hides current banner ad (if shown).
     void hideBannerAd();
+
+    /// https://firebase.google.com/docs/admob/android/native-express
+    /// https://firebase.google.com/docs/admob/ios/native-express
+    /// @param adUnitId The id of the ad.
+    /// @param width The desired width of the ad view in DP (density-independent
+    /// pixel), pass -1 for full width.
+    /// @param height The desired width of the ad view in DP
+    /// (density-independent pixel), pass -2 for auto
+    /// height.
+    void showNativeExpressAd(const std::string& adUnitId, int width, int height,
+                             AdsPos position);
+
+    /// @see showNativeExpressAd
+    /// @param x Horizontal distance from the left border of the device screen
+    /// in pixels.
+    /// @param y Vertical distance from the top border of the device screen in
+    /// pixels.
+    void showNativeExpressAd(const std::string& adUnitId, int width, int height,
+                             int x, int y);
+
+    /// Hides the currently displaying native express ad (if any).
+    void hideNativeExpressAd();
 
     /// Shows an interstitial ad.
     void showInterstitialAd();
@@ -124,59 +155,45 @@ public:
         return hasInterstitialAd();
     }
 
-    /// @param width The desired width of the ad view, pass -1 for full width.
-    /// @param height The desired width of the ad view, pass -2 for auto height.
-    void showNativeExpressAd(const std::string& adUnitId, int width, int height,
-                             AdsPos position);
-
-    /// @param width The desired width of the ad view, pass -1 for full width.
-    /// @param height The desired width of the ad view, pass -2 for auto height.
-    /// @param x Horizontal distance from the left border of the device screen
-    /// in pixels.
-    /// @param y Vertical distance from the top border of the device screen in
-    /// pixels.
-    void showNativeExpressAd(const std::string& adUnitId, int width, int height,
-                             int x, int y);
-
-    void hideNativeExpressAd();
+    /// Attempts to show the loaded rewarded video ad.
+    /// No-op if there is not any rewarded video ad.
+    void showRewardedAd();
 
     /// Attempts to load a rewarded video ad with the specified id.
     /// Ignored if the last loading try is in progress.
     void loadRewardedAd(const std::string& adId);
 
-    /// Attempts to show the loaded rewarded video ad.
-    /// No-op if there is not any rewarded video ad.
-    void showRewardedAd();
-
     /// Checks whether there is any available rewarded video ad to show.
     bool hasRewardedAd();
+
+    void slideUpBannerAd();
+    void slideDownBannerAd();
+
+    CC_DEPRECATED_ATTRIBUTE void slideBannerUp() { slideUpBannerAd(); }
+    CC_DEPRECATED_ATTRIBUTE void slideBannerDown() { slideDownBannerAd(); }
 
     /// Gets the size of the banner ad in pixels.
     /// @param size In DP (density-independent pixel), pass -1 for full width,
     /// -2 for auto height.
     int getSizeInPixels(int size);
 
-    void slideBannerUp();
-    void slideBannerDown();
-
     /// Gets the current displaying banner ad's width in pixels.
     /// For getting the specified banner ad size, refer @c getSizeInPixels.
     /// @note If there is no displaying banner, returns 0.
-    int getBannerWidthInPixel();
+    int getBannerWidthInPixels();
 
     /// Gets the current displaying banner ad's height in pixels.
     /// For getting the specified banner ad size, refer @c getSizeInPixels.
     /// @note If there is no displaying banner, returns 0.
-    int getBannerHeightInPixel();
+    int getBannerHeightInPixels();
 
-    /// Configure AdMob mediation with AdColony.
-    /// Available keys:
-    /// - "AdColonyAppID": The AdColony application id (must have).
-    /// - "AdColonyInterstitialAdID": Interstitial zone id used to display AdMob
-    /// interstitial ads (optional).
-    /// - "AdColonyRewardedAdID": Rewarded V4VC zone id used to display AdMob
-    /// rewarded videos (optional).
-    void configMediationAdColony(const cocos2d::plugin::TAdsInfo& params);
+    CC_DEPRECATED_ATTRIBUTE int getBannerWidthInPixel() {
+        return getBannerWidthInPixels();
+    }
+
+    CC_DEPRECATED_ATTRIBUTE int getBannerHeightInPixel() {
+        return getBannerHeightInPixels();
+    }
 
     /// No-op.
     CC_DEPRECATED_ATTRIBUTE void initializeMediationAd() {}
@@ -190,7 +207,7 @@ public:
     configMediationAdUnity(const cocos2d::plugin::TAdsInfo& params) {}
 };
 
-class AdmobProtocolAds::AdType {
+class CC_DEPRECATED_ATTRIBUTE AdmobProtocolAds::AdType {
 public:
     static const AdType Banner;
 

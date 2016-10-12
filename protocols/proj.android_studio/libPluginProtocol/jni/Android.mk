@@ -24,7 +24,8 @@ $(addprefix ../../../platform/android/, \
     AgentManager.cpp \
 ) \
 ../../../PluginManager.cpp \
-../../../PluginParam.cpp
+../../../PluginParam.cpp \
+../../../src/senspark/utility.cpp
 
 LOCAL_CFLAGS := -std=c++11 -Wno-psabi
 LOCAL_EXPORT_CFLAGS := -Wno-psabi

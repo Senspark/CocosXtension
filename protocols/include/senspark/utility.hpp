@@ -9,9 +9,10 @@
 #ifndef SENSPARK_PLUGIN_X_UTILITY_HPP_
 #define SENSPARK_PLUGIN_X_UTILITY_HPP_
 
-#include <cstddef>
 #include <string>
 #include <vector>
+
+#include "senspark/integer_sequence.hpp"
 
 namespace cocos2d {
 namespace plugin {
@@ -22,20 +23,6 @@ class PluginParam;
 
 namespace senspark {
 namespace detail {
-template <std::size_t... Is> struct sequence {
-    static constexpr std::size_t arity = sizeof...(Is);
-};
-
-template <std::size_t N, std::size_t... Is>
-struct sequence_generator : sequence_generator<N - 1, N - 1, Is...> {};
-
-template <std::size_t... Is> struct sequence_generator<0, Is...> {
-    using type = sequence<Is...>;
-};
-
-template <std::size_t N>
-using make_sequence = typename sequence_generator<N>::type;
-
 using cocos2d::plugin::PluginProtocol;
 using cocos2d::plugin::PluginParam;
 
@@ -45,7 +32,7 @@ ReturnType callFunction(PluginProtocol* plugin, const std::string& functionName,
 
 template <class ReturnType, class... Args, std::size_t... Is>
 ReturnType callFunction(PluginProtocol* plugin, const std::string& functionName,
-                        sequence<Is...>, Args&&... args) {
+                        index_sequence<Is...>, Args&&... args) {
     std::vector<PluginParam> params = {
         PluginParam{std::forward<Args>(args)}...};
     std::vector<PluginParam*> param_pointers = {&params.at(Is)...};
@@ -56,9 +43,9 @@ ReturnType callFunction(PluginProtocol* plugin, const std::string& functionName,
 template <class ReturnType = void, class... Args>
 ReturnType callFunction(cocos2d::plugin::PluginProtocol* plugin,
                         const std::string& functionName, Args&&... args) {
-    return detail::callFunction<ReturnType>(
-        plugin, functionName, detail::make_sequence<sizeof...(Args)>(),
-        std::forward<Args>(args)...);
+    return detail::callFunction<ReturnType>(plugin, functionName,
+                                            index_sequence_for<Args...>(),
+                                            std::forward<Args>(args)...);
 }
 } // namespace senspark
 

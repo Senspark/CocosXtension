@@ -47,51 +47,53 @@ typedef enum {
 @property BOOL debug;
 
 // clang-format off
-@property (nonatomic, retain, nullable) NSString* strBannerID DEPRECATED_ATTRIBUTE;
-@property (nonatomic, retain, nullable) NSString* strInterstitialID DEPRECATED_ATTRIBUTE;
+@property (nonatomic, copy, nullable) NSString* strBannerID DEPRECATED_ATTRIBUTE;
+@property (nonatomic, copy, nullable) NSString* strInterstitialID DEPRECATED_ATTRIBUTE;
+
+@property (nonatomic, retain, nullable) NSMutableArray* testDeviceIDs;
 
 @property (nonatomic, copy, nullable) NSString* adColonyInterstitialAdZoneId;
 @property (nonatomic, copy, nullable) NSString* adColonyRewardedAdZoneId;
 
 @property (nonatomic, assign, nullable) GADBannerView* bannerAdView;
-@property (nonatomic, assign, nullable) GADInterstitial* interstitialAdView;
 @property (nonatomic, assign, nullable) GADNativeExpressAdView* nativeExpressAdView;
-
-@property (nonatomic, copy, nullable) NSMutableArray* testDeviceIDs;
+@property (nonatomic, assign, nullable) GADInterstitial* interstitialAdView;
 
 @property (nonatomic) GADAdSize bannerAdSize;
 
-@property (nonatomic, assign) int slideUpTimePeriod;
-@property (nonatomic, assign) int slideDownTimePeriod;
+@property (nonatomic) int slideUpTimePeriod;
+@property (nonatomic) int slideDownTimePeriod;
 // clang-format on
 
 /**
  interface for Admob SDK
  */
-- (void)addTestDevice:(NSString* _Nonnull)deviceID;
-- (void)slideUpBannerAds;
-- (void)slideDownBannerAds;
+- (void)addTestDevice:(NSString* _Nonnull)deviceId;
+- (void)configMediationAdColony:(NSDictionary* _Nonnull)params;
 
 - (void)showBannerAd:(NSDictionary* _Nonnull)params;
 - (void)hideBannerAd;
+- (void)moveBannerAd:(NSDictionary* _Nonnull)params;
 
 - (void)showNativeExpressAd:(NSDictionary* _Nonnull)params;
-- (void)showNativeExpressAdWithDeltaPosition:(NSDictionary* _Nonnull)params;
 - (void)hideNativeExpressAd;
+- (void)moveNativeExpressAd:(NSDictionary* _Nonnull)params;
 
 - (void)loadInterstitial DEPRECATED_ATTRIBUTE;
-- (void)loadInterstitialAd:(NSString* _Nonnull)adId;
+
 - (void)showInterstitialAd;
+- (void)loadInterstitialAd:(NSString* _Nonnull)adId;
 - (BOOL)hasInterstitialAd;
 
-- (void)loadRewardedAd:(NSString* _Nonnull)adID;
 - (void)showRewardedAd;
+- (void)loadRewardedAd:(NSString* _Nonnull)adID;
 - (BOOL)hasRewardedAd;
 
-- (NSNumber* _Nonnull)getSizeInPixels:(NSNumber* _Nonnull)size;
-- (NSNumber* _Nonnull)getAutoHeightInPixels;
-- (NSNumber* _Nonnull)getFullWidthInPixels;
+- (void)slideUpBannerAd;
+- (void)slideDownBannerAd;
 
-- (void)configMediationAdColony:(NSDictionary* __nullable)params;
+- (NSNumber* _Nonnull)getSizeInPixels:(NSNumber* _Nonnull)size;
+- (NSNumber* _Nonnull)getBannerWidthInPixels;
+- (NSNumber* _Nonnull)getBannerHeightInPixels;
 
 @end

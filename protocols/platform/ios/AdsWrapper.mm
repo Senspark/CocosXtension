@@ -96,14 +96,14 @@ using namespace cocos2d::plugin;
   return nil;
 }
 
-+ (BOOL)wasBuiltForiOS8orLater
-{
-  return [[self buildVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending;
++ (BOOL)wasBuiltForiOS8orLater {
+    return [[self buildVersion] compare:@"8.0" options:NSNumericSearch] !=
+           NSOrderedAscending;
 }
 
-+ (BOOL)requireRotation
-{
-  return ![self wasBuiltForiOS8orLater] || ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0);
++ (BOOL)requireRotation {
+    return ![self wasBuiltForiOS8orLater] ||
+           ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0);
 }
 
 + (void) addAdView:(UIView*) view atPos:(ProtocolAds::AdsPos) pos
@@ -162,61 +162,54 @@ using namespace cocos2d::plugin;
     [controller.view addSubview:view];
 }
 
-+ (void) addAdView:(UIView *)view withDeltaX:(NSNumber *)deltaX withDeltaY:(NSNumber *)deltaY
-{
+/// http://stackoverflow.com/questions/24150359/is-uiscreen-mainscreen-bounds-size-becoming-orientation-dependent-in-ios8?noredirect=1&lq=1
++ (CGSize)getOrientationDependentScreenSize {
     UIViewController* controller = [AdsWrapper getCurrentRootViewController];
 
     if (nil == controller) {
         PluginUtilsIOS::outputLog("Can't get the UIViewController object");
-        return;
+        return CGSizeZero;
     }
 
-    CGFloat X = [deltaX intValue];
-    CGFloat Y = [deltaY intValue];
+    CGSize rootSize = [[controller view] frame].size;
 
-    CGSize rootSize = controller.view.frame.size;
-    CGSize viewSize = view.frame.size;
-    CGPoint viewOrigin;
-
-    if ([self requireRotation] && UIInterfaceOrientationIsLandscape(controller.interfaceOrientation)){
+    if ([self requireRotation] &&
+        UIInterfaceOrientationIsLandscape([controller interfaceOrientation])) {
         CGFloat temp = rootSize.width;
         rootSize.width = rootSize.height;
         rootSize.height = temp;
     }
 
-    CGRect rect = CGRectMake(X, Y, viewSize.width, viewSize.height);
-    view.frame = rect;
-    [controller.view addSubview:view];
+    return rootSize;
 }
 
-+ (UIViewController *)getCurrentRootViewController {
-    
-    UIViewController *result = nil;
-    
++ (UIViewController* _Nullable)getCurrentRootViewController {
+    UIViewController* result = nil;
+
     // Try to find the root view controller programmically
-    
     // Find the top window (that is not an alert view or other window)
-    UIWindow *topWindow = [[UIApplication sharedApplication] keyWindow];
-    if (topWindow.windowLevel != UIWindowLevelNormal)
-    {
-        NSArray *windows = [[UIApplication sharedApplication] windows];
-        for(topWindow in windows)
-        {
-            if (topWindow.windowLevel == UIWindowLevelNormal)
+    UIWindow* topWindow = [[UIApplication sharedApplication] keyWindow];
+    if ([topWindow windowLevel] != UIWindowLevelNormal) {
+        NSArray* windows = [[UIApplication sharedApplication] windows];
+        for (topWindow in windows) {
+            if ([topWindow windowLevel] == UIWindowLevelNormal) {
                 break;
+            }
         }
     }
-    
-    UIView *rootView = [[topWindow subviews] objectAtIndex:0];
+
+    UIView* rootView = [[topWindow subviews] objectAtIndex:0];
     id nextResponder = [rootView nextResponder];
-    
-    if ([nextResponder isKindOfClass:[UIViewController class]])
+
+    if ([nextResponder isKindOfClass:[UIViewController class]]) {
         result = nextResponder;
-    else if ([topWindow respondsToSelector:@selector(rootViewController)] && topWindow.rootViewController != nil)
-        result = topWindow.rootViewController;
-    else
+    } else if ([topWindow respondsToSelector:@selector(rootViewController)] &&
+               [topWindow rootViewController] != nil) {
+        result = [topWindow rootViewController];
+    } else {
         NSAssert(NO, @"Could not find a root view controller.");
-    
+    }
+
     return result;
 }
 

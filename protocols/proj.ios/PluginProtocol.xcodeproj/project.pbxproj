@@ -56,6 +56,7 @@
 		17F253E81C51E42F00BF2EF9 /* android */ = {isa = PBXFileReference; lastKnownFileType = folder; name = android; path = ../platform/android; sourceTree = "<group>"; };
 		6F131C4A1DACDBAD0070DD1E /* utility.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utility.hpp; sourceTree = "<group>"; };
 		6F131C4D1DACEB7A0070DD1E /* utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utility.cpp; path = ../src/senspark/utility.cpp; sourceTree = "<group>"; };
+		6F5609E01DADD5D6008CD5BB /* integer_sequence.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = integer_sequence.hpp; sourceTree = "<group>"; };
 		950768851C3BB943004293FF /* ProtocolPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProtocolPlatform.h; sourceTree = "<group>"; };
 		950768861C3BCAAD004293FF /* ProtocolPlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ProtocolPlatform.mm; sourceTree = "<group>"; };
 		950768881C3BCD92004293FF /* EReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EReachability.h; sourceTree = "<group>"; };
@@ -131,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				6F131C4A1DACDBAD0070DD1E /* utility.hpp */,
+				6F5609E01DADD5D6008CD5BB /* integer_sequence.hpp */,
 			);
 			path = senspark;
 			sourceTree = "<group>";

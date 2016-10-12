@@ -36,9 +36,7 @@ THE SOFTWARE.
 + (void)addAdView:(UIView* _Nonnull)view
             atPos:(cocos2d::plugin::ProtocolAds::AdsPos)pos;
 
-+ (void)addAdView:(UIView* _Nonnull)view
-       withDeltaX:(NSNumber* _Nonnull)deltaX
-       withDeltaY:(NSNumber* _Nonnull)deltaY;
++ (CGSize)getOrientationDependentScreenSize;
 
 + (UIViewController* _Nullable)getCurrentRootViewController;
 
