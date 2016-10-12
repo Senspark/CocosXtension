@@ -38,12 +38,12 @@ public class AdsWrapper {
     }
 
     public static final int RESULT_CODE_AdsBannerReceived       = 0;
-        // The ad is received
+    // The ad is received
     public static final int RESULT_CODE_AdsInterstitialReceived = 1;
     public static final int RESULT_CODE_AdsShown                = 2;
-        // The advertisement shown
+    // The advertisement shown
     public static final int RESULT_CODE_AdsDismissed            = 3;
-        // The advertisement dismissed
+    // The advertisement dismissed
     public static final int RESULT_CODE_AdsClicked              = 4;
     public static final int RESULT_CODE_AdsClosed               = 5;
     public static final int RESULT_CODE_AdsSkipped              = 6;
@@ -122,22 +122,17 @@ public class AdsWrapper {
         mFrameLayout.addView(adView, mLayoutParams);
     }
 
-    public static void addAdView(View adView, int deltaX, int deltaY) {
-
-        FrameLayout mFrameLayout = (FrameLayout) ((Activity) PluginWrapper.getContext())
+    public static void addAdView(View adView) {
+        FrameLayout layout = (FrameLayout) ((Activity) PluginWrapper.getContext())
             .findViewById(android.R.id.content)
             .getRootView();
 
-        FrameLayout.LayoutParams mLayoutParams;
-        mLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams params =
+            new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.LEFT | Gravity.TOP;
 
-        mLayoutParams.gravity = Gravity.LEFT | Gravity.TOP;
-
-        mLayoutParams.leftMargin = deltaX;
-        mLayoutParams.topMargin = deltaY;
-
-        mFrameLayout.addView(adView, mLayoutParams);
+        layout.addView(adView, params);
     }
 
     public static void onAdsResult(InterfaceAds adapter, int code, String msg) {

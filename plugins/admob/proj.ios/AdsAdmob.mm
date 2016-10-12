@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,13 +28,15 @@
 #import "SSNativeExpressAdListener.h"
 #import "SSAdColonyMediation.h"
 
-#define OUTPUT_LOG(...)     if (self.debug) NSLog(__VA_ARGS__);
+#define OUTPUT_LOG(...)                                                        \
+    if (self.debug)                                                            \
+        NSLog(__VA_ARGS__);
 
 @implementation AdsAdmob
 
-@synthesize debug                           = __debug;
-@synthesize strBannerID                     = __strBannerID;
-@synthesize strInterstitialID               = __strInterstitialID;
+@synthesize debug = __debug;
+@synthesize strBannerID = __strBannerID;
+@synthesize strInterstitialID = __strInterstitialID;
 
 - (id)init {
     self = [super init];
@@ -99,69 +101,67 @@
 
 #pragma mark InterfaceAds impl
 
-- (void) configDeveloperInfo: (NSDictionary*) devInfo {
-    NSLog(@"Deprecated: Use showBannerAd(adId) and loadInterstitialAd(adId) instead!");
-    
-    NSString* bannerId      = [devInfo objectForKey:@"AdmobID"];
+- (void)configDeveloperInfo:(NSDictionary*)devInfo {
+    NSLog(@"Deprecated: Use showBannerAd(adId) and loadInterstitialAd(adId) "
+          @"instead!");
+
+    NSString* bannerId = [devInfo objectForKey:@"AdmobID"];
     NSString* interstiailId = [devInfo objectForKey:@"AdmobInterstitialID"];
-    
+
     if (bannerId == nil) {
         NSLog(@"WARNING: BannerID is nil");
     }
-    
+
     if (interstiailId == nil) {
         NSLog(@"WARNING: IntestitialID is nil");
     }
-    
-    self.strBannerID        = bannerId;
-    self.strInterstitialID  = interstiailId;
-    
-    _interstitialAdView   = nil;
-    _bannerAdView         = nil;
+
+    self.strBannerID = bannerId;
+    self.strInterstitialID = interstiailId;
+
+    _interstitialAdView = nil;
+    _bannerAdView = nil;
 }
 
-- (void) showAds: (NSDictionary*) info position:(int) pos {
-    NSLog(@"Deprecated: Use showBannerAd(adId) and showInterstitialAd instead!");
-    
+- (void)showAds:(NSDictionary*)info position:(int)pos {
+    NSLog(
+        @"Deprecated: Use showBannerAd(adId) and showInterstitialAd instead!");
+
     if (self.strBannerID == nil || self.strBannerID.length == 0) {
         OUTPUT_LOG(@"configDeveloperInfo() not correctly invoked in Admob!");
         return;
     }
 
-
     NSString* strType = [info objectForKey:@"AdmobType"];
     int type = [strType intValue];
     switch (type) {
     case kTypeBanner: {
-            NSString* strSize = [info objectForKey:@"AdmobSizeEnum"];
-            int sizeEnum = [strSize intValue];
-            [self _showBannerAd:[self strBannerID]
-                           size:@(sizeEnum)
-                       position:@(pos)];
-            break;
-        }
+        NSString* strSize = [info objectForKey:@"AdmobSizeEnum"];
+        int sizeEnum = [strSize intValue];
+        [self _showBannerAd:[self strBannerID] size:@(sizeEnum)];
+        [self _moveAd:[self bannerAdView] position:@(pos)];
+        break;
+    }
     case kTypeFullScreen: {
-            [self showInterstitialAd];
-            break;
-        }
+        [self showInterstitialAd];
+        break;
+    }
     default:
         OUTPUT_LOG(@"The value of 'AdmobType' is wrong (should be 1 or 2)");
         break;
     }
 }
 
-- (void) hideAds: (NSDictionary*) info
-{
+- (void)hideAds:(NSDictionary*)info {
     NSLog(@"Deprecated: Use hideBannerAd(adId) instead!");
-    
+
     NSString* strType = [info objectForKey:@"AdmobType"];
     int type = [strType intValue];
     switch (type) {
-    case kTypeBanner:
-        {
-            [self hideBannerAd];
-            break;
-        }
+    case kTypeBanner: {
+        [self hideBannerAd];
+        break;
+    }
     case kTypeFullScreen:
         OUTPUT_LOG(@"Now not support full screen view in Admob");
         break;
@@ -171,28 +171,23 @@
     }
 }
 
-- (void) queryPoints
-{
+- (void)queryPoints {
     OUTPUT_LOG(@"Admob not support query points!");
 }
 
-- (void) spendPoints: (int) points
-{
+- (void)spendPoints:(int)points {
     OUTPUT_LOG(@"Admob not support spend points!");
 }
 
-- (void) setDebugMode: (BOOL) isDebugMode
-{
+- (void)setDebugMode:(BOOL)isDebugMode {
     self.debug = isDebugMode;
 }
 
-- (NSString*) getSDKVersion
-{
+- (NSString*)getSDKVersion {
     return @"7.3.1";
 }
 
-- (NSString*) getPluginVersion
-{
+- (NSString*)getPluginVersion {
     return @"0.3.0";
 }
 
@@ -227,7 +222,7 @@
         [[[GADBannerView alloc] initWithAdSize:size] autorelease];
     [view setAdUnitID:adId];
     [view setDelegate:self];
-    
+
     UIViewController* controller = [AdsWrapper getCurrentRootViewController];
     [view setRootViewController:controller];
     [[controller view] addSubview:view];
@@ -312,7 +307,7 @@
 
     [view setAdUnitID:adUnitId];
     [view setDelegate:nativeExpressAdListener_];
-    
+
     UIViewController* controller = [AdsWrapper getCurrentRootViewController];
     [view setRootViewController:controller];
     [[controller view] addSubview:view];
@@ -325,7 +320,7 @@
 }
 
 - (void)hideNativeExpressAd {
-    if ([self nativeExpressAdView] != nil) {
+    if ([self _hasNativeExpressAd]) {
         [[self nativeExpressAdView] removeFromSuperview];
         [self setNativeExpressAdView:nil];
     }
@@ -344,9 +339,13 @@
 }
 
 - (void)_moveNativeExpressAd:(NSNumber* _Nonnull)x y:(NSNumber* _Nonnull)y {
-    if ([self nativeExpressAdView] != nil) {
+    if ([self _hasNativeExpressAd]) {
         [self _moveAd:[self nativeExpressAdView] x:x y:y];
     }
+}
+
+- (BOOL)_hasNativeExpressAd {
+    return [self nativeExpressAdView] != nil;
 }
 
 - (void)_moveAd:(UIView* _Nonnull)view position:(NSNumber* _Nonnull)_position {
@@ -406,19 +405,19 @@
 - (void)showInterstitialAd {
     NSLog(@"Interstitial view: %@", [self interstitialAdView]);
 
-    if (not[self hasInterstitialAd]) {
-        // Ad not ready to present.
-        NSLog(@"ADMOB: Interstitial cannot show. It is not ready.");
-        // Attempt to load the default interstitial ad id.
-        // Should be deprecated.
-        [self loadInterstitial];
-    } else {
+    if ([self hasInterstitialAd]) {
         UIViewController* controller =
             [AdsWrapper getCurrentRootViewController];
         [[self interstitialAdView] presentFromRootViewController:controller];
         [AdsWrapper onAdsResult:self
                         withRet:cocos2d::plugin::AdsResultCode::kAdsShown
                         withMsg:@"Ads is shown!"];
+    } else {
+        // Ad is not ready to present.
+        NSLog(@"ADMOB: Interstitial cannot show. It is not ready.");
+        // Attempt to load the default interstitial ad id.
+        // Should be deprecated: load interstitial should be called manually.
+        [self loadInterstitial];
     }
 }
 
@@ -468,9 +467,8 @@
 
 - (void)loadRewardedAd:(NSString* _Nonnull)adId {
     [[GADRewardBasedVideoAd sharedInstance] setDelegate:self];
-    GADRequest* request = [GADRequest request];
-    [request setTestDevices:[self testDeviceIDs]];
 
+    GADRequest* request = [GADRequest request];
     if ([SSAdColonyMediation isLinkedWithAdColony] &&
         [[self adColonyRewardedAdZoneId] length] > 0) {
         id<GADAdNetworkExtras> extras = [SSAdColonyMediation
@@ -487,25 +485,6 @@
 }
 
 #pragma mark - Utility
-
-- (NSNumber* _Nonnull)getSizeInPixels:(NSNumber* _Nonnull)size_ {
-    int size = [size_ intValue];
-    if (size == -2) {
-        return [self _getAutoHeightInPixels];
-    }
-    if (size == -1) {
-        return [self _getFullWidthInPixels];
-    }
-    GADAdSize adSize = GADAdSizeFromCGSize(CGSizeMake(size, size));
-    GADBannerView* banner =
-        [[[GADBannerView alloc] initWithAdSize:adSize] autorelease];
-    if (banner == nil) {
-        NSLog(@"%s: invalid ad size", __PRETTY_FUNCTION__);
-        return @(0);
-    }
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    return @([banner frame].size.height * scale);
-}
 
 - (NSNumber*)getBannerWidthInPixels {
     if (not[self _hasBannerAd]) {
@@ -531,6 +510,25 @@
         return @(0);
     }
 
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    return @([banner frame].size.height * scale);
+}
+
+- (NSNumber* _Nonnull)getSizeInPixels:(NSNumber* _Nonnull)size_ {
+    int size = [size_ intValue];
+    if (size == -2) {
+        return [self _getAutoHeightInPixels];
+    }
+    if (size == -1) {
+        return [self _getFullWidthInPixels];
+    }
+    GADAdSize adSize = GADAdSizeFromCGSize(CGSizeMake(size, size));
+    GADBannerView* banner =
+        [[[GADBannerView alloc] initWithAdSize:adSize] autorelease];
+    if (banner == nil) {
+        NSLog(@"%s: invalid ad size", __PRETTY_FUNCTION__);
+        return @(0);
+    }
     CGFloat scale = [[UIScreen mainScreen] scale];
     return @([banner frame].size.height * scale);
 }

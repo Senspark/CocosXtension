@@ -83,13 +83,13 @@ class BannerAdListener extends AdListener {
         super.onAdLoaded();
         AdsWrapper.onAdsResult(_adapter, AdsWrapper.RESULT_CODE_AdsBannerReceived, "Ads request received success!");
 
-        if (_adapter.adView != null) {
-            _adapter.adView.setVisibility(View.GONE);
-            _adapter.adView.setVisibility(View.VISIBLE);
+        if (_adapter._hasBannerAd()) {
+            _adapter._bannerAdView.setVisibility(View.GONE);
+            _adapter._bannerAdView.setVisibility(View.VISIBLE);
 
-            if (_adapter.adView.getAdSize().isAutoHeight()) {
+            if (_adapter._bannerAdView.getAdSize().isAutoHeight()) {
                 _adapter.logD("AdSize is SMART BANNER. Set its background color BLACK");
-                _adapter.adView.setBackgroundColor(Color.BLACK);
+                _adapter._bannerAdView.setBackgroundColor(Color.BLACK);
             }
         }
 

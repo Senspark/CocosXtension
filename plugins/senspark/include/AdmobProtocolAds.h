@@ -166,11 +166,6 @@ public:
     /// Checks whether there is any available rewarded video ad to show.
     bool hasRewardedAd();
 
-    /// Gets the size of the banner ad in pixels.
-    /// @param size In DP (density-independent pixel), pass -1 for full width,
-    /// -2 for auto height.
-    int getSizeInPixels(int size);
-
     /// Gets the current displaying banner ad's width in pixels.
     /// For getting the specified banner ad size, refer @c getSizeInPixels.
     /// @note If there is no displaying banner, returns 0.
@@ -181,6 +176,11 @@ public:
     /// @note If there is no displaying banner, returns 0.
     int getBannerHeightInPixels();
 
+    /// Gets the size of the banner ad in pixels.
+    /// @param size In DP (density-independent pixel), pass -1 for full width,
+    /// -2 for auto height.
+    int getSizeInPixels(int size);
+
     CC_DEPRECATED_ATTRIBUTE int getBannerWidthInPixel() {
         return getBannerWidthInPixels();
     }
@@ -188,17 +188,6 @@ public:
     CC_DEPRECATED_ATTRIBUTE int getBannerHeightInPixel() {
         return getBannerHeightInPixels();
     }
-
-    /// No-op.
-    CC_DEPRECATED_ATTRIBUTE void initializeMediationAd() {}
-
-    /// No-op.
-    CC_DEPRECATED_ATTRIBUTE void
-    configMediationAdVungle(const cocos2d::plugin::TAdsInfo& params) {}
-
-    /// No-op.
-    CC_DEPRECATED_ATTRIBUTE void
-    configMediationAdUnity(const cocos2d::plugin::TAdsInfo& params) {}
 };
 
 class CC_DEPRECATED_ATTRIBUTE AdmobProtocolAds::AdType {

@@ -15,7 +15,7 @@ public class RewardedAdListener implements RewardedVideoAdListener {
     private AdsAdmob _adapter;
     private WeakReference<RewardedVideoAd> _rewardedVideoAd;
 
-    public RewardedAdListener(@NonNull AdsAdmob adapter, RewardedVideoAd ad) {
+    RewardedAdListener(@NonNull AdsAdmob adapter, RewardedVideoAd ad) {
         _adapter = adapter;
         _rewardedVideoAd = new WeakReference<>(ad);
     }
@@ -24,7 +24,7 @@ public class RewardedAdListener implements RewardedVideoAdListener {
         assert (_rewardedVideoAd.get() != null);
 
         if (_rewardedVideoAd.get() != null) {
-            _adapter._isRewardedVideoAdLoaded.set(_rewardedVideoAd.get().isLoaded());
+            _adapter._changeRewardedAdAvailability(_rewardedVideoAd.get().isLoaded());
         }
     }
 
@@ -58,7 +58,6 @@ public class RewardedAdListener implements RewardedVideoAdListener {
     public void onRewardedVideoAdFailedToLoad(int errorCode) {
         _adapter.logD("RewardedAdListener: onRewardedVideoAdFailedToLoad: begin errorCode = " + errorCode);
 
-        _adapter._isRewardedVideoAdLoading = false;
         refreshAdAvailability();
 
         AdsWrapper.onAdsResult(_adapter,
@@ -72,7 +71,6 @@ public class RewardedAdListener implements RewardedVideoAdListener {
     public void onRewardedVideoAdLoaded() {
         _adapter.logD("RewardedAdListener: onRewardedVideoAdLoaded: begin.");
 
-        _adapter._isRewardedVideoAdLoading = false;
         refreshAdAvailability();
 
         AdsWrapper.onAdsResult(_adapter,

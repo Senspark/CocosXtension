@@ -143,15 +143,15 @@ bool AdmobProtocolAds::hasRewardedAd() {
     return callFunction<bool>(this, "hasRewardedAd");
 }
 
-int AdmobProtocolAds::getSizeInPixels(int size) {
-    return callFunction<int>(this, "getSizeInPixels", size);
-}
-
 int AdmobProtocolAds::getBannerWidthInPixels() {
     return callFunction<int>(this, "getBannerWidthInPixels");
 }
 
 int AdmobProtocolAds::getBannerHeightInPixels() {
     return callFunction<int>(this, "getBannerHeightInPixels");
+}
+
+int AdmobProtocolAds::getSizeInPixels(int size) {
+    return callFunction<int>(this, "getSizeInPixels", size);
 }
 NS_SENSPARK_PLUGIN_ADS_END

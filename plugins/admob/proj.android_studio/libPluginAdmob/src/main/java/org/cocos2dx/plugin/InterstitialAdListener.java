@@ -22,7 +22,7 @@ class InterstitialAdListener extends AdListener {
         assert (_interstitialAd.get() != null);
 
         if (_interstitialAd.get() != null) {
-            _adapter._isInterstitialAdLoaded.set(_interstitialAd.get().isLoaded());
+            _adapter._changeInterstitialAdAvailability(_interstitialAd.get().isLoaded());
         }
     }
 
