@@ -166,12 +166,6 @@ public:
     /// Checks whether there is any available rewarded video ad to show.
     bool hasRewardedAd();
 
-    void slideUpBannerAd();
-    void slideDownBannerAd();
-
-    CC_DEPRECATED_ATTRIBUTE void slideBannerUp() { slideUpBannerAd(); }
-    CC_DEPRECATED_ATTRIBUTE void slideBannerDown() { slideDownBannerAd(); }
-
     /// Gets the size of the banner ad in pixels.
     /// @param size In DP (density-independent pixel), pass -1 for full width,
     /// -2 for auto height.

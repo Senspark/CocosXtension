@@ -143,14 +143,6 @@ bool AdmobProtocolAds::hasRewardedAd() {
     return callFunction<bool>(this, "hasRewardedAd");
 }
 
-void AdmobProtocolAds::slideUpBannerAd() {
-    callFunction(this, "slideUpBannerAd");
-}
-
-void AdmobProtocolAds::slideDownBannerAd() {
-    callFunction(this, "slideDownBannerAd");
-}
-
 int AdmobProtocolAds::getSizeInPixels(int size) {
     return callFunction<int>(this, "getSizeInPixels", size);
 }

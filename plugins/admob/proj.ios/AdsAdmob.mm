@@ -243,7 +243,6 @@
     if ([self _hasBannerAd]) {
         [[self bannerAdView] removeFromSuperview];
         [self setBannerAdView:nil];
-        [self setBannerAdSize:GADAdSizeFromCGSize(CGSizeMake(0, 0))];
     }
 }
 
@@ -590,43 +589,6 @@
     return UIInterfaceOrientationIsLandscape(orientation)
                ? kGADAdSizeSmartBannerLandscape
                : kGADAdSizeSmartBannerPortrait;
-}
-
-#pragma mark - Animation banner ads
-
-- (void)slideDownBannerAd {
-    if ([[self bannerAdView] isHidden]) {
-        [[self bannerAdView] setHidden:NO];
-    }
-    CGSize windowSize = [[UIScreen mainScreen] bounds].size;
-    CGSize bannerAdSize = [[self bannerAdView] frame].size;
-    [UIView animateWithDuration:1.0
-                     animations:^{
-                         [[self bannerAdView]
-                             setFrame:CGRectMake(
-                                          windowSize.width - bannerAdSize.width,
-                                          windowSize.height, bannerAdSize.width,
-                                          bannerAdSize.height)];
-                     }];
-}
-
-- (void)slideUpBannerAd {
-    OUTPUT_LOG(@"Show Banner Ads!");
-    if ([[self bannerAdView] isHidden]) {
-        [[self bannerAdView] setHidden:NO];
-    }
-    CGSize windowSize = [[UIScreen mainScreen] bounds].size;
-    CGSize bannerAdSize = [[self bannerAdView] frame].size;
-    [UIView
-        animateWithDuration:1.0
-                 animations:^{
-                     [[self bannerAdView]
-                         setFrame:CGRectMake(
-                                      windowSize.width - bannerAdSize.width,
-                                      windowSize.height - bannerAdSize.height,
-                                      bannerAdSize.width, bannerAdSize.height)];
-
-                 }];
 }
 
 #pragma mark GADBannerViewDelegate impl

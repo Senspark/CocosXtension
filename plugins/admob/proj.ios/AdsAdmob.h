@@ -89,9 +89,6 @@ typedef enum {
 - (void)loadRewardedAd:(NSString* _Nonnull)adID;
 - (BOOL)hasRewardedAd;
 
-- (void)slideUpBannerAd;
-- (void)slideDownBannerAd;
-
 - (NSNumber* _Nonnull)getSizeInPixels:(NSNumber* _Nonnull)size;
 - (NSNumber* _Nonnull)getBannerWidthInPixels;
 - (NSNumber* _Nonnull)getBannerHeightInPixels;
