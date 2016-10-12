@@ -426,7 +426,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         logD("_showBannerAd: end.");
     }
 
-    private void hideBannerAd() {
+    public void hideBannerAd() {
         logD("hideBannerAd: begin.");
         _runOnMainThread(new Runnable() {
             @Override
@@ -441,6 +441,21 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             }
         });
         logD("hideBannerAd: end.");
+    }
+
+    public void moveBannerAd(@NonNull JSONObject params) {
+        logD("moveBannerAd: begin json = " + params);
+        assert (params.length() == 2);
+
+        try {
+            Integer x = params.getInt("Param1");
+            Integer y = params.getInt("Param2");
+
+            _moveBannerAd(x, y);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        logD("moveBannerAd: end.");
     }
 
     private void _moveBannerAd(@NonNull final Integer x, @NonNull final Integer y) {
@@ -553,6 +568,21 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             }
         });
         logD("hideNativeExpressAd: end.");
+    }
+
+    public void moveNativeExpressAd(@NonNull JSONObject params) {
+        logD("moveNativeExpressAd: begin json = " + params);
+        assert (params.length() == 2);
+
+        try {
+            Integer x = params.getInt("Param1");
+            Integer y = params.getInt("Param2");
+
+            _moveNativeExpressAd(x, y);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        logD("moveNativeExpressAd: end.");
     }
 
     private void _moveNativeExpressAd(@NonNull final Integer x, @NonNull final Integer y) {

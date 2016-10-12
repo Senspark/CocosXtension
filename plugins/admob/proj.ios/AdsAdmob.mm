@@ -388,15 +388,17 @@
         break;
     }
 
-    [self _moveAd:view x:@(viewOrigin.x) y:@(viewOrigin.y)];
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    [self _moveAd:view x:@(viewOrigin.x * scale) y:@(viewOrigin.y * scale)];
 }
 
 - (void)_moveAd:(UIView* _Nonnull)view
               x:(NSNumber* _Nonnull)x
               y:(NSNumber* _Nonnull)y {
+    CGFloat scale = [[UIScreen mainScreen] scale];
     CGRect frame = [view frame];
-    frame.origin.x = [x floatValue];
-    frame.origin.y = [y floatValue];
+    frame.origin.x = [x floatValue] / scale;
+    frame.origin.y = [y floatValue] / scale;
     [view setFrame:frame];
 }
 

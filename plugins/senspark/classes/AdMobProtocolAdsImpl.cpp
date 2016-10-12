@@ -84,6 +84,10 @@ void AdmobProtocolAds::showBannerAd(const std::string& bannerAdId,
 
 void AdmobProtocolAds::hideBannerAd() { callFunction(this, "hideBannerAd"); }
 
+void AdmobProtocolAds::moveBannerAd(int x, int y) {
+    callFunction(this, "moveBannerAd", x, y);
+}
+
 void AdmobProtocolAds::showNativeExpressAd(const std::string& adUnitId,
                                            int width, int height,
                                            AdsPos position) {
@@ -100,6 +104,10 @@ void AdmobProtocolAds::showNativeExpressAd(const std::string& adUnitId,
 
 void AdmobProtocolAds::hideNativeExpressAd() {
     callFunction(this, "hideNativeExpressAd");
+}
+
+void AdmobProtocolAds::moveNativeExpressAd(int x, int y) {
+    callFunction(this, "moveNativeExpressAd", x, y);
 }
 
 void AdmobProtocolAds::showInterstitialAd() {

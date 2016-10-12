@@ -96,6 +96,13 @@ public:
     /// Hides current banner ad (if shown).
     void hideBannerAd();
 
+    /// Moves the displaying banner ad to the specified location.
+    /// @param x Vertical distance from the top border of the device screen in
+    /// pixels.
+    /// @param y Horizontal distance from the left border of the device screen
+    /// in pixels.
+    void moveBannerAd(int x, int y);
+
     /// https://firebase.google.com/docs/admob/android/native-express
     /// https://firebase.google.com/docs/admob/ios/native-express
     /// @param adUnitId The id of the ad.
@@ -114,6 +121,13 @@ public:
     /// pixels.
     void showNativeExpressAd(const std::string& adUnitId, int width, int height,
                              int x, int y);
+
+    /// Moves the displaying native express ad to the specified location.
+    /// @param x Vertical distance from the top border of the device screen in
+    /// pixels.
+    /// @param y Horizontal distance from the left border of the device screen
+    /// in pixels.
+    void moveNativeExpressAd(int x, int y);
 
     /// Hides the currently displaying native express ad (if any).
     void hideNativeExpressAd();
