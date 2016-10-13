@@ -160,10 +160,10 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     private String        _adColonyClientOptions      = null;
 
     @Deprecated
-    private String _interstitialId = null;
+    private String _interstitialAdId = null;
 
     @Deprecated
-    private String _bannerAdId = "";
+    private String _bannerAdId = null;
 
     private       Set<String> _testDeviceIds       = null;
     private final Object      _testDeviceIdsLocker = new Object();
@@ -320,14 +320,12 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     @Override
     @Deprecated
     public void configDeveloperInfo(Hashtable<String, String> devInfo) {
-        logD("configDeveloperInfo");
-        try {
+        logD("configDeveloperInfo: info = " + devInfo);
+        if (devInfo.contains(Constants.AdIdKey)) {
             _bannerAdId = devInfo.get(Constants.AdIdKey);
-            _interstitialId = devInfo.get(Constants.AdIntestitialIdKey);
-            logD("id banner Ad: " + _bannerAdId);
-            logD("id interstitialAd: " + _interstitialId);
-        } catch (Exception e) {
-            logE("initAppInfo, The format of appInfo is wrong", e);
+        }
+        if (devInfo.contains(Constants.AdIntestitialIdKey)) {
+            _interstitialAdId = devInfo.get(Constants.AdIntestitialIdKey);
         }
     }
 
@@ -341,8 +339,10 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         case AdType.Banner: {
             String strSize = info.get(Constants.AdSizeKey);
             int sizeEnum = Integer.parseInt(strSize);
-            _showBannerAd(_bannerAdId, sizeEnum);
-            _moveBannerAd(sizeEnum);
+            if (_bannerAdId != null) {
+                _showBannerAd(_bannerAdId, sizeEnum);
+                _moveBannerAd(sizeEnum);
+            }
             break;
         }
         case AdType.Interstitial: {
@@ -724,7 +724,9 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     public synchronized void loadInterstitial() {
         logD("loadInterstitial: begin.");
-        loadInterstitialAd(_interstitialId);
+        if (_interstitialAdId != null) {
+            loadInterstitialAd(_interstitialAdId);
+        }
         logD("loadInterstitial: end.");
     }
 
