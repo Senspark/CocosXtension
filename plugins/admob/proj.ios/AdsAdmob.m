@@ -22,11 +22,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include <array>
+#import <GoogleMobileAds/GoogleMobileAds.h>
 
 #import "AdsAdmob.h"
+#import "SSBannerAdListener.h"
 #import "SSNativeExpressAdListener.h"
+#import "SSInterstitialAdListener.h"
+#import "SSRewardedVideoAdListener.h"
 #import "SSAdColonyMediation.h"
+#import "SSAdMobUtility.h"
+#import "AdsWrapper.h"
 
 #define OUTPUT_LOG(...)                                                        \
     if (self.debug)                                                            \
@@ -34,18 +39,22 @@
 
 @implementation AdsAdmob
 
-@synthesize debug = __debug;
-@synthesize strBannerID = __strBannerID;
-@synthesize strInterstitialID = __strInterstitialID;
-
 - (id)init {
     self = [super init];
     if (self == nil) {
         return self;
     }
 
+    bannerAdListener_ = [[SSBannerAdListener alloc] initWithAdsInterface:self];
+
     nativeExpressAdListener_ =
         [[SSNativeExpressAdListener alloc] initWithAdsInterface:self];
+
+    interstitialAdListener_ =
+        [[SSInterstitialAdListener alloc] initWithAdsInterface:self];
+
+    rewardedVideoAdListener_ =
+        [[SSRewardedVideoAdListener alloc] initWithAdsInterface:self];
 
     return self;
 }
@@ -56,8 +65,17 @@
     [self _removeInterstitialAd];
     [self setTestDeviceIDs:nil];
 
+    [bannerAdListener_ release];
+    bannerAdListener_ = nil;
+
     [nativeExpressAdListener_ release];
     nativeExpressAdListener_ = nil;
+
+    [interstitialAdListener_ release];
+    interstitialAdListener_ = nil;
+
+    [rewardedVideoAdListener_ release];
+    rewardedVideoAdListener_ = nil;
 
     [super dealloc];
 }
@@ -211,19 +229,26 @@
 - (void)_showBannerAd:(NSString* _Nonnull)adId size:(NSNumber* _Nonnull)_size {
     [self hideBannerAd];
 
-    const std::array<GADAdSize, 7> AdSizes{
-        {kGADAdSizeBanner, kGADAdSizeLargeBanner, kGADAdSizeMediumRectangle,
-         kGADAdSizeFullBanner, kGADAdSizeLeaderboard, kGADAdSizeSkyscraper,
-         [self _getSmartBannerAdSize]}};
-    auto size = AdSizes.at([_size unsignedIntegerValue]);
+    const GADAdSize AdSizes[] = {
+        kGADAdSizeBanner,            kGADAdSizeLargeBanner,
+        kGADAdSizeMediumRectangle,   kGADAdSizeFullBanner,
+        kGADAdSizeLeaderboard,       kGADAdSizeSkyscraper,
+        [self _getSmartBannerAdSize]};
+
+    NSUInteger adIndex = [_size unsignedIntegerValue];
+    NSAssert(0 <= adIndex && adIndex < (sizeof(AdSizes) / sizeof(AdSizes[0])),
+             @"...");
+
+    GADAdSize size = AdSizes[adIndex];
     [self setBannerAdSize:size];
 
     GADBannerView* view =
         [[[GADBannerView alloc] initWithAdSize:size] autorelease];
     [view setAdUnitID:adId];
-    [view setDelegate:self];
+    [view setDelegate:bannerAdListener_];
 
-    UIViewController* controller = [AdsWrapper getCurrentRootViewController];
+    UIViewController* controller =
+        [SSAdMobUtility getCurrentRootViewController];
     [view setRootViewController:controller];
     [[controller view] addSubview:view];
 
@@ -308,7 +333,8 @@
     [view setAdUnitID:adUnitId];
     [view setDelegate:nativeExpressAdListener_];
 
-    UIViewController* controller = [AdsWrapper getCurrentRootViewController];
+    UIViewController* controller =
+        [SSAdMobUtility getCurrentRootViewController];
     [view setRootViewController:controller];
     [[controller view] addSubview:view];
 
@@ -351,37 +377,36 @@
 - (void)_moveAd:(UIView* _Nonnull)view position:(NSNumber* _Nonnull)_position {
     CGSize rootSize = [AdsWrapper getOrientationDependentScreenSize];
 
-    using namespace cocos2d::plugin;
-    ProtocolAds::AdsPos position = (ProtocolAds::AdsPos)([_position intValue]);
+    SSAdPosition position = (SSAdPosition)([_position intValue]);
 
     CGSize viewSize = [view frame].size;
     CGPoint viewOrigin;
     switch (position) {
-    case ProtocolAds::AdsPos::kPosTop:
+    case SSAdPositionTop:
         viewOrigin.x = (rootSize.width - viewSize.width) / 2;
         viewOrigin.y = 0.0f;
         break;
-    case ProtocolAds::AdsPos::kPosTopLeft:
+    case SSAdPositionTopLeft:
         viewOrigin.x = 0.0f;
         viewOrigin.y = 0.0f;
         break;
-    case ProtocolAds::AdsPos::kPosTopRight:
+    case SSAdPositionTopRight:
         viewOrigin.x = rootSize.width - viewSize.width;
         viewOrigin.y = 0.0f;
         break;
-    case ProtocolAds::AdsPos::kPosBottom:
+    case SSAdPositionBottom:
         viewOrigin.x = (rootSize.width - viewSize.width) / 2;
         viewOrigin.y = rootSize.height - viewSize.height;
         break;
-    case ProtocolAds::AdsPos::kPosBottomLeft:
+    case SSAdPositionBottomLeft:
         viewOrigin.x = 0.0f;
         viewOrigin.y = rootSize.height - viewSize.height;
         break;
-    case ProtocolAds::AdsPos::kPosBottomRight:
+    case SSAdPositionBottomRight:
         viewOrigin.x = rootSize.width - viewSize.width;
         viewOrigin.y = rootSize.height - viewSize.height;
         break;
-    case ProtocolAds::AdsPos::kPosCenter:
+    case SSAdPositionCenter:
     default:
         viewOrigin.x = (rootSize.width - viewSize.width) / 2;
         viewOrigin.y = (rootSize.height - viewSize.height) / 2;
@@ -411,9 +436,6 @@
         UIViewController* controller =
             [AdsWrapper getCurrentRootViewController];
         [[self interstitialAdView] presentFromRootViewController:controller];
-        [AdsWrapper onAdsResult:self
-                        withRet:cocos2d::plugin::AdsResultCode::kAdsShown
-                        withMsg:@"Ads is shown!"];
     } else {
         // Ad is not ready to present.
         NSLog(@"ADMOB: Interstitial cannot show. It is not ready.");
@@ -431,7 +453,7 @@
     [self _removeInterstitialAd];
 
     GADInterstitial* view = [[GADInterstitial alloc] initWithAdUnitID:adId];
-    [view setDelegate:self];
+    [view setDelegate:interstitialAdListener_];
 
     GADRequest* request = [GADRequest request];
     [request setTestDevices:[self testDeviceIDs]];
@@ -468,7 +490,8 @@
 }
 
 - (void)loadRewardedAd:(NSString* _Nonnull)adId {
-    [[GADRewardBasedVideoAd sharedInstance] setDelegate:self];
+    [[GADRewardBasedVideoAd sharedInstance]
+        setDelegate:rewardedVideoAdListener_];
 
     GADRequest* request = [GADRequest request];
     if ([SSAdColonyMediation isLinkedWithAdColony] &&
@@ -489,7 +512,7 @@
 #pragma mark - Utility
 
 - (NSNumber*)getBannerWidthInPixels {
-    if (not[self _hasBannerAd]) {
+    if ([self _hasBannerAd] == NO) {
         return @(0);
     }
     GADBannerView* banner =
@@ -503,7 +526,7 @@
 }
 
 - (NSNumber*)getBannerHeightInPixels {
-    if (not[self _hasBannerAd]) {
+    if ([self _hasBannerAd] == NO) {
         return @(0);
     }
     GADBannerView* banner =
@@ -589,132 +612,6 @@
     return UIInterfaceOrientationIsLandscape(orientation)
                ? kGADAdSizeSmartBannerLandscape
                : kGADAdSizeSmartBannerPortrait;
-}
-
-#pragma mark GADBannerViewDelegate impl
-
-// Since we've received an ad, let's go ahead and set the frame to display it.
-- (void)adViewDidReceiveAd:(GADBannerView*)adView {
-    NSLog(@"Received ad");
-    [AdsWrapper onAdsResult:self
-                    withRet:cocos2d::plugin::AdsResultCode::kAdsBannerReceived
-                    withMsg:@"Ads request received success!"];
-}
-
-- (void)adView:(GADBannerView*)view
-    didFailToReceiveAdWithError:(GADRequestError*)error {
-    NSLog(@"Failed to receive ad with error: %@",
-          [error localizedFailureReason]);
-    auto errorNo = cocos2d::plugin::AdsResultCode::kAdsUnknownError;
-    switch ([error code]) {
-    case kGADErrorNetworkError:
-        errorNo = cocos2d::plugin::AdsResultCode::kNetworkError;
-        break;
-    default:
-        break;
-    }
-    [AdsWrapper onAdsResult:self
-                    withRet:errorNo
-                    withMsg:[error localizedDescription]];
-}
-
-#pragma mark GADInterstitialDelegate impl
-
-- (void)interstitialDidReceiveAd:(GADInterstitial*)ad {
-    OUTPUT_LOG(@"Interstitial ad was loaded. Can present now.");
-    [AdsWrapper
-        onAdsResult:self
-            withRet:cocos2d::plugin::AdsResultCode::kAdsInterstitialReceived
-            withMsg:@"Ads request received success!"];
-}
-
-/// Called when an interstitial ad request completed without an interstitial to
-/// show. This is common since interstitials are shown sparingly to users.
-- (void)interstitial:(GADInterstitial*)ad
-    didFailToReceiveAdWithError:(GADRequestError*)error {
-    OUTPUT_LOG(@"Interstitial failed to load with error: %@",
-               [error description]);
-
-    [AdsWrapper onAdsResult:self
-                    withRet:cocos2d::plugin::AdsResultCode::kAdsUnknownError
-                    withMsg:[error description]];
-}
-
-#pragma mark Display-Time Lifecycle Notifications
-
-- (void)interstitialWillPresentScreen:(GADInterstitial*)ad {
-    [AdsWrapper onAdsResult:self
-                    withRet:cocos2d::plugin::AdsResultCode::kAdsShown
-                    withMsg:@"Interstitial is showing"];
-}
-
-- (void)interstitialWillDismissScreen:(GADInterstitial*)ad {
-    OUTPUT_LOG(@"Interstitial will dismiss.");
-}
-
-- (void)interstitialDidDismissScreen:(GADInterstitial*)ad {
-    OUTPUT_LOG(@"Interstitial dismissed")
-        [AdsWrapper onAdsResult:self
-                        withRet:cocos2d::plugin::AdsResultCode::kAdsDismissed
-                        withMsg:@"Interstital dismissed."];
-}
-
-- (void)interstitialWillLeaveApplication:(GADInterstitial*)ad {
-    OUTPUT_LOG(@"Interstitial will leave application.");
-}
-
-#pragma mark - Rewarded Video Ad Delegate
-
-- (void)rewardBasedVideoAdDidReceiveAd:
-        (GADRewardBasedVideoAd*)rewardBasedVideoAd {
-    NSLog(@"Reward based video ad is received.");
-    [AdsWrapper onAdsResult:self
-                    withRet:cocos2d::plugin::AdsResultCode::kVideoReceived
-                    withMsg:@"Reward based video ad is received."];
-}
-
-- (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd*)rewardBasedVideoAd {
-    NSLog(@"Opened reward based video ad.");
-    [AdsWrapper onAdsResult:self
-                    withRet:cocos2d::plugin::AdsResultCode::kVideoShown
-                    withMsg:@"Opened reward based video ad."];
-}
-
-- (void)rewardBasedVideoAdDidStartPlaying:
-        (GADRewardBasedVideoAd*)rewardBasedVideoAd {
-    NSLog(@"Reward based video ad started playing.");
-}
-
-- (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd*)rewardBasedVideoAd {
-    NSLog(@"Reward based video ad is closed.");
-    [AdsWrapper onAdsResult:self
-                    withRet:cocos2d::plugin::AdsResultCode::kVideoClosed
-                    withMsg:@"Reward based video ad is closed."];
-}
-
-- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd*)rewardBasedVideoAd
-    didRewardUserWithReward:(GADAdReward*)reward {
-    NSString* rewardMessage = [NSString
-        stringWithFormat:@"Reward received with currency %@ , amount %@",
-                         [reward type], [reward amount]];
-    NSLog(@"%@", rewardMessage);
-    // Reward the user for watching the video.
-}
-
-- (void)rewardBasedVideoAdWillLeaveApplication:
-        (GADRewardBasedVideoAd*)rewardBasedVideoAd {
-    NSLog(@"Reward based video ad will leave application.");
-}
-
-- (void)rewardBasedVideoAd:(GADRewardBasedVideoAd*)rewardBasedVideoAd
-    didFailToLoadWithError:(NSError*)error {
-    NSLog(@"Reward based video ad failed to load.");
-    [AdsWrapper
-        onAdsResult:self
-            withRet:cocos2d::plugin::AdsResultCode::kVideoUnknownError
-            withMsg:[NSString stringWithFormat:@"Reward based video ad failed "
-                                               @"to load with error: %@",
-                                               error]];
 }
 
 @end

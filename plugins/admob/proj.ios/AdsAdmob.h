@@ -24,24 +24,23 @@
 
 #import <Foundation/Foundation.h>
 
-#import <GoogleMobileAds/GoogleMobileAds.h>
-#import <GoogleMobileAds/GADAdSize.h>
-
 #import "InterfaceAds.h"
-#import "AdsWrapper.h"
 
+@class SSBannerAdListener;
 @class SSNativeExpressAdListener;
+@class SSInterstitialAdListener;
+@class SSRewardedVideoAdListener;
 
 typedef enum {
     kTypeBanner = 1,
     kTypeFullScreen,
 } AdmobType;
 
-@interface AdsAdmob
-    : NSObject <InterfaceAds, GADBannerViewDelegate, GADInterstitialDelegate,
-                GADRewardBasedVideoAdDelegate> {
-
+@interface AdsAdmob : NSObject <InterfaceAds> {
+    SSBannerAdListener* bannerAdListener_;
     SSNativeExpressAdListener* nativeExpressAdListener_;
+    SSInterstitialAdListener* interstitialAdListener_;
+    SSRewardedVideoAdListener* rewardedVideoAdListener_;
 }
 
 @property BOOL debug;

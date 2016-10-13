@@ -25,16 +25,11 @@ THE SOFTWARE.
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "ProtocolAds.h"
-
 @interface AdsWrapper : NSObject
 
 + (void)onAdsResult:(id _Nonnull)obj
-            withRet:(cocos2d::plugin::AdsResultCode)ret
+            withRet:(int)ret
             withMsg:(NSString* _Nullable)msg;
-
-+ (void)addAdView:(UIView* _Nonnull)view
-            atPos:(cocos2d::plugin::ProtocolAds::AdsPos)pos;
 
 + (CGSize)getOrientationDependentScreenSize;
 

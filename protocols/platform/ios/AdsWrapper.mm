@@ -23,6 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #import "AdsWrapper.h"
+
 #include "PluginUtilsIOS.h"
 #include "ProtocolAds.h"
 
@@ -32,68 +33,72 @@ using namespace cocos2d::plugin;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-+ (void) onAdsResult:(id) obj withRet:(AdsResultCode) ret withMsg:(NSString*) msg
-{
+
++ (void)onAdsResult:(id)obj withRet:(int)ret withMsg:(NSString*)msg {
     PluginProtocol* plugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolAds* adsPlugin = dynamic_cast<ProtocolAds*>(plugin);
     if (adsPlugin) {
         const char* chMsg = [msg UTF8String];
-        AdsResultCode cRet = (AdsResultCode) ret;
+        AdsResultCode cRet = static_cast<AdsResultCode>(ret);
         AdsListener* listener = adsPlugin->getAdsListener();
-         ProtocolAds::AdsCallback callback = adsPlugin->getCallback();
-        if (listener)
-        {
+        ProtocolAds::AdsCallback callback = adsPlugin->getCallback();
+        if (listener) {
             listener->onAdsResult(cRet, chMsg);
-        }else if(callback){
+        } else if (callback) {
             std::string stdmsg(chMsg);
-            callback(cRet,stdmsg);
+            callback(cRet, stdmsg);
         }
     } else {
-        PluginUtilsIOS::outputLog("Can't find the C++ object of the ads plugin");
+        PluginUtilsIOS::outputLog(
+            "Can't find the C++ object of the ads plugin");
     }
 }
 
-+ (void) onPlayerGetPoints:(id) obj withPoints: (int) points
-{
++ (void)onPlayerGetPoints:(id)obj withPoints:(int)points {
     PluginProtocol* plugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolAds* adsPlugin = dynamic_cast<ProtocolAds*>(plugin);
     if (adsPlugin) {
         AdsListener* listener = adsPlugin->getAdsListener();
-        if (listener)
-        {
+        if (listener) {
             listener->onPlayerGetPoints(adsPlugin, points);
         }
     } else {
-        PluginUtilsIOS::outputLog("Can't find the C++ object of the ads plugin");
+        PluginUtilsIOS::outputLog(
+            "Can't find the C++ object of the ads plugin");
     }
 }
+
 #pragma GCC diagnostic pop
 
++ (NSString*)buildVersion {
+    NSString* SDKPlatformVersion =
+        [[NSBundle mainBundle] infoDictionary][@"DTPlatformVersion"];
 
-+ (NSString*)buildVersion
-{
-  NSString *SDKPlatformVersion = [[NSBundle mainBundle] infoDictionary][@"DTPlatformVersion"];
-  
-  if (SDKPlatformVersion) {
-    return SDKPlatformVersion;
-  }
-  
-  // adapted from http://stackoverflow.com/questions/25540140/can-one-determine-the-ios-sdk-version-used-to-build-a-binary-programmatically
-  // form character set of digits and punctuation
-  NSMutableCharacterSet *characterSet = [[NSCharacterSet decimalDigitCharacterSet] mutableCopy];
-  
-  [characterSet formUnionWithCharacterSet: [NSCharacterSet punctuationCharacterSet]];
-  
-  // get only those things in characterSet from the SDK name
-  NSString *SDKName = [[NSBundle mainBundle] infoDictionary][@"DTSDKName"];
-  NSArray *components = [[SDKName componentsSeparatedByCharactersInSet: [characterSet invertedSet]]
-                         filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"length != 0"]];
-  
-  if([components count])  {
-    return components[0];
-  }
-  
-  return nil;
+    if (SDKPlatformVersion) {
+        return SDKPlatformVersion;
+    }
+
+    // adapted from
+    // http://stackoverflow.com/questions/25540140/can-one-determine-the-ios-sdk-version-used-to-build-a-binary-programmatically
+    // form character set of digits and punctuation
+    NSMutableCharacterSet* characterSet =
+        [[NSCharacterSet decimalDigitCharacterSet] mutableCopy];
+
+    [characterSet
+        formUnionWithCharacterSet:[NSCharacterSet punctuationCharacterSet]];
+
+    // get only those things in characterSet from the SDK name
+    NSString* SDKName = [[NSBundle mainBundle] infoDictionary][@"DTSDKName"];
+    NSArray* components = [[SDKName
+        componentsSeparatedByCharactersInSet:[characterSet invertedSet]]
+        filteredArrayUsingPredicate:[NSPredicate
+                                        predicateWithFormat:@"length != 0"]];
+
+    if ([components count]) {
+        return components[0];
+    }
+
+    return nil;
 }
 
 + (BOOL)wasBuiltForiOS8orLater {
@@ -104,62 +109,6 @@ using namespace cocos2d::plugin;
 + (BOOL)requireRotation {
     return ![self wasBuiltForiOS8orLater] ||
            ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0);
-}
-
-+ (void) addAdView:(UIView*) view atPos:(ProtocolAds::AdsPos) pos
-{
-    UIViewController* controller = [AdsWrapper getCurrentRootViewController];
-
-    if (nil == controller) {
-        PluginUtilsIOS::outputLog("Can't get the UIViewController object");
-        return;
-    }
-
-    CGSize rootSize = controller.view.frame.size;
-    CGSize viewSize = view.frame.size;
-    CGPoint viewOrigin;
-
-    if ([self requireRotation] && UIInterfaceOrientationIsLandscape(controller.interfaceOrientation)){
-        CGFloat temp = rootSize.width;
-        rootSize.width = rootSize.height;
-        rootSize.height = temp;
-    }
-
-    switch (pos) {
-        case ProtocolAds::AdsPos::kPosTop:
-        viewOrigin.x = (rootSize.width - viewSize.width) / 2;
-        viewOrigin.y = 0.0f;
-        break;
-    case ProtocolAds::AdsPos::kPosTopLeft:
-        viewOrigin.x = 0.0f;
-        viewOrigin.y = 0.0f;
-        break;
-    case ProtocolAds::AdsPos::kPosTopRight:
-        viewOrigin.x = rootSize.width - viewSize.width;
-        viewOrigin.y = 0.0f;
-        break;
-    case ProtocolAds::AdsPos::kPosBottom:
-        viewOrigin.x = (rootSize.width - viewSize.width) / 2;
-        viewOrigin.y = rootSize.height - viewSize.height;
-        break;
-    case ProtocolAds::AdsPos::kPosBottomLeft:
-        viewOrigin.x = 0.0f;
-        viewOrigin.y = rootSize.height - viewSize.height;
-        break;
-    case ProtocolAds::AdsPos::kPosBottomRight:
-        viewOrigin.x = rootSize.width - viewSize.width;
-        viewOrigin.y = rootSize.height - viewSize.height;
-        break;
-    case ProtocolAds::AdsPos::kPosCenter:
-    default:
-        viewOrigin.x = (rootSize.width - viewSize.width) / 2;
-        viewOrigin.y = (rootSize.height - viewSize.height) / 2;
-        break;
-    }
-
-    CGRect rect = CGRectMake(viewOrigin.x, viewOrigin.y, viewSize.width, viewSize.height);
-    view.frame = rect;
-    [controller.view addSubview:view];
 }
 
 /// http://stackoverflow.com/questions/24150359/is-uiscreen-mainscreen-bounds-size-becoming-orientation-dependent-in-ios8?noredirect=1&lq=1

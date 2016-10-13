@@ -29,43 +29,33 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 public class AdsWrapper {
-    public static class ResultCode {
-        public static final int NativeExpressAdLoaded          = 50;
-        public static final int NativeExpressAdFailedToLoad    = 51;
-        public static final int NativeExpressAdOpened          = 52;
-        public static final int NativeExpressAdClosed          = 53;
-        public static final int NativeExpressAdLeftApplication = 54;
+    static class ResultCode {
+        static final int BannerAdLoaded          = 40;
+        static final int BannerAdFailedToLoad    = 41;
+        static final int BannerAdOpened          = 42;
+        static final int BannerAdClosed          = 43;
+        static final int BannerAdLeftApplication = 44;
+
+        static final int NativeExpressAdLoaded          = 50;
+        static final int NativeExpressAdFailedToLoad    = 51;
+        static final int NativeExpressAdOpened          = 52;
+        static final int NativeExpressAdClosed          = 53;
+        static final int NativeExpressAdLeftApplication = 54;
+
+        static final int InterstitialAdLoaded          = 60;
+        static final int InterstitialAdFailedToLoad    = 61;
+        static final int InterstitialAdOpened          = 62;
+        static final int InterstitialAdClosed          = 63;
+        static final int InterstitialAdLeftApplication = 64;
+
+        static final int RewardedVideoAdLoaded          = 70;
+        static final int RewardedVideoAdFailedToLoad    = 71;
+        static final int RewardedVideoAdOpened          = 72;
+        static final int RewardedVideoAdStarted         = 73;
+        static final int RewardedVideoAdClosed          = 74;
+        static final int RewardedVideoAdRewarded        = 75;
+        static final int RewardedVideoAdLeftApplication = 76;
     }
-
-    public static final int RESULT_CODE_AdsBannerReceived       = 0;
-    // The ad is received
-    public static final int RESULT_CODE_AdsInterstitialReceived = 1;
-    public static final int RESULT_CODE_AdsShown                = 2;
-    // The advertisement shown
-    public static final int RESULT_CODE_AdsDismissed            = 3;
-    // The advertisement dismissed
-    public static final int RESULT_CODE_AdsClicked              = 4;
-    public static final int RESULT_CODE_AdsClosed               = 5;
-    public static final int RESULT_CODE_AdsSkipped              = 6;
-
-    public static final int RESULT_CODE_MoreAppsReceived  = 7;
-    public static final int RESULT_CODE_MoreAppsShown     = 8;
-    public static final int RESULT_CODE_MoreAppsDismissed = 9;
-    public static final int RESULT_CODE_MoreAppsClicked   = 10;
-    public static final int RESULT_CODE_MoreAppsClosed    = 11;
-
-    public static final int RESULT_CODE_VideoReceived  = 12;
-    public static final int RESULT_CODE_VideoShown     = 13;
-    public static final int RESULT_CODE_VideoDismissed = 14;
-    public static final int RESULT_CODE_VideoCompleted = 15;
-    public static final int RESULT_CODE_VideoClosed    = 16;
-    public static final int RESULT_CODE_VideoClicked   = 17;
-
-    public static final int RESULT_CODE_PointsSpendSucceed = 18;        // The points spend succeed
-    public static final int RESULT_CODE_PointsSpendFailed  = 19;         // The points spend failed
-    public static final int RESULT_CODE_NetworkError       = 20;              // Network error
-    public static final int RESULT_CODE_AdsUnknownError    = 21;              // Unknown error
-    public static final int RESULT_CODE_VideoUnknownError  = 22;
 
     /// Called when an interstitial ad was shown and user click on
     /// an in-app purchase butotn
@@ -78,62 +68,6 @@ public class AdsWrapper {
     public static final int POS_BOTTOM       = 4;
     public static final int POS_BOTTOM_LEFT  = 5;
     public static final int POS_BOTTOM_RIGHT = 6;
-
-    public static void addAdView(View adView, int pos) {
-        FrameLayout mFrameLayout = (FrameLayout) ((Activity) PluginWrapper.getContext())
-            .findViewById(android.R.id.content)
-            .getRootView();
-
-        FrameLayout.LayoutParams mLayoutParams;
-        if (pos == POS_CENTER || pos == POS_BOTTOM || pos == POS_TOP) {
-            mLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT);
-        } else {
-            mLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT);
-        }
-
-        switch (pos) {
-        case POS_CENTER:
-            mLayoutParams.gravity = Gravity.CENTER;
-            break;
-        case POS_TOP:
-            mLayoutParams.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-            break;
-        case POS_TOP_LEFT:
-            mLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-            break;
-        case POS_TOP_RIGHT:
-            mLayoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-            break;
-        case POS_BOTTOM:
-            mLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-            break;
-        case POS_BOTTOM_LEFT:
-            mLayoutParams.gravity = Gravity.BOTTOM | Gravity.LEFT;
-            break;
-        case POS_BOTTOM_RIGHT:
-            mLayoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-            break;
-        default:
-            break;
-        }
-
-        mFrameLayout.addView(adView, mLayoutParams);
-    }
-
-    public static void addAdView(View adView) {
-        FrameLayout layout = (FrameLayout) ((Activity) PluginWrapper.getContext())
-            .findViewById(android.R.id.content)
-            .getRootView();
-
-        FrameLayout.LayoutParams params =
-            new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.LEFT | Gravity.TOP;
-
-        layout.addView(adView, params);
-    }
 
     public static void onAdsResult(InterfaceAds adapter, int code, String msg) {
         final int curCode = code;

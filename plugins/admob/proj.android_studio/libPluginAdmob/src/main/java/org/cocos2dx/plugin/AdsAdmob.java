@@ -35,6 +35,7 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -382,6 +383,19 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         }
     }
 
+    private void _addAdView(View adView) {
+        FrameLayout layout = (FrameLayout) ((Activity) PluginWrapper.getContext())
+            .findViewById(android.R.id.content)
+            .getRootView();
+
+        FrameLayout.LayoutParams params =
+            new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.LEFT | Gravity.TOP;
+
+        layout.addView(adView, params);
+    }
+
     public void showBannerAd(@NonNull JSONObject params) {
         logD("showBannerAd: begin json = " + params);
         assert (params.length() == 3);
@@ -417,7 +431,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 _addTestDeviceIds(builder);
 
                 view.loadAd(builder.build());
-                AdsWrapper.addAdView(view);
+                _addAdView(view);
 
                 _bannerAdView = view;
                 logD("_showBannerAd: main thread end.");
@@ -544,7 +558,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 AdRequest request = builder.build();
                 view.loadAd(request);
 
-                AdsWrapper.addAdView(view);
+                _addAdView(view);
 
                 _nativeExpressAdView = view;
                 logD("_showNativeExpressAd: main thread end.");

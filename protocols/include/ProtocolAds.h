@@ -29,69 +29,98 @@ THE SOFTWARE.
 #include <string>
 #include <functional>
 
-namespace cocos2d { namespace plugin {
+namespace cocos2d {
+namespace plugin {
 
 typedef std::map<std::string, std::string> TAdsInfo;
 
 enum class AdsResultCode {
-    kAdsBannerReceived = 0,           // The ad is received
-    kAdsInterstitialReceived, //
-    kAdsShown,                  // The advertisement shown
-    kAdsDismissed,              // The advertisement dismissed
+    BannerAdLoaded = 40,
+    BannerAdFailedToLoad,
+    BannerAdOpened,
+    BannerAdClosed,
+    BannerAdLeftApplication,
+
+    NativeExpressAdLoaded = 50,
+    NativeExpressAdFailedToLoad,
+    NativeExpressAdOpened,
+    NativeExpressAdClosed,
+    NativeExpressAdLeftApplication,
+
+    IntersittialAdLoaded = 60,
+    InterstitialAdFailedToLoad,
+    InterstitialAdOpened,
+    InterstitialAdClosed,
+    InterstitialAdLeftApplication,
+
+    RewardedVideoAdLoaded = 70,
+    RewardedVideoAdFailedToLoad,
+    RewardedVideoAdOpened,
+    RewardedVideoAdStarted,
+    RewardedVideoAdClosed,
+    RewardedVideoAdRewarded,
+    RewardedVideoAdLeftApplication,
+
+    kAdsBannerReceived = BannerAdLoaded,
+    kAdsInterstitialReceived = IntersittialAdLoaded,
+
+    /*
+    kAdsShown
+    kAdsDismissed
     kAdsClicked,
     kAdsClosed,
     kAdsSkipped,
+     */
 
+    /*
     kMoreAppsReceived,
     kMoreAppsShown,
     kMoreAppsDismissed,
     kMoreAppsClicked,
     kMoreAppsClosed,
-    
-    kVideoReceived,
-    kVideoShown,
-    kVideoDismissed,
-    kVideoCompleted,
-    kVideoClosed,
-    kVideoClicked,
+     */
 
-    kPointsSpendSucceed,        // The points spend succeed
-    kPointsSpendFailed,         // The points spend failed
-    
-    kNetworkError,              // Network error
-    kAdsUnknownError,              // Unknown error
-    kVideoUnknownError,
+    kVideoReceived = RewardedVideoAdLoaded,
+    kVideoShown = RewardedVideoAdOpened,
+    kVideoDismissed = RewardedVideoAdClosed,
+    kVideoCompleted = RewardedVideoAdRewarded,
+    kVideoClosed = RewardedVideoAdClosed,
+    kVideoClicked = RewardedVideoAdLeftApplication,
+
+    /*
+    kPointsSpendSucceed, // The points spend succeed
+    kPointsSpendFailed,  // The points spend failed
+     */
+
+    /*
+    kNetworkError,    // Network error
+    kAdsUnknownError, // Unknown error
+     */
+    kVideoUnknownError = RewardedVideoAdFailedToLoad,
     kIapPurchaseRequested,
-    
-    NativeExpressAdLoaded             = 50,
-    NativeExpressAdFailedToLoad       = 51,
-    NativeExpressAdOpened             = 52,
-    NativeExpressAdClosed             = 53,
-    NativeExpressAdLeftApplication    = 54,
 };
 
 class ProtocolAds;
-class AdsListener
-{
+class AdsListener {
 public:
     /**
     @brief The advertisement request result
     */
     virtual void onAdsResult(AdsResultCode code, const char* msg) = 0;
-    
+
     /**
     @brief Player get points from advertisement(For example: Tapjoy)
     @param points The point number player has got.
-    @param pAdsPlugin  The plugin which the player get points. Used to spend the points.
+    @param pAdsPlugin  The plugin which the player get points. Used to spend the
+    points.
     */
     virtual void onPlayerGetPoints(ProtocolAds* pAdsPlugin, int points) {}
 };
 
-class ProtocolAds : public PluginProtocol
-{
+class ProtocolAds : public PluginProtocol {
 public:
-	ProtocolAds();
-	virtual ~ProtocolAds();
+    ProtocolAds();
+    virtual ~ProtocolAds();
 
     typedef enum {
         kPosCenter = 0,
@@ -144,8 +173,7 @@ public:
      @deprecated
      @brief set the Ads listener
     */
-    CC_DEPRECATED_ATTRIBUTE inline void setAdsListener(AdsListener* listener)
-    {
+    CC_DEPRECATED_ATTRIBUTE inline void setAdsListener(AdsListener* listener) {
         _listener = listener;
     }
 
@@ -153,31 +181,25 @@ public:
      @deprecated
      @brief set the Ads listener
     */
-    CC_DEPRECATED_ATTRIBUTE inline AdsListener* getAdsListener()
-    {
+    CC_DEPRECATED_ATTRIBUTE inline AdsListener* getAdsListener() {
         return _listener;
     }
 
     /**
      @brief set the Ads callback function
     */
-    inline void setCallback(const AdsCallback& cb)
-    {
-    	_callback = cb;
-    }
+    inline void setCallback(const AdsCallback& cb) { _callback = cb; }
 
     /**
      @brief get the Ads callback function
     */
-    inline AdsCallback getCallback()
-    {
-    	return _callback;
-    }
+    inline AdsCallback getCallback() { return _callback; }
+
 protected:
     AdsListener* _listener;
     AdsCallback _callback;
 };
-
-}} // namespace cocos2d { namespace plugin {
+}
+} // namespace cocos2d { namespace plugin {
 
 #endif /* __CCX_PROTOCOL_ADS_H__ */

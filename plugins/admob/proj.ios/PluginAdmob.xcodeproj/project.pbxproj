@@ -7,10 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6FBEDB7F1D1A79B80038E335 /* SSNativeExpressAdListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FBEDB7E1D1A79B80038E335 /* SSNativeExpressAdListener.mm */; };
+		6F745A021DAF31C00069C080 /* SSAdMobUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F745A011DAF31C00069C080 /* SSAdMobUtility.m */; };
+		6F745A061DAF33920069C080 /* SSBannerAdListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F745A041DAF33920069C080 /* SSBannerAdListener.m */; };
+		6F745A091DAF34B90069C080 /* SSAdMobListenerProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F745A071DAF34B90069C080 /* SSAdMobListenerProtocol.m */; };
+		6F745A0C1DAF3A500069C080 /* SSInterstitialAdListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F745A0A1DAF3A500069C080 /* SSInterstitialAdListener.m */; };
+		6F745A0F1DAF3DCD0069C080 /* SSRewardedVideoAdListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F745A0D1DAF3DCD0069C080 /* SSRewardedVideoAdListener.m */; };
+		6FBEDB7F1D1A79B80038E335 /* SSNativeExpressAdListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBEDB7E1D1A79B80038E335 /* SSNativeExpressAdListener.m */; };
 		6FF443831D5DAA0E00FB4D83 /* SSAdColonyMediation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF443821D5DAA0E00FB4D83 /* SSAdColonyMediation.m */; };
 		FADC44AB176EA82000B2D5ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FADC44AA176EA82000B2D5ED /* Foundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		FADC44C6176EA84500B2D5ED /* AdsAdmob.mm in Sources */ = {isa = PBXBuildFile; fileRef = FADC44C4176EA84500B2D5ED /* AdsAdmob.mm */; };
+		FADC44C6176EA84500B2D5ED /* AdsAdmob.m in Sources */ = {isa = PBXBuildFile; fileRef = FADC44C4176EA84500B2D5ED /* AdsAdmob.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,14 +31,24 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6FBEDB7E1D1A79B80038E335 /* SSNativeExpressAdListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SSNativeExpressAdListener.mm; sourceTree = "<group>"; };
+		6F745A011DAF31C00069C080 /* SSAdMobUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSAdMobUtility.m; sourceTree = "<group>"; };
+		6F745A031DAF31D50069C080 /* SSAdMobUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSAdMobUtility.h; sourceTree = "<group>"; };
+		6F745A041DAF33920069C080 /* SSBannerAdListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSBannerAdListener.m; sourceTree = "<group>"; };
+		6F745A051DAF33920069C080 /* SSBannerAdListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSBannerAdListener.h; sourceTree = "<group>"; };
+		6F745A071DAF34B90069C080 /* SSAdMobListenerProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSAdMobListenerProtocol.m; sourceTree = "<group>"; };
+		6F745A081DAF34B90069C080 /* SSAdMobListenerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSAdMobListenerProtocol.h; sourceTree = "<group>"; };
+		6F745A0A1DAF3A500069C080 /* SSInterstitialAdListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSInterstitialAdListener.m; sourceTree = "<group>"; };
+		6F745A0B1DAF3A500069C080 /* SSInterstitialAdListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSInterstitialAdListener.h; sourceTree = "<group>"; };
+		6F745A0D1DAF3DCD0069C080 /* SSRewardedVideoAdListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSRewardedVideoAdListener.m; sourceTree = "<group>"; };
+		6F745A0E1DAF3DCD0069C080 /* SSRewardedVideoAdListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSRewardedVideoAdListener.h; sourceTree = "<group>"; };
+		6FBEDB7E1D1A79B80038E335 /* SSNativeExpressAdListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSNativeExpressAdListener.m; sourceTree = "<group>"; };
 		6FBEDB801D1A79C50038E335 /* SSNativeExpressAdListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSNativeExpressAdListener.h; sourceTree = "<group>"; };
 		6FF443821D5DAA0E00FB4D83 /* SSAdColonyMediation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSAdColonyMediation.m; sourceTree = "<group>"; };
 		6FF443841D5DAA1900FB4D83 /* SSAdColonyMediation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSAdColonyMediation.h; sourceTree = "<group>"; };
 		FADC44A7176EA82000B2D5ED /* libPluginAdmob.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginAdmob.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FADC44AA176EA82000B2D5ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FADC44C3176EA84500B2D5ED /* AdsAdmob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdsAdmob.h; sourceTree = "<group>"; };
-		FADC44C4176EA84500B2D5ED /* AdsAdmob.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AdsAdmob.mm; sourceTree = "<group>"; };
+		FADC44C4176EA84500B2D5ED /* AdsAdmob.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdsAdmob.m; sourceTree = "<group>"; };
 		FADC44C7176EA85F00B2D5ED /* PluginAdmob-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PluginAdmob-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -54,11 +69,21 @@
 			children = (
 				FADC44C7176EA85F00B2D5ED /* PluginAdmob-Prefix.pch */,
 				FADC44C3176EA84500B2D5ED /* AdsAdmob.h */,
-				FADC44C4176EA84500B2D5ED /* AdsAdmob.mm */,
+				FADC44C4176EA84500B2D5ED /* AdsAdmob.m */,
+				6F745A031DAF31D50069C080 /* SSAdMobUtility.h */,
+				6F745A011DAF31C00069C080 /* SSAdMobUtility.m */,
 				6FF443841D5DAA1900FB4D83 /* SSAdColonyMediation.h */,
 				6FF443821D5DAA0E00FB4D83 /* SSAdColonyMediation.m */,
+				6F745A081DAF34B90069C080 /* SSAdMobListenerProtocol.h */,
+				6F745A071DAF34B90069C080 /* SSAdMobListenerProtocol.m */,
+				6F745A051DAF33920069C080 /* SSBannerAdListener.h */,
+				6F745A041DAF33920069C080 /* SSBannerAdListener.m */,
 				6FBEDB801D1A79C50038E335 /* SSNativeExpressAdListener.h */,
-				6FBEDB7E1D1A79B80038E335 /* SSNativeExpressAdListener.mm */,
+				6FBEDB7E1D1A79B80038E335 /* SSNativeExpressAdListener.m */,
+				6F745A0B1DAF3A500069C080 /* SSInterstitialAdListener.h */,
+				6F745A0A1DAF3A500069C080 /* SSInterstitialAdListener.m */,
+				6F745A0E1DAF3DCD0069C080 /* SSRewardedVideoAdListener.h */,
+				6F745A0D1DAF3DCD0069C080 /* SSRewardedVideoAdListener.m */,
 				FADC44A9176EA82000B2D5ED /* Frameworks */,
 				FADC44A8176EA82000B2D5ED /* Products */,
 			);
@@ -131,8 +156,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FBEDB7F1D1A79B80038E335 /* SSNativeExpressAdListener.mm in Sources */,
-				FADC44C6176EA84500B2D5ED /* AdsAdmob.mm in Sources */,
+				6F745A0F1DAF3DCD0069C080 /* SSRewardedVideoAdListener.m in Sources */,
+				6F745A021DAF31C00069C080 /* SSAdMobUtility.m in Sources */,
+				6F745A0C1DAF3A500069C080 /* SSInterstitialAdListener.m in Sources */,
+				6FBEDB7F1D1A79B80038E335 /* SSNativeExpressAdListener.m in Sources */,
+				6F745A061DAF33920069C080 /* SSBannerAdListener.m in Sources */,
+				6F745A091DAF34B90069C080 /* SSAdMobListenerProtocol.m in Sources */,
+				FADC44C6176EA84500B2D5ED /* AdsAdmob.m in Sources */,
 				6FF443831D5DAA0E00FB4D83 /* SSAdColonyMediation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

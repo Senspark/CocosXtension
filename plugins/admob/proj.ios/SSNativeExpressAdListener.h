@@ -8,12 +8,9 @@
 
 #import <GoogleMobileAds/GADNativeExpressAdViewDelegate.h>
 
-@protocol InterfaceAds;
+#import "SSAdMobListenerProtocol.h"
 
-@interface SSNativeExpressAdListener : NSObject<GADNativeExpressAdViewDelegate>;
-
-- (id _Nullable) initWithAdsInterface:(id _Nonnull) interface;
-
-@property (nonatomic, readonly, nonnull) id interface;
+@interface SSNativeExpressAdListener
+    : SSAdMobListenerProtocol <GADNativeExpressAdViewDelegate>
 
 @end
