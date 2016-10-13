@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created by nikelarteta on 4/11/16.
  */
-public class RewardedAdListener implements RewardedVideoAdListener {
+class RewardedAdListener implements RewardedVideoAdListener {
     private AdsAdmob                       _adapter;
     private WeakReference<RewardedVideoAd> _rewardedVideoAd;
 

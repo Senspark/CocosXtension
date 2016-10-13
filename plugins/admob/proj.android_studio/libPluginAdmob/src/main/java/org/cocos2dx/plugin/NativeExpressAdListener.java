@@ -15,7 +15,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created by Zinge on 6/22/16.
  */
-public class NativeExpressAdListener extends AdListener {
+class NativeExpressAdListener extends AdListener {
     private AdsAdmob                           _adapter;
     private WeakReference<NativeExpressAdView> _nativeExpressAdView;
 
