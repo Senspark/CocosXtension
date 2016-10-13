@@ -707,7 +707,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             @Override
             public void run() {
                 logD("showInterstitial: main thread begin.");
-                if (hasInterstitial()) {
+                if (hasInterstitialAd()) {
                     _interstitialAd.show();
                 } else {
                     // Ad is not ready to present.
@@ -762,7 +762,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         logD("loadInterstitialAd: end.");
     }
 
-    public boolean hasInterstitial() {
+    public boolean hasInterstitialAd() {
         synchronized (_isInterstitialAdLoadedLocker) {
             return _isInterstitialAdLoaded;
         }
