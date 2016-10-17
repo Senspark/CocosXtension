@@ -97,7 +97,7 @@ enum class AdsResultCode {
     kAdsUnknownError, // Unknown error
      */
     kVideoUnknownError = RewardedVideoAdFailedToLoad,
-    kIapPurchaseRequested,
+    kIapPurchaseRequested = 100,
 };
 
 class ProtocolAds;

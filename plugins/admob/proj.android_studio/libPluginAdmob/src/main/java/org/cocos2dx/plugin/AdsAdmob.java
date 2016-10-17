@@ -193,6 +193,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         PluginWrapper.addListener(this);
         _testDeviceIds = new HashSet<>();
 
+        _lazyInitRewardedAd();
 
         logI("constructor: end.");
     }

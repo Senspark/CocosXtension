@@ -59,7 +59,7 @@ public class AdsWrapper {
 
     /// Called when an interstitial ad was shown and user click on
     /// an in-app purchase butotn
-    public static final int RESULT_CODE_InAppPurchaseRequested = 23;
+    public static final int RESULT_CODE_InAppPurchaseRequested = 100;
 
     public static final int POS_CENTER       = 0;
     public static final int POS_TOP          = 1;
