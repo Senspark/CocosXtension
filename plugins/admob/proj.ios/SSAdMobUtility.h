@@ -8,16 +8,6 @@
 
 @class UIViewController;
 
-typedef NS_ENUM(NSInteger, SSAdPosition) {
-    SSAdPositionCenter,
-    SSAdPositionTop,
-    SSAdPositionTopLeft,
-    SSAdPositionTopRight,
-    SSAdPositionBottom,
-    SSAdPositionBottomLeft,
-    SSAdPositionBottomRight
-};
-
 typedef NS_ENUM(NSInteger, SSBannerAdCode) {
     // clang-format off
     SSBannerAdLoaded                    = 40,

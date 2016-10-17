@@ -92,4 +92,7 @@ typedef enum {
 - (NSNumber* _Nonnull)getBannerWidthInPixels;
 - (NSNumber* _Nonnull)getBannerHeightInPixels;
 
+- (NSNumber* _Nonnull)getRealScreenWidthInPixels;
+- (NSNumber* _Nonnull)getRealScreenHeightInPixels;
+
 @end

@@ -141,35 +141,6 @@
     _bannerAdView = nil;
 }
 
-- (void)showAds:(NSDictionary*)info position:(int)pos {
-    NSLog(
-        @"Deprecated: Use showBannerAd(adId) and showInterstitialAd instead!");
-
-    if (self.strBannerID == nil || self.strBannerID.length == 0) {
-        OUTPUT_LOG(@"configDeveloperInfo() not correctly invoked in Admob!");
-        return;
-    }
-
-    NSString* strType = [info objectForKey:@"AdmobType"];
-    int type = [strType intValue];
-    switch (type) {
-    case kTypeBanner: {
-        NSString* strSize = [info objectForKey:@"AdmobSizeEnum"];
-        int sizeEnum = [strSize intValue];
-        [self _showBannerAd:[self strBannerID] size:@(sizeEnum)];
-        [self _moveAd:[self bannerAdView] position:@(pos)];
-        break;
-    }
-    case kTypeFullScreen: {
-        [self showInterstitialAd];
-        break;
-    }
-    default:
-        OUTPUT_LOG(@"The value of 'AdmobType' is wrong (should be 1 or 2)");
-        break;
-    }
-}
-
 - (void)hideAds:(NSDictionary*)info {
     NSLog(@"Deprecated: Use hideBannerAd(adId) instead!");
 
@@ -215,35 +186,31 @@
     NSAssert([params count] == 3, @"Invalid number of params");
 
     NSString* adId = params[@"Param1"];
-    NSNumber* size = params[@"Param2"];
-    NSNumber* position = params[@"Param3"];
+    NSNumber* width = params[@"Param2"];
+    NSNumber* height = params[@"Param3"];
 
     NSAssert([adId isKindOfClass:[NSString class]], @"...");
-    NSAssert([size isKindOfClass:[NSNumber class]], @"...");
-    NSAssert([position isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([width isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([height isKindOfClass:[NSNumber class]], @"...");
 
-    [self _showBannerAd:adId size:size];
-    [self _moveAd:[self bannerAdView] position:position];
+    [self _showBannerAd:adId width:width height:height];
 }
 
-- (void)_showBannerAd:(NSString* _Nonnull)adId size:(NSNumber* _Nonnull)_size {
+- (void)_showBannerAd:(NSString* _Nonnull)adId
+                width:(NSNumber* _Nonnull)width
+               height:(NSNumber* _Nonnull)height {
     [self hideBannerAd];
 
-    const GADAdSize AdSizes[] = {
-        kGADAdSizeBanner,            kGADAdSizeLargeBanner,
-        kGADAdSizeMediumRectangle,   kGADAdSizeFullBanner,
-        kGADAdSizeLeaderboard,       kGADAdSizeSkyscraper,
-        [self _getSmartBannerAdSize]};
-
-    NSUInteger adIndex = [_size unsignedIntegerValue];
-    NSAssert(0 <= adIndex && adIndex < (sizeof(AdSizes) / sizeof(AdSizes[0])),
-             @"...");
-
-    GADAdSize size = AdSizes[adIndex];
+    GADAdSize size = [self _createAdSize:width height:height];
     [self setBannerAdSize:size];
 
     GADBannerView* view =
         [[[GADBannerView alloc] initWithAdSize:size] autorelease];
+    if (view == nil) {
+        NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
+        return;
+    }
+
     [view setAdUnitID:adId];
     [view setDelegate:bannerAdListener_];
 
@@ -291,8 +258,7 @@
 #pragma mark - Native express ad
 
 - (void)showNativeExpressAd:(NSDictionary* _Nonnull)params {
-    NSAssert(4 <= [params count] && [params count] <= 5,
-             @"Invalid number of params");
+    NSAssert([params count] == 3, @"Invalid number of params");
 
     NSString* adUnitId = params[@"Param1"];
     NSNumber* width = params[@"Param2"];
@@ -303,18 +269,6 @@
     NSAssert([height isKindOfClass:[NSNumber class]], @"...");
 
     [self _showNativeExpressAd:adUnitId width:width height:height];
-
-    if ([params count] == 4) {
-        NSNumber* position = params[@"Param4"];
-        NSAssert([position isKindOfClass:[NSNumber class]], @"...");
-        [self _moveAd:[self nativeExpressAdView] position:position];
-    } else {
-        NSNumber* x = params[@"Param4"];
-        NSNumber* y = params[@"Param5"];
-        NSAssert([x isKindOfClass:[NSNumber class]], @"...");
-        NSAssert([y isKindOfClass:[NSNumber class]], @"...");
-        [self _moveAd:[self nativeExpressAdView] x:x y:y];
-    }
 }
 
 - (void)_showNativeExpressAd:(NSString* _Nonnull)adUnitId
@@ -374,53 +328,10 @@
     return [self nativeExpressAdView] != nil;
 }
 
-- (void)_moveAd:(UIView* _Nonnull)view position:(NSNumber* _Nonnull)_position {
-    CGSize rootSize = [AdsWrapper getOrientationDependentScreenSize];
-
-    SSAdPosition position = (SSAdPosition)([_position intValue]);
-
-    CGSize viewSize = [view frame].size;
-    CGPoint viewOrigin;
-    switch (position) {
-    case SSAdPositionTop:
-        viewOrigin.x = (rootSize.width - viewSize.width) / 2;
-        viewOrigin.y = 0.0f;
-        break;
-    case SSAdPositionTopLeft:
-        viewOrigin.x = 0.0f;
-        viewOrigin.y = 0.0f;
-        break;
-    case SSAdPositionTopRight:
-        viewOrigin.x = rootSize.width - viewSize.width;
-        viewOrigin.y = 0.0f;
-        break;
-    case SSAdPositionBottom:
-        viewOrigin.x = (rootSize.width - viewSize.width) / 2;
-        viewOrigin.y = rootSize.height - viewSize.height;
-        break;
-    case SSAdPositionBottomLeft:
-        viewOrigin.x = 0.0f;
-        viewOrigin.y = rootSize.height - viewSize.height;
-        break;
-    case SSAdPositionBottomRight:
-        viewOrigin.x = rootSize.width - viewSize.width;
-        viewOrigin.y = rootSize.height - viewSize.height;
-        break;
-    case SSAdPositionCenter:
-    default:
-        viewOrigin.x = (rootSize.width - viewSize.width) / 2;
-        viewOrigin.y = (rootSize.height - viewSize.height) / 2;
-        break;
-    }
-
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    [self _moveAd:view x:@(viewOrigin.x * scale) y:@(viewOrigin.y * scale)];
-}
-
 - (void)_moveAd:(UIView* _Nonnull)view
               x:(NSNumber* _Nonnull)x
               y:(NSNumber* _Nonnull)y {
-    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat scale = [self _getRetinaScale];
     CGRect frame = [view frame];
     frame.origin.x = [x floatValue] / scale;
     frame.origin.y = [y floatValue] / scale;
@@ -521,7 +432,7 @@
         return @(0);
     }
 
-    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat scale = [self _getRetinaScale];
     return @([banner frame].size.width * scale);
 }
 
@@ -535,7 +446,7 @@
         return @(0);
     }
 
-    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat scale = [self _getRetinaScale];
     return @([banner frame].size.height * scale);
 }
 
@@ -554,7 +465,7 @@
         NSLog(@"%s: invalid ad size", __PRETTY_FUNCTION__);
         return @(0);
     }
-    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat scale = [self _getRetinaScale];
     return @([banner frame].size.height * scale);
 }
 
@@ -589,7 +500,7 @@
         NSAssert(NO, @"...");
         return @(0);
     }
-    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat scale = [self _getRetinaScale];
     return @([banner frame].size.height * scale);
 }
 
@@ -599,7 +510,7 @@
         NSAssert(NO, @"...");
         return @(0);
     }
-    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat scale = [self _getRetinaScale];
     return @([banner frame].size.width * scale);
 }
 
@@ -612,6 +523,25 @@
     return UIInterfaceOrientationIsLandscape(orientation)
                ? kGADAdSizeSmartBannerLandscape
                : kGADAdSizeSmartBannerPortrait;
+}
+
+- (NSNumber* _Nonnull)getRealScreenWidthInPixels {
+    return @([self _getRealScreenSizeInPixels].width);
+}
+
+- (NSNumber* _Nonnull)getRealScreenHeightInPixels {
+    return @([self _getRealScreenSizeInPixels].height);
+}
+
+- (CGSize)_getRealScreenSizeInPixels {
+    CGSize rootSize = [AdsWrapper getOrientationDependentScreenSize];
+    CGFloat scale = [self _getRetinaScale];
+    return CGSizeMake(rootSize.width * scale, rootSize.height * scale);
+}
+
+- (CGFloat)_getRetinaScale {
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    return scale;
 }
 
 @end

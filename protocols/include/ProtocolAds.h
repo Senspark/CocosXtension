@@ -149,7 +149,7 @@ public:
                 Pay attention to the subclass definition
     @param pos The position where the adview be shown.
     */
-    void showAds(TAdsInfo info, AdsPos pos = kPosCenter);
+    virtual void showAds(TAdsInfo info, AdsPos pos = kPosCenter);
 
     /**
     @brief Hide the adview

@@ -23,6 +23,7 @@
  ****************************************************************************/
 package org.cocos2dx.plugin;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -55,6 +57,7 @@ import com.jirbo.adcolony.AdColonyBundleBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -63,14 +66,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static org.cocos2dx.plugin.AdsWrapper.POS_BOTTOM;
-import static org.cocos2dx.plugin.AdsWrapper.POS_BOTTOM_LEFT;
-import static org.cocos2dx.plugin.AdsWrapper.POS_BOTTOM_RIGHT;
-import static org.cocos2dx.plugin.AdsWrapper.POS_CENTER;
-import static org.cocos2dx.plugin.AdsWrapper.POS_TOP;
-import static org.cocos2dx.plugin.AdsWrapper.POS_TOP_LEFT;
-import static org.cocos2dx.plugin.AdsWrapper.POS_TOP_RIGHT;
 
 public class AdsAdmob implements InterfaceAds, PluginListener {
     @Override
@@ -138,10 +133,10 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     private boolean bDebug = true;
 
+    @Deprecated
     private AdSize _bannerAdSize = null;
     AdView _bannerAdView = null;
 
-    private AdSize              _nativeExpressAdSize = null;
     private NativeExpressAdView _nativeExpressAdView = null;
 
     private       boolean        _isInterstitialAdLoaded       = false;
@@ -332,28 +327,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     @Override
     @Deprecated
-    public void showAds(final Hashtable<String, String> info, final int pos) {
-        final String strType = info.get(Constants.AdTypeKey);
-        final int adsType = Integer.parseInt(strType);
-
-        switch (adsType) {
-        case AdType.Banner: {
-            String strSize = info.get(Constants.AdSizeKey);
-            int sizeEnum = Integer.parseInt(strSize);
-            if (_bannerAdId != null) {
-                _showBannerAd(_bannerAdId, sizeEnum);
-                _moveBannerAd(sizeEnum);
-            }
-            break;
-        }
-        case AdType.Interstitial: {
-            showInterstitialAd();
-            break;
-        }
-        default:
-            break;
-        }
-    }
+    public void showAds(final Hashtable<String, String> info, final int pos) { }
 
     @Override
     public void spendPoints(int points) {
@@ -403,20 +377,20 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
         try {
             String adId = params.getString("Param1");
-            Integer size = params.getInt("Param2");
-            Integer position = params.getInt("Param3");
+            Integer width = params.getInt("Param2");
+            Integer height = params.getInt("Param3");
 
-            _showBannerAd(adId, size);
-            _moveBannerAd(position);
+            _showBannerAd(adId, width, height);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         logD("showBannerAd: end.");
     }
 
-    private void _showBannerAd(@NonNull final String adId, @NonNull Integer size) {
+    private void _showBannerAd(@NonNull final String adId, @NonNull Integer width,
+                               @NonNull Integer height) {
         logD("_showBannerAd: begin.");
-        _bannerAdSize = AdSizes.get(size);
+        _bannerAdSize = new AdSize(width, height);
         _runOnMainThread(new Runnable() {
             @Override
             public void run() {
@@ -488,24 +462,13 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         logD("_moveBannerAd: end.");
     }
 
-    private void _moveBannerAd(@NonNull final Integer position) {
-        _runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                if (_hasBannerAd()) {
-                    _moveAd(_bannerAdView, _bannerAdSize, position);
-                }
-            }
-        });
-    }
-
     boolean _hasBannerAd() {
         return _bannerAdView != null;
     }
 
     public void showNativeExpressAd(@NonNull final JSONObject params) {
         logD("showNativeExpressAd: begin json = " + params);
-        assert (params.length() == 4 || params.length() == 5);
+        assert (params.length() == 3);
 
         try {
             String adUnitId = params.getString("Param1");
@@ -513,23 +476,6 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             Integer height = params.getInt("Param3");
 
             _showNativeExpressAd(adUnitId, width, height);
-            _runOnMainThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (params.length() == 4) {
-                            Integer position = params.getInt("Param4");
-                            _moveAd(_nativeExpressAdView, _nativeExpressAdSize, position);
-                        } else {
-                            Integer x = params.getInt("Param4");
-                            Integer y = params.getInt("Param5");
-                            _moveAd(_nativeExpressAdView, x, y);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -541,7 +487,6 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         logD(String.format(Locale.getDefault(),
             "_showNativeExpressAd: begin adUnitId = %s width = %d height = %d.", adUnitId, width,
             height));
-        _nativeExpressAdSize = new AdSize(width, height);
         _runOnMainThread(new Runnable() {
             @Override
             public void run() {
@@ -549,7 +494,8 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 hideNativeExpressAd();
 
                 NativeExpressAdView view = new NativeExpressAdView(_context);
-                view.setAdSize(_nativeExpressAdSize);
+                AdSize adSize = new AdSize(width, height);
+                view.setAdSize(adSize);
                 view.setAdUnitId(adUnitId);
                 view.setAdListener(new NativeExpressAdListener(AdsAdmob.this, view));
 
@@ -617,69 +563,6 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     private boolean _hasNativeExpressAd() {
         return _nativeExpressAdView != null;
-    }
-
-    private void _moveAd(@NonNull final View view, @NonNull final AdSize adSize,
-                         @NonNull final Integer position) {
-        _runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                WindowManager wm =
-                    (WindowManager) _context.getSystemService(Context.WINDOW_SERVICE);
-                Display display = wm.getDefaultDisplay();
-
-                int screenWidth;
-                int screenHeight;
-
-                if (Build.VERSION.SDK_INT >= 13) {
-                    Point point = new Point();
-                    display.getSize(point);
-                    screenWidth = point.x;
-                    screenHeight = point.y;
-                } else {
-                    screenWidth = display.getWidth();
-                    screenHeight = display.getHeight();
-                }
-
-                int viewWidth = adSize.getWidthInPixels(_context);
-                int viewHeight = adSize.getHeightInPixels(_context);
-
-                Point viewOrigin = new Point();
-                switch (position) {
-                case POS_TOP:
-                    viewOrigin.x = (screenWidth - viewWidth) / 2;
-                    viewOrigin.y = 0;
-                    break;
-                case POS_TOP_LEFT:
-                    viewOrigin.x = 0;
-                    viewOrigin.y = 0;
-                    break;
-                case POS_TOP_RIGHT:
-                    viewOrigin.x = screenWidth - viewWidth;
-                    viewOrigin.y = 0;
-                    break;
-                case POS_BOTTOM:
-                    viewOrigin.x = (screenWidth - viewWidth) / 2;
-                    viewOrigin.y = screenHeight - viewHeight;
-                    break;
-                case POS_BOTTOM_LEFT:
-                    viewOrigin.x = 0;
-                    viewOrigin.y = screenHeight - viewHeight;
-                    break;
-                case POS_BOTTOM_RIGHT:
-                    viewOrigin.x = screenWidth - viewWidth;
-                    viewOrigin.y = screenHeight - viewHeight;
-                    break;
-                case POS_CENTER:
-                default:
-                    viewOrigin.x = (screenWidth - viewWidth) / 2;
-                    viewOrigin.y = (screenHeight - viewHeight) / 2;
-                    break;
-                }
-
-                _moveAd(view, viewOrigin.x, viewOrigin.y);
-            }
-        });
     }
 
     private void _moveAd(@NonNull final View view, @NonNull final Integer x,
@@ -892,5 +775,67 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     private int _getFullWidthInPixels() {
         return AdSize.SMART_BANNER.getWidthInPixels(_context);
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private Point _getRealScreenSizeInPixelsForApi17(Display display) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getRealMetrics(metrics);
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+        return new Point(width, height);
+    }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private Point _getRealScreenSizeInPixelsForApi14(Display display) {
+        int width;
+        int height;
+        try {
+            Method getRawH = Display.class.getMethod("getRawHeight");
+            Method getRawW = Display.class.getMethod("getRawWidth");
+            width = (Integer) getRawH.invoke(display);
+            height = (Integer) getRawW.invoke(display);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Point size = _getRealScreenSizeInPixelsForApi1(display);
+            width = size.x;
+            height = size.y;
+        }
+        return new Point(width, height);
+    }
+
+    private Point _getRealScreenSizeInPixelsForApi1(Display display) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+        return new Point(width, height);
+    }
+
+    private Point _getRealScreenSizeInPixels() {
+        // http://stackoverflow.com/questions/14341041/how-to-get-real-screen-height-and-width
+        // http://stackoverflow.com/questions/16503064/how-to-get-screen-size-in-android
+        // -including-virtual-buttons
+        WindowManager wm = (WindowManager) _context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size;
+        if (Build.VERSION.SDK_INT >= 17) {
+            size = _getRealScreenSizeInPixelsForApi17(display);
+        } else if (Build.VERSION.SDK_INT >= 14) {
+            size = _getRealScreenSizeInPixelsForApi14(display);
+        } else {
+            size = _getRealScreenSizeInPixelsForApi1(display);
+        }
+        return size;
+    }
+
+    public int getRealScreenWidthInPixels() {
+        Point size = _getRealScreenSizeInPixels();
+        return size.x;
+    }
+
+    public int getRealScreenHeightInPixels() {
+        Point size = _getRealScreenSizeInPixels();
+        return size.y;
     }
 }

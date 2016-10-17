@@ -61,14 +61,6 @@ public class AdsWrapper {
     /// an in-app purchase butotn
     public static final int RESULT_CODE_InAppPurchaseRequested = 100;
 
-    public static final int POS_CENTER       = 0;
-    public static final int POS_TOP          = 1;
-    public static final int POS_TOP_LEFT     = 2;
-    public static final int POS_TOP_RIGHT    = 3;
-    public static final int POS_BOTTOM       = 4;
-    public static final int POS_BOTTOM_LEFT  = 5;
-    public static final int POS_BOTTOM_RIGHT = 6;
-
     public static void onAdsResult(InterfaceAds adapter, int code, String msg) {
         final int curCode = code;
         final String curMsg = msg;

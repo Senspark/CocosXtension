@@ -89,12 +89,21 @@ public:
     /// rewarded videos (optional).
     void configMediationAdColony(const cocos2d::plugin::TAdsInfo& params);
 
+    CC_DEPRECATED_ATTRIBUTE
+    virtual void showAds(cocos2d::plugin::TAdsInfo info,
+                         AdsPos pos = kPosCenter) override;
+
     /// Shows a banner ad given its id, size and position (optional).
+    CC_DEPRECATED_ATTRIBUTE
     void showBannerAd(const std::string& bannerAdId, AdSize bannerAdSize,
                       AdsPos bannerAdPosition = AdsPos::kPosCenter);
 
+    void showBannerAd(const std::string& bannerAdId, int width, int height);
+
     /// Hides current banner ad (if shown).
     void hideBannerAd();
+
+    void moveBannerAd(AdsPos position);
 
     /// Moves the displaying banner ad to the specified location.
     /// @param x Vertical distance from the top border of the device screen in
@@ -111,6 +120,7 @@ public:
     /// @param height The desired width of the ad view in DP
     /// (density-independent pixel), pass -2 for auto
     /// height.
+    CC_DEPRECATED_ATTRIBUTE
     void showNativeExpressAd(const std::string& adUnitId, int width, int height,
                              AdsPos position);
 
@@ -119,8 +129,17 @@ public:
     /// in pixels.
     /// @param y Vertical distance from the top border of the device screen in
     /// pixels.
+    CC_DEPRECATED_ATTRIBUTE
     void showNativeExpressAd(const std::string& adUnitId, int width, int height,
                              int x, int y);
+
+    void showNativeExpressAd(const std::string& adUnitId, int width,
+                             int height);
+
+    /// Hides the currently displaying native express ad (if any).
+    void hideNativeExpressAd();
+
+    void moveNativeExpressAd(AdsPos position);
 
     /// Moves the displaying native express ad to the specified location.
     /// @param x Vertical distance from the top border of the device screen in
@@ -128,9 +147,6 @@ public:
     /// @param y Horizontal distance from the left border of the device screen
     /// in pixels.
     void moveNativeExpressAd(int x, int y);
-
-    /// Hides the currently displaying native express ad (if any).
-    void hideNativeExpressAd();
 
     /// Shows an interstitial ad.
     void showInterstitialAd();
@@ -202,6 +218,10 @@ public:
     CC_DEPRECATED_ATTRIBUTE int getBannerHeightInPixel() {
         return getBannerHeightInPixels();
     }
+
+private:
+    std::pair<int, int> computeAdViewPosition(AdsPos position, int width,
+                                              int height);
 };
 
 class CC_DEPRECATED_ATTRIBUTE AdmobProtocolAds::AdType {
@@ -222,7 +242,7 @@ private:
     std::string _s;
 };
 
-class AdmobProtocolAds::AdSize {
+class CC_DEPRECATED_ATTRIBUTE AdmobProtocolAds::AdSize {
 public:
     /// iPhone and iPod Touch ad size.
     ///
@@ -288,9 +308,13 @@ public:
     const std::string& getDescription() const;
 
 private:
-    explicit AdSize(const std::string& s);
+    friend AdmobProtocolAds;
+
+    explicit AdSize(const std::string& s, int w, int h);
 
     std::string _s;
+    int _w;
+    int _h;
 };
 
 NS_SENSPARK_PLUGIN_ADS_END
