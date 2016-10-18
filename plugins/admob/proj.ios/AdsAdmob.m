@@ -56,12 +56,12 @@
     rewardedVideoAdListener_ =
         [[SSRewardedVideoAdListener alloc] initWithAdsInterface:self];
 
+    adViews_ = [[NSMutableDictionary alloc] init];
+
     return self;
 }
 
 - (void)dealloc {
-    [self hideBannerAd];
-    [self hideNativeExpressAd];
     [self _removeInterstitialAd];
     [self setTestDeviceIDs:nil];
 
@@ -76,6 +76,12 @@
 
     [rewardedVideoAdListener_ release];
     rewardedVideoAdListener_ = nil;
+
+    for (NSString* key in [adViews_ allKeys]) {
+        [self destroyAd:key];
+    }
+    [adViews_ release];
+    adViews_ = nil;
 
     [super dealloc];
 }
@@ -136,9 +142,6 @@
 
     self.strBannerID = bannerId;
     self.strInterstitialID = interstiailId;
-
-    _interstitialAdView = nil;
-    _bannerAdView = nil;
 }
 
 - (void)hideAds:(NSDictionary*)info {
@@ -148,7 +151,7 @@
     int type = [strType intValue];
     switch (type) {
     case kTypeBanner: {
-        [self hideBannerAd];
+        [self hideAd:[self strBannerID]];
         break;
     }
     case kTypeFullScreen:
@@ -180,9 +183,9 @@
     return @"0.3.0";
 }
 
-#pragma mark - Banner ad
+#pragma mark - Banner ad & native express ad
 
-- (void)showBannerAd:(NSDictionary*)params {
+- (void)createBannerAd:(NSDictionary*)params {
     NSAssert([params count] == 3, @"Invalid number of params");
 
     NSString* adId = params[@"Param1"];
@@ -193,144 +196,159 @@
     NSAssert([width isKindOfClass:[NSNumber class]], @"...");
     NSAssert([height isKindOfClass:[NSNumber class]], @"...");
 
-    [self _showBannerAd:adId width:width height:height];
+    [self _createAd:SSAdMobAdTypeBanner adId:adId width:width height:height];
 }
 
-- (void)_showBannerAd:(NSString* _Nonnull)adId
-                width:(NSNumber* _Nonnull)width
-               height:(NSNumber* _Nonnull)height {
-    [self hideBannerAd];
-
-    GADAdSize size = [self _createAdSize:width height:height];
-    [self setBannerAdSize:size];
-
-    GADBannerView* view =
-        [[[GADBannerView alloc] initWithAdSize:size] autorelease];
-    if (view == nil) {
-        NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
-        return;
-    }
-
-    [view setAdUnitID:adId];
-    [view setDelegate:bannerAdListener_];
-
-    UIViewController* controller =
-        [SSAdMobUtility getCurrentRootViewController];
-    [view setRootViewController:controller];
-    [[controller view] addSubview:view];
-
-    GADRequest* request = [GADRequest request];
-    [request setTestDevices:[self testDeviceIDs]];
-    [view loadRequest:request];
-
-    [self setBannerAdView:view];
-}
-
-- (void)hideBannerAd {
-    if ([self _hasBannerAd]) {
-        [[self bannerAdView] removeFromSuperview];
-        [self setBannerAdView:nil];
-    }
-}
-
-- (void)moveBannerAd:(NSDictionary* _Nonnull)params {
-    NSAssert([params count] == 2, @"...");
-
-    NSNumber* x = params[@"Param1"];
-    NSNumber* y = params[@"Param2"];
-
-    NSAssert([x isKindOfClass:[NSNumber class]], @"...");
-    NSAssert([y isKindOfClass:[NSNumber class]], @"...");
-
-    [self _moveBannerAd:x y:y];
-}
-
-- (void)_moveBannerAd:(NSNumber* _Nonnull)x y:(NSNumber* _Nonnull)y {
-    if ([self bannerAdView] != nil) {
-        [self _moveAd:[self bannerAdView] x:x y:y];
-    }
-}
-
-- (BOOL)_hasBannerAd {
-    return [self bannerAdView] != nil;
-}
-
-#pragma mark - Native express ad
-
-- (void)showNativeExpressAd:(NSDictionary* _Nonnull)params {
+- (void)createNativeExpressAd:(NSDictionary* _Nonnull)params {
     NSAssert([params count] == 3, @"Invalid number of params");
 
-    NSString* adUnitId = params[@"Param1"];
+    NSString* adId = params[@"Param1"];
     NSNumber* width = params[@"Param2"];
     NSNumber* height = params[@"Param3"];
 
-    NSAssert([adUnitId isKindOfClass:[NSString class]], @"...");
+    NSAssert([adId isKindOfClass:[NSString class]], @"...");
     NSAssert([width isKindOfClass:[NSNumber class]], @"...");
     NSAssert([height isKindOfClass:[NSNumber class]], @"...");
 
-    [self _showNativeExpressAd:adUnitId width:width height:height];
+    [self _createAd:SSAdMobAdTypeNativeExpress
+               adId:adId
+              width:width
+             height:height];
 }
 
-- (void)_showNativeExpressAd:(NSString* _Nonnull)adUnitId
-                       width:(NSNumber* _Nonnull)width
-                      height:(NSNumber* _Nonnull)height {
-    [self hideNativeExpressAd];
-
-    GADAdSize adSize = [self _createAdSize:width height:height];
-    GADNativeExpressAdView* view =
-        [[[GADNativeExpressAdView alloc] initWithAdSize:adSize] autorelease];
-    if (view == nil) {
-        NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
+- (void)_createAd:(SSAdMobAdType)adType
+             adId:(NSString* _Nonnull)adId
+            width:(NSNumber* _Nonnull)width
+           height:(NSNumber* _Nonnull)height {
+    GADAdSize size = [self _createAdSize:width height:height];
+    if ([self _hasAd:adId size:size]) {
+        NSLog(@"%s: attempted to create an ad with id = %@ width = %@ height = "
+              @"%@ but it is already created.",
+              __PRETTY_FUNCTION__, adId, width, height);
         return;
     }
 
-    [view setAdUnitID:adUnitId];
-    [view setDelegate:nativeExpressAdListener_];
+    [self _createAd:adType adId:adId size:size];
+}
 
+- (BOOL)_hasAd:(NSString* _Nonnull)adId size:(GADAdSize)size {
+    NSValue* elt = [adSizes_ objectForKey:adId];
+    if (elt == nil) {
+        return NO;
+    }
+
+    GADAdSize cachedSize = GADAdSizeFromNSValue(elt);
+    if (CGSizeEqualToSize(size.size, cachedSize.size) &&
+        size.flags == cachedSize.flags) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)_createAd:(SSAdMobAdType)adType
+             adId:(NSString* _Nonnull)adId
+             size:(GADAdSize)size {
+    [self destroyAd:adId];
+
+    UIView* _view = nil;
     UIViewController* controller =
         [SSAdMobUtility getCurrentRootViewController];
-    [view setRootViewController:controller];
-    [[controller view] addSubview:view];
-
     GADRequest* request = [GADRequest request];
     [request setTestDevices:[self testDeviceIDs]];
-    [view loadRequest:request];
 
-    [self setNativeExpressAdView:view];
-}
+    if (adType == SSAdMobAdTypeBanner) {
+        GADBannerView* view =
+            [[[GADBannerView alloc] initWithAdSize:size] autorelease];
+        if (view == nil) {
+            NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
+            return;
+        }
 
-- (void)hideNativeExpressAd {
-    if ([self _hasNativeExpressAd]) {
-        [[self nativeExpressAdView] removeFromSuperview];
-        [self setNativeExpressAdView:nil];
+        [view setAdUnitID:adId];
+        [view setDelegate:bannerAdListener_];
+        [view setRootViewController:controller];
+        [view loadRequest:request];
+    } else if (adType == SSAdMobAdTypeNativeExpress) {
+        GADNativeExpressAdView* view =
+            [[[GADNativeExpressAdView alloc] initWithAdSize:size] autorelease];
+        if (view == nil) {
+            NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
+            return;
+        }
+
+        [view setAdUnitID:adId];
+        [view setDelegate:nativeExpressAdListener_];
+        [view setRootViewController:controller];
+        [view loadRequest:request];
+    } else {
+        NSAssert(NO, @"...");
     }
+
+    [_view setHidden:YES];
+    [[controller view] addSubview:_view];
+
+    [adViews_ setObject:_view forKey:adId];
+    [adSizes_ setObject:NSValueFromGADAdSize(size) forKey:adId];
 }
 
-- (void)moveNativeExpressAd:(NSDictionary*)params {
-    NSAssert([params count] == 2, @"...");
+- (void)destroyAd:(NSString* _Nonnull)adId {
+    UIView* view = [adViews_ objectForKey:adId];
+    if (view == nil) {
+        NSLog(@"%s: attempted to destroy a non-created ad with id = %@",
+              __PRETTY_FUNCTION__, adId);
+        return;
+    }
 
-    NSNumber* x = params[@"Param1"];
-    NSNumber* y = params[@"Param2"];
+    [view removeFromSuperview];
+    [adViews_ removeObjectForKey:adId];
+}
 
+- (void)showAd:(NSString* _Nonnull)adId {
+    UIView* view = [adViews_ objectForKey:adId];
+    if (view == nil) {
+        NSLog(@"%s: attempted to show a non-created ad with id = %@",
+              __PRETTY_FUNCTION__, adId);
+        return;
+    }
+
+    [view setHidden:NO];
+}
+
+- (void)hideAd:(NSString* _Nonnull)adId {
+    UIView* view = [adViews_ objectForKey:adId];
+    if (view == nil) {
+        NSLog(@"%s: attempted to hide a non-created ad with id = %@",
+              __PRETTY_FUNCTION__, adId);
+        return;
+    }
+
+    [view setHidden:YES];
+}
+
+- (void)moveAd:(NSDictionary* _Nonnull)params {
+    NSAssert([params count] == 3, @"...");
+
+    NSString* adId = params[@"Param1"];
+    NSNumber* x = params[@"Param2"];
+    NSNumber* y = params[@"Param3"];
+
+    NSAssert([adId isKindOfClass:[NSString class]], @"...");
     NSAssert([x isKindOfClass:[NSNumber class]], @"...");
     NSAssert([y isKindOfClass:[NSNumber class]], @"...");
 
-    [self _moveNativeExpressAd:x y:y];
+    [self _moveAd:adId x:x y:y];
 }
 
-- (void)_moveNativeExpressAd:(NSNumber* _Nonnull)x y:(NSNumber* _Nonnull)y {
-    if ([self _hasNativeExpressAd]) {
-        [self _moveAd:[self nativeExpressAdView] x:x y:y];
-    }
-}
-
-- (BOOL)_hasNativeExpressAd {
-    return [self nativeExpressAdView] != nil;
-}
-
-- (void)_moveAd:(UIView* _Nonnull)view
+- (void)_moveAd:(NSString* _Nonnull)adId
               x:(NSNumber* _Nonnull)x
               y:(NSNumber* _Nonnull)y {
+    UIView* view = [adViews_ objectForKey:adId];
+    if (view == nil) {
+        NSLog(@"%s: attempted to move a non-created ad with id = %@",
+              __PRETTY_FUNCTION__, adId);
+        return;
+    }
+
     CGFloat scale = [self _getRetinaScale];
     CGRect frame = [view frame];
     frame.origin.x = [x floatValue] / scale;
@@ -421,34 +439,6 @@
 }
 
 #pragma mark - Utility
-
-- (NSNumber*)getBannerWidthInPixels {
-    if ([self _hasBannerAd] == NO) {
-        return @(0);
-    }
-    GADBannerView* banner =
-        [[GADBannerView alloc] initWithAdSize:[self bannerAdSize]];
-    if (banner == nil) {
-        return @(0);
-    }
-
-    CGFloat scale = [self _getRetinaScale];
-    return @([banner frame].size.width * scale);
-}
-
-- (NSNumber*)getBannerHeightInPixels {
-    if ([self _hasBannerAd] == NO) {
-        return @(0);
-    }
-    GADBannerView* banner =
-        [[GADBannerView alloc] initWithAdSize:[self bannerAdSize]];
-    if (banner == nil) {
-        return @(0);
-    }
-
-    CGFloat scale = [self _getRetinaScale];
-    return @([banner frame].size.height * scale);
-}
 
 - (NSNumber* _Nonnull)getSizeInPixels:(NSNumber* _Nonnull)size_ {
     int size = [size_ intValue];

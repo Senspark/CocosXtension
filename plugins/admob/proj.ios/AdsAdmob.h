@@ -36,11 +36,19 @@ typedef enum {
     kTypeFullScreen,
 } AdmobType;
 
+typedef NS_ENUM(NSInteger, SSAdMobAdType) {
+    SSAdMobAdTypeBanner,
+    SSAdMobAdTypeNativeExpress,
+};
+
 @interface AdsAdmob : NSObject <InterfaceAds> {
     SSBannerAdListener* bannerAdListener_;
     SSNativeExpressAdListener* nativeExpressAdListener_;
     SSInterstitialAdListener* interstitialAdListener_;
     SSRewardedVideoAdListener* rewardedVideoAdListener_;
+
+    NSMutableDictionary<NSString*, UIView*>* adViews_;
+    NSMutableDictionary<NSString*, NSValue*>* adSizes_;
 }
 
 @property BOOL debug;
@@ -54,14 +62,7 @@ typedef enum {
 @property (nonatomic, copy, nullable) NSString* adColonyInterstitialAdZoneId;
 @property (nonatomic, copy, nullable) NSString* adColonyRewardedAdZoneId;
 
-@property (nonatomic, assign, nullable) GADBannerView* bannerAdView;
-@property (nonatomic, assign, nullable) GADNativeExpressAdView* nativeExpressAdView;
 @property (nonatomic, assign, nullable) GADInterstitial* interstitialAdView;
-
-@property (nonatomic) GADAdSize bannerAdSize;
-
-@property (nonatomic) int slideUpTimePeriod;
-@property (nonatomic) int slideDownTimePeriod;
 // clang-format on
 
 /**
@@ -70,13 +71,12 @@ typedef enum {
 - (void)addTestDevice:(NSString* _Nonnull)deviceId;
 - (void)configMediationAdColony:(NSDictionary* _Nonnull)params;
 
-- (void)showBannerAd:(NSDictionary* _Nonnull)params;
-- (void)hideBannerAd;
-- (void)moveBannerAd:(NSDictionary* _Nonnull)params;
-
-- (void)showNativeExpressAd:(NSDictionary* _Nonnull)params;
-- (void)hideNativeExpressAd;
-- (void)moveNativeExpressAd:(NSDictionary* _Nonnull)params;
+- (void)createBannerAd:(NSDictionary* _Nonnull)params;
+- (void)createNativeExpressAd:(NSDictionary* _Nonnull)params;
+- (void)destroyAd:(NSString* _Nonnull)adId;
+- (void)showAd:(NSString* _Nonnull)adId;
+- (void)hideAd:(NSString* _Nonnull)adId;
+- (void)moveAd:(NSDictionary* _Nonnull)params;
 
 - (void)loadInterstitial DEPRECATED_ATTRIBUTE;
 
@@ -89,9 +89,6 @@ typedef enum {
 - (BOOL)hasRewardedAd;
 
 - (NSNumber* _Nonnull)getSizeInPixels:(NSNumber* _Nonnull)size;
-- (NSNumber* _Nonnull)getBannerWidthInPixels;
-- (NSNumber* _Nonnull)getBannerHeightInPixels;
-
 - (NSNumber* _Nonnull)getRealScreenWidthInPixels;
 - (NSNumber* _Nonnull)getRealScreenHeightInPixels;
 

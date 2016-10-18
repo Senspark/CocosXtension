@@ -89,6 +89,37 @@ public:
     /// rewarded videos (optional).
     void configMediationAdColony(const cocos2d::plugin::TAdsInfo& params);
 
+    /// Creates a banner ad.
+    /// @param adId the id of the banner ad.
+    /// @param width The width of the banner ad in dp, pass -1 for full width.
+    /// @param height The height of the banner ad in dp, pass -2 for
+    /// auto-height.
+    void createBannerAd(const std::string& adId, int width, int height);
+
+    /// Creates a native express ad.
+    /// @see createBannerAd.
+    void createNativeExpressAd(const std::string& adId, int width, int height);
+
+    /// Destroys the specified banner/native express ad.
+    /// @param adId.
+    void destroyAd(const std::string& adId);
+
+    /// Shows the specified banner/native express ad.
+    void showAd(const std::string& adId);
+
+    /// Hides the specified banner/native express ad.
+    void hideAd(const std::string& adId);
+
+    /// Moves the specified banner/native express ad to the specified location.
+    /// @param adId The ad id.
+    /// @param x The horizontal coordinate of the desired position in pixels.
+    /// @param y The vertical coordinate of the desired position in pixels.
+    void moveAd(const std::string& adId, int x, int y);
+
+    void moveAd(const std::string& adId, AdsPos position);
+
+    std::pair<int, int> getAdSizeInPixels(const std::string& adId);
+
     CC_DEPRECATED_ATTRIBUTE
     virtual void showAds(cocos2d::plugin::TAdsInfo info,
                          AdsPos pos = kPosCenter) override;
@@ -98,11 +129,14 @@ public:
     void showBannerAd(const std::string& bannerAdId, AdSize bannerAdSize,
                       AdsPos bannerAdPosition = AdsPos::kPosCenter);
 
+    CC_DEPRECATED_ATTRIBUTE
     void showBannerAd(const std::string& bannerAdId, int width, int height);
 
     /// Hides current banner ad (if shown).
+    CC_DEPRECATED_ATTRIBUTE
     void hideBannerAd();
 
+    CC_DEPRECATED_ATTRIBUTE
     void moveBannerAd(AdsPos position);
 
     /// Moves the displaying banner ad to the specified location.
@@ -110,6 +144,7 @@ public:
     /// pixels.
     /// @param y Horizontal distance from the left border of the device screen
     /// in pixels.
+    CC_DEPRECATED_ATTRIBUTE
     void moveBannerAd(int x, int y);
 
     /// https://firebase.google.com/docs/admob/android/native-express
@@ -133,12 +168,15 @@ public:
     void showNativeExpressAd(const std::string& adUnitId, int width, int height,
                              int x, int y);
 
+    CC_DEPRECATED_ATTRIBUTE
     void showNativeExpressAd(const std::string& adUnitId, int width,
                              int height);
 
     /// Hides the currently displaying native express ad (if any).
+    CC_DEPRECATED_ATTRIBUTE
     void hideNativeExpressAd();
 
+    CC_DEPRECATED_ATTRIBUTE
     void moveNativeExpressAd(AdsPos position);
 
     /// Moves the displaying native express ad to the specified location.
@@ -146,6 +184,7 @@ public:
     /// pixels.
     /// @param y Horizontal distance from the left border of the device screen
     /// in pixels.
+    CC_DEPRECATED_ATTRIBUTE
     void moveNativeExpressAd(int x, int y);
 
     /// Shows an interstitial ad.
@@ -199,11 +238,13 @@ public:
     /// Gets the current displaying banner ad's width in pixels.
     /// For getting the specified banner ad size, refer @c getSizeInPixels.
     /// @note If there is no displaying banner, returns 0.
+    CC_DEPRECATED_ATTRIBUTE
     int getBannerWidthInPixels();
 
     /// Gets the current displaying banner ad's height in pixels.
     /// For getting the specified banner ad size, refer @c getSizeInPixels.
     /// @note If there is no displaying banner, returns 0.
+    CC_DEPRECATED_ATTRIBUTE
     int getBannerHeightInPixels();
 
     /// Gets the size of the banner ad in pixels.

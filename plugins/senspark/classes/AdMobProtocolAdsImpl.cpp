@@ -18,11 +18,13 @@ namespace {
 /// AdmobProtocolAds is actually ProtocolAds, so we can not store member
 /// variable in it.
 struct AdMobData {
-    std::pair<int, int> bannerAdSize_;
-    std::pair<int, int> nativeExpressAdSize_;
+    std::unordered_map<std::string, std::pair<int, int>> adSizes_;
 
     /// Backward compability.
+    std::pair<int, int> bannerAdSize_;
+    std::pair<int, int> nativeExpressAdSize_;
     std::string bannerAdId_;
+    std::string nativeExpressAdId_;
 };
 
 std::unordered_map<AdmobProtocolAds*, AdMobData> data_;
@@ -107,6 +109,52 @@ void AdmobProtocolAds::configMediationAdColony(
     callFunction(this, "configMediationAdColony", params);
 }
 
+void AdmobProtocolAds::createBannerAd(const std::string& adId, int width,
+                                      int height) {
+    getData(this).adSizes_.emplace(std::piecewise_construct,
+                                   std::forward_as_tuple(adId),
+                                   std::forward_as_tuple(width, height));
+    callFunction(this, "createBannerAd", adId.c_str(), width, height);
+}
+
+void AdmobProtocolAds::createNativeExpressAd(const std::string& adId, int width,
+                                             int height) {
+    getData(this).adSizes_.emplace(std::piecewise_construct,
+                                   std::forward_as_tuple(adId),
+                                   std::forward_as_tuple(width, height));
+    callFunction(this, "createNativeExpressAd", adId.c_str(), width, height);
+}
+
+void AdmobProtocolAds::destroyAd(const std::string& adId) {
+    callFunction(this, "destroyAd", adId.c_str());
+    getData(this).adSizes_.erase(adId);
+}
+
+void AdmobProtocolAds::showAd(const std::string& adId) {
+    callFunction(this, "showAd", adId.c_str());
+}
+
+void AdmobProtocolAds::hideAd(const std::string& adId) {
+    callFunction(this, "hideAd", adId.c_str());
+}
+
+void AdmobProtocolAds::moveAd(const std::string& adId, int x, int y) {
+    callFunction(this, "moveAd", adId.c_str(), x, y);
+}
+
+void AdmobProtocolAds::moveAd(const std::string& adId, AdsPos position) {}
+
+std::pair<int, int>
+AdmobProtocolAds::getAdSizeInPixels(const std::string& adId) {
+    auto&& sizes = getData(this).adSizes_;
+    if (not sizes.count(adId)) {
+        return std::make_pair(0, 0);
+    }
+    auto&& size = sizes.at(adId);
+    return std::make_pair(getSizeInPixels(size.first),
+                          getSizeInPixels(size.second));
+}
+
 void AdmobProtocolAds::showAds(cocos2d::plugin::TAdsInfo info, AdsPos pos) {
     auto adType = info[AdTypeKey];
     if (adType == AdType::Banner.getDescription()) {
@@ -131,24 +179,20 @@ void AdmobProtocolAds::showBannerAd(const std::string& bannerAdId,
 
 void AdmobProtocolAds::showBannerAd(const std::string& bannerAdId, int width,
                                     int height) {
-    callFunction(this, "showBannerAd", bannerAdId.c_str(), width, height);
     getData(this).bannerAdSize_ = std::make_pair(width, height);
     getData(this).bannerAdId_ = bannerAdId;
+    createBannerAd(bannerAdId, width, height);
+    showAd(bannerAdId);
 }
 
-void AdmobProtocolAds::hideBannerAd() { callFunction(this, "hideBannerAd"); }
+void AdmobProtocolAds::hideBannerAd() { hideAd(getData(this).bannerAdId_); }
 
 void AdmobProtocolAds::moveBannerAd(AdsPos position) {
-    int x;
-    int y;
-    std::tie(x, y) =
-        computeAdViewPosition(position, getData(this).bannerAdSize_.first,
-                              getData(this).bannerAdSize_.second);
-    moveBannerAd(x, y);
+    moveAd(getData(this).bannerAdId_, position);
 }
 
 void AdmobProtocolAds::moveBannerAd(int x, int y) {
-    callFunction(this, "moveBannerAd", x, y);
+    moveAd(getData(this).bannerAdId_, x, y);
 }
 
 void AdmobProtocolAds::showNativeExpressAd(const std::string& adUnitId,
@@ -167,25 +211,22 @@ void AdmobProtocolAds::showNativeExpressAd(const std::string& adUnitId,
 
 void AdmobProtocolAds::showNativeExpressAd(const std::string& adUnitId,
                                            int width, int height) {
-    callFunction(this, "showNativeExpressAd", adUnitId.c_str(), width, height);
+    getData(this).nativeExpressAdId_ = adUnitId;
     getData(this).nativeExpressAdSize_ = std::make_pair(width, height);
+    createNativeExpressAd(adUnitId, width, height);
+    showAd(adUnitId);
 }
 
 void AdmobProtocolAds::hideNativeExpressAd() {
-    callFunction(this, "hideNativeExpressAd");
+    hideAd(getData(this).nativeExpressAdId_);
 }
 
 void AdmobProtocolAds::moveNativeExpressAd(AdsPos position) {
-    int x;
-    int y;
-    std::tie(x, y) = computeAdViewPosition(
-        position, getData(this).nativeExpressAdSize_.first,
-        getData(this).nativeExpressAdSize_.second);
-    moveNativeExpressAd(x, y);
+    moveAd(getData(this).nativeExpressAdId_, position);
 }
 
 void AdmobProtocolAds::moveNativeExpressAd(int x, int y) {
-    callFunction(this, "moveNativeExpressAd", x, y);
+    moveAd(getData(this).nativeExpressAdId_, x, y);
 }
 
 void AdmobProtocolAds::showInterstitialAd() {
@@ -230,11 +271,11 @@ bool AdmobProtocolAds::hasRewardedAd() {
 }
 
 int AdmobProtocolAds::getBannerWidthInPixels() {
-    return callFunction<int>(this, "getBannerWidthInPixels");
+    return getSizeInPixels(getData(this).bannerAdSize_.first);
 }
 
 int AdmobProtocolAds::getBannerHeightInPixels() {
-    return callFunction<int>(this, "getBannerHeightInPixels");
+    return getSizeInPixels(getData(this).bannerAdSize_.second);
 }
 
 int AdmobProtocolAds::getSizeInPixels(int size) {
