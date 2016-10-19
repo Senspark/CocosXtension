@@ -33,6 +33,11 @@
 #import "SSAdMobUtility.h"
 #import "AdsWrapper.h"
 
+typedef NS_ENUM(NSInteger, SSAdMobAdType) {
+    SSAdMobAdTypeBanner,
+    SSAdMobAdTypeNativeExpress,
+};
+
 #define OUTPUT_LOG(...)                                                        \
     if (self.debug)                                                            \
         NSLog(__VA_ARGS__);
@@ -57,6 +62,7 @@
         [[SSRewardedVideoAdListener alloc] initWithAdsInterface:self];
 
     adViews_ = [[NSMutableDictionary alloc] init];
+    adSizes_ = [[NSMutableDictionary alloc] init];
 
     return self;
 }
@@ -82,6 +88,9 @@
     }
     [adViews_ release];
     adViews_ = nil;
+
+    [adSizes_ release];
+    adSizes_ = nil;
 
     [super dealloc];
 }
@@ -118,7 +127,7 @@
             [self setAdColonyInterstitialAdZoneId:interstitialAdZoneId];
             [self setAdColonyRewardedAdZoneId:rewardedAdZoneId];
         } else {
-            NSLog(@"AdColony is not linked!");
+            NSLog(@"%s: AdColony is not linked!", __PRETTY_FUNCTION__);
         }
     }
 }
@@ -144,8 +153,12 @@
     self.strInterstitialID = interstiailId;
 }
 
+- (void)showAds:(NSDictionary*)info position:(int)pos {
+    NSLog(@"%s: deprecated", __PRETTY_FUNCTION__);
+}
+
 - (void)hideAds:(NSDictionary*)info {
-    NSLog(@"Deprecated: Use hideBannerAd(adId) instead!");
+    NSLog(@"%s: deprecated, use hideAd(adId) instead!", __PRETTY_FUNCTION__);
 
     NSString* strType = [info objectForKey:@"AdmobType"];
     int type = [strType intValue];
@@ -250,45 +263,68 @@
              size:(GADAdSize)size {
     [self destroyAd:adId];
 
-    UIView* _view = nil;
+    UIView* view = nil;
     UIViewController* controller =
         [SSAdMobUtility getCurrentRootViewController];
     GADRequest* request = [GADRequest request];
     [request setTestDevices:[self testDeviceIDs]];
 
     if (adType == SSAdMobAdTypeBanner) {
-        GADBannerView* view =
-            [[[GADBannerView alloc] initWithAdSize:size] autorelease];
-        if (view == nil) {
-            NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
-            return;
-        }
-
-        [view setAdUnitID:adId];
-        [view setDelegate:bannerAdListener_];
-        [view setRootViewController:controller];
-        [view loadRequest:request];
+        view = [self _createBannerAd:adId
+                                size:size
+                             request:request
+                          controller:controller];
     } else if (adType == SSAdMobAdTypeNativeExpress) {
-        GADNativeExpressAdView* view =
-            [[[GADNativeExpressAdView alloc] initWithAdSize:size] autorelease];
-        if (view == nil) {
-            NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
-            return;
-        }
-
-        [view setAdUnitID:adId];
-        [view setDelegate:nativeExpressAdListener_];
-        [view setRootViewController:controller];
-        [view loadRequest:request];
+        view = [self _createNativeExpressAd:adId
+                                       size:size
+                                    request:request
+                                 controller:controller];
     } else {
         NSAssert(NO, @"...");
     }
 
-    [_view setHidden:YES];
-    [[controller view] addSubview:_view];
+    [view setHidden:YES];
+    [[controller view] addSubview:view];
 
-    [adViews_ setObject:_view forKey:adId];
+    [adViews_ setObject:view forKey:adId];
     [adSizes_ setObject:NSValueFromGADAdSize(size) forKey:adId];
+}
+
+- (GADBannerView*)_createBannerAd:(NSString* _Nonnull)adId
+                             size:(GADAdSize)size
+                          request:(GADRequest*)request
+                       controller:(UIViewController* _Nonnull)controller {
+    GADBannerView* view =
+        [[[GADBannerView alloc] initWithAdSize:size] autorelease];
+    if (view == nil) {
+        NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
+        return nil;
+    }
+
+    [view setAdUnitID:adId];
+    [view setDelegate:bannerAdListener_];
+    [view setRootViewController:controller];
+    [view loadRequest:request];
+    return view;
+}
+
+- (GADNativeExpressAdView*)_createNativeExpressAd:(NSString* _Nonnull)adId
+                                             size:(GADAdSize)size
+                                          request:(GADRequest*)request
+                                       controller:(UIViewController* _Nonnull)
+                                                      controller {
+    GADNativeExpressAdView* view =
+        [[[GADNativeExpressAdView alloc] initWithAdSize:size] autorelease];
+    if (view == nil) {
+        NSLog(@"%s: invalid ad size.", __PRETTY_FUNCTION__);
+        return nil;
+    }
+
+    [view setAdUnitID:adId];
+    [view setDelegate:nativeExpressAdListener_];
+    [view setRootViewController:controller];
+    [view loadRequest:request];
+    return view;
 }
 
 - (void)destroyAd:(NSString* _Nonnull)adId {
@@ -363,11 +399,12 @@
 
     if ([self hasInterstitialAd]) {
         UIViewController* controller =
-            [AdsWrapper getCurrentRootViewController];
+            [SSAdMobUtility getCurrentRootViewController];
         [[self interstitialAdView] presentFromRootViewController:controller];
     } else {
         // Ad is not ready to present.
-        NSLog(@"ADMOB: Interstitial cannot show. It is not ready.");
+        NSLog(@"%s: interstitial cannot show, it is not ready.",
+              __PRETTY_FUNCTION__);
         // Attempt to load the default interstitial ad id.
         // Should be deprecated: load interstitial should be called manually.
         [self loadInterstitial];
@@ -414,7 +451,7 @@
     if ([self hasRewardedAd]) {
         [[GADRewardBasedVideoAd sharedInstance]
             presentFromRootViewController:
-                [AdsWrapper getCurrentRootViewController]];
+                [SSAdMobUtility getCurrentRootViewController]];
     }
 }
 

@@ -36,11 +36,6 @@ typedef enum {
     kTypeFullScreen,
 } AdmobType;
 
-typedef NS_ENUM(NSInteger, SSAdMobAdType) {
-    SSAdMobAdTypeBanner,
-    SSAdMobAdTypeNativeExpress,
-};
-
 @interface AdsAdmob : NSObject <InterfaceAds> {
     SSBannerAdListener* bannerAdListener_;
     SSNativeExpressAdListener* nativeExpressAdListener_;
@@ -51,11 +46,12 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     NSMutableDictionary<NSString*, NSValue*>* adSizes_;
 }
 
-@property BOOL debug;
+@property (nonatomic) BOOL debug;
 
 // clang-format off
 @property (nonatomic, copy, nullable) NSString* strBannerID DEPRECATED_ATTRIBUTE;
 @property (nonatomic, copy, nullable) NSString* strInterstitialID DEPRECATED_ATTRIBUTE;
+// clang-format on
 
 @property (nonatomic, retain, nullable) NSMutableArray* testDeviceIDs;
 
@@ -63,7 +59,6 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
 @property (nonatomic, copy, nullable) NSString* adColonyRewardedAdZoneId;
 
 @property (nonatomic, assign, nullable) GADInterstitial* interstitialAdView;
-// clang-format on
 
 /**
  interface for Admob SDK
