@@ -95,6 +95,10 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     [super dealloc];
 }
 
+- (void)initialize:(NSString* _Nonnull)applicationId {
+    [GADMobileAds configureWithApplicationID:applicationId];
+}
+
 - (void)addTestDevice:(NSString*)deviceId {
     if ([self testDeviceIDs] == nil) {
         [self setTestDeviceIDs:[NSMutableArray array]];
@@ -135,45 +139,15 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
 #pragma mark InterfaceAds impl
 
 - (void)configDeveloperInfo:(NSDictionary*)devInfo {
-    NSLog(@"Deprecated: Use showBannerAd(adId) and loadInterstitialAd(adId) "
-          @"instead!");
-
-    NSString* bannerId = [devInfo objectForKey:@"AdmobID"];
-    NSString* interstiailId = [devInfo objectForKey:@"AdmobInterstitialID"];
-
-    if (bannerId == nil) {
-        NSLog(@"WARNING: BannerID is nil");
-    }
-
-    if (interstiailId == nil) {
-        NSLog(@"WARNING: IntestitialID is nil");
-    }
-
-    self.strBannerID = bannerId;
-    self.strInterstitialID = interstiailId;
+    NSLog(@"%s: deprecated.", __PRETTY_FUNCTION__);
 }
 
 - (void)showAds:(NSDictionary*)info position:(int)pos {
-    NSLog(@"%s: deprecated", __PRETTY_FUNCTION__);
+    NSLog(@"%s: deprecated.", __PRETTY_FUNCTION__);
 }
 
 - (void)hideAds:(NSDictionary*)info {
-    NSLog(@"%s: deprecated, use hideAd(adId) instead!", __PRETTY_FUNCTION__);
-
-    NSString* strType = [info objectForKey:@"AdmobType"];
-    int type = [strType intValue];
-    switch (type) {
-    case kTypeBanner: {
-        [self hideAd:[self strBannerID]];
-        break;
-    }
-    case kTypeFullScreen:
-        OUTPUT_LOG(@"Now not support full screen view in Admob");
-        break;
-    default:
-        OUTPUT_LOG(@"The value of 'AdmobType' is wrong (should be 1 or 2)");
-        break;
-    }
+    NSLog(@"%s: deprecated.", __PRETTY_FUNCTION__);
 }
 
 - (void)queryPoints {
@@ -251,11 +225,7 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     }
 
     GADAdSize cachedSize = GADAdSizeFromNSValue(elt);
-    if (CGSizeEqualToSize(size.size, cachedSize.size) &&
-        size.flags == cachedSize.flags) {
-        return YES;
-    }
-    return NO;
+    return GADAdSizeEqualToSize(size, cachedSize);
 }
 
 - (void)_createAd:(SSAdMobAdType)adType
@@ -266,19 +236,12 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     UIView* view = nil;
     UIViewController* controller =
         [SSAdMobUtility getCurrentRootViewController];
-    GADRequest* request = [GADRequest request];
-    [request setTestDevices:[self testDeviceIDs]];
 
     if (adType == SSAdMobAdTypeBanner) {
-        view = [self _createBannerAd:adId
-                                size:size
-                             request:request
-                          controller:controller];
+        view = [self _createBannerAd:adId size:size controller:controller];
     } else if (adType == SSAdMobAdTypeNativeExpress) {
-        view = [self _createNativeExpressAd:adId
-                                       size:size
-                                    request:request
-                                 controller:controller];
+        view =
+            [self _createNativeExpressAd:adId size:size controller:controller];
     } else {
         NSAssert(NO, @"...");
     }
@@ -292,7 +255,6 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
 
 - (GADBannerView*)_createBannerAd:(NSString* _Nonnull)adId
                              size:(GADAdSize)size
-                          request:(GADRequest*)request
                        controller:(UIViewController* _Nonnull)controller {
     GADBannerView* view =
         [[[GADBannerView alloc] initWithAdSize:size] autorelease];
@@ -304,13 +266,11 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     [view setAdUnitID:adId];
     [view setDelegate:bannerAdListener_];
     [view setRootViewController:controller];
-    [view loadRequest:request];
     return view;
 }
 
 - (GADNativeExpressAdView*)_createNativeExpressAd:(NSString* _Nonnull)adId
                                              size:(GADAdSize)size
-                                          request:(GADRequest*)request
                                        controller:(UIViewController* _Nonnull)
                                                       controller {
     GADNativeExpressAdView* view =
@@ -323,7 +283,6 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     [view setAdUnitID:adId];
     [view setDelegate:nativeExpressAdListener_];
     [view setRootViewController:controller];
-    [view loadRequest:request];
     return view;
 }
 
@@ -337,6 +296,7 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
 
     [view removeFromSuperview];
     [adViews_ removeObjectForKey:adId];
+    [adSizes_ removeObjectForKey:adId];
 }
 
 - (void)showAd:(NSString* _Nonnull)adId {
@@ -348,6 +308,17 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     }
 
     [view setHidden:NO];
+
+    GADRequest* request = [GADRequest request];
+    [request setTestDevices:[self testDeviceIDs]];
+
+    if ([view isKindOfClass:[GADBannerView class]]) {
+        GADBannerView* _view = (GADBannerView*)(view);
+        [_view loadRequest:request];
+    } else if ([view isKindOfClass:[GADNativeExpressAdView class]]) {
+        GADNativeExpressAdView* _view = (GADNativeExpressAdView*)(view);
+        [_view loadRequest:request];
+    }
 }
 
 - (void)hideAd:(NSString* _Nonnull)adId {
@@ -405,14 +376,7 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
         // Ad is not ready to present.
         NSLog(@"%s: interstitial cannot show, it is not ready.",
               __PRETTY_FUNCTION__);
-        // Attempt to load the default interstitial ad id.
-        // Should be deprecated: load interstitial should be called manually.
-        [self loadInterstitial];
     }
-}
-
-- (void)loadInterstitial {
-    [self loadInterstitialAd:[self strInterstitialID]];
 }
 
 - (void)loadInterstitialAd:(NSString* _Nonnull)adId {

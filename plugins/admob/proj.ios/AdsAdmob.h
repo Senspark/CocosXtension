@@ -47,12 +47,6 @@ typedef enum {
 }
 
 @property (nonatomic) BOOL debug;
-
-// clang-format off
-@property (nonatomic, copy, nullable) NSString* strBannerID DEPRECATED_ATTRIBUTE;
-@property (nonatomic, copy, nullable) NSString* strInterstitialID DEPRECATED_ATTRIBUTE;
-// clang-format on
-
 @property (nonatomic, retain, nullable) NSMutableArray* testDeviceIDs;
 
 @property (nonatomic, copy, nullable) NSString* adColonyInterstitialAdZoneId;
@@ -60,9 +54,7 @@ typedef enum {
 
 @property (nonatomic, assign, nullable) GADInterstitial* interstitialAdView;
 
-/**
- interface for Admob SDK
- */
+- (void)initialize:(NSString* _Nonnull)applicationId;
 - (void)addTestDevice:(NSString* _Nonnull)deviceId;
 - (void)configMediationAdColony:(NSDictionary* _Nonnull)params;
 
@@ -72,8 +64,6 @@ typedef enum {
 - (void)showAd:(NSString* _Nonnull)adId;
 - (void)hideAd:(NSString* _Nonnull)adId;
 - (void)moveAd:(NSDictionary* _Nonnull)params;
-
-- (void)loadInterstitial DEPRECATED_ATTRIBUTE;
 
 - (void)showInterstitialAd;
 - (void)loadInterstitialAd:(NSString* _Nonnull)adId;
