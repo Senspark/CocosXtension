@@ -1,47 +1,43 @@
 package org.cocos2dx.plugin;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 
 import org.cocos2dx.plugin.AdsWrapper.ResultCode;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Created by enrevol on 4/8/16.
  */
 class InterstitialAdListener extends AdListener {
-    private AdsAdmob                      _adapter;
-    private WeakReference<InterstitialAd> _interstitialAd;
+    private static final String _Tag = InterstitialAdListener.class.getName();
 
-    public InterstitialAdListener(AdsAdmob adapter, InterstitialAd ad) {
-        _adapter = adapter;
-        _interstitialAd = new WeakReference<>(ad);
+    private NativeCallback _callback;
+
+    InterstitialAdListener(@NonNull NativeCallback callback) {
+        _callback = callback;
     }
 
-    private void refreshAdAvailability() {
-        assert (_interstitialAd.get() != null);
+    private void logD(String message) {
+        Log.d(_Tag, message);
+    }
 
-        if (_interstitialAd.get() != null) {
-            _adapter._changeInterstitialAdAvailability(_interstitialAd.get().isLoaded());
-        }
+    private void logE(String message) {
+        Log.e(_Tag, message);
     }
 
     @Override
     public void onAdLoaded() {
-        _adapter.logD("InterstitialAdListener: onAdLoaded: begin.");
-
-        super.onAdLoaded();
-        refreshAdAvailability();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.InterstitialAdLoaded, "Interstitial ad loaded");
-
-        _adapter.logD("InterstitialAdListener: onAdLoaded: end.");
+        logD("onAdLoaded: begin.");
+        _callback.onEvent(ResultCode.InterstitialAdLoaded, "Interstitial ad loaded");
+        logD("onAdLoaded: end.");
     }
 
     @Override
     public void onAdFailedToLoad(int errorCode) {
-        _adapter.logE("InterstitialAdListener: onAdFailedToLoad: begin errorCode = " + errorCode);
+        logE("onAdFailedToLoad: begin errorCode = " + errorCode);
 
         String errorMsg = "Unknown error";
         switch (errorCode) {
@@ -58,49 +54,30 @@ class InterstitialAdListener extends AdListener {
         default:
             break;
         }
-        _adapter.logE("Error message: " + errorMsg);
-
-        super.onAdFailedToLoad(errorCode);
-        refreshAdAvailability();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.InterstitialAdFailedToLoad, errorMsg);
-
-        _adapter.logD("InterstitialAdListener: onAdFailedToLoad: end.");
+        logE("Error message: " + errorMsg);
+        _callback.onEvent(ResultCode.InterstitialAdFailedToLoad, errorMsg);
+        logD("onAdFailedToLoad: end.");
     }
 
     @Override
     public void onAdOpened() {
-        _adapter.logD("InterstitialAdListener: onAdLeftApplication: begin.");
-
-        super.onAdOpened();
-        refreshAdAvailability();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.InterstitialAdOpened, "Interstitial ad opened");
-
-        _adapter.logD("InterstitialAdListener: onAdLeftApplication: end.");
+        logD("onAdLeftApplication: begin.");
+        _callback.onEvent(ResultCode.InterstitialAdOpened, "Interstitial ad opened");
+        logD("onAdLeftApplication: end.");
     }
 
     @Override
     public void onAdClosed() {
-        _adapter.logD("InterstitialAdListener: onAdClosed: begin.");
-
-        super.onAdClosed();
-        refreshAdAvailability();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.InterstitialAdClosed, "Interstitial ad closed");
-
-        // Should be removed?
-        _adapter.loadInterstitial();
-
-        _adapter.logD("InterstitialAdListener: onAdClosed: end.");
+        logD("onAdClosed: begin.");
+        _callback.onEvent(ResultCode.InterstitialAdClosed, "Interstitial ad closed");
+        logD("onAdClosed: end.");
     }
 
     @Override
     public void onAdLeftApplication() {
-        _adapter.logD("InterstitialAdListener: onAdLeftApplication: begin.");
-
-        super.onAdLeftApplication();
-        refreshAdAvailability();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.InterstitialAdLeftApplication,
+        logD("onAdLeftApplication: begin.");
+        _callback.onEvent(ResultCode.InterstitialAdLeftApplication,
             "Interstitial ad left application");
-
-        _adapter.logD("InterstitialAdListener: onAdLeftApplication: end.");
+        logD("onAdLeftApplication: end.");
     }
 }

@@ -1,7 +1,7 @@
 package org.cocos2dx.plugin;
 
-import android.graphics.Color;
-import android.view.View;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -12,35 +12,32 @@ import org.cocos2dx.plugin.AdsWrapper.ResultCode;
  * Created by enrevol on 4/8/16.
  */
 class BannerAdListener extends AdListener {
-    private AdsAdmob _adapter;
+    private static final String _Tag = BannerAdListener.class.getName();
 
-    BannerAdListener(AdsAdmob adapter) {
-        this._adapter = adapter;
+    private NativeCallback _callback;
+
+    BannerAdListener(@NonNull NativeCallback callback) {
+        _callback = callback;
+    }
+
+    private void logD(String message) {
+        Log.d(_Tag, message);
+    }
+
+    private void logE(String message) {
+        Log.e(_Tag, message);
     }
 
     @Override
     public void onAdLoaded() {
-        _adapter.logD("BannerAdListener: onAdLoaded: begin.");
-
-        super.onAdLoaded();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.BannerAdLoaded, "Banner ad loaded");
-
-        if (_adapter._hasBannerAd()) {
-            _adapter._bannerAdView.setVisibility(View.GONE);
-            _adapter._bannerAdView.setVisibility(View.VISIBLE);
-
-            if (_adapter._bannerAdView.getAdSize().isAutoHeight()) {
-                _adapter.logD("AdSize is SMART BANNER. Set its background color BLACK");
-                _adapter._bannerAdView.setBackgroundColor(Color.BLACK);
-            }
-        }
-
-        _adapter.logD("BannerAdListener: onAdLoaded: end.");
+        logD("onAdLoaded: begin.");
+        _callback.onEvent(ResultCode.BannerAdLoaded, "Banner ad loaded");
+        logD("onAdLoaded: end.");
     }
 
     @Override
     public void onAdFailedToLoad(int errorCode) {
-        _adapter.logE("BannerAdListener: onAdFailedToLoad: begin errorCode = " + errorCode);
+        logE("BannerAdListener: onAdFailedToLoad: begin errorCode = " + errorCode);
 
         String errorMsg = "Unknown error";
         switch (errorCode) {
@@ -57,43 +54,30 @@ class BannerAdListener extends AdListener {
         default:
             break;
         }
-        _adapter.logE("Error message: " + errorMsg);
-
-        super.onAdFailedToLoad(errorCode);
-        AdsWrapper.onAdsResult(_adapter, ResultCode.BannerAdFailedToLoad, errorMsg);
-
-        _adapter.logD("BannerAdListener: onAdFailedToLoad: end.");
+        logE("Error message: " + errorMsg);
+        _callback.onEvent(ResultCode.BannerAdFailedToLoad, errorMsg);
+        logD("BannerAdListener: onAdFailedToLoad: end.");
     }
 
     @Override
     public void onAdOpened() {
-        _adapter.logD("BannerAdListener: onAdOpened: begin.");
-
-        super.onAdOpened();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.BannerAdOpened, "Banner ad opened");
-
-        _adapter.logD("BannerAdListener: onAdOpened: end.");
+        logD("BannerAdListener: onAdOpened: begin.");
+        _callback.onEvent(ResultCode.BannerAdOpened, "Banner ad opened");
+        logD("BannerAdListener: onAdOpened: end.");
     }
 
     @Override
     public void onAdClosed() {
-        _adapter.logD("BannerAdListener: onAdClosed: begin");
-
-        super.onAdClosed();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.BannerAdClosed, "Banner ad closed");
-
-        _adapter.logD("BannerAdListener: onAdClosed: end.");
+        logD("BannerAdListener: onAdClosed: begin");
+        _callback.onEvent(ResultCode.BannerAdClosed, "Banner ad closed");
+        logD("BannerAdListener: onAdClosed: end.");
     }
 
 
     @Override
     public void onAdLeftApplication() {
-        _adapter.logD("BannerAdListener: onLeftApplication: begin.");
-
-        super.onAdLeftApplication();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.BannerAdLeftApplication,
-            "Banner ad left application");
-
-        _adapter.logD("BannerAdListener: onLeftApplication: end.");
+        logD("BannerAdListener: onLeftApplication: begin.");
+        _callback.onEvent(ResultCode.BannerAdLeftApplication, "Banner ad left application");
+        logD("BannerAdListener: onLeftApplication: end.");
     }
 }

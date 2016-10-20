@@ -1,51 +1,43 @@
 package org.cocos2dx.plugin;
 
-import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.view.View;
+import android.util.Log;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.NativeExpressAdView;
 
 import org.cocos2dx.plugin.AdsWrapper.ResultCode;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Created by Zinge on 6/22/16.
  */
 class NativeExpressAdListener extends AdListener {
-    private AdsAdmob                           _adapter;
-    private WeakReference<NativeExpressAdView> _nativeExpressAdView;
+    private static final String _Tag = NativeExpressAdListener.class.getName();
 
-    public NativeExpressAdListener(@NonNull AdsAdmob adapter, @NonNull NativeExpressAdView adView) {
-        this._adapter = adapter;
-        this._nativeExpressAdView = new WeakReference<>(adView);
+    private NativeCallback _callback;
+
+    NativeExpressAdListener(@NonNull NativeCallback callback) {
+        _callback = callback;
+    }
+
+    private void logD(String message) {
+        Log.d(_Tag, message);
+    }
+
+    private void logE(String message) {
+        Log.e(_Tag, message);
     }
 
     @Override
     public void onAdLoaded() {
-        _adapter.logD("NativeExpressAdListener: onAdLoaded: begin.");
-        assert (Looper.getMainLooper() == Looper.myLooper());
-
-        super.onAdLoaded();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.NativeExpressAdLoaded,
-            "Native express ad loaded");
-
-        if (_nativeExpressAdView.get() != null) {
-            _nativeExpressAdView.get().setVisibility(View.GONE);
-            _nativeExpressAdView.get().setVisibility(View.VISIBLE);
-        }
-
-        _adapter.logD("NativeExpressAdListener: onAdLoaded: end.");
+        logD("onAdLoaded: begin.");
+        _callback.onEvent(ResultCode.NativeExpressAdLoaded, "Native express ad loaded");
+        logD("onAdLoaded: end.");
     }
 
     @Override
     public void onAdFailedToLoad(int errorCode) {
-        assert (Looper.getMainLooper() == Looper.myLooper());
-
-        _adapter.logE("NativeExpressAdListener: onAdFailedToLoad: begin errorCode = " + errorCode);
+        logE("onAdFailedToLoad: begin errorCode = " + errorCode);
 
         String errorDescription = "Unknown error";
         switch (errorCode) {
@@ -62,46 +54,29 @@ class NativeExpressAdListener extends AdListener {
         default:
             break;
         }
-        _adapter.logE(
-            "NativeExpressAdListener: onAdFailedToLoad errorDescription = " + errorDescription);
-
-        super.onAdFailedToLoad(errorCode);
-        AdsWrapper.onAdsResult(_adapter, ResultCode.NativeExpressAdFailedToLoad, errorDescription);
-
-        _adapter.logD("NativeExpressAdListener: onAdFailedToLoad: end.");
+        logE("onAdFailedToLoad errorDescription = " + errorDescription);
+        _callback.onEvent(ResultCode.NativeExpressAdFailedToLoad, errorDescription);
+        logD("onAdFailedToLoad: end.");
     }
 
     @Override
     public void onAdOpened() {
-        _adapter.logD("NativeExpressAdListener: onAdOpened: begin.");
-        assert (Looper.getMainLooper() == Looper.myLooper());
-
-        super.onAdOpened();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.NativeExpressAdOpened, "Ads view shown!");
-
-        _adapter.logD("NativeExpressAdListener: onAdOpened: end.");
+        logD("onAdOpened: begin.");
+        _callback.onEvent(ResultCode.NativeExpressAdOpened, "Ads view shown!");
+        logD("onAdOpened: end.");
     }
 
     @Override
     public void onAdClosed() {
-        _adapter.logD("NativeExpressAdListener: onAdClosed: begin.");
-        assert (Looper.getMainLooper() == Looper.myLooper());
-
-        super.onAdClosed();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.NativeExpressAdClosed, "Ads view closed!");
-
-        _adapter.logD("NativeExpressAdListener: onAdClosed: end.");
+        logD("onAdClosed: begin.");
+        _callback.onEvent(ResultCode.NativeExpressAdClosed, "Ads view closed!");
+        logD("onAdClosed: end.");
     }
 
     @Override
     public void onAdLeftApplication() {
-        _adapter.logD("NativeExpressAdListener: onAdLeftApplication: begin.");
-        assert (Looper.getMainLooper() == Looper.myLooper());
-
-        super.onAdLeftApplication();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.NativeExpressAdLeftApplication,
-            "Ads left application!");
-
-        _adapter.logD("NativeExpressAdListener: onAdLeftApplication: end.");
+        logD("onAdLeftApplication: begin.");
+        _callback.onEvent(ResultCode.NativeExpressAdLeftApplication, "Ads left application!");
+        logD("onAdLeftApplication: end.");
     }
 }

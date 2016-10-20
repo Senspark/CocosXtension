@@ -23,11 +23,6 @@
  ****************************************************************************/
 package org.cocos2dx.plugin;
 
-import android.app.Activity;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.FrameLayout;
-
 public class AdsWrapper {
     static class ResultCode {
         static final int BannerAdLoaded          = 40;
@@ -61,6 +56,7 @@ public class AdsWrapper {
     /// an in-app purchase butotn
     public static final int RESULT_CODE_InAppPurchaseRequested = 100;
 
+    @Deprecated
     public static void onAdsResult(InterfaceAds adapter, int code, String msg) {
         final int curCode = code;
         final String curMsg = msg;
@@ -71,6 +67,16 @@ public class AdsWrapper {
                 String name = curObj.getClass().getName();
                 name = name.replace('.', '/');
                 AdsWrapper.nativeOnAdsResult(name, curCode, curMsg);
+            }
+        });
+    }
+
+    public static void onAdsResult(final String className, final Integer code,
+                                   final String message) {
+        PluginWrapper.runOnGLThread(new Runnable() {
+            @Override
+            public void run() {
+                AdsWrapper.nativeOnAdsResult(className.replace('.', '/'), code, message);
             }
         });
     }

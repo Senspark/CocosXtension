@@ -1,106 +1,81 @@
 package org.cocos2dx.plugin;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.ads.reward.RewardItem;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
 import org.cocos2dx.plugin.AdsWrapper.ResultCode;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Created by nikelarteta on 4/11/16.
  */
 class RewardedAdListener implements RewardedVideoAdListener {
-    private AdsAdmob                       _adapter;
-    private WeakReference<RewardedVideoAd> _rewardedVideoAd;
+    private static final String _Tag = RewardedAdListener.class.getName();
 
-    RewardedAdListener(@NonNull AdsAdmob adapter, RewardedVideoAd ad) {
-        _adapter = adapter;
-        _rewardedVideoAd = new WeakReference<>(ad);
+    private NativeCallback _callback;
+
+    RewardedAdListener(@NonNull NativeCallback callback) {
+        _callback = callback;
     }
 
-    private void refreshAdAvailability() {
-        assert (_rewardedVideoAd.get() != null);
+    private void logD(String message) {
+        Log.d(_Tag, message);
+    }
 
-        if (_rewardedVideoAd.get() != null) {
-            _adapter._changeRewardedAdAvailability(_rewardedVideoAd.get().isLoaded());
-        }
+    private void logE(String message) {
+        Log.e(_Tag, message);
     }
 
     @Override
     public void onRewardedVideoAdLoaded() {
-        _adapter.logD("RewardedAdListener: onRewardedVideoAdLoaded: begin.");
-
-        refreshAdAvailability();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.RewardedVideoAdLoaded, "Rewarded video ad loaded.");
-
-        _adapter.logD("RewardedAdListener: onRewardedVideoAdLoaded: end.");
+        logD("onRewardedVideoAdLoaded: begin.");
+        _callback.onEvent(ResultCode.RewardedVideoAdLoaded, "Rewarded video ad loaded.");
+        logD("onRewardedVideoAdLoaded: end.");
     }
 
     @Override
     public void onRewardedVideoAdFailedToLoad(int errorCode) {
-        _adapter.logE(
-            "RewardedAdListener: onRewardedVideoAdFailedToLoad: begin errorCode = " + errorCode);
-
-        refreshAdAvailability();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.RewardedVideoAdFailedToLoad,
-            String.valueOf(errorCode));
-
-        _adapter.logE("RewardedAdListener: onRewardedVideoAdFailedToLoad: end.");
+        logE("onRewardedVideoAdFailedToLoad: begin errorCode = " + errorCode);
+        _callback.onEvent(ResultCode.RewardedVideoAdFailedToLoad, String.valueOf(errorCode));
+        logE("onRewardedVideoAdFailedToLoad: end.");
     }
 
     @Override
     public void onRewardedVideoAdOpened() {
-        _adapter.logD("RewardedAdListener: onRewardedVideoAdLoaded: begin.");
-
-        refreshAdAvailability();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.RewardedVideoAdOpened, "Rewarded video ad opened.");
-
-        _adapter.logD("RewardedAdListener: onRewardedVideoAdLoaded: end.");
+        logD("onRewardedVideoAdLoaded: begin.");
+        _callback.onEvent(ResultCode.RewardedVideoAdOpened, "Rewarded video ad opened.");
+        logD("onRewardedVideoAdLoaded: end.");
     }
 
     @Override
     public void onRewardedVideoStarted() {
-        _adapter.logD("RewardedAdListener: onRewardedVideoStarted: begin.");
-
-        refreshAdAvailability();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.RewardedVideoAdStarted, "Rewarded video ad started");
-
-        _adapter.logD("RewardedAdListener: onRewardedVideoStarted: end.");
+        logD("onRewardedVideoStarted: begin.");
+        _callback.onEvent(ResultCode.RewardedVideoAdStarted, "Rewarded video ad started");
+        logD("onRewardedVideoStarted: end.");
     }
 
     @Override
     public void onRewardedVideoAdClosed() {
-        _adapter.logD("RewardedAdListener: onRewardedVideoAdClosed: begin.");
-
-        refreshAdAvailability();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.RewardedVideoAdClosed, "Rewarded video ad closed.");
-
-        _adapter.logD("RewardedAdListener: onRewardedVideoAdClosed: end.");
+        logD("onRewardedVideoAdClosed: begin.");
+        _callback.onEvent(ResultCode.RewardedVideoAdClosed, "Rewarded video ad closed.");
+        logD("onRewardedVideoAdClosed: end.");
     }
 
     @Override
     public void onRewarded(RewardItem reward) {
-        _adapter.logD("RewardedAdListener: onRewarded: begin.");
-
-        refreshAdAvailability();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.RewardedVideoAdRewarded,
+        logD("onRewarded: begin.");
+        _callback.onEvent(ResultCode.RewardedVideoAdRewarded,
             "Reward received with currency " + reward.getType() + ", amount " + reward.getAmount());
-
-        _adapter.logD("RewardedAdListener: onRewarded: end.");
+        logD("onRewarded: end.");
     }
 
     @Override
     public void onRewardedVideoAdLeftApplication() {
-        _adapter.logD("RewardedAdListener: onRewardedVideoAdLeftApplication: begin.");
-
-        refreshAdAvailability();
-        AdsWrapper.onAdsResult(_adapter, ResultCode.RewardedVideoAdLeftApplication,
+        logD("onRewardedVideoAdLeftApplication: begin.");
+        _callback.onEvent(ResultCode.RewardedVideoAdLeftApplication,
             "Rewarded video ad left application");
-
-        _adapter.logD("RewardedAdListener: onRewardedVideoAdLeftApplication: end.");
+        logD("RewardedAdListener: onRewardedVideoAdLeftApplication: end.");
     }
 }
