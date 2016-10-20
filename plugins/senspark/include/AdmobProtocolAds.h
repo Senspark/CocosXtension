@@ -56,27 +56,12 @@ NS_SENSPARK_PLUGIN_ADS_BEGIN
 /// @endcode
 class AdmobProtocolAds : public cocos2d::plugin::ProtocolAds {
 public:
-    class AdType;
     class AdSize;
-
-    /// Ad id key used in TAdsInfo.
-    CC_DEPRECATED_ATTRIBUTE static const std::string AdBannerIdKey;
-    CC_DEPRECATED_ATTRIBUTE static const std::string AdInterstitialIdKey;
-
-    /// Ad type key used in TAdsInfo.
-    CC_DEPRECATED_ATTRIBUTE static const std::string AdTypeKey;
-
-    /// Ad size key used in TAdsInfo.
-    CC_DEPRECATED_ATTRIBUTE static const std::string AdSizeKey;
 
     AdmobProtocolAds();
     virtual ~AdmobProtocolAds();
 
-    CC_DEPRECATED_ATTRIBUTE void configureAds(const std::string& adsId);
-
-    CC_DEPRECATED_ATTRIBUTE void
-    configureAds(const std::string& bannerAds,
-                 const std::string& interstitialAds);
+    void initialize(const std::string& applicationId);
 
     void addTestDevice(const std::string& deviceId);
 
@@ -118,11 +103,9 @@ public:
 
     void moveAd(const std::string& adId, AdsPos position);
 
-    std::pair<int, int> getAdSizeInPixels(const std::string& adId);
+    std::pair<int, int> getAdSize(const std::string& adId);
 
-    CC_DEPRECATED_ATTRIBUTE
-    virtual void showAds(cocos2d::plugin::TAdsInfo info,
-                         AdsPos pos = kPosCenter) override;
+    std::pair<int, int> getAdSizeInPixels(const std::string& adId);
 
     /// Shows a banner ad given its id, size and position (optional).
     CC_DEPRECATED_ATTRIBUTE
@@ -190,31 +173,6 @@ public:
     /// Shows an interstitial ad.
     void showInterstitialAd();
 
-    CC_DEPRECATED_ATTRIBUTE void
-    showInterstitialAd(const std::string& interstitialAdId);
-
-    /// Shows an interstitial ad given its id and a callback when user requested
-    /// an in-app purchase.
-    ///
-    /// Only works on Android.
-    ///
-    /// Example.
-    /// @code
-    /// your_admob_protocol_ads_instance->showInterstitialAds(
-    ///     your_interstitial_ad_id,
-    ///     [](AdsResultCode code, const std::string& msg) {
-    ///         if (code == AdsResultCode::kIapPurchaseRequested) {
-    ///             auto productId = msg;
-    ///             /// Process your iap mechanism with productId here.
-    ///         }
-    /// });
-    /// @endcode
-    CC_DEPRECATED_ATTRIBUTE void
-    showInterstitialAd(const std::string& interstitialAdId,
-                       const AdsCallback& iapCallback);
-
-    CC_DEPRECATED_ATTRIBUTE void loadInterstitial();
-
     void loadInterstitialAd(const std::string& adId);
 
     bool hasInterstitialAd();
@@ -263,24 +221,6 @@ public:
 private:
     std::pair<int, int> computeAdViewPosition(AdsPos position, int width,
                                               int height);
-};
-
-class CC_DEPRECATED_ATTRIBUTE AdmobProtocolAds::AdType {
-public:
-    static const AdType Banner;
-
-    /// Fullscreen ad.
-    static const AdType Interstitial;
-
-    /// Implicit conversion to std::string to be stored in TAdsInfo.
-    operator const std::string&() const;
-
-    const std::string& getDescription() const;
-
-private:
-    explicit AdType(const std::string& s);
-
-    std::string _s;
 };
 
 class CC_DEPRECATED_ATTRIBUTE AdmobProtocolAds::AdSize {

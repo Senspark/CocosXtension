@@ -35,17 +35,6 @@ void removeData(AdmobProtocolAds* instance) { data_.erase(instance); }
 AdMobData& getData(AdmobProtocolAds* instance) { return data_[instance]; }
 } // namespace
 
-AdmobProtocolAds::AdType::AdType(const std::string& s)
-    : _s(s) {}
-
-AdmobProtocolAds::AdType::operator const std::string&() const {
-    return getDescription();
-}
-
-const std::string& AdmobProtocolAds::AdType::getDescription() const {
-    return _s;
-}
-
 AdmobProtocolAds::AdSize::AdSize(const std::string& s, int w, int h)
     : _s(s)
     , _w(w)
@@ -59,9 +48,6 @@ const std::string& AdmobProtocolAds::AdSize::getDescription() const {
     return _s;
 }
 
-const AdmobProtocolAds::AdType AdmobProtocolAds::AdType::Banner("1");
-const AdmobProtocolAds::AdType AdmobProtocolAds::AdType::Interstitial("2");
-
 // clang-format off
 const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::Banner("0", 320, 50);
 const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::LargeBanner("1", 320, 100);
@@ -72,11 +58,6 @@ const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::Skyscraper("5", 120, 60
 const AdmobProtocolAds::AdSize AdmobProtocolAds::AdSize::SmartBanner("6", -1, -2);
 // clang-format on
 
-const std::string AdmobProtocolAds::AdBannerIdKey("AdmobID");
-const std::string AdmobProtocolAds::AdInterstitialIdKey("AdmobInterstitialID");
-const std::string AdmobProtocolAds::AdTypeKey("AdmobType");
-const std::string AdmobProtocolAds::AdSizeKey("AdmobSizeEnum");
-
 AdmobProtocolAds::AdmobProtocolAds() = default;
 
 AdmobProtocolAds::~AdmobProtocolAds() {
@@ -84,20 +65,8 @@ AdmobProtocolAds::~AdmobProtocolAds() {
     // Maybe memory leak if many admob protocols are used.
 }
 
-void AdmobProtocolAds::configureAds(const std::string& adsId) {
-    cocos2d::plugin::TAdsInfo devInfo;
-    devInfo[AdBannerIdKey] = adsId;
-    getData(this).bannerAdId_ = adsId;
-    configDeveloperInfo(devInfo);
-}
-
-void AdmobProtocolAds::configureAds(const std::string& bannerAds,
-                                    const std::string& interstitialAds) {
-    cocos2d::plugin::TAdsInfo devInfo;
-    devInfo[AdBannerIdKey] = bannerAds;
-    devInfo[AdInterstitialIdKey] = interstitialAds;
-    getData(this).bannerAdId_ = bannerAds;
-    configDeveloperInfo(devInfo);
+void AdmobProtocolAds::initialize(const std::string& applicationId) {
+    callFunction(this, "initialize", applicationId.c_str());
 }
 
 void AdmobProtocolAds::addTestDevice(const std::string& deviceId) {
@@ -142,32 +111,28 @@ void AdmobProtocolAds::moveAd(const std::string& adId, int x, int y) {
     callFunction(this, "moveAd", adId.c_str(), x, y);
 }
 
-void AdmobProtocolAds::moveAd(const std::string& adId, AdsPos position) {}
+void AdmobProtocolAds::moveAd(const std::string& adId, AdsPos position) {
+    int width, height;
+    std::tie(width, height) = getAdSize(adId);
+    int x, y;
+    std::tie(x, y) = computeAdViewPosition(position, width, height);
+    moveAd(adId, x, y);
+}
 
-std::pair<int, int>
-AdmobProtocolAds::getAdSizeInPixels(const std::string& adId) {
+std::pair<int, int> AdmobProtocolAds::getAdSize(const std::string& adId) {
     auto&& sizes = getData(this).adSizes_;
     if (not sizes.count(adId)) {
         return std::make_pair(0, 0);
     }
     auto&& size = sizes.at(adId);
-    return std::make_pair(getSizeInPixels(size.first),
-                          getSizeInPixels(size.second));
+    return size;
 }
 
-void AdmobProtocolAds::showAds(cocos2d::plugin::TAdsInfo info, AdsPos pos) {
-    auto adType = info[AdTypeKey];
-    if (adType == AdType::Banner.getDescription()) {
-        auto _adSize = info[AdSizeKey];
-        auto adSize = std::stoi(_adSize);
-        const std::array<AdSize, 7> AdSizes = {
-            {AdSize::Banner, AdSize::LargeBanner, AdSize::MediumRectangle,
-             AdSize::FullBanner, AdSize::Leaderboard, AdSize::Skyscraper,
-             AdSize::SmartBanner}};
-        showBannerAd(getData(this).bannerAdId_, AdSizes.at(adSize), pos);
-    } else {
-        showInterstitialAd();
-    }
+std::pair<int, int>
+AdmobProtocolAds::getAdSizeInPixels(const std::string& adId) {
+    auto size = getAdSize(adId);
+    return std::make_pair(getSizeInPixels(size.first),
+                          getSizeInPixels(size.second));
 }
 
 void AdmobProtocolAds::showBannerAd(const std::string& bannerAdId,
@@ -231,23 +196,6 @@ void AdmobProtocolAds::moveNativeExpressAd(int x, int y) {
 
 void AdmobProtocolAds::showInterstitialAd() {
     callFunction(this, "showInterstitialAd");
-}
-
-void AdmobProtocolAds::showInterstitialAd(const std::string& interstitialAdId) {
-    configureAds(interstitialAdId);
-    cocos2d::plugin::TAdsInfo info;
-    info[AdTypeKey] = AdType::Interstitial;
-    showAds(info);
-}
-
-void AdmobProtocolAds::showInterstitialAd(const std::string& interstitialAdId,
-                                          const AdsCallback& iapCallback) {
-    showInterstitialAd(interstitialAdId);
-    setCallback(iapCallback);
-}
-
-void AdmobProtocolAds::loadInterstitial() {
-    callFunction(this, "loadInterstitial");
 }
 
 void AdmobProtocolAds::loadInterstitialAd(const std::string& adId) {
