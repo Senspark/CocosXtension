@@ -73,12 +73,21 @@ public class AdsWrapper {
 
     public static void onAdsResult(final String className, final Integer code,
                                    final String message) {
+        // Callback in C++ side will have to do cocos2d::Director::getInstance()->getScheduler()
+        // ->performFunctionInCocosThread(...) to ensure that the program will run in cocos thread.
+        AdsWrapper.nativeOnAdsResult(className.replace('.', '/'), code, message);
+
+        /*
+        If the device doesn't have enough memory, the activity will be destroyed before the
+        callback is invoked.
+
         PluginWrapper.runOnGLThread(new Runnable() {
             @Override
             public void run() {
                 AdsWrapper.nativeOnAdsResult(className.replace('.', '/'), code, message);
             }
         });
+        */
     }
 
     private native static void nativeOnAdsResult(String className, int code, String msg);
