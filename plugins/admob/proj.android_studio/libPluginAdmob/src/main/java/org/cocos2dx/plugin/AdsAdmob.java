@@ -809,10 +809,10 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         int width;
         int height;
         try {
-            Method getRawH = Display.class.getMethod("getRawHeight");
             Method getRawW = Display.class.getMethod("getRawWidth");
-            width = (Integer) getRawH.invoke(display);
-            height = (Integer) getRawW.invoke(display);
+            Method getRawH = Display.class.getMethod("getRawHeight");
+            width = (Integer) getRawW.invoke(display);
+            height = (Integer) getRawH.invoke(display);
         } catch (Exception e) {
             e.printStackTrace();
             Point size = _getRealScreenSizeInPixelsForApi1(display);
