@@ -1,5 +1,6 @@
 package org.cocos2dx.plugin;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -35,7 +36,7 @@ class AdViewInfo {
         _request = request;
     }
 
-    AdViewInfo(@NonNull NativeCallback callback, @NonNull final NativeExpressAdView view,
+    AdViewInfo(@NonNull NativeCallback callback, @NonNull NativeExpressAdView view,
                @NonNull AdRequest request) {
         view.setAdListener(new NativeExpressAdListener(callback) {
             @Override
@@ -74,8 +75,12 @@ class AdViewInfo {
 
     private void __invalidate() {
         logD("__invalidate");
+        _view.setBackgroundColor(Color.BLACK);
+        /*
+        // Can also use.
         _view.setVisibility(View.GONE); // View.INVISIBLE won't work.
         _view.setVisibility(View.VISIBLE);
+        */
     }
 
     void hide() {
