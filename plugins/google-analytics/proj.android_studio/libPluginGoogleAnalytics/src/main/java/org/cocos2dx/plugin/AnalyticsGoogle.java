@@ -16,10 +16,11 @@ import org.json.JSONObject;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Map;
 
 public class AnalyticsGoogle implements InterfaceAnalytics {
-	protected static final String LOG_TAG = "AnalyticsGoogle";
+	protected static final String LOG_TAG = AnalyticsGoogle.class.getName();
 	protected Context mContext = null;
 	protected static boolean isDebug = false;
 	protected GoogleAnalytics mGoogleAnalytics = null;
@@ -34,19 +35,25 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 		mGoogleAnalytics = GoogleAnalytics.getInstance(context);
 	}
 
+    private void logD(String msg) {
+        if (isDebug) {
+            Log.d(LOG_TAG, msg);
+        }
+    }
+
 	public void configureTracker(String trackerId) {
+        logD("configureTracker: id = " + trackerId);
 		if (null == trackerId) {
-			Log.d(LOG_TAG, "Null tracker id at configure time.");
+			logD("Null tracker id at configure time.");
 			return;
 		}
-
-		Log.d(LOG_TAG, "Configure with trackerId: " + trackerId);
 
 		createTracker(trackerId);
 	}
 
 	public void createTracker(String trackerId) {
-		Tracker tr = (Tracker) this.mTrackers.get(trackerId);
+        logD("createTracker: id = " + trackerId);
+		Tracker tr = mTrackers.get(trackerId);
 		if (null == tr) {
 			tr = this.mGoogleAnalytics.newTracker(trackerId);
 
@@ -61,15 +68,16 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 	}
 
 	public void enableTracker(String trackerId) {
+        logD("enableTracker: id = " + trackerId);
 		if (null == trackerId) {
 			return;
 		}
 
-		Tracker tr = (Tracker) this.mTrackers.get(trackerId);
+		Tracker tr = mTrackers.get(trackerId);
 		if (null == tr) {
-			Log.d(LOG_TAG, "Trying to enable unknown tracker: " + trackerId);
+			logD("Trying to enable unknown tracker: " + trackerId);
 		} else {
-			Log.d(LOG_TAG, "Selected tracker: " + trackerId);
+			logD("Selected tracker: " + trackerId);
 			this.tracker = tr;
 		}
 	}
@@ -110,6 +118,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 	}
 
 	public void trackScreen(String screenName) {
+        logD("trackScreen: name = " + screenName);
 		if (null != this.tracker) {
 			this.tracker.setScreenName(screenName);
 			this.tracker.send(new HitBuilders.ScreenViewBuilder().build());
@@ -120,7 +129,10 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 
 	public void trackEventWithCategory(String category, String action, String label,
 			int value) {
-		if (null != this.tracker) {
+        logD(String.format(Locale.getDefault(),
+            "trackEvent: category = %s action = %s label = %s value = %d", category, action, label,
+            value));
+        if (null != this.tracker) {
 			this.tracker.send(new HitBuilders.EventBuilder()
 					.setCategory(category)
 					.setAction(action)
@@ -155,13 +167,16 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 	public void trackExceptionWithDescription(Hashtable<String, String> params) {
 		String description  = params.get("Param1");
 		boolean isFatal 	= Boolean.parseBoolean(params.get("Param2"));
-		
+
 		trackException(description, isFatal);
 	}
 
 	public void trackTiming(String category, int interval, String name,
 			String label) {
-		if (null != this.tracker) {
+        logD(String.format(Locale.getDefault(),
+            "trackTiming: category = %s interval = %d name = %s label = %s", category, interval,
+            name, label));
+        if (null != this.tracker) {
 			this.tracker.send(new HitBuilders.TimingBuilder()
 					.setCategory(category).setValue(interval).setVariable(name)
 					.setLabel(label).build());
@@ -169,26 +184,37 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 			Log.e(LOG_TAG, "Log Timing called w/o valid tracker.");
 	}
 
-	public void trackTimingWithCategory(Hashtable<String, String> params) {
-		String category = params.get("Param1");
-		int interval	= Integer.parseInt(params.get("Param2"));
-		String name		= params.get("Param3");
-		String label	= params.get("Param4");
-		
-		trackTiming(category, interval, name, label);
+	public void trackTimingWithCategory(JSONObject params) {
+        try {
+            String category = params.getString("Param1");
+            int interval = params.getInt("Param2");
+            String name = params.getString("Param3");
+            String label = params.getString("Param4");
+
+            trackTiming(category, interval, name, label);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 	}
 
-	public void trackEcommerceTransactions(Hashtable<String, String> params) {
-		String identity = params.get("Param1");
-		String name		= params.get("Param2");
-		String category = params.get("Param3");
-		float price		= Float.parseFloat(params.get("Param4"));
+	public void trackEcommerceTransactions(JSONObject params) {
+        try {
+            String identity = params.getString("Param1");
+            String name = params.getString("Param2");
+            String category = params.getString("Param3");
+            double price = params.getDouble("Param4");
 
-		trackEcommerceTransactions(identity, name, category, price);
+            trackEcommerceTransactions(identity, name, category, price);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 	}
 
-	public void trackEcommerceTransactions(String id, String name, String category, float price) {
-		String productID 		= String.format("Product-%s", id);
+	public void trackEcommerceTransactions(String id, String name, String category, double price) {
+        logD(String.format(Locale.getDefault(),
+            "trackEcommerceTransactions: id = %s name = %s category = %s price = %f", id, name,
+            category, price));
+        String productID 		= String.format("Product-%s", id);
 		String transactionID  	= String.format("Transaction-%s", id);
 
 		Product product =  new Product()
@@ -217,12 +243,12 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 		else
 			Log.e(LOG_TAG, "Log Social called w/o valid tracker.");
 	}
-	
+
 	public void trackSocialWithNetwork(Hashtable<String, String> params) {
 		String network	= params.get("Param1");
 		String action	= params.get("Param2");
 		String target	= params.get("Param3");
-		
+
 		trackSocial(network, action, target);
 	}
 
@@ -245,7 +271,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 	@Override
 	public void setCaptureUncaughtException(boolean isEnabled) {
         mCrashUncaughtEnable = isEnabled;
-        
+
         if (isEnabled) {
             if (null != tracker) {
                 UncaughtExceptionHandler myHandler = new ExceptionReporter(tracker, Thread.getDefaultUncaughtExceptionHandler(), mContext);

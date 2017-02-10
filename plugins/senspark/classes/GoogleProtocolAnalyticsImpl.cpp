@@ -58,7 +58,8 @@ void GoogleProtocolAnalytics::trackEvent(const std::string& category,
 
 void GoogleProtocolAnalytics::trackException(const std::string& description,
                                              bool isFatal) {
-    callFunction(this, "trackTimingWithCategory", description.c_str(), isFatal);
+    callFunction(this, "trackExceptionWithDescription", description.c_str(),
+                 isFatal);
 }
 
 void GoogleProtocolAnalytics::trackTiming(const std::string& category,
