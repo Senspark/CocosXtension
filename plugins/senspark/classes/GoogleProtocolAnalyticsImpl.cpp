@@ -41,7 +41,7 @@ void GoogleProtocolAnalytics::dispatchPeriodically(int seconds) {
 }
 
 void GoogleProtocolAnalytics::stopPeriodicalDispatch() {
-    callFunction(this, "stopPeriodcalDispatch");
+    callFunction(this, "stopPeriodicalDispatch");
 }
 
 void GoogleProtocolAnalytics::trackScreen(const std::string& screenName) {
