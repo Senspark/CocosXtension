@@ -40,15 +40,26 @@ public:
 
     void stopPeriodicalDispatch();
 
+    /// Tracks screen.
+    /// https://developers.google.com/analytics/devguides/collection/ios/v3/screens
+    /// https://developers.google.com/analytics/devguides/collection/android/v4/screens
+    /// Hit type: kGAIScreenView.
     void trackScreen(const std::string& screenName);
 
+    /// Track event.
+    /// https://developers.google.com/analytics/devguides/collection/ios/v3/events
+    /// https://developers.google.com/analytics/devguides/collection/android/v4/events
+    /// Hit type: kGAIEvent.
     void trackEvent(const std::string& category, const std::string& action,
-                    const std::string& label, float value);
+                    const std::string& label, int value);
 
-    void trackException(const std::string& description, bool isFatal);
-
+    /// Hit type: kGAITiming
+    /// https://developers.google.com/analytics/devguides/collection/ios/v3/usertimings
+    /// https://developers.google.com/analytics/devguides/collection/android/v4/usertimings
     void trackTiming(const std::string& category, int interval,
                      const std::string& name, const std::string& label);
+
+    void trackException(const std::string& description, bool isFatal);
 
     void trackEcommerceTransactions(const std::string& identity,
                                     const std::string& productName,
@@ -61,8 +72,11 @@ public:
     void setDryRun(bool isDryRun);
 
     void enableAdvertisingTracking(bool enable);
-};
 
+    void setParameter(const std::string& key, const std::string& value);
+
+    void sendHit(const std::map<std::string, std::string>& parameters);
+};
 NS_SENSPARK_PLUGIN_ANALYTICS_END
 
 #endif
