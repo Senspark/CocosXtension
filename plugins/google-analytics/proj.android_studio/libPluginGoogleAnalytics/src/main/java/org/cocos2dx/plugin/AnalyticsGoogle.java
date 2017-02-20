@@ -57,9 +57,6 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
         if (null == tr) {
             tr = this.mGoogleAnalytics.newTracker(trackerId);
 
-            if (this.mTrackers.size() == 0) {
-                tr.setScreenName(this.mContext.getClass().getCanonicalName());
-            }
 
             this.mTrackers.put(trackerId, tr);
         }
