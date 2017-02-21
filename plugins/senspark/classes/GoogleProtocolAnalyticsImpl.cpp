@@ -264,8 +264,8 @@ T& HitBuilders::Internal<T>::set(const std::string& paramName,
 }
 
 template <class T>
-T& HitBuilders::Internal<T>::setCustomDimenstion(std::size_t index,
-                                                 const std::string& dimension) {
+T& HitBuilders::Internal<T>::setCustomDimension(std::size_t index,
+                                                const std::string& dimension) {
     return set(make_parameter(parameters::custom_dimension, index), dimension);
 }
 

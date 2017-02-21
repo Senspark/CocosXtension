@@ -188,7 +188,7 @@ public:
     /// with the new one.
     /// @param index The index/slot in which the dimension will be set.
     /// @param dimension The value of the dimension for the given index.
-    T& setCustomDimenstion(std::size_t index, const std::string& dimension);
+    T& setCustomDimension(std::size_t index, const std::string& dimension);
 
     /// Adds a custom metric to the current hit builder. Calling this method
     /// with the same index will overwrite the previous metric with the new
