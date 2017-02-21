@@ -26,9 +26,7 @@ template <std::size_t Placeholders> class Parameter;
 template <> class Parameter<0> {
 public:
     constexpr explicit Parameter(const char* x)
-        : x_(x) {
-        assert(count_placeholders(x) == 0);
-    }
+        : x_(x) {}
 
     const char* x_;
 };
@@ -37,9 +35,7 @@ template <> class Parameter<1> {
 public:
     constexpr explicit Parameter(const char* x, const char* y = "")
         : x_(x)
-        , y_(y) {
-        assert(count_placeholders(x) == 1);
-    }
+        , y_(y) {}
 
     const char* x_;
     const char* y_;
@@ -136,14 +132,14 @@ constexpr auto is_exception_fatal = Parameter<0>("exf");
 /// Each custom dimension has an associated index. There is a maximum of 20
 /// custom dimensions (200 for Analytics 360 accounts). The dimension index must
 /// be a positive integer between 1 and 200, inclusive.
-constexpr auto custom_dimension = Parameter<1>("cd_");
+constexpr auto custom_dimension = Parameter<1>("cd");
 
 /// https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#cm_
 /// Optional for all hit types.
 /// Each custom metric has an associated index. There is a maximum of 20 custom
 /// metrics (200 for Analytics 360 accounts). The metric index must be a
 /// positive integer between 1 and 200, inclusive.
-constexpr auto custom_metric = Parameter<1>("cm_");
+constexpr auto custom_metric = Parameter<1>("cm");
 
 /// https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#pa
 /// Optional for all hit types.
