@@ -144,6 +144,36 @@ constexpr auto custom_dimension = Parameter<1>("cd_");
 /// metrics (200 for Analytics 360 accounts). The metric index must be a
 /// positive integer between 1 and 200, inclusive.
 constexpr auto custom_metric = Parameter<1>("cm_");
+
+/// https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#pa
+/// Optional for all hit types.
+/// The role of the products included in a hit. If a product action is not
+/// specified, all product definitions included with the hit will be ignored.
+/// Must be one of: detail, click, add, remove, checkout, checkout_option,
+/// purchase, refund. For analytics.js the Enhanced Ecommerce plugin must be
+/// installed before using this field.
+constexpr auto product_action = Parameter<0>("pa");
+
+/// https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#ti
+/// A unique identifier for the transaction. This value should be the same for
+/// both the Transaction hit and Items hits associated to the particular
+/// transaction.
+constexpr auto transaction_id = Parameter<0>("ti");
+
+/// https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#tr
+/// Specifies the total revenue associated with the transaction. This value
+/// should include any shipping or tax costs.
+constexpr auto transaction_revenue = Parameter<0>("tr");
+
+/// https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#pal
+/// Optional for all hit types.
+/// The list or collection from which a product action occurred. This is an
+/// additional parameter that can be sent when Product Action is set to 'detail'
+/// or 'click'. For analytics.js the Enhanced Ecommerce plugin must be installed
+/// before using this field.
+constexpr auto product_action_list = Parameter<0>("pal");
+
+constexpr auto product_list_source = Parameter<0>("pls");
 } // namespace parameters
 
 std::string make_parameter(const Parameter<0>& parameter) {
@@ -155,6 +185,76 @@ std::string make_parameter(const Parameter<1>& parameter, std::size_t index) {
            parameter.y_;
 }
 } // namespace
+Product& Product::setCategory(const std::string& value) {
+    dict_["ca"] = value;
+    return *this;
+}
+
+Product& Product::setId(const std::string& value) {
+    dict_["id"] = value;
+    return *this;
+}
+
+Product& Product::setName(const std::string& value) {
+    dict_["nm"] = value;
+    return *this;
+}
+
+Product& Product::setPrice(float price) {
+    dict_["pr"] = std::to_string(price);
+    return *this;
+}
+
+const std::string ProductAction::ActionAdd = "add";
+const std::string ProductAction::ActionCheckout = "checkout";
+const std::string ProductAction::ActionClick = "click";
+const std::string ProductAction::ActionDetail = "detail";
+const std::string ProductAction::ActionPurchase = "purchase";
+
+ProductAction::ProductAction(const std::string& action) {
+    dict_[make_parameter(parameters::product_action)] = action;
+}
+
+ProductAction& ProductAction::setProductActionList(const std::string& value) {
+    dict_[make_parameter(parameters::product_action_list)] = value;
+    return *this;
+}
+
+ProductAction& ProductAction::setProductListSource(const std::string& value) {
+    dict_[make_parameter(parameters::product_list_source)] = value;
+    return *this;
+}
+
+ProductAction& ProductAction::setTransactionId(const std::string& value) {
+    dict_[make_parameter(parameters::transaction_id)] = value;
+    return *this;
+}
+
+ProductAction& ProductAction::setTransactionRevenue(float value) {
+    dict_[make_parameter(parameters::transaction_revenue)] =
+        std::to_string(value);
+    return *this;
+}
+
+template <class T>
+T& HitBuilders::Internal<T>::addImpression(const Product& product,
+                                           const std::string& impressionList) {
+    impressions_[impressionList].push_back(product);
+    return static_cast<T&>(*this);
+}
+
+template <class T>
+T& HitBuilders::Internal<T>::addProduct(const Product& product) {
+    products_.push_back(product);
+    return static_cast<T&>(*this);
+}
+
+template <class T>
+T& HitBuilders::Internal<T>::setProductAction(const ProductAction& action) {
+    productAction_.clear();
+    productAction_.push_back(action);
+    return static_cast<T&>(*this);
+}
 
 template <class T>
 T& HitBuilders::Internal<T>::set(const std::string& paramName,
@@ -177,7 +277,34 @@ T& HitBuilders::Internal<T>::setCustomMetric(std::size_t index, float metric) {
 
 template <class T>
 std::map<std::string, std::string> HitBuilders::Internal<T>::build() const {
-    return dict_;
+    auto result = dict_;
+    for (std::size_t i = 0; i < products_.size(); ++i) {
+        for (auto&& elt : products_[i].dict_) {
+            result["&pr" + std::to_string(i + 1) + elt.first] = elt.second;
+        }
+    }
+    if (not productAction_.empty()) {
+        for (auto&& elt : productAction_[0].dict_) {
+            result["&" + elt.first] = elt.second;
+        }
+    }
+    if (not impressions_.empty()) {
+        std::size_t listIndex = 0;
+        for (auto&& elt : impressions_) {
+            result["&il" + std::to_string(listIndex + 1) + "nm"] = elt.first;
+            for (std::size_t i = 0; i < elt.second.size(); ++i) {
+                for (auto&& p_elt : elt.second[i].dict_) {
+                    result["&il" + std::to_string(listIndex + 1) + "pi" +
+                           std::to_string(i + 1) + p_elt.first] = p_elt.second;
+                }
+            }
+            ++listIndex;
+        }
+    }
+    for (auto&& elt : result) {
+        assert(elt.first[0] == '&');
+    }
+    return result;
 }
 
 template <class T>
@@ -213,6 +340,15 @@ HitBuilders::ExceptionBuilder::setFatal(bool fatal) {
 
 HitBuilders::TimingBuilder::TimingBuilder() {
     setHitType(parameters::types::timing);
+}
+
+HitBuilders::TimingBuilder::TimingBuilder(const std::string& category,
+                                          const std::string& variable,
+                                          int value)
+    : TimingBuilder() {
+    setCategory(category);
+    setVariable(variable);
+    setValue(value);
 }
 
 HitBuilders::TimingBuilder&
@@ -255,6 +391,13 @@ HitBuilders::SocialBuilder::setTarget(const std::string& target) {
 
 HitBuilders::EventBuilder::EventBuilder() {
     setHitType(parameters::types::event);
+}
+
+HitBuilders::EventBuilder::EventBuilder(const std::string& category,
+                                        const std::string& action)
+    : EventBuilder() {
+    setCategory(category);
+    setAction(action);
 }
 
 HitBuilders::EventBuilder&
