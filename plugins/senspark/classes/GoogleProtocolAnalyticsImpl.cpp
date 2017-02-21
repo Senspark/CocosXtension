@@ -47,34 +47,130 @@ constexpr auto exception_description =
 constexpr auto is_exception_fatal = "exf"; ///< Optional for exception hit type.
 } // namespace parameters
 
-class HitBuilder {
-public:
-    using Dict = std::map<std::string, std::string>;
-
-    explicit HitBuilder(const std::string& type) {
-        assert(type == parameters::types::screen_view ||
-               type == parameters::types::event ||
-               type == parameters::types::timing);
-        setParameter(parameters::hit_type, type);
-    }
-
-    HitBuilder& setParameter(const std::string& key, const std::string& value) {
-        dict_[key] = value;
-        return *this;
-    }
-
-    Dict build() const {
-        Dict result;
-        for (auto&& elt : dict_) {
-            result["&" + elt.first] = elt.second;
-        }
-        return result;
-    }
-
-private:
-    Dict dict_;
-};
+std::string make_parameter(const std::string& parameter) {
+    return "&" + parameter;
+}
 } // namespace
+
+template <class T>
+T& HitBuilders::Internal<T>::set(const std::string& paramName,
+                                 const std::string& paramValue) {
+    dict_[paramName] = paramValue;
+    return static_cast<T&>(*this);
+}
+
+template <class T>
+T& HitBuilders::Internal<T>::setCustomDimenstion(int index,
+                                                 const std::string& dimension) {
+    // FIXME.
+    return static_cast<T&>(*this);
+}
+
+template <class T>
+T& HitBuilders::Internal<T>::setCustomMetric(int index, float metric) {
+    // FIXME.
+    return static_cast<T&>(*this);
+}
+
+template <class T>
+std::map<std::string, std::string> HitBuilders::Internal<T>::build() const {
+    return dict_;
+}
+
+template <class T>
+T& HitBuilders::Internal<T>::setHitType(const std::string& hitType) {
+    return set(make_parameter(parameters::hit_type), hitType);
+}
+
+template class HitBuilders::Internal<HitBuilders::ScreenViewBuilder>;
+template class HitBuilders::Internal<HitBuilders::ExceptionBuilder>;
+template class HitBuilders::Internal<HitBuilders::TimingBuilder>;
+template class HitBuilders::Internal<HitBuilders::SocialBuilder>;
+template class HitBuilders::Internal<HitBuilders::EventBuilder>;
+
+HitBuilders::ScreenViewBuilder::ScreenViewBuilder() {
+    setHitType(parameters::types::screen_view);
+}
+
+HitBuilders::ExceptionBuilder::ExceptionBuilder() {
+    setHitType(parameters::types::exception);
+}
+
+HitBuilders::ExceptionBuilder&
+HitBuilders::ExceptionBuilder::setDescription(const std::string& description) {
+    return set(make_parameter(parameters::exception_description), description);
+}
+
+HitBuilders::ExceptionBuilder&
+HitBuilders::ExceptionBuilder::setFatal(bool fatal) {
+    return set(make_parameter(parameters::is_exception_fatal),
+               std::to_string(fatal));
+}
+
+HitBuilders::TimingBuilder::TimingBuilder() {
+    setHitType(parameters::types::timing);
+}
+
+HitBuilders::TimingBuilder&
+HitBuilders::TimingBuilder::setVariable(const std::string& variable) {
+    return set(make_parameter(parameters::timing_variable_name), variable);
+}
+
+HitBuilders::TimingBuilder& HitBuilders::TimingBuilder::setValue(int value) {
+    return set(make_parameter(parameters::timing_time), std::to_string(value));
+}
+
+HitBuilders::TimingBuilder&
+HitBuilders::TimingBuilder::setCategory(const std::string& category) {
+    return set(make_parameter(parameters::timing_category), category);
+}
+
+HitBuilders::TimingBuilder&
+HitBuilders::TimingBuilder::setLabel(const std::string& label) {
+    return set(make_parameter(parameters::timing_label), label);
+}
+
+HitBuilders::SocialBuilder::SocialBuilder() {
+    setTarget(parameters::types::social);
+}
+
+HitBuilders::SocialBuilder&
+HitBuilders::SocialBuilder::setNetwork(const std::string& network) {
+    return set(make_parameter(parameters::social_network), network);
+}
+
+HitBuilders::SocialBuilder&
+HitBuilders::SocialBuilder::setAction(const std::string& action) {
+    return set(make_parameter(parameters::social_action), action);
+}
+
+HitBuilders::SocialBuilder&
+HitBuilders::SocialBuilder::setTarget(const std::string& target) {
+    return set(make_parameter(parameters::social_action_target), target);
+}
+
+HitBuilders::EventBuilder::EventBuilder() {
+    setHitType(parameters::types::event);
+}
+
+HitBuilders::EventBuilder&
+HitBuilders::EventBuilder::setCategory(const std::string& category) {
+    return set(make_parameter(parameters::event_category), category);
+}
+
+HitBuilders::EventBuilder&
+HitBuilders::EventBuilder::setAction(const std::string& action) {
+    return set(make_parameter(parameters::event_action), action);
+}
+
+HitBuilders::EventBuilder&
+HitBuilders::EventBuilder::setLabel(const std::string& label) {
+    return set(make_parameter(parameters::event_label), label);
+}
+
+HitBuilders::EventBuilder& HitBuilders::EventBuilder::setValue(int value) {
+    return set(make_parameter(parameters::event_value), std::to_string(value));
+}
 
 GoogleProtocolAnalytics::GoogleProtocolAnalytics() = default;
 
@@ -107,41 +203,38 @@ void GoogleProtocolAnalytics::stopPeriodicalDispatch() {
 }
 
 void GoogleProtocolAnalytics::trackScreen(const std::string& screenName) {
-    setParameter(parameters::screen_name, screenName);
-    auto builder = HitBuilder(parameters::types::screen_view);
+    setParameter(make_parameter(parameters::screen_name), screenName);
+    auto builder = HitBuilders::ScreenViewBuilder();
     sendHit(builder.build());
 }
 
 void GoogleProtocolAnalytics::trackEvent(const std::string& category,
                                          const std::string& action,
                                          const std::string& label, int value) {
-    auto builder =
-        HitBuilder(parameters::types::event)
-            .setParameter(parameters::event_category, category)
-            .setParameter(parameters::event_action, action)
-            .setParameter(parameters::event_label, label)
-            .setParameter(parameters::event_value, std::to_string(value));
+    auto builder = HitBuilders::EventBuilder()
+                       .setCategory(category)
+                       .setAction(action)
+                       .setLabel(label)
+                       .setValue(value);
     sendHit(builder.build());
 }
 
 void GoogleProtocolAnalytics::trackException(const std::string& description,
                                              bool isFatal) {
-    auto builder =
-        HitBuilder(parameters::types::exception)
-            .setParameter(parameters::exception_description, description)
-            .setParameter(parameters::is_exception_fatal, isFatal ? "1" : "0");
+    auto builder = HitBuilders::ExceptionBuilder()
+                       .setDescription(description)
+                       .setFatal(isFatal);
     sendHit(builder.build());
 }
 
 void GoogleProtocolAnalytics::trackTiming(const std::string& category,
                                           int interval, const std::string& name,
                                           const std::string& label) {
-    auto builder =
-        HitBuilder(parameters::types::timing)
-            .setParameter(parameters::timing_category, category)
-            .setParameter(parameters::timing_time, std::to_string(interval))
-            .setParameter(parameters::timing_variable_name, name)
-            .setParameter(parameters::timing_label, label);
+    auto builder = HitBuilders::TimingBuilder()
+                       .setCategory(category)
+                       .setValue(interval)
+                       .setVariable(name)
+                       .setLabel(label);
     sendHit(builder.build());
 }
 
@@ -155,10 +248,10 @@ void GoogleProtocolAnalytics::trackEcommerceTransactions(
 void GoogleProtocolAnalytics::trackSocial(const std::string& network,
                                           const std::string& action,
                                           const std::string& target) {
-    auto builder = HitBuilder(parameters::types::social)
-                       .setParameter(parameters::social_network, network)
-                       .setParameter(parameters::social_action, action)
-                       .setParameter(parameters::social_action_target, target);
+    auto builder = HitBuilders::SocialBuilder()
+                       .setNetwork(network)
+                       .setAction(action)
+                       .setTarget(target);
     sendHit(builder.build());
 }
 
@@ -172,7 +265,7 @@ void GoogleProtocolAnalytics::enableAdvertisingTracking(bool enable) {
 
 void GoogleProtocolAnalytics::setParameter(const std::string& key,
                                            const std::string& value) {
-    callFunction(this, "setParameter", ("&" + key).c_str(), value.c_str());
+    callFunction(this, "setParameter", key.c_str(), value.c_str());
 }
 
 void GoogleProtocolAnalytics::sendHit(

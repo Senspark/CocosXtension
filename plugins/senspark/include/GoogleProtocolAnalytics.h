@@ -23,6 +23,92 @@ enum class GALogLevel {
     VERBOSE = 4
 };
 
+class HitBuilders {
+private:
+    /// https://developers.google.com/android/reference/com/google/android/gms/analytics/HitBuilders.HitBuilder
+    /// Internal class to provide common builder class methods. The most
+    /// important methods from this class are the setXYZ and build methods.
+    /// These methods can be used to set individual properties on the hit and
+    /// then build it so that it is ready to be passed into the tracker.
+    template <class T> class Internal {
+    public:
+        /// Sets the value for the given parameter name.
+        /// @param paramName The name of the parameter that should be sent over
+        /// wire. This value should start with "&".
+        /// @param paramValue The value to be sent over the wire for the given
+        /// parameter.
+        T& set(const std::string& paramName, const std::string& paramValue);
+
+        /// Adds a custom dimension to the current hit builder. Calling this
+        /// method with the same index will overwrite the previous dimension
+        /// with the new one.
+        /// @param index The index/slot in which the dimension will be set.
+        /// @param dimension The value of the dimension for the given index.
+        T& setCustomDimenstion(int index, const std::string& dimension);
+
+        /// Adds a custom metric to the current hit builder. Calling this method
+        /// with the same index will overwrite the previous metric with the new
+        /// one.
+        /// @param index The index/slot in which the dimension will be set.
+        /// @param metric The value of the metric for the given index.
+        T& setCustomMetric(int index, float metric);
+
+        /// Builds a Map of parameters and values that can be set on the Tracker
+        /// object.
+        /// @return A map of string keys to string values that can be passed
+        /// into the tracker for one or more hits.
+        std::map<std::string, std::string> build() const;
+
+    protected:
+        /// Sets the type of the hit to be sent. This can be used to reuse the
+        /// builder object for multiple hit types.
+        /// @param hitType The value of the Hit.
+        T& setHitType(const std::string& hitType);
+
+    private:
+        std::map<std::string, std::string> dict_;
+    };
+
+public:
+    class ScreenViewBuilder : public Internal<ScreenViewBuilder> {
+    public:
+        ScreenViewBuilder();
+    };
+
+    class ExceptionBuilder : public Internal<ExceptionBuilder> {
+    public:
+        ExceptionBuilder();
+        ExceptionBuilder& setDescription(const std::string& description);
+        ExceptionBuilder& setFatal(bool fatal);
+    };
+
+    class TimingBuilder : public Internal<TimingBuilder> {
+    public:
+        TimingBuilder();
+        TimingBuilder& setVariable(const std::string& variable);
+        TimingBuilder& setValue(int value);
+        TimingBuilder& setCategory(const std::string& category);
+        TimingBuilder& setLabel(const std::string& label);
+    };
+
+    class SocialBuilder : public Internal<SocialBuilder> {
+    public:
+        SocialBuilder();
+        SocialBuilder& setNetwork(const std::string& network);
+        SocialBuilder& setAction(const std::string& action);
+        SocialBuilder& setTarget(const std::string& target);
+    };
+
+    class EventBuilder : public Internal<EventBuilder> {
+    public:
+        EventBuilder();
+        EventBuilder& setCategory(const std::string& category);
+        EventBuilder& setAction(const std::string& action);
+        EventBuilder& setLabel(const std::string& label);
+        EventBuilder& setValue(int value);
+    };
+};
+
 class GoogleProtocolAnalytics : public cocos2d::plugin::ProtocolAnalytics {
 public:
     GoogleProtocolAnalytics();
