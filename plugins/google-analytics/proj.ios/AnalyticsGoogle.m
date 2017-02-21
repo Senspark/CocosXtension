@@ -251,4 +251,15 @@
     [self _checkDictionary:dict dict:expectedDict];
 }
 
+- (void)_testCustomDimensionAndMetric:(NSDictionary*)dict {
+    GAIDictionaryBuilder* builder = [GAIDictionaryBuilder createScreenView];
+    [builder set:@"1" forKey:[GAIFields customMetricForIndex:1]];
+    [builder set:@"2" forKey:[GAIFields customMetricForIndex:2]];
+    [builder set:@"5.5" forKey:[GAIFields customMetricForIndex:5]];
+    [builder set:@"dimension_1" forKey:[GAIFields customDimensionForIndex:1]];
+    [builder set:@"dimension_2" forKey:[GAIFields customDimensionForIndex:2]];
+
+    NSDictionary* expectedDict = [builder build];
+    [self _checkDictionary:dict dict:expectedDict];
+}
 @end

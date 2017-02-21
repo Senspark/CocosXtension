@@ -535,6 +535,7 @@ void GoogleProtocolAnalytics::doTests() {
     testTrackException();
     testTrackSocial();
     testEcommerce();
+    testCustomDimensionAndMetric();
 }
 
 void GoogleProtocolAnalytics::testTrackScreenView() {
@@ -581,7 +582,16 @@ void GoogleProtocolAnalytics::testEcommerce() {
     testBothImpressionAndAction();
 }
 
-void GoogleProtocolAnalytics::testImpression() {}
+void GoogleProtocolAnalytics::testCustomDimensionAndMetric() {
+    callFunction(this, "_testCustomDimensionAndMetric",
+                 HitBuilders::ScreenViewBuilder()
+                     .setCustomMetric(1, 1)
+                     .setCustomMetric(2, 2)
+                     .setCustomMetric(5, 5.5f)
+                     .setCustomDimension(1, "dimension_1")
+                     .setCustomDimension(2, "dimension_2")
+                     .build());
+}
 
 void GoogleProtocolAnalytics::testAction() {}
 

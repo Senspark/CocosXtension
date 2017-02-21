@@ -177,7 +177,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
         if (builtDict.equals(expectedDict)) {
             // Ok.
         } else {
-            Log.wtf(LOG_TAG, "Dictionary unmatched: " + builtDict + " vs " + expectedDict);
+            Log.wtf(LOG_TAG, "Dictionary mismatched: " + builtDict + " vs " + expectedDict);
         }
     }
 
@@ -232,6 +232,20 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
             .setNetwork("network")
             .setAction("action")
             .setTarget("target")
+            .build();
+        _checkDictionary(dict, expectedDict);
+    }
+
+    @SuppressWarnings("unused") // JNI method.
+    private void _testCustomDimensionAndMetric(JSONObject json) throws JSONException {
+        logD("_testCustomDimensionAndMetric");
+        Map<String, String> dict = _convertToMap(json);
+        Map<String, String> expectedDict = new HitBuilders.ScreenViewBuilder()
+            .setCustomMetric(1, 1)
+            .setCustomMetric(2, 2)
+            .setCustomMetric(5, 5.5f)
+            .setCustomDimension(1, "dimension_1")
+            .setCustomDimension(2, "dimension_2")
             .build();
         _checkDictionary(dict, expectedDict);
     }

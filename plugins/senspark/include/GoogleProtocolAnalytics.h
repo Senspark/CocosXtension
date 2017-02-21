@@ -367,6 +367,7 @@ private:
     void testTrackTiming();
     void testTrackException();
     void testTrackSocial();
+    void testCustomDimensionAndMetric();
     void testEcommerce();
     void testImpression();
     void testAction();
