@@ -450,7 +450,7 @@ void GoogleProtocolAnalytics::stopPeriodicalDispatch() {
 }
 
 void GoogleProtocolAnalytics::trackScreen(const std::string& screenName) {
-    setParameter(make_parameter(parameters::screen_name), screenName);
+    setScreenName(screenName);
     auto builder = HitBuilders::ScreenViewBuilder();
     sendHit(builder.build());
 }
@@ -513,6 +513,10 @@ void GoogleProtocolAnalytics::enableAdvertisingTracking(bool enable) {
 void GoogleProtocolAnalytics::setParameter(const std::string& key,
                                            const std::string& value) {
     callFunction(this, "setParameter", key.c_str(), value.c_str());
+}
+
+void GoogleProtocolAnalytics::setScreenName(const std::string& screenName) {
+    setParameter(make_parameter(parameters::screen_name), screenName);
 }
 
 void GoogleProtocolAnalytics::sendHit(

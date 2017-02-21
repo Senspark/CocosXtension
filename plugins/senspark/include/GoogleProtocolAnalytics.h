@@ -339,8 +339,24 @@ public:
 
     void enableAdvertisingTracking(bool enable);
 
+    /// Sets the model value for the given key. All subsequent track or send
+    /// calls will send this key-value pair along as well. To remove a
+    /// particular field, simply set the value to null.
+    /// @param key The key of the field that needs to be set. It starts with "&"
+    /// followed by the parameter name. The complete list of fields can be found
+    /// at https://goo.gl/M6dK2U.
+    /// @param value A string value to be sent to Google servers. A null value
+    /// denotes that the value should not be sent over wire.
     void setParameter(const std::string& key, const std::string& value);
 
+    /// Set the screen name to be associated with all subsequent hits.
+    void setScreenName(const std::string& screenName);
+
+    /// Merges the model values set on this Tracker via send(Map) with params
+    /// and generates a hit to be sent. The hit may not be dispatched
+    /// immediately. Note that the hit type must set for the hit to be
+    /// considered valid. More information on this can be found at
+    /// https://goo.gl/HVIXHR.
     void sendHit(const std::map<std::string, std::string>& parameters);
 };
 NS_SENSPARK_PLUGIN_ANALYTICS_END
