@@ -371,7 +371,7 @@ HitBuilders::TimingBuilder::setLabel(const std::string& label) {
 }
 
 HitBuilders::SocialBuilder::SocialBuilder() {
-    setTarget(parameters::types::social);
+    setHitType(parameters::types::social);
 }
 
 HitBuilders::SocialBuilder&
