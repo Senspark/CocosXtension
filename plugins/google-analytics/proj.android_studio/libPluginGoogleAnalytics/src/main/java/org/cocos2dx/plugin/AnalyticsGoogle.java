@@ -7,8 +7,6 @@ import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.analytics.ecommerce.Product;
-import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +15,6 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 
 public class AnalyticsGoogle implements InterfaceAnalytics {
@@ -154,44 +151,6 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
             }
         }
     }
-
-    public void trackEcommerceTransactions(JSONObject params) {
-        try {
-            String identity = params.getString("Param1");
-            String name = params.getString("Param2");
-            String category = params.getString("Param3");
-            double price = params.getDouble("Param4");
-
-            trackEcommerceTransactions(identity, name, category, price);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void trackEcommerceTransactions(String id, String name, String category, double price) {
-        logD(String.format(Locale.getDefault(),
-            "trackEcommerceTransactions: id = %s name = %s category = %s price = %f", id, name,
-            category, price));
-        String productID = String.format("Product-%s", id);
-        String transactionID = String.format("Transaction-%s", id);
-
-        Product product =
-            new Product().setId(productID).setName(name).setCategory(category).setPrice(price);
-        ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
-            .setTransactionId(transactionID)
-            .setTransactionRevenue(price);
-
-        HitBuilders.ScreenViewBuilder builder =
-            new HitBuilders.ScreenViewBuilder().addProduct(product).setProductAction(productAction);
-
-        if (_currentTracker != null) {
-            _currentTracker.setScreenName("transaction");
-            _currentTracker.send(builder.build());
-        } else {
-            Log.e(LOG_TAG, "Log E-commerce Transactions called w/o valid tracker.");
-        }
-    }
-
 
     @SuppressWarnings("WeakerAccess")
     public void setDryRun(boolean isDryRun) {

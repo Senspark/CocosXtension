@@ -189,53 +189,6 @@
     }
 }
 
-- (void)trackEcommerceTransactions:(NSString*)identity
-                              name:(NSString*)name
-                          category:(NSString*)category
-                             price:(NSNumber*)priceValue {
-    /*
-    if (self.tracker) {
-        NSString* productID =
-            [NSString stringWithFormat:@"Product-%@", identity];
-        NSString* transactionID =
-            [NSString stringWithFormat:@"Transaction-%@", identity];
-
-        GAIEcommerceProduct* product = [[GAIEcommerceProduct alloc] init];
-        [product setId:productID];
-        [product setName:name];
-        [product setCategory:category];
-        [product setPrice:priceValue];
-        GAIDictionaryBuilder* builder =
-            [GAIDictionaryBuilder createEventWithCategory:@"Ecommerce"
-                                                   action:@"Purchase"
-                                                    label:nil
-                                                    value:nil];
-        GAIEcommerceProductAction* action =
-            [[GAIEcommerceProductAction alloc] init];
-        [action setAction:kGAIPAPurchase];
-        [action setTransactionId:transactionID];
-        [action setRevenue:priceValue];
-        [builder setProductAction:action];
-
-        // Sets the product for the next available slot, starting with 1
-        [builder addProduct:product];
-        [self.tracker send:[builder build]];
-    }
-     */
-}
-
-- (void)trackEcommerceTransactions:(NSMutableDictionary*)params {
-    NSString* identity = (NSString*)[params objectForKey:@"Param1"];
-    NSString* name = (NSString*)[params objectForKey:@"Param2"];
-    NSString* category = (NSString*)[params objectForKey:@"Param3"];
-    NSNumber* price = (NSNumber*)[params objectForKey:@"Param4"];
-
-    [self trackEcommerceTransactions:identity
-                                name:name
-                            category:category
-                               price:price];
-}
-
 - (void)setDryRun:(NSNumber*)isDryRun {
     [self setDebugMode:[isDryRun boolValue]];
 }
