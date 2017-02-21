@@ -7,6 +7,7 @@
 //
 
 #include <cassert>
+#include <sstream>
 
 #include "GoogleProtocolAnalytics.h"
 #include "senspark/utility.hpp"
@@ -19,6 +20,13 @@ namespace {
 constexpr std::size_t count_placeholders(const char* s, std::size_t index = 0) {
     return s[index] == '\0' ? 0 : (s[index] == '_') +
                                       count_placeholders(s, index + 1);
+}
+
+/// Converts float to string without trailing zero.
+std::string float_to_string(float x) {
+    std::stringstream ss;
+    ss << x;
+    return ss.str();
 }
 
 template <std::size_t Placeholders> class Parameter;
@@ -197,7 +205,7 @@ Product& Product::setName(const std::string& value) {
 }
 
 Product& Product::setPrice(float price) {
-    dict_["pr"] = std::to_string(price);
+    dict_["pr"] = float_to_string(price);
     return *this;
 }
 
@@ -228,7 +236,7 @@ ProductAction& ProductAction::setTransactionId(const std::string& value) {
 
 ProductAction& ProductAction::setTransactionRevenue(float value) {
     dict_[make_parameter(parameters::transaction_revenue)] =
-        std::to_string(value);
+        float_to_string(value);
     return *this;
 }
 
@@ -268,7 +276,7 @@ T& HitBuilders::Internal<T>::setCustomDimension(std::size_t index,
 template <class T>
 T& HitBuilders::Internal<T>::setCustomMetric(std::size_t index, float metric) {
     return set(make_parameter(parameters::custom_metric, index),
-               std::to_string(metric));
+               float_to_string(metric));
 }
 
 template <class T>
