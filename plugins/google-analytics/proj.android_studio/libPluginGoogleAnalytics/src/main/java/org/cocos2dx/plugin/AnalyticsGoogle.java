@@ -21,12 +21,11 @@ import java.util.Locale;
 import java.util.Map;
 
 public class AnalyticsGoogle implements InterfaceAnalytics {
-    protected static final String          LOG_TAG              = AnalyticsGoogle.class.getName();
-    protected              Context         _context             = null;
-    protected static       boolean         isDebug              = false;
-    protected              GoogleAnalytics _googleAnalytics     = null;
-    protected              Tracker         _currentTracker      = null;
-    protected              boolean         mCrashUncaughtEnable = false;
+    protected static final String          LOG_TAG          = AnalyticsGoogle.class.getName();
+    protected              Context         _context         = null;
+    protected static       boolean         _debugEnabled    = false;
+    protected              GoogleAnalytics _googleAnalytics = null;
+    protected              Tracker         _currentTracker  = null;
 
     private Map<String, Tracker> _registeredTrackers = null;
 
@@ -38,7 +37,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
     }
 
     private void logD(String msg) {
-        if (isDebug) {
+        if (_debugEnabled) {
             Log.d(LOG_TAG, msg);
         }
     }
@@ -54,16 +53,14 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
         createTracker(trackerId);
     }
 
-    public void createTracker(String trackerId) {
-        logD("createTracker: id = " + trackerId);
-        Tracker tracker = _registeredTrackers.get(trackerId);
-        if (null == tracker) {
-            tracker = _googleAnalytics.newTracker(trackerId);
-            _registeredTrackers.put(trackerId, tracker);
-        }
-
-        _enableTracker(tracker);
+    private Tracker _getTrackerWithId(String trackerId) {
+        return _registeredTrackers.get(trackerId);
     }
+
+    private void _registerTracker(Tracker tracker, String trackerId) {
+        _registeredTrackers.put(trackerId, tracker);
+    }
+
 
     private void _enableTracker(Tracker tracker) {
         _currentTracker = tracker;
@@ -76,13 +73,25 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
             return;
         }
 
-        Tracker tracker = _registeredTrackers.get(trackerId);
+        Tracker tracker = _getTrackerWithId(trackerId);
         if (null == tracker) {
-            logD("Trying to enable unknown _currentTracker: " + trackerId);
+            logD("Trying to enable unknown tracker id: " + trackerId);
         } else {
-            logD("Selected _currentTracker: " + trackerId);
+            logD("Selected tracker id: " + trackerId);
             _enableTracker(tracker);
         }
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void createTracker(String trackerId) {
+        logD("createTracker: id = " + trackerId);
+        Tracker tracker = _getTrackerWithId(trackerId);
+        if (null == tracker) {
+            tracker = _googleAnalytics.newTracker(trackerId);
+            _registerTracker(tracker, trackerId);
+        }
+
+        _enableTracker(tracker);
     }
 
     @SuppressWarnings("unused") // JNI method.
@@ -96,33 +105,13 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
     }
 
     @SuppressWarnings("unused") // JNI method.
-    public void dispatchPeriodically(int numberOfSeconds) {
-        _googleAnalytics.setLocalDispatchPeriod(numberOfSeconds);
+    public void dispatchPeriodically(int seconds) {
+        _googleAnalytics.setLocalDispatchPeriod(seconds);
     }
 
     @SuppressWarnings("unused") // JNI method.
     public void stopPeriodicalDispatch() {
         _googleAnalytics.setLocalDispatchPeriod(-1);
-    }
-
-    @Override
-    public void startSession(String appKey) {
-        if (this._currentTracker != null) {
-            this._currentTracker.setScreenName(appKey);
-            this._currentTracker.send(new HitBuilders.ScreenViewBuilder().setNewSession().build());
-        } else {
-            Log.e(LOG_TAG, "Start session called w/o valid _currentTracker.");
-        }
-    }
-
-    @Override
-    public void stopSession() {
-        if (this._currentTracker != null) {
-            this._currentTracker.send(
-                (new HitBuilders.ScreenViewBuilder().set("&sc", "end")).build());
-        } else {
-            Log.e(LOG_TAG, "Start session called w/o valid _currentTracker.");
-        }
     }
 
     private void _setParameter(String key, String value) {
@@ -195,24 +184,45 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
         HitBuilders.ScreenViewBuilder builder =
             new HitBuilders.ScreenViewBuilder().addProduct(product).setProductAction(productAction);
 
-        if (this._currentTracker != null) {
-            this._currentTracker.setScreenName("transaction");
-            this._currentTracker.send(builder.build());
+        if (_currentTracker != null) {
+            _currentTracker.setScreenName("transaction");
+            _currentTracker.send(builder.build());
         } else {
-            Log.e(LOG_TAG, "Log Ecommerce Transactions called w/o valid _currentTracker.");
+            Log.e(LOG_TAG, "Log E-commerce Transactions called w/o valid tracker.");
         }
     }
 
 
-    void setDryRun(boolean isDryRun) {
+    @SuppressWarnings("WeakerAccess")
+    public void setDryRun(boolean isDryRun) {
         _googleAnalytics.setDryRun(isDryRun);
     }
 
-    void enableAdvertisingTracking(boolean enabled) {
-        if (null != this._currentTracker) {
-            this._currentTracker.enableAdvertisingIdCollection(enabled);
+    @SuppressWarnings("unused")
+    public void enableAdvertisingTracking(boolean enabled) {
+        if (null != _currentTracker) {
+            _currentTracker.enableAdvertisingIdCollection(enabled);
         } else {
-            Log.e(LOG_TAG, "Advertising called w/o valid _currentTracker.");
+            Log.e(LOG_TAG, "Advertising called w/o valid tracker.");
+        }
+    }
+
+    @Override
+    public void startSession(String appKey) {
+        if (_currentTracker != null) {
+            _currentTracker.setScreenName(appKey);
+            _currentTracker.send(new HitBuilders.ScreenViewBuilder().setNewSession().build());
+        } else {
+            Log.e(LOG_TAG, "Start session called w/o valid tracker.");
+        }
+    }
+
+    @Override
+    public void stopSession() {
+        if (_currentTracker != null) {
+            _currentTracker.send((new HitBuilders.ScreenViewBuilder().set("&sc", "end")).build());
+        } else {
+            Log.e(LOG_TAG, "Start session called w/o valid tracker.");
         }
     }
 
@@ -223,15 +233,13 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 
     @Override
     public void setCaptureUncaughtException(boolean isEnabled) {
-        mCrashUncaughtEnable = isEnabled;
-
         if (isEnabled) {
             if (null != _currentTracker) {
                 UncaughtExceptionHandler myHandler = new ExceptionReporter(_currentTracker,
                     Thread.getDefaultUncaughtExceptionHandler(), _context);
                 Thread.setDefaultUncaughtExceptionHandler(myHandler);
             } else {
-                Log.e(LOG_TAG, "setCaptureUncaughtException called w/o valid _currentTracker.");
+                Log.e(LOG_TAG, "setCaptureUncaughtException called w/o valid tracker.");
             }
         } else {
             Thread.setDefaultUncaughtExceptionHandler(null);
@@ -240,8 +248,8 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 
     @Override
     public void setDebugMode(boolean isDebugMode) {
-        isDebug = isDebugMode;
-        setDryRun(isDebug);
+        _debugEnabled = isDebugMode;
+        setDryRun(_debugEnabled);
     }
 
     @Override
@@ -278,5 +286,4 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
     public String getPluginVersion() {
         return "0.9.0";
     }
-
 }

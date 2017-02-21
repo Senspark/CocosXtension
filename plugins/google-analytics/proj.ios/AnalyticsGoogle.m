@@ -32,6 +32,10 @@
     return self;
 }
 
+- (void)dealloc {
+    [self setRegisteredTrackers:nil];
+}
+
 - (void)startSession:(NSString*)appKey {
     if ([self currentTracker] != nil) {
         // Start a new session with a screenView hit.
@@ -104,7 +108,6 @@
     }
 
     OUTPUT_LOG(@"Configure with trackerId: %@", trackerId);
-
     [self createTracker:trackerId];
 }
 
