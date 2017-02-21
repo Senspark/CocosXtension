@@ -523,6 +523,65 @@ void GoogleProtocolAnalytics::sendHit(
     const std::map<std::string, std::string>& parameters) {
     callFunction(this, "sendHit", parameters);
 }
+
+void GoogleProtocolAnalytics::doTests() {
+    testTrackScreenView();
+    testTrackEvent();
+    testTrackTiming();
+    testTrackException();
+    testTrackSocial();
+    testEcommerce();
+}
+
+void GoogleProtocolAnalytics::testTrackScreenView() {
+    callFunction(this, "_testTrackScreenView",
+                 HitBuilders::ScreenViewBuilder().build());
+}
+
+void GoogleProtocolAnalytics::testTrackEvent() {
+    callFunction(this, "_testTrackEvent", HitBuilders::EventBuilder()
+                                              .setCategory("category")
+                                              .setAction("action")
+                                              .setLabel("label")
+                                              .setValue(1)
+                                              .build());
+}
+
+void GoogleProtocolAnalytics::testTrackTiming() {
+    callFunction(this, "_testTrackTiming", HitBuilders::TimingBuilder()
+                                               .setCategory("category")
+                                               .setVariable("variable")
+                                               .setLabel("label")
+                                               .setValue(1)
+                                               .build());
+}
+
+void GoogleProtocolAnalytics::testTrackException() {
+    callFunction(this, "_testTrackException", HitBuilders::ExceptionBuilder()
+                                                  .setDescription("description")
+                                                  .setFatal(true)
+                                                  .build());
+}
+
+void GoogleProtocolAnalytics::testTrackSocial() {
+    callFunction(this, "_testTrackSocial", HitBuilders::SocialBuilder()
+                                               .setNetwork("network")
+                                               .setAction("action")
+                                               .setTarget("target")
+                                               .build());
+}
+
+void GoogleProtocolAnalytics::testEcommerce() {
+    testImpression();
+    testAction();
+    testBothImpressionAndAction();
+}
+
+void GoogleProtocolAnalytics::testImpression() {}
+
+void GoogleProtocolAnalytics::testAction() {}
+
+void GoogleProtocolAnalytics::testBothImpressionAndAction() {}
 } // namespace analytics
 } // namespace plugin
 } // namespace senspark

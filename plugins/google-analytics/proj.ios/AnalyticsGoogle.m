@@ -202,4 +202,53 @@
     }
 }
 
+- (void)_checkDictionary:(NSDictionary*)builtDict
+                    dict:(NSDictionary*)expectedDict {
+    if ([builtDict isEqualToDictionary:expectedDict]) {
+        // Ok.
+    } else {
+        NSLog(@"Dictionary unmatched: %@ vs %@", builtDict, expectedDict);
+        NSAssert(NO, @"..");
+    }
+}
+
+- (void)_testTrackScreenView:(NSDictionary*)dict {
+    NSDictionary* expectedDict =
+        [[GAIDictionaryBuilder createScreenView] build];
+    [self _checkDictionary:dict dict:expectedDict];
+}
+
+- (void)_testTrackEvent:(NSDictionary*)dict {
+    NSDictionary* expectedDict =
+        [[GAIDictionaryBuilder createEventWithCategory:@"category"
+                                                action:@"action"
+                                                 label:@"label"
+                                                 value:@(1)] build];
+    [self _checkDictionary:dict dict:expectedDict];
+}
+
+- (void)_testTrackTiming:(NSDictionary*)dict {
+    NSDictionary* expectedDict =
+        [[GAIDictionaryBuilder createTimingWithCategory:@"category"
+                                               interval:@(1)
+                                                   name:@"variable"
+                                                  label:@"label"] build];
+    [self _checkDictionary:dict dict:expectedDict];
+}
+
+- (void)_testTrackException:(NSDictionary*)dict {
+    NSDictionary* expectedDict =
+        [[GAIDictionaryBuilder createExceptionWithDescription:@"description"
+                                                    withFatal:@(YES)] build];
+    [self _checkDictionary:dict dict:expectedDict];
+}
+
+- (void)_testTrackSocial:(NSDictionary*)dict {
+    NSDictionary* expectedDict =
+        [[GAIDictionaryBuilder createSocialWithNetwork:@"network"
+                                                action:@"action"
+                                                target:@"target"] build];
+    [self _checkDictionary:dict dict:expectedDict];
+}
+
 @end

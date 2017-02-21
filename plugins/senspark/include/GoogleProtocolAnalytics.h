@@ -358,6 +358,19 @@ public:
     /// considered valid. More information on this can be found at
     /// https://goo.gl/HVIXHR.
     void sendHit(const std::map<std::string, std::string>& parameters);
+
+    void doTests();
+
+private:
+    void testTrackScreenView();
+    void testTrackEvent();
+    void testTrackTiming();
+    void testTrackException();
+    void testTrackSocial();
+    void testEcommerce();
+    void testImpression();
+    void testAction();
+    void testBothImpressionAndAction();
 };
 NS_SENSPARK_PLUGIN_ANALYTICS_END
 

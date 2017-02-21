@@ -39,6 +39,10 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
         }
     }
 
+    private void _logI(String msg) {
+        Log.i(LOG_TAG, msg);
+    }
+
     @SuppressWarnings("unused") // JNI method.
     public void configureTracker(String trackerId) {
         logD("configureTracker: id = " + trackerId);
@@ -93,6 +97,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 
     @SuppressWarnings("unused") // JNI method.
     public void setLogLevel(int logLevel) {
+        logD("setLogLevel: level = " + logLevel);
         _googleAnalytics.getLogger().setLogLevel(logLevel);
     }
 
@@ -119,6 +124,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 
     @SuppressWarnings("unused") // JNI method.
     public void setParameter(JSONObject dict) {
+        logD("setParameter: dict = " + dict);
         try {
             String param1 = dict.getString("Param1");
             String param2 = dict.getString("Param2");
@@ -154,6 +160,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 
     @SuppressWarnings("WeakerAccess")
     public void setDryRun(boolean isDryRun) {
+        logD("setDryRun: enabled = " + isDryRun);
         _googleAnalytics.setDryRun(isDryRun);
     }
 
@@ -164,6 +171,69 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
         } else {
             Log.e(LOG_TAG, "Advertising called w/o valid tracker.");
         }
+    }
+
+    private void _checkDictionary(Map<String, String> builtDict, Map<String, String> expectedDict) {
+        if (builtDict.equals(expectedDict)) {
+            // Ok.
+        } else {
+            Log.wtf(LOG_TAG, "Dictionary unmatched: " + builtDict + " vs " + expectedDict);
+        }
+    }
+
+    @SuppressWarnings("unused") // JNI method.
+    private void _testTrackScreenView(JSONObject json) throws JSONException {
+        logD("_testTrackScreenView");
+        Map<String, String> dict = _convertToMap(json);
+        Map<String, String> expectedDict = new HitBuilders.ScreenViewBuilder().build();
+        _checkDictionary(dict, expectedDict);
+    }
+
+    @SuppressWarnings("unused") // JNI method.
+    private void _testTrackEvent(JSONObject json) throws JSONException {
+        logD("_testTrackEvent");
+        Map<String, String> dict = _convertToMap(json);
+        Map<String, String> expectedDict = new HitBuilders.EventBuilder()
+            .setCategory("category")
+            .setAction("action")
+            .setLabel("label")
+            .setValue(1)
+            .build();
+        _checkDictionary(dict, expectedDict);
+    }
+
+    @SuppressWarnings("unused") // JNI method.
+    private void _testTrackTiming(JSONObject json) throws JSONException {
+        logD("_testTrackTiming");
+        Map<String, String> dict = _convertToMap(json);
+        Map<String, String> expectedDict = new HitBuilders.TimingBuilder()
+            .setCategory("category")
+            .setValue(1)
+            .setVariable("variable")
+            .setLabel("label")
+            .build();
+        _checkDictionary(dict, expectedDict);
+    }
+
+    @SuppressWarnings("unused") // JNI method.
+    private void _testTrackException(JSONObject json) throws JSONException {
+        logD("_testTrackException");
+        Map<String, String> dict = _convertToMap(json);
+        Map<String, String> expectedDict =
+            new HitBuilders.ExceptionBuilder().setDescription("description").setFatal(true).build();
+        _checkDictionary(dict, expectedDict);
+    }
+
+    @SuppressWarnings("unused") // JNI method.
+    private void _testTrackSocial(JSONObject json) throws JSONException {
+        logD("_testTrackSocial");
+        Map<String, String> dict = _convertToMap(json);
+        Map<String, String> expectedDict = new HitBuilders.SocialBuilder()
+            .setNetwork("network")
+            .setAction("action")
+            .setTarget("target")
+            .build();
+        _checkDictionary(dict, expectedDict);
     }
 
     @Override
@@ -207,6 +277,7 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
 
     @Override
     public void setDebugMode(boolean isDebugMode) {
+        _logI("setDebugMode: enabled = " + isDebugMode);
         _debugEnabled = isDebugMode;
         setDryRun(_debugEnabled);
     }
