@@ -7,6 +7,8 @@ import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.ecommerce.Product;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +17,9 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class AnalyticsGoogle implements InterfaceAnalytics {
     protected static final String          LOG_TAG          = AnalyticsGoogle.class.getName();
@@ -174,10 +178,20 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
     }
 
     private void _checkDictionary(Map<String, String> builtDict, Map<String, String> expectedDict) {
-        if (builtDict.equals(expectedDict)) {
-            // Ok.
-        } else {
-            Log.wtf(LOG_TAG, "Dictionary mismatched: " + builtDict + " vs " + expectedDict);
+        if (builtDict.size() != expectedDict.size()) {
+            Log.wtf(LOG_TAG, String.format(Locale.getDefault(),
+                "Dictionary size mismatched: expected %d found %d", expectedDict.size(),
+                builtDict.size()));
+            return;
+        }
+        Set<String> allKeys = expectedDict.keySet();
+        for (String key : allKeys) {
+            String expectedValue = expectedDict.get(key);
+            String value = builtDict.get(key);
+            if (!expectedValue.equals(value)) {
+                Log.wtf(LOG_TAG, String.format(Locale.getDefault(),
+                    "Element value mismatched: expected %s found %s", expectedValue, value));
+            }
         }
     }
 
@@ -247,6 +261,52 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
             .setCustomDimension(1, "dimension_1")
             .setCustomDimension(2, "dimension_2")
             .build();
+        _checkDictionary(dict, expectedDict);
+    }
+
+    @SuppressWarnings("unused") // JNI method.
+    private void _testEcommerceImpression(JSONObject json) throws JSONException {
+        logD("_testEcommerceImpression");
+        Map<String, String> dict = _convertToMap(json);
+
+        Product product0 =
+            new Product().setCategory("category0").setId("id0").setName("name0").setPrice(1.5);
+        Product product1 =
+            new Product().setCategory("category1").setId("id1").setName("name1").setPrice(2.5);
+        Product product2 =
+            new Product().setCategory("category2").setId("id2").setName("name2").setPrice(3.0);
+        Product product3 =
+            new Product().setCategory("category3").setId("id3").setName("name3").setPrice(4);
+        Map<String, String> expectedDict = new HitBuilders.ScreenViewBuilder()
+            .addImpression(product0, "impressionList0")
+            .addImpression(product1, "impressionList0")
+            .addImpression(product2, "impressionList1")
+            .addImpression(product3, "impressionList1")
+            .build();
+
+        _checkDictionary(dict, expectedDict);
+    }
+
+    @SuppressWarnings("unused") // JNI method.
+    private void _testEcommerceAction(JSONObject json) throws JSONException {
+        logD("_testEcommerceAction");
+        Map<String, String> dict = _convertToMap(json);
+
+        Product product0 =
+            new Product().setCategory("category0").setId("id0").setName("name0").setPrice(1.5);
+        Product product1 =
+            new Product().setCategory("category1").setId("id1").setName("name1").setPrice(2);
+        ProductAction action = new ProductAction(ProductAction.ACTION_PURCHASE)
+            .setProductActionList("actionList")
+            .setProductListSource("listSource")
+            .setTransactionId("transactionId")
+            .setTransactionRevenue(2.0);
+        Map<String, String> expectedDict = new HitBuilders.ScreenViewBuilder()
+            .addProduct(product0)
+            .addProduct(product1)
+            .setProductAction(action)
+            .build();
+
         _checkDictionary(dict, expectedDict);
     }
 

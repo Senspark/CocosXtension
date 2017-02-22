@@ -204,12 +204,24 @@
 
 - (void)_checkDictionary:(NSDictionary*)builtDict
                     dict:(NSDictionary*)expectedDict {
-    if ([builtDict isEqualToDictionary:expectedDict]) {
-        // Ok.
-    } else {
-        NSLog(@"Dictionary unmatched: %@ vs %@", builtDict, expectedDict);
-        NSAssert(NO, @"..");
+    if ([builtDict count] != [expectedDict count]) {
+        NSLog(@"Dictionary size mismatched: expected %d found %d",
+              (int)([expectedDict count]), (int)([builtDict count]));
+        NSAssert(NO, @"...");
+        return;
     }
+    BOOL matched = YES;
+    NSArray* allKeys = [expectedDict allKeys];
+    for (NSString* key in allKeys) {
+        NSString* expectedValue = [expectedDict valueForKey:key];
+        NSString* value = [builtDict valueForKey:key];
+        if (![value isEqualToString:expectedValue]) {
+            NSLog(@"Element value mismatched: expected %@ found %@",
+                  expectedValue, value);
+            matched = NO;
+        }
+    }
+    NSAssert(matched, @"...");
 }
 
 - (void)_testTrackScreenView:(NSDictionary*)dict {
