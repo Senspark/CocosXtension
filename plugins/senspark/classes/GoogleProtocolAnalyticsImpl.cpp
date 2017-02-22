@@ -29,24 +29,30 @@ std::string float_to_string(float x) {
     return ss.str();
 }
 
-template <std::size_t Placeholders> class Parameter;
+/// Merges two maps.
+void merge(TrackingDict& lhs, const TrackingDict& rhs) {
+    for (auto&& elt : rhs) {
+        lhs[elt.first] = elt.second;
+    }
+}
 
-template <> class Parameter<0> {
+template <std::size_t Placeholders,
+          std::size_t Parameters = (Placeholders > 1 ? Placeholders : 1)>
+class Parameter {
 public:
-    constexpr explicit Parameter(const char* x)
-        : x_(x) {}
+    template <class... Args, class = typename std::enable_if<sizeof...(Args) ==
+                                                             Parameters>::type>
+    constexpr explicit Parameter(Args&&... args)
+        : s_{args...} {}
 
-    const char* x_;
-};
+    template <std::size_t Index,
+              class = typename std::enable_if<(Index < Parameters)>::type>
+    constexpr const char* get() const {
+        return s_[Index];
+    }
 
-template <> class Parameter<1> {
-public:
-    constexpr explicit Parameter(const char* x, const char* y = "")
-        : x_(x)
-        , y_(y) {}
-
-    const char* x_;
-    const char* y_;
+private:
+    const char* s_[Parameters];
 };
 
 namespace parameters {
@@ -178,15 +184,44 @@ constexpr auto transaction_revenue = Parameter<0>("tr");
 constexpr auto product_action_list = Parameter<0>("pal");
 
 constexpr auto product_list_source = Parameter<0>("pls");
+
+/// https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#pr_id
+/// Product SKU.
+/// Product Name.
+/// Product Brand.
+/// Product Category.
+/// Product Variant.
+/// Product Price.
+/// Product Quantity.
+/// Product Coupon Code.
+/// Product Position.
+/// Product Custom Dimension.
+/// Product Custom Metric.
+constexpr auto product_prefix = Parameter<1>("pr");
+
+constexpr auto product_impression_prefix = Parameter<2>("il", "pi");
+
+constexpr auto product_impression_list_name = Parameter<1, 2>("il", "nm");
 } // namespace parameters
 
 std::string make_parameter(const Parameter<0>& parameter) {
-    return std::string("&") + parameter.x_;
+    return std::string("&") + parameter.get<0>();
 }
 
 std::string make_parameter(const Parameter<1>& parameter, std::size_t index) {
-    return std::string("&") + parameter.x_ + std::to_string(index) +
-           parameter.y_;
+    return std::string("&") + parameter.get<0>() + std::to_string(index);
+}
+
+std::string make_parameter(const Parameter<1, 2>& parameter,
+                           std::size_t index) {
+    return std::string("&") + parameter.get<0>() + std::to_string(index) +
+           parameter.get<1>();
+}
+
+std::string make_parameter(const Parameter<2>& parameter, std::size_t index0,
+                           std::size_t index1) {
+    return std::string("&") + parameter.get<0>() + std::to_string(index0) +
+           parameter.get<1>() + std::to_string(index1);
 }
 } // namespace
 Product& Product::setCategory(const std::string& value) {
@@ -207,6 +242,24 @@ Product& Product::setName(const std::string& value) {
 Product& Product::setPrice(float price) {
     dict_["pr"] = float_to_string(price);
     return *this;
+}
+
+TrackingDict Product::build(std::size_t productIndex) const {
+    return build(make_parameter(parameters::product_prefix, productIndex));
+}
+
+TrackingDict Product::build(std::size_t listIndex,
+                            std::size_t productIndex) const {
+    return build(make_parameter(parameters::product_impression_prefix,
+                                listIndex, productIndex));
+}
+
+TrackingDict Product::build(const std::string& prefix) const {
+    TrackingDict result;
+    for (auto&& elt : dict_) {
+        result[prefix + elt.first] = elt.second;
+    }
+    return result;
 }
 
 const std::string ProductAction::ActionAdd = "add";
@@ -239,6 +292,8 @@ ProductAction& ProductAction::setTransactionRevenue(float value) {
         float_to_string(value);
     return *this;
 }
+
+TrackingDict ProductAction::build() const { return dict_; }
 
 template <class T>
 T& HitBuilders::Internal<T>::addImpression(const Product& product,
@@ -279,28 +334,21 @@ T& HitBuilders::Internal<T>::setCustomMetric(std::size_t index, float metric) {
                float_to_string(metric));
 }
 
-template <class T>
-std::map<std::string, std::string> HitBuilders::Internal<T>::build() const {
+template <class T> TrackingDict HitBuilders::Internal<T>::build() const {
     auto result = dict_;
     for (std::size_t i = 0; i < products_.size(); ++i) {
-        for (auto&& elt : products_[i].dict_) {
-            result["&pr" + std::to_string(i + 1) + elt.first] = elt.second;
-        }
+        merge(result, products_[i].build(i));
     }
     if (not productAction_.empty()) {
-        for (auto&& elt : productAction_[0].dict_) {
-            result["&" + elt.first] = elt.second;
-        }
+        merge(result, productAction_[0].build());
     }
     if (not impressions_.empty()) {
         std::size_t listIndex = 0;
         for (auto&& elt : impressions_) {
-            result["&il" + std::to_string(listIndex + 1) + "nm"] = elt.first;
+            result[make_parameter(parameters::product_impression_list_name,
+                                  listIndex)] = elt.first;
             for (std::size_t i = 0; i < elt.second.size(); ++i) {
-                for (auto&& p_elt : elt.second[i].dict_) {
-                    result["&il" + std::to_string(listIndex + 1) + "pi" +
-                           std::to_string(i + 1) + p_elt.first] = p_elt.second;
-                }
+                merge(result, elt.second[i].build(listIndex, i));
             }
             ++listIndex;
         }
@@ -523,8 +571,7 @@ void GoogleProtocolAnalytics::setScreenName(const std::string& screenName) {
     setParameter(make_parameter(parameters::screen_name), screenName);
 }
 
-void GoogleProtocolAnalytics::sendHit(
-    const std::map<std::string, std::string>& parameters) {
+void GoogleProtocolAnalytics::sendHit(const TrackingDict& parameters) {
     callFunction(this, "sendHit", parameters);
 }
 

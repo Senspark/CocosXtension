@@ -25,6 +25,8 @@ enum class GALogLevel {
     VERBOSE = 4
 };
 
+using TrackingDict = std::map<std::string, std::string>;
+
 class Product;
 class ProductAction;
 
@@ -49,8 +51,6 @@ public:
 /// String).
 class Product {
 public:
-    template <class T> friend class HitBuilders::Internal;
-
     /// Sets the category associated with the product in GA reports.
     /// @param value The product's category. Example: "Toys"
     /// @return Returns the same object to enable chaining of methods.
@@ -71,8 +71,22 @@ public:
     /// @return Returns the same object to enable chaining of methods.
     Product& setPrice(float price);
 
+    /// Builds a Map of fields stored in this instance suitable for a product
+    /// action.
+    /// @param productIndex The index of this product in the product action
+    /// list.
+    TrackingDict build(std::size_t productIndex) const;
+
+    /// Builds a Map of fields stored in this instance suitable for an
+    /// impression list.
+    /// @param listIndex The index of the product impression list.
+    /// @param productIndex The index of this product in that impression list.
+    TrackingDict build(std::size_t listIndex, std::size_t productIndex) const;
+
 private:
-    std::map<std::string, std::string> dict_;
+    TrackingDict build(const std::string& prefix) const;
+
+    TrackingDict dict_;
 };
 
 /// https://developers.google.com/android/reference/com/google/android/gms/analytics/ecommerce/ProductAction
@@ -83,8 +97,6 @@ private:
 /// setProductAction(ProductAction).
 class ProductAction {
 public:
-    template <class T> friend class HitBuilders::Internal;
-
     /// Action to use when a product is added to the cart.
     /// Constant Value: "add"
     static const std::string ActionAdd;
@@ -151,8 +163,10 @@ public:
     /// @return Returns the same object to enable chaining of methods.
     ProductAction& setTransactionRevenue(float value);
 
+    TrackingDict build() const;
+
 private:
-    std::map<std::string, std::string> dict_;
+    TrackingDict dict_;
 };
 
 /// https://developers.google.com/android/reference/com/google/android/gms/analytics/HitBuilders.HitBuilder
@@ -201,7 +215,7 @@ public:
     /// object.
     /// @return A map of string keys to string values that can be passed
     /// into the tracker for one or more hits.
-    std::map<std::string, std::string> build() const;
+    TrackingDict build() const;
 
 protected:
     /// Sets the type of the hit to be sent. This can be used to reuse the
@@ -210,7 +224,7 @@ protected:
     T& setHitType(const std::string& hitType);
 
 private:
-    std::map<std::string, std::string> dict_;
+    TrackingDict dict_;
     std::vector<ProductAction> productAction_; /// Actually contains 1 object.
     std::vector<Product> products_;
     std::map<std::string, std::vector<Product>> impressions_;
@@ -357,7 +371,7 @@ public:
     /// immediately. Note that the hit type must set for the hit to be
     /// considered valid. More information on this can be found at
     /// https://goo.gl/HVIXHR.
-    void sendHit(const std::map<std::string, std::string>& parameters);
+    void sendHit(const TrackingDict& parameters);
 
     void doTests();
 
