@@ -546,8 +546,15 @@ void GoogleProtocolAnalytics::trackTiming(const std::string& category,
 void GoogleProtocolAnalytics::trackEcommerceTransactions(
     const std::string& identity, const std::string& productName,
     const std::string& productCategory, float priceValue) {
-    callFunction(this, "trackEcommerceTransactions", identity.c_str(),
-                 productName.c_str(), productCategory.c_str(), priceValue);
+    auto builder =
+        HitBuilders::ScreenViewBuilder()
+            .addProduct(Product()
+                            .setId(identity)
+                            .setCategory(productCategory)
+                            .setName(productName)
+                            .setPrice(priceValue))
+            .setProductAction(ProductAction(ProductAction::ActionPurchase));
+    sendHit(builder.build());
 }
 
 void GoogleProtocolAnalytics::trackSocial(const std::string& network,

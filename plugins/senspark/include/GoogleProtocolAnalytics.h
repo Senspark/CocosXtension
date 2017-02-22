@@ -225,7 +225,7 @@ protected:
 
 private:
     TrackingDict dict_;
-    std::vector<ProductAction> productAction_; /// Actually contains 1 object.
+    std::vector<ProductAction> productAction_; ///< Actually contains 1 object.
     std::vector<Product> products_;
     std::map<std::string, std::vector<Product>> impressions_;
 };
@@ -339,6 +339,8 @@ public:
     CC_DEPRECATED_ATTRIBUTE
     void trackException(const std::string& description, bool isFatal);
 
+    /// Use Product, ProductAction.
+    CC_DEPRECATED_ATTRIBUTE
     void trackEcommerceTransactions(const std::string& identity,
                                     const std::string& productName,
                                     const std::string& productCategory,
