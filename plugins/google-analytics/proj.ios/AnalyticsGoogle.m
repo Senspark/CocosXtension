@@ -262,4 +262,84 @@
     NSDictionary* expectedDict = [builder build];
     [self _checkDictionary:dict dict:expectedDict];
 }
+
+- (void)_testEcommerceImpression:(NSDictionary*)dict {
+    GAIEcommerceProduct* product0 =
+        [[[GAIEcommerceProduct alloc] init] autorelease];
+    [product0 setCategory:@"category0"];
+    [product0 setId:@"id0"];
+    [product0 setName:@"name0"];
+    [product0 setPrice:@(1.5)];
+
+    GAIEcommerceProduct* product1 =
+        [[[GAIEcommerceProduct alloc] init] autorelease];
+    [product1 setCategory:@"category1"];
+    [product1 setId:@"id1"];
+    [product1 setName:@"name1"];
+    [product1 setPrice:@(2.5)];
+
+    GAIEcommerceProduct* product2 =
+        [[[GAIEcommerceProduct alloc] init] autorelease];
+    [product2 setCategory:@"category2"];
+    [product2 setId:@"id2"];
+    [product2 setName:@"name2"];
+    [product2 setPrice:@(3.0)];
+
+    GAIEcommerceProduct* product3 =
+        [[[GAIEcommerceProduct alloc] init] autorelease];
+    [product3 setCategory:@"category3"];
+    [product3 setId:@"id3"];
+    [product3 setName:@"name3"];
+    [product3 setPrice:@(4)];
+
+    GAIDictionaryBuilder* builder = [GAIDictionaryBuilder createScreenView];
+    [builder addProductImpression:product0
+                   impressionList:@"impressionList0"
+                 impressionSource:nil];
+    [builder addProductImpression:product1
+                   impressionList:@"impressionList0"
+                 impressionSource:nil];
+    [builder addProductImpression:product2
+                   impressionList:@"impressionList1"
+                 impressionSource:nil];
+    [builder addProductImpression:product3
+                   impressionList:@"impressionList1"
+                 impressionSource:nil];
+
+    NSDictionary* expectedDict = [builder build];
+    [self _checkDictionary:dict dict:expectedDict];
+}
+
+- (void)_testEcommerceAction:(NSDictionary*)dict {
+    GAIEcommerceProduct* product0 =
+        [[[GAIEcommerceProduct alloc] init] autorelease];
+    [product0 setCategory:@"category0"];
+    [product0 setId:@"id0"];
+    [product0 setName:@"name0"];
+    [product0 setPrice:@(1.5)];
+
+    GAIEcommerceProduct* product1 =
+        [[[GAIEcommerceProduct alloc] init] autorelease];
+    [product1 setCategory:@"category1"];
+    [product1 setId:@"id1"];
+    [product1 setName:@"name1"];
+    [product1 setPrice:@(2)];
+
+    GAIEcommerceProductAction* action =
+        [[[GAIEcommerceProductAction alloc] init] autorelease];
+    [action setAction:kGAIPAPurchase];
+    [action setProductActionList:@"actionList"];
+    [action setProductListSource:@"listSource"];
+    [action setTransactionId:@"transactionId"];
+    [action setRevenue:@(2.0)];
+
+    GAIDictionaryBuilder* builder = [GAIDictionaryBuilder createScreenView];
+    [builder addProduct:product0];
+    [builder addProduct:product1];
+    [builder setProductAction:action];
+
+    NSDictionary* expectedDict = [builder build];
+    [self _checkDictionary:dict dict:expectedDict];
+}
+
 @end

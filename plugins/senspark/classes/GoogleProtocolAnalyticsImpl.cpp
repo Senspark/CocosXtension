@@ -336,19 +336,25 @@ T& HitBuilders::Internal<T>::setCustomMetric(std::size_t index, float metric) {
 
 template <class T> TrackingDict HitBuilders::Internal<T>::build() const {
     auto result = dict_;
-    for (std::size_t i = 0; i < products_.size(); ++i) {
-        merge(result, products_[i].build(i));
+    if (not products_.empty()) {
+        std::size_t productIndex = 1;
+        for (auto&& product : products_) {
+            merge(result, product.build(productIndex));
+            ++productIndex;
+        }
     }
     if (not productAction_.empty()) {
         merge(result, productAction_[0].build());
     }
     if (not impressions_.empty()) {
-        std::size_t listIndex = 0;
+        std::size_t listIndex = 1;
         for (auto&& elt : impressions_) {
             result[make_parameter(parameters::product_impression_list_name,
                                   listIndex)] = elt.first;
-            for (std::size_t i = 0; i < elt.second.size(); ++i) {
-                merge(result, elt.second[i].build(listIndex, i));
+            std::size_t productIndex = 1;
+            for (auto&& product : elt.second) {
+                merge(result, product.build(listIndex, productIndex));
+                ++productIndex;
             }
             ++listIndex;
         }
@@ -581,8 +587,9 @@ void GoogleProtocolAnalytics::doTests() {
     testTrackTiming();
     testTrackException();
     testTrackSocial();
-    testEcommerce();
     testCustomDimensionAndMetric();
+    testEcommerceImpression();
+    testEcommerceAction();
 }
 
 void GoogleProtocolAnalytics::testTrackScreenView() {
@@ -623,12 +630,6 @@ void GoogleProtocolAnalytics::testTrackSocial() {
                                                .build());
 }
 
-void GoogleProtocolAnalytics::testEcommerce() {
-    testImpression();
-    testAction();
-    testBothImpressionAndAction();
-}
-
 void GoogleProtocolAnalytics::testCustomDimensionAndMetric() {
     callFunction(this, "_testCustomDimensionAndMetric",
                  HitBuilders::ScreenViewBuilder()
@@ -640,9 +641,58 @@ void GoogleProtocolAnalytics::testCustomDimensionAndMetric() {
                      .build());
 }
 
-void GoogleProtocolAnalytics::testAction() {}
+void GoogleProtocolAnalytics::testEcommerceImpression() {
+    auto product0 = Product()
+                        .setCategory("category0")
+                        .setId("id0")
+                        .setName("name0")
+                        .setPrice(1.5f);
+    auto product1 = Product()
+                        .setCategory("category1")
+                        .setId("id1")
+                        .setName("name1")
+                        .setPrice(2.5f);
+    auto product2 = Product()
+                        .setCategory("category2")
+                        .setId("id2")
+                        .setName("name2")
+                        .setPrice(3.0f);
+    auto product3 = Product()
+                        .setCategory("category3")
+                        .setId("id3")
+                        .setName("name3")
+                        .setPrice(4);
+    callFunction(this, "_testEcommerceImpression",
+                 HitBuilders::ScreenViewBuilder()
+                     .addImpression(product0, "impressionList0")
+                     .addImpression(product1, "impressionList0")
+                     .addImpression(product2, "impressionList1")
+                     .addImpression(product3, "impressionList1")
+                     .build());
+}
 
-void GoogleProtocolAnalytics::testBothImpressionAndAction() {}
+void GoogleProtocolAnalytics::testEcommerceAction() {
+    auto product0 = Product()
+                        .setCategory("category0")
+                        .setId("id0")
+                        .setName("name0")
+                        .setPrice(1.5f);
+    auto product1 = Product()
+                        .setCategory("category1")
+                        .setId("id1")
+                        .setName("name1")
+                        .setPrice(2);
+    auto action = ProductAction(ProductAction::ActionPurchase)
+                      .setProductActionList("actionList")
+                      .setProductListSource("listSource")
+                      .setTransactionId("transactionId")
+                      .setTransactionRevenue(2.0f);
+    callFunction(this, "_testEcommerceAction", HitBuilders::ScreenViewBuilder()
+                                                   .addProduct(product0)
+                                                   .addProduct(product1)
+                                                   .setProductAction(action)
+                                                   .build());
+}
 } // namespace analytics
 } // namespace plugin
 } // namespace senspark

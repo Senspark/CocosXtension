@@ -382,10 +382,8 @@ private:
     void testTrackException();
     void testTrackSocial();
     void testCustomDimensionAndMetric();
-    void testEcommerce();
-    void testImpression();
-    void testAction();
-    void testBothImpressionAndAction();
+    void testEcommerceImpression();
+    void testEcommerceAction();
 };
 NS_SENSPARK_PLUGIN_ANALYTICS_END
 
