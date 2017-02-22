@@ -33,6 +33,7 @@
 }
 
 - (void)dealloc {
+    [super dealloc];
     [self setRegisteredTrackers:nil];
 }
 
