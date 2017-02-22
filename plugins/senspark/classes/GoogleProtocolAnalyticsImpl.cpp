@@ -387,7 +387,6 @@ HitBuilders::ExceptionBuilder::ExceptionBuilder() {
 HitBuilders::ExceptionBuilder&
 HitBuilders::ExceptionBuilder::setDescription(const std::string& description) {
     return set(make_parameter(parameters::exception_description), description);
-    return set(make_parameter(parameters::exception_description), description);
 }
 
 HitBuilders::ExceptionBuilder&
