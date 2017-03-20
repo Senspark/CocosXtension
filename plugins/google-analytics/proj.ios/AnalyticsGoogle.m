@@ -33,8 +33,8 @@
 }
 
 - (void)dealloc {
-    [super dealloc];
     [self setRegisteredTrackers:nil];
+    [super dealloc];
 }
 
 - (void)startSession:(NSString*)appKey {
