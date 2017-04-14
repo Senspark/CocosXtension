@@ -190,11 +190,11 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         }
     }
 
-    public void initialize(@NonNull String applicationId) {
-        MobileAds.initialize(_context.getApplicationContext(), applicationId);
+    public void initialize(@NonNull final String applicationId) {
         _runOnMainThread(new Runnable() {
             @Override
             public void run() {
+                MobileAds.initialize(_context.getApplicationContext(), applicationId);
                 NativeCallback callback = new NativeCallback() {
                     @Override
                     public void onEvent(@NonNull Integer code, @NonNull String message) {
