@@ -190,10 +190,13 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         }
     }
 
+    @SuppressWarnings("unused")
     public void initialize(@NonNull final String applicationId) {
+        logD("initialize: applicationId = " + applicationId);
         _runOnMainThread(new Runnable() {
             @Override
             public void run() {
+                logD("initialize: main thread begin.");
                 MobileAds.initialize(_context.getApplicationContext(), applicationId);
                 NativeCallback callback = new NativeCallback() {
                     @Override
@@ -245,8 +248,10 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                         _refreshRewardedAdAvailability();
                     }
                 });
+                logD("initialize: main thread end.");
             }
         });
+        logD("initialize: end.");
     }
 
     @SuppressWarnings("unused") // JNI method.
