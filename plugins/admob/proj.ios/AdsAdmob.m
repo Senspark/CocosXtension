@@ -163,7 +163,7 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
 }
 
 - (NSString*)getSDKVersion {
-    return @"7.3.1";
+    return [GADRequest sdkVersion];
 }
 
 - (NSString*)getPluginVersion {
