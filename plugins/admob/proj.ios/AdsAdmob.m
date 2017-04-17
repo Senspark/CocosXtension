@@ -36,11 +36,14 @@
 typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     SSAdMobAdTypeBanner,
     SSAdMobAdTypeNativeExpress,
+    SSAdmobAdTypeAdvanced,
 };
 
 #define OUTPUT_LOG(...)                                                        \
     if (self.debug)                                                            \
         NSLog(__VA_ARGS__);
+
+static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
 
 @implementation AdsAdmob
 
@@ -183,7 +186,7 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     NSAssert([width isKindOfClass:[NSNumber class]], @"...");
     NSAssert([height isKindOfClass:[NSNumber class]], @"...");
 
-    [self _createAd:SSAdMobAdTypeBanner adId:adId width:width height:height];
+    [self _createAd:SSAdMobAdTypeBanner adId:adId width:width height:height extras: nil];
 }
 
 - (void)createNativeExpressAd:(NSDictionary* _Nonnull)params {
@@ -200,13 +203,38 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     [self _createAd:SSAdMobAdTypeNativeExpress
                adId:adId
               width:width
-             height:height];
+             height:height
+             extras: nil];
+}
+
+- (void)createNativeAdvancedAd:(NSDictionary* _Nonnull)params {
+    NSAssert([params count] == 3, @"Invalid number of params");
+
+    NSString* adId = params[@"Param1"];
+    NSString* layoutId = params[@"Param2"];
+    NSNumber* width = params[@"Param3"];
+    NSNumber* height = params[@"Param4"];
+
+    NSAssert([adId isKindOfClass:[NSString class]], @"...");
+    NSAssert([layoutId isKindOfClass:[NSString class]], @"...");
+    NSAssert([width isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([height isKindOfClass:[NSNumber class]], @"...");
+
+    NSDictionary* extras = [NSDictionary dictionaryWithObject:layoutId forKey:NativeAdsAdvancedLayoutIdExtra];
+
+    [self _createAd:SSAdmobAdTypeAdvanced
+               adId:adId
+              width:width
+             height:height
+             extras: extras];
 }
 
 - (void)_createAd:(SSAdMobAdType)adType
              adId:(NSString* _Nonnull)adId
             width:(NSNumber* _Nonnull)width
-           height:(NSNumber* _Nonnull)height {
+           height:(NSNumber* _Nonnull)height
+           extras:(NSDictionary*) extras {
+    
     GADAdSize size = [self _createAdSize:width height:height];
     if ([self _hasAd:adId size:size]) {
         NSLog(@"%s: attempted to create an ad with id = %@ width = %@ height = "
@@ -215,7 +243,7 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
         return;
     }
 
-    [self _createAd:adType adId:adId size:size];
+    [self _createAd:adType adId:adId size:size extras:extras];
 }
 
 - (BOOL)_hasAd:(NSString* _Nonnull)adId size:(GADAdSize)size {
@@ -230,7 +258,8 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
 
 - (void)_createAd:(SSAdMobAdType)adType
              adId:(NSString* _Nonnull)adId
-             size:(GADAdSize)size {
+             size:(GADAdSize)size
+             extras: (NSDictionary*) extras {
     [self destroyAd:adId];
 
     UIView* view = nil;
@@ -242,6 +271,17 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     } else if (adType == SSAdMobAdTypeNativeExpress) {
         view =
             [self _createNativeExpressAd:adId size:size controller:controller];
+    } else if (adType == SSAdmobAdTypeAdvanced) {
+        if (extras == nil) {
+            NSAssert(NO, @"Admob Native Ads Advanced REQUIRED a layout.");
+        }
+        
+        NSString* layoutId = [extras objectForKey:NativeAdsAdvancedLayoutIdExtra];
+        if (layoutId == nil) {
+            NSAssert(NO, @"Admob Native Ads Advanced layout ID is NULL.");
+        }
+        
+        view = [self _createNativeAdvancedAd:adId layout:layoutId size:size controller:controller];
     } else {
         NSAssert(NO, @"...");
     }
@@ -285,6 +325,13 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     [view setRootViewController:controller];
     return view;
 }
+
+- (GADNativeAppInstallAdView*)_createNativeAdvancedAd:(NSString* _Nonnull)adId
+                                                layout:(NSString*) layout
+                                                size:(GADAdSize) size
+                            controller:(UIViewController* _Nonnull) controller {
+}
+
 
 - (void)destroyAd:(NSString* _Nonnull)adId {
     UIView* view = [adViews_ objectForKey:adId];

@@ -60,6 +60,7 @@ typedef enum {
 
 - (void)createBannerAd:(NSDictionary* _Nonnull)params;
 - (void)createNativeExpressAd:(NSDictionary* _Nonnull)params;
+- (void)createNativeAdvancedAd: (NSDictionary* _Nonnull)params;
 - (void)destroyAd:(NSString* _Nonnull)adId;
 - (void)showAd:(NSString* _Nonnull)adId;
 - (void)hideAd:(NSString* _Nonnull)adId;
