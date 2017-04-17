@@ -1,8 +1,5 @@
 apply plugin: 'com.android.library'
 
-import com.android.build.gradle.internal.dsl.LintOptions
-
-
 ext {
     bintrayRepo = 'maven'
     bintrayName = 'plugin-google-analytics'
@@ -29,12 +26,12 @@ ext {
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 23
+        targetSdkVersion 25
     }
 
     buildTypes {
@@ -46,7 +43,7 @@ android {
 }
 
 dependencies {
-    provided 'com.google.android.gms:play-services-analytics:8.4.0'
+    provided 'com.google.android.gms:play-services-analytics:10.0.1'
     compile project(':libPluginProtocol')
 }
 

@@ -16,239 +16,330 @@ import org.json.JSONObject;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class AnalyticsGoogle implements InterfaceAnalytics {
-	protected static final String LOG_TAG = "AnalyticsGoogle";
-	protected Context mContext = null;
-	protected static boolean isDebug = false;
-	protected GoogleAnalytics mGoogleAnalytics = null;
-	protected Tracker tracker = null;
-	protected boolean mCrashUncaughtEnable = false;
+    protected static final String          LOG_TAG          = AnalyticsGoogle.class.getName();
+    protected              Context         _context         = null;
+    protected static       boolean         _debugEnabled    = false;
+    protected              GoogleAnalytics _googleAnalytics = null;
+    protected              Tracker         _currentTracker  = null;
 
-	protected Map<String, Tracker> mTrackers = null;
+    private Map<String, Tracker> _registeredTrackers = null;
 
-	public AnalyticsGoogle(Context context) {
-		mTrackers = new HashMap<String, Tracker>();
-		mContext = context;
-		mGoogleAnalytics = GoogleAnalytics.getInstance(context);
-	}
+    @SuppressWarnings("unused") // JNI method.
+    public AnalyticsGoogle(Context context) {
+        _registeredTrackers = new HashMap<>();
+        _context = context;
+        _googleAnalytics = GoogleAnalytics.getInstance(context);
+    }
 
-	public void configureTracker(String trackerId) {
-		if (null == trackerId) {
-			Log.d(LOG_TAG, "Null tracker id at configure time.");
-			return;
-		}
+    private void logD(String msg) {
+        if (_debugEnabled) {
+            Log.d(LOG_TAG, msg);
+        }
+    }
 
-		Log.d(LOG_TAG, "Configure with trackerId: " + trackerId);
+    private void _logI(String msg) {
+        Log.i(LOG_TAG, msg);
+    }
 
-		createTracker(trackerId);
-	}
+    @SuppressWarnings("unused") // JNI method.
+    public void configureTracker(String trackerId) {
+        logD("configureTracker: id = " + trackerId);
+        if (null == trackerId) {
+            logD("configureTracker: null tracker id at configure time.");
+            return;
+        }
 
-	public void createTracker(String trackerId) {
-		Tracker tr = (Tracker) this.mTrackers.get(trackerId);
-		if (null == tr) {
-			tr = this.mGoogleAnalytics.newTracker(trackerId);
+        createTracker(trackerId);
+    }
 
-			if (this.mTrackers.size() == 0) {
-				tr.setScreenName(this.mContext.getClass().getCanonicalName());
-			}
+    private Tracker _getTrackerWithId(String trackerId) {
+        return _registeredTrackers.get(trackerId);
+    }
 
-			this.mTrackers.put(trackerId, tr);
-		}
+    private void _registerTracker(Tracker tracker, String trackerId) {
+        _registeredTrackers.put(trackerId, tracker);
+    }
 
-		enableTracker(trackerId);
-	}
 
-	public void enableTracker(String trackerId) {
-		if (null == trackerId) {
-			return;
-		}
+    private void _enableTracker(Tracker tracker) {
+        _currentTracker = tracker;
+    }
 
-		Tracker tr = (Tracker) this.mTrackers.get(trackerId);
-		if (null == tr) {
-			Log.d(LOG_TAG, "Trying to enable unknown tracker: " + trackerId);
-		} else {
-			Log.d(LOG_TAG, "Selected tracker: " + trackerId);
-			this.tracker = tr;
-		}
-	}
+    @SuppressWarnings("unused") // JNI method.
+    public void enableTracker(String trackerId) {
+        logD("enableTracker: id = " + trackerId);
+        if (null == trackerId) {
+            return;
+        }
 
-	public void setLogLevel(int logLevel) {
-		mGoogleAnalytics.getLogger().setLogLevel(logLevel);
-	}
+        Tracker tracker = _getTrackerWithId(trackerId);
+        if (null == tracker) {
+            logD("Trying to enable unknown tracker id: " + trackerId);
+        } else {
+            logD("Selected tracker id: " + trackerId);
+            _enableTracker(tracker);
+        }
+    }
 
-	public void dispatchHits() {
-		mGoogleAnalytics.dispatchLocalHits();
-	}
+    @SuppressWarnings("WeakerAccess")
+    public void createTracker(String trackerId) {
+        logD("createTracker: id = " + trackerId);
+        Tracker tracker = _getTrackerWithId(trackerId);
+        if (null == tracker) {
+            tracker = _googleAnalytics.newTracker(trackerId);
+            _registerTracker(tracker, trackerId);
+        }
 
-	public void dispatchPeriodically(int numberOfSeconds) {
-		mGoogleAnalytics.setLocalDispatchPeriod(numberOfSeconds);
-	}
+        _enableTracker(tracker);
+    }
 
-	public void stopPeriodicalDispatch() {
-		mGoogleAnalytics.setLocalDispatchPeriod(-1);
-	}
+    @SuppressWarnings("unused") // JNI method.
+    public void setLogLevel(int logLevel) {
+        logD("setLogLevel: level = " + logLevel);
+        _googleAnalytics.getLogger().setLogLevel(logLevel);
+    }
 
-	@Override
-	public void startSession(String appKey) {
-		if (this.tracker != null) {
-			this.tracker.setScreenName(appKey);
-			this.tracker.send(new HitBuilders.ScreenViewBuilder()
-					.setNewSession().build());
-		} else
-			Log.e(LOG_TAG, "Start session called w/o valid tracker.");
-	}
+    @SuppressWarnings("unused") // JNI method.
+    public void dispatchHits() {
+        _googleAnalytics.dispatchLocalHits();
+    }
 
-	@Override
-	public void stopSession() {
-		if (this.tracker != null) {
-			this.tracker.send((new HitBuilders.ScreenViewBuilder().set("&sc",
-					"end")).build());
-		} else
-			Log.e(LOG_TAG, "Start session called w/o valid tracker.");
-	}
+    @SuppressWarnings("unused") // JNI method.
+    public void dispatchPeriodically(int seconds) {
+        _googleAnalytics.setLocalDispatchPeriod(seconds);
+    }
 
-	public void trackScreen(String screenName) {
-		if (null != this.tracker) {
-			this.tracker.setScreenName(screenName);
-			this.tracker.send(new HitBuilders.ScreenViewBuilder().build());
-		} else {
-			Log.e(LOG_TAG, "Log Screen called w/o valid tracker.");
-		}
-	}
+    @SuppressWarnings("unused") // JNI method.
+    public void stopPeriodicalDispatch() {
+        _googleAnalytics.setLocalDispatchPeriod(-1);
+    }
 
-	public void trackEventWithCategory(String category, String action, String label,
-			int value) {
-		if (null != this.tracker) {
-			this.tracker.send(new HitBuilders.EventBuilder()
-					.setCategory(category)
-					.setAction(action)
-					.setLabel(label)
-					.setValue(value)
-					.build());
-		} else
-			Log.e(LOG_TAG, "Log Event called w/o valid tracker.");
-	}
+    private void _setParameter(String key, String value) {
+        if (_currentTracker != null) {
+            _currentTracker.set(key, value);
+        }
+    }
 
-	public void trackEventWithCategory(JSONObject jsonObject) {
-		try {
-			String category = jsonObject.getString("Param1");
-			String action = jsonObject.getString("Param2");
-			String label = jsonObject.getString("Param3");
-			int value = jsonObject.getInt("Param4");
+    @SuppressWarnings("unused") // JNI method.
+    public void setParameter(JSONObject dict) {
+        logD("setParameter: dict = " + dict);
+        try {
+            String param1 = dict.getString("Param1");
+            String param2 = dict.getString("Param2");
+            _setParameter(param1, param2);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
-			trackEventWithCategory(category, action, label, value);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
+    private Map<String, String> _convertToMap(JSONObject dict) throws JSONException {
+        Map<String, String> map = new HashMap<>();
+        Iterator<String> keys = dict.keys();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            String value = dict.getString(key);
+            map.put(key, value);
+        }
+        return map;
+    }
 
-	public void trackException(String description, boolean fatal) {
-		if (null != this.tracker) {
-			this.tracker.send(new HitBuilders.ExceptionBuilder()
-					.setDescription(description).setFatal(fatal).build());
-		} else
-			Log.e(LOG_TAG, "Log Exception called w/o valid tracker.");
-	}
+    @SuppressWarnings("unused") // JNI method.
+    public void sendHit(JSONObject dict) {
+        logD("sendHit: dict = " + dict);
+        if (_currentTracker != null) {
+            try {
+                Map<String, String> map = _convertToMap(dict);
+                _currentTracker.send(map);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	public void trackExceptionWithDescription(Hashtable<String, String> params) {
-		String description  = params.get("Param1");
-		boolean isFatal 	= Boolean.parseBoolean(params.get("Param2"));
-		
-		trackException(description, isFatal);
-	}
+    @SuppressWarnings("WeakerAccess")
+    public void setDryRun(boolean isDryRun) {
+        logD("setDryRun: enabled = " + isDryRun);
+        _googleAnalytics.setDryRun(isDryRun);
+    }
 
-	public void trackTiming(String category, int interval, String name,
-			String label) {
-		if (null != this.tracker) {
-			this.tracker.send(new HitBuilders.TimingBuilder()
-					.setCategory(category).setValue(interval).setVariable(name)
-					.setLabel(label).build());
-		} else
-			Log.e(LOG_TAG, "Log Timing called w/o valid tracker.");
-	}
+    @SuppressWarnings("unused")
+    public void enableAdvertisingTracking(boolean enabled) {
+        if (null != _currentTracker) {
+            _currentTracker.enableAdvertisingIdCollection(enabled);
+        } else {
+            Log.e(LOG_TAG, "Advertising called w/o valid tracker.");
+        }
+    }
 
-	public void trackTimingWithCategory(Hashtable<String, String> params) {
-		String category = params.get("Param1");
-		int interval	= Integer.parseInt(params.get("Param2"));
-		String name		= params.get("Param3");
-		String label	= params.get("Param4");
-		
-		trackTiming(category, interval, name, label);
-	}
+    private void _checkDictionary(Map<String, String> builtDict, Map<String, String> expectedDict) {
+        if (builtDict.size() != expectedDict.size()) {
+            Log.wtf(LOG_TAG, String.format(Locale.getDefault(),
+                "Dictionary size mismatched: expected %d found %d", expectedDict.size(),
+                builtDict.size()));
+            return;
+        }
+        Set<String> allKeys = expectedDict.keySet();
+        for (String key : allKeys) {
+            String expectedValue = expectedDict.get(key);
+            String value = builtDict.get(key);
+            if (!expectedValue.equals(value)) {
+                Log.wtf(LOG_TAG, String.format(Locale.getDefault(),
+                    "Element value mismatched: expected %s found %s", expectedValue, value));
+            }
+        }
+    }
 
-	public void trackEcommerceTransactions(Hashtable<String, String> params) {
-		String identity = params.get("Param1");
-		String name		= params.get("Param2");
-		String category = params.get("Param3");
-		float price		= Float.parseFloat(params.get("Param4"));
+    @SuppressWarnings("unused") // JNI method.
+    private void _testTrackScreenView(JSONObject json) throws JSONException {
+        logD("_testTrackScreenView");
+        Map<String, String> dict = _convertToMap(json);
+        Map<String, String> expectedDict = new HitBuilders.ScreenViewBuilder().build();
+        _checkDictionary(dict, expectedDict);
+    }
 
-		trackEcommerceTransactions(identity, name, category, price);
-	}
+    @SuppressWarnings("unused") // JNI method.
+    private void _testTrackEvent(JSONObject json) throws JSONException {
+        logD("_testTrackEvent");
+        Map<String, String> dict = _convertToMap(json);
+        Map<String, String> expectedDict = new HitBuilders.EventBuilder()
+            .setCategory("category")
+            .setAction("action")
+            .setLabel("label")
+            .setValue(1)
+            .build();
+        _checkDictionary(dict, expectedDict);
+    }
 
-	public void trackEcommerceTransactions(String id, String name, String category, float price) {
-		String productID 		= String.format("Product-%s", id);
-		String transactionID  	= String.format("Transaction-%s", id);
+    @SuppressWarnings("unused") // JNI method.
+    private void _testTrackTiming(JSONObject json) throws JSONException {
+        logD("_testTrackTiming");
+        Map<String, String> dict = _convertToMap(json);
+        Map<String, String> expectedDict = new HitBuilders.TimingBuilder()
+            .setCategory("category")
+            .setValue(1)
+            .setVariable("variable")
+            .setLabel("label")
+            .build();
+        _checkDictionary(dict, expectedDict);
+    }
 
-		Product product =  new Product()
-				.setId(productID)
-				.setName(name)
-				.setCategory(category)
-				.setPrice(price);
-		ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
-				.setTransactionId(transactionID)
-				.setTransactionRevenue(price);
-		HitBuilders.ScreenViewBuilder builder = new HitBuilders.ScreenViewBuilder()
-				.addProduct(product)
-				.setProductAction(productAction);
-		if (this.tracker != null) {
-			this.tracker.setScreenName("transaction");
-			this.tracker.send(builder.build());
-		} else
-			Log.e(LOG_TAG, "Log Ecommerce Transactions called w/o valid tracker.");
-	}
+    @SuppressWarnings("unused") // JNI method.
+    private void _testTrackException(JSONObject json) throws JSONException {
+        logD("_testTrackException");
+        Map<String, String> dict = _convertToMap(json);
+        Map<String, String> expectedDict =
+            new HitBuilders.ExceptionBuilder().setDescription("description").setFatal(true).build();
+        _checkDictionary(dict, expectedDict);
+    }
 
-	public void trackSocial(String network, String action, String target) {
-		if (this.tracker != null)
-			this.tracker.send(new HitBuilders.SocialBuilder()
-					.setNetwork(network).setAction(action).setTarget(target)
-					.build());
-		else
-			Log.e(LOG_TAG, "Log Social called w/o valid tracker.");
-	}
-	
-	public void trackSocialWithNetwork(Hashtable<String, String> params) {
-		String network	= params.get("Param1");
-		String action	= params.get("Param2");
-		String target	= params.get("Param3");
-		
-		trackSocial(network, action, target);
-	}
+    @SuppressWarnings("unused") // JNI method.
+    private void _testTrackSocial(JSONObject json) throws JSONException {
+        logD("_testTrackSocial");
+        Map<String, String> dict = _convertToMap(json);
+        Map<String, String> expectedDict = new HitBuilders.SocialBuilder()
+            .setNetwork("network")
+            .setAction("action")
+            .setTarget("target")
+            .build();
+        _checkDictionary(dict, expectedDict);
+    }
 
-	void setDryRun(boolean isDryRun) {
-		mGoogleAnalytics.setDryRun(isDryRun);
-	}
+    @SuppressWarnings("unused") // JNI method.
+    private void _testCustomDimensionAndMetric(JSONObject json) throws JSONException {
+        logD("_testCustomDimensionAndMetric");
+        Map<String, String> dict = _convertToMap(json);
+        Map<String, String> expectedDict = new HitBuilders.ScreenViewBuilder()
+            .setCustomMetric(1, 1)
+            .setCustomMetric(2, 2)
+            .setCustomMetric(5, 5.5f)
+            .setCustomDimension(1, "dimension_1")
+            .setCustomDimension(2, "dimension_2")
+            .build();
+        _checkDictionary(dict, expectedDict);
+    }
 
-	void enableAdvertisingTracking(boolean enabled) {
-		if (null != this.tracker)
-			this.tracker.enableAdvertisingIdCollection(enabled);
-		else
-			Log.e(LOG_TAG, "Advertising called w/o valid tracker.");
-	}
+    @SuppressWarnings("unused") // JNI method.
+    private void _testEcommerceImpression(JSONObject json) throws JSONException {
+        logD("_testEcommerceImpression");
+        Map<String, String> dict = _convertToMap(json);
 
-	@Override
-	public void setSessionContinueMillis(int millis) {
-		Log.i(LOG_TAG, "Not supported on Android");
-	}
+        Product product0 =
+            new Product().setCategory("category0").setId("id0").setName("name0").setPrice(1.5);
+        Product product1 =
+            new Product().setCategory("category1").setId("id1").setName("name1").setPrice(2.5);
+        Product product2 =
+            new Product().setCategory("category2").setId("id2").setName("name2").setPrice(3.0);
+        Product product3 =
+            new Product().setCategory("category3").setId("id3").setName("name3").setPrice(4);
+        Map<String, String> expectedDict = new HitBuilders.ScreenViewBuilder()
+            .addImpression(product0, "impressionList0")
+            .addImpression(product1, "impressionList0")
+            .addImpression(product2, "impressionList1")
+            .addImpression(product3, "impressionList1")
+            .build();
 
-	@Override
-	public void setCaptureUncaughtException(boolean isEnabled) {
-        mCrashUncaughtEnable = isEnabled;
-        
+        _checkDictionary(dict, expectedDict);
+    }
+
+    @SuppressWarnings("unused") // JNI method.
+    private void _testEcommerceAction(JSONObject json) throws JSONException {
+        logD("_testEcommerceAction");
+        Map<String, String> dict = _convertToMap(json);
+
+        Product product0 =
+            new Product().setCategory("category0").setId("id0").setName("name0").setPrice(1.5);
+        Product product1 =
+            new Product().setCategory("category1").setId("id1").setName("name1").setPrice(2);
+        ProductAction action = new ProductAction(ProductAction.ACTION_PURCHASE)
+            .setProductActionList("actionList")
+            .setProductListSource("listSource")
+            .setTransactionId("transactionId")
+            .setTransactionRevenue(2.0);
+        Map<String, String> expectedDict = new HitBuilders.ScreenViewBuilder()
+            .addProduct(product0)
+            .addProduct(product1)
+            .setProductAction(action)
+            .build();
+
+        _checkDictionary(dict, expectedDict);
+    }
+
+    @Override
+    public void startSession(String appKey) {
+        if (_currentTracker != null) {
+            _currentTracker.setScreenName(appKey);
+            _currentTracker.send(new HitBuilders.ScreenViewBuilder().setNewSession().build());
+        } else {
+            Log.e(LOG_TAG, "Start session called w/o valid tracker.");
+        }
+    }
+
+    @Override
+    public void stopSession() {
+        if (_currentTracker != null) {
+            _currentTracker.send((new HitBuilders.ScreenViewBuilder().set("&sc", "end")).build());
+        } else {
+            Log.e(LOG_TAG, "Start session called w/o valid tracker.");
+        }
+    }
+
+    @Override
+    public void setSessionContinueMillis(int millis) {
+        Log.i(LOG_TAG, "Not supported on Android");
+    }
+
+    @Override
+    public void setCaptureUncaughtException(boolean isEnabled) {
         if (isEnabled) {
-            if (null != tracker) {
-                UncaughtExceptionHandler myHandler = new ExceptionReporter(tracker, Thread.getDefaultUncaughtExceptionHandler(), mContext);
+            if (null != _currentTracker) {
+                UncaughtExceptionHandler myHandler = new ExceptionReporter(_currentTracker,
+                    Thread.getDefaultUncaughtExceptionHandler(), _context);
                 Thread.setDefaultUncaughtExceptionHandler(myHandler);
             } else {
                 Log.e(LOG_TAG, "setCaptureUncaughtException called w/o valid tracker.");
@@ -256,47 +347,47 @@ public class AnalyticsGoogle implements InterfaceAnalytics {
         } else {
             Thread.setDefaultUncaughtExceptionHandler(null);
         }
-	}
+    }
 
-	@Override
-	public void setDebugMode(boolean isDebugMode) {
-		isDebug = isDebugMode;
-		setDryRun(isDebug);
-	}
+    @Override
+    public void setDebugMode(boolean isDebugMode) {
+        _logI("setDebugMode: enabled = " + isDebugMode);
+        _debugEnabled = isDebugMode;
+        setDryRun(_debugEnabled);
+    }
 
-	@Override
-	public void logError(String errorId, String message) {
-		Log.i(LOG_TAG, "Not supported on Android");
-	}
+    @Override
+    public void logError(String errorId, String message) {
+        Log.i(LOG_TAG, "Not supported on Android");
+    }
 
-	@Override
-	public void logEvent(String eventId) {
-		Log.i(LOG_TAG, "Not supported on Android");
-	}
+    @Override
+    public void logEvent(String eventId) {
+        Log.i(LOG_TAG, "Not supported on Android");
+    }
 
-	@Override
-	public void logEvent(String eventId, Hashtable<String, String> paramMap) {
-		Log.i(LOG_TAG, "Not supported on Android");
-	}
+    @Override
+    public void logEvent(String eventId, Hashtable<String, String> paramMap) {
+        Log.i(LOG_TAG, "Not supported on Android");
+    }
 
-	@Override
-	public void logTimedEventBegin(String eventId) {
-		Log.i(LOG_TAG, "Not supported on Android");
-	}
+    @Override
+    public void logTimedEventBegin(String eventId) {
+        Log.i(LOG_TAG, "Not supported on Android");
+    }
 
-	@Override
-	public void logTimedEventEnd(String eventId) {
-		Log.i(LOG_TAG, "Not supported on Android");
-	}
+    @Override
+    public void logTimedEventEnd(String eventId) {
+        Log.i(LOG_TAG, "Not supported on Android");
+    }
 
-	@Override
-	public String getSDKVersion() {
-		return "7.5.71";
-	}
+    @Override
+    public String getSDKVersion() {
+        return "7.5.71";
+    }
 
-	@Override
-	public String getPluginVersion() {
-		return "0.9.0";
-	}
-
+    @Override
+    public String getPluginVersion() {
+        return "0.9.0";
+    }
 }
