@@ -25,9 +25,11 @@
 #import <Foundation/Foundation.h>
 
 #import "InterfaceAds.h"
+#import <GoogleMobileAds/GADInterstitial.h>
 
 @class SSBannerAdListener;
 @class SSNativeExpressAdListener;
+@class SSNativeAdvancedAdListener;
 @class SSInterstitialAdListener;
 @class SSRewardedVideoAdListener;
 
@@ -39,9 +41,11 @@ typedef enum {
 @interface AdsAdmob : NSObject <InterfaceAds> {
     SSBannerAdListener* bannerAdListener_;
     SSNativeExpressAdListener* nativeExpressAdListener_;
+    SSNativeAdvancedAdListener* nativeAdvancedAdListener_;
     SSInterstitialAdListener* interstitialAdListener_;
     SSRewardedVideoAdListener* rewardedVideoAdListener_;
-
+    
+    NSMutableDictionary<NSString*, GADAdLoader*> *adLoaders_;
     NSMutableDictionary<NSString*, UIView*>* adViews_;
     NSMutableDictionary<NSString*, NSValue*>* adSizes_;
 }
@@ -61,6 +65,7 @@ typedef enum {
 - (void)createBannerAd:(NSDictionary* _Nonnull)params;
 - (void)createNativeExpressAd:(NSDictionary* _Nonnull)params;
 - (void)createNativeAdvancedAd: (NSDictionary* _Nonnull)params;
+- (void)displayNativeAdvancedAd: (GADNativeAppInstallAd* _Nonnull) ad adLoader: (GADAdLoader* _Nonnull) adLoader;
 - (void)destroyAd:(NSString* _Nonnull)adId;
 - (void)showAd:(NSString* _Nonnull)adId;
 - (void)hideAd:(NSString* _Nonnull)adId;

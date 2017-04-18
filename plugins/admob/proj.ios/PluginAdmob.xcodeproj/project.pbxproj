@@ -14,6 +14,7 @@
 		6F745A0F1DAF3DCD0069C080 /* SSRewardedVideoAdListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F745A0D1DAF3DCD0069C080 /* SSRewardedVideoAdListener.m */; };
 		6FBEDB7F1D1A79B80038E335 /* SSNativeExpressAdListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBEDB7E1D1A79B80038E335 /* SSNativeExpressAdListener.m */; };
 		6FF443831D5DAA0E00FB4D83 /* SSAdColonyMediation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF443821D5DAA0E00FB4D83 /* SSAdColonyMediation.m */; };
+		952CF5071EA4CD1000333994 /* SSNativeAdvancedAdListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 952CF5061EA4CD1000333994 /* SSNativeAdvancedAdListener.m */; };
 		FADC44AB176EA82000B2D5ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FADC44AA176EA82000B2D5ED /* Foundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		FADC44C6176EA84500B2D5ED /* AdsAdmob.m in Sources */ = {isa = PBXBuildFile; fileRef = FADC44C4176EA84500B2D5ED /* AdsAdmob.m */; };
 /* End PBXBuildFile section */
@@ -45,6 +46,8 @@
 		6FBEDB801D1A79C50038E335 /* SSNativeExpressAdListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSNativeExpressAdListener.h; sourceTree = "<group>"; };
 		6FF443821D5DAA0E00FB4D83 /* SSAdColonyMediation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSAdColonyMediation.m; sourceTree = "<group>"; };
 		6FF443841D5DAA1900FB4D83 /* SSAdColonyMediation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSAdColonyMediation.h; sourceTree = "<group>"; };
+		952CF5051EA4CD1000333994 /* SSNativeAdvancedAdListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSNativeAdvancedAdListener.h; sourceTree = "<group>"; };
+		952CF5061EA4CD1000333994 /* SSNativeAdvancedAdListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSNativeAdvancedAdListener.m; sourceTree = "<group>"; };
 		FADC44A7176EA82000B2D5ED /* libPluginAdmob.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginAdmob.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FADC44AA176EA82000B2D5ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FADC44C3176EA84500B2D5ED /* AdsAdmob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdsAdmob.h; sourceTree = "<group>"; };
@@ -80,6 +83,8 @@
 				6F745A041DAF33920069C080 /* SSBannerAdListener.m */,
 				6FBEDB801D1A79C50038E335 /* SSNativeExpressAdListener.h */,
 				6FBEDB7E1D1A79B80038E335 /* SSNativeExpressAdListener.m */,
+				952CF5051EA4CD1000333994 /* SSNativeAdvancedAdListener.h */,
+				952CF5061EA4CD1000333994 /* SSNativeAdvancedAdListener.m */,
 				6F745A0B1DAF3A500069C080 /* SSInterstitialAdListener.h */,
 				6F745A0A1DAF3A500069C080 /* SSInterstitialAdListener.m */,
 				6F745A0E1DAF3DCD0069C080 /* SSRewardedVideoAdListener.h */,
@@ -131,7 +136,7 @@
 		FADC449F176EA82000B2D5ED /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "cocos2d-x";
 			};
 			buildConfigurationList = FADC44A2176EA82000B2D5ED /* Build configuration list for PBXProject "PluginAdmob" */;
@@ -163,6 +168,7 @@
 				6F745A061DAF33920069C080 /* SSBannerAdListener.m in Sources */,
 				6F745A091DAF34B90069C080 /* SSAdMobListenerProtocol.m in Sources */,
 				FADC44C6176EA84500B2D5ED /* AdsAdmob.m in Sources */,
+				952CF5071EA4CD1000333994 /* SSNativeAdvancedAdListener.m in Sources */,
 				6FF443831D5DAA0E00FB4D83 /* SSAdColonyMediation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -176,41 +182,49 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/frameworks";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../protocols/platform/ios",
 					"$(SRCROOT)/../../../protocols/include",
 					"$(SRCROOT)/include",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
@@ -224,34 +238,41 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/frameworks";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../protocols/platform/ios",
 					"$(SRCROOT)/../../../protocols/include",
 					"$(SRCROOT)/include",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;

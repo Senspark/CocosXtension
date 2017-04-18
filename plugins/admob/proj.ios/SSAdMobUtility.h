@@ -28,6 +28,11 @@ typedef NS_ENUM(NSInteger, SSNativeExpressAdCode) {
     // clang-format on
 };
 
+typedef NS_ENUM(NSInteger, SSNativeAdvancedAdCode) {
+    SSNativeAdvancedAdReceived          = 80,
+    SSNativeAdvandedAdFailedToLoad      = 81,
+};
+
 typedef NS_ENUM(NSInteger, SSInterstitialAdCode) {
     // clang-format off
     SSInterstitialAdLoaded              = 60,

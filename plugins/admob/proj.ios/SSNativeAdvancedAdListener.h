@@ -6,8 +6,10 @@
 //  Copyright © 2017 cocos2d-x. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <GoogleMobileAds/GADNativeAppInstallAd.h>
 
-@interface SSNativeAdvancedAdListener : NSObject
+#import "SSAdMobListenerProtocol.h"
+
+@interface SSNativeAdvancedAdListener : SSAdMobListenerProtocol<GADNativeAppInstallAdLoaderDelegate>
 
 @end
