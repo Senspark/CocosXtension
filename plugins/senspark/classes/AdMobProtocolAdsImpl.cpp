@@ -94,6 +94,12 @@ void AdmobProtocolAds::createNativeExpressAd(const std::string& adId, int width,
     callFunction(this, "createNativeExpressAd", adId.c_str(), width, height);
 }
 
+void AdmobProtocolAds::createNativeAdvancedAd(const std::string& adId, const std::string& layoutId, int width, int height) {
+    
+    getData(this).adSizes_.emplace(std::piecewise_construct, std::forward_as_tuple(adId), std::forward_as_tuple(width, height));
+    callFunction(this, "createNativeAdvancedAd", adId.c_str(), layoutId.c_str(), width, height);
+}
+
 void AdmobProtocolAds::destroyAd(const std::string& adId) {
     callFunction(this, "destroyAd", adId.c_str());
     getData(this).adSizes_.erase(adId);

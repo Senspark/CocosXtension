@@ -218,7 +218,7 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
 }
 
 - (void)createNativeAdvancedAd:(NSDictionary* _Nonnull)params {
-    NSAssert([params count] == 3, @"Invalid number of params");
+    NSAssert([params count] == 4, @"Invalid number of params");
 
     NSString* adId = params[@"Param1"];
     NSString* layoutId = params[@"Param2"];

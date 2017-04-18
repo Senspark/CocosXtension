@@ -84,6 +84,9 @@ public:
     /// Creates a native express ad.
     /// @see createBannerAd.
     void createNativeExpressAd(const std::string& adId, int width, int height);
+    
+    //
+    void createNativeAdvancedAd(const std::string& adId, const std::string& layoutId, int width, int height);
 
     /// Destroys the specified banner/native express ad.
     /// @param adId.
