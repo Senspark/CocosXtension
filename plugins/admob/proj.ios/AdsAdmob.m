@@ -69,6 +69,7 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
 
     adViews_ = [[NSMutableDictionary alloc] init];
     adSizes_ = [[NSMutableDictionary alloc] init];
+    adLoaders_ = [[NSMutableDictionary alloc] init];
 
     return self;
 }
@@ -346,9 +347,8 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
     
     GADAdLoader* adLoader = [[GADAdLoader alloc] initWithAdUnitID:adId rootViewController:controller adTypes:@[kGADAdLoaderAdTypeNativeAppInstall] options:nil];
     
-    [adLoaders_ setObject:adLoader forKey:adId];
-    
     adLoader.delegate = nativeAdvancedAdListener_;
+    [adLoaders_ setObject:adLoader forKey:adId];
     
     CGRect frame = appInstallAdView.frame;
     frame.size = size.size;
@@ -439,6 +439,7 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
         [_view loadRequest:request];
     } else if ([view isKindOfClass:[GADNativeAppInstallAdView class]]) {
         GADAdLoader* adLoader = (GADAdLoader*) [adLoaders_ objectForKey:adId];
+        NSAssert(adLoader != nil, @"AdLoader with ID %@ NOT existed.", adId);
         [adLoader loadRequest:request];
     }
 }
