@@ -364,6 +364,7 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
     NSAssert(adId != nil, @"Ad ID must not NIL");
     
     GADNativeAppInstallAdView* appInstallAdView = (GADNativeAppInstallAdView*) [adViews_ objectForKey:adId];
+    [appInstallAdView setHidden:NO];
     
     NSAssert(appInstallAdView != nil, @"Not provide Ad view yet!!!");
     
@@ -426,17 +427,17 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
         return;
     }
 
-    [view setHidden:NO];
-
     GADRequest* request = [GADRequest request];
     [request setTestDevices:[self testDeviceIDs]];
 
     if ([view isKindOfClass:[GADBannerView class]]) {
         GADBannerView* _view = (GADBannerView*)(view);
         [_view loadRequest:request];
+        [_view setHidden:NO];
     } else if ([view isKindOfClass:[GADNativeExpressAdView class]]) {
         GADNativeExpressAdView* _view = (GADNativeExpressAdView*)(view);
         [_view loadRequest:request];
+        [_view setHidden:NO];
     } else if ([view isKindOfClass:[GADNativeAppInstallAdView class]]) {
         GADAdLoader* adLoader = (GADAdLoader*) [adLoaders_ objectForKey:adId];
         NSAssert(adLoader != nil, @"AdLoader with ID %@ NOT existed.", adId);
