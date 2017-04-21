@@ -244,19 +244,25 @@ static NSString* const NativeAdAdvancedUsingLogoExtra       = @"asset_logo";
 }
 
 - (void)createNativeAdvancedAd:(NSDictionary* _Nonnull)params {
-    NSAssert([params count] == 4, @"Invalid number of params");
+    NSAssert([params count] == 6, @"Invalid number of params");
 
     NSString* adId = params[@"Param1"];
-    NSString* layoutId = params[@"Param2"];
-    NSNumber* width = params[@"Param3"];
-    NSNumber* height = params[@"Param4"];
+    NSNumber* type = params[@"Param2"];
+    NSString* layoutId = params[@"Param3"];
+    NSNumber* width = params[@"Param4"];
+    NSNumber* height = params[@"Param5"];
+    NSDictionary* details = params[@"Param6"];
 
     NSAssert([adId isKindOfClass:[NSString class]], @"...");
+    NSAssert([type isKindOfClass:[NSNumber class]], @"...");
     NSAssert([layoutId isKindOfClass:[NSString class]], @"...");
     NSAssert([width isKindOfClass:[NSNumber class]], @"...");
     NSAssert([height isKindOfClass:[NSNumber class]], @"...");
+    NSAssert([details isKindOfClass:[NSDictionary class]], @"...");
 
-    NSDictionary* extras = [NSDictionary dictionaryWithObject:layoutId forKey:NativeAdAdvancedLayoutIdExtra];
+
+    NSMutableDictionary* extras = [NSMutableDictionary dictionaryWithObjectsAndKeys: layoutId, NativeAdAdvancedLayoutIdExtra, type, NativeAdAdvancedAdTypeExtra, nil];
+    [extras addEntriesFromDictionary:details];
 
     [self _createAd:SSAdmobAdTypeAdvanced
                adId:adId
@@ -417,23 +423,55 @@ static NSString* const NativeAdAdvancedUsingLogoExtra       = @"asset_logo";
     
     if ([[adOptions objectForKey:NativeAdAdvancedUsingHeadlineExtra] boolValue]) {
         ((UILabel*) appInstallAdView.headlineView).text = ad.headline;
+        appInstallAdView.headlineView.hidden = NO;
+    } else {
+        appInstallAdView.headlineView.hidden = YES;
     }
     
     if ([[adOptions objectForKey:NativeAdAdvancedUsingIconExtra] boolValue]) {
         ((UIImageView*) appInstallAdView.iconView).image = ad.icon.image;
+        appInstallAdView.iconView.hidden = NO;
+    } else {
+        appInstallAdView.iconView.hidden = YES;
     }
     
     if ([[adOptions objectForKey:NativeAdAdvancedUsingBodyExtra] boolValue]) {
         ((UILabel*) appInstallAdView.bodyView).text = ad.body;
+        appInstallAdView.bodyView.hidden = NO;
+    } else {
+        appInstallAdView.bodyView.hidden = YES;
     }
     
     if ([[adOptions objectForKey:NativeAdAdvancedUsingImageExtra] boolValue]) {
         ((UIImageView *)appInstallAdView.imageView).image = ((GADNativeAdImage *)[ad.images firstObject]).image;
+        appInstallAdView.imageView.hidden = NO;
+    } else {
+        appInstallAdView.imageView.hidden = YES;
     }
     
     if ([[adOptions objectForKey:NativeAdAdvancedUsingCallToActionExtra] boolValue]) {
         [((UIButton *)appInstallAdView.callToActionView)setTitle:ad.callToAction
                                                   forState:UIControlStateNormal];
+        appInstallAdView.callToActionView.hidden = NO;
+    } else {
+        appInstallAdView.callToActionView.hidden = YES;
+    }
+    
+    if (ad.videoController.hasVideoContent && [[adOptions objectForKey:NativeAdAdvancedUsingMediaExtra] boolValue]) {
+        
+        NSLayoutConstraint *heightConstraint =
+        [NSLayoutConstraint constraintWithItem:appInstallAdView.mediaView
+                                     attribute:NSLayoutAttributeHeight
+                                     relatedBy:NSLayoutRelationEqual
+                                        toItem:appInstallAdView.mediaView
+                                     attribute:NSLayoutAttributeWidth
+                                    multiplier:(1 / ad.videoController.aspectRatio)
+                                      constant:0];
+        heightConstraint.active = YES;
+        
+        appInstallAdView.mediaView.hidden = NO;
+    } else {
+        appInstallAdView.mediaView.hidden = YES;
     }
     
     if (ad.starRating && [[adOptions objectForKey:NativeAdAdvancedUsingStarRatingExtra] boolValue]) {
@@ -445,16 +483,16 @@ static NSString* const NativeAdAdvancedUsingLogoExtra       = @"asset_logo";
     
     if (ad.store && [[adOptions objectForKey:NativeAdAdvancedUsingStoreExtra] boolValue]) {
         ((UILabel*)appInstallAdView.storeView).text = ad.store;
-        appInstallAdView.hidden = NO;
+        appInstallAdView.storeView.hidden = NO;
     } else {
-        appInstallAdView.hidden = YES;
+        appInstallAdView.storeView.hidden = YES;
     }
     
     if (ad.price && [[adOptions objectForKey:NativeAdAdvancedUsingPriceExtra] boolValue]) {
         ((UILabel*)appInstallAdView.priceView).text = ad.price;
-        appInstallAdView.hidden = NO;
+        appInstallAdView.priceView.hidden = NO;
     } else {
-        appInstallAdView.hidden = YES;
+        appInstallAdView.priceView.hidden = YES;
     }
     
     appInstallAdView.callToActionView.userInteractionEnabled = NO;
@@ -468,29 +506,46 @@ static NSString* const NativeAdAdvancedUsingLogoExtra       = @"asset_logo";
 
     if ([[adOptions objectForKey:NativeAdAdvancedUsingHeadlineExtra] boolValue]) {
         ((UILabel*) contentAdView.headlineView).text = ad.headline;
+        contentAdView.headlineView.hidden = NO;
+    } else {
+        contentAdView.headlineView.hidden = YES;
     }
 
     if ([[adOptions objectForKey:NativeAdAdvancedUsingBodyExtra] boolValue]) {
         ((UILabel*) contentAdView.bodyView).text = ad.body;
+        contentAdView.bodyView.hidden = NO;
+    } else {
+        contentAdView.bodyView.hidden = YES;
     }
     
-    if ([[adOptions objectForKey:NativeAdAdvancedUsingAdvertiserExtra] boolValue])
+    if ([[adOptions objectForKey:NativeAdAdvancedUsingAdvertiserExtra] boolValue]) {
+        ((UILabel*)contentAdView.advertiserView).text = ad.advertiser;
+        contentAdView.advertiserView.hidden = NO;
+    } else {
+        contentAdView.advertiserView.hidden = YES;
+    }
         
     if ([[adOptions objectForKey:NativeAdAdvancedUsingImageExtra] boolValue]) {
         ((UIImageView *)contentAdView.imageView).image = ((GADNativeAdImage *)[ad.images firstObject]).image;
+        contentAdView.imageView.hidden = NO;
+    } else {
+        contentAdView.imageView.hidden = YES;
     }
 
     
     if ([[adOptions objectForKey:NativeAdAdvancedUsingCallToActionExtra] boolValue]) {
         [((UIButton *)contentAdView.callToActionView)setTitle:ad.callToAction
                                                   forState:UIControlStateNormal];
+        contentAdView.callToActionView.hidden = NO;
+    } else {
+        contentAdView.callToActionView.hidden = YES;
     }
     
     if (ad.logo && [[adOptions objectForKey:NativeAdAdvancedUsingLogoExtra] boolValue]) {
         ((UIImageView*)contentAdView.logoView).image = ad.logo.image;
-        contentAdView.hidden = NO;
+        contentAdView.logoView.hidden = NO;
     } else {
-        contentAdView.hidden = YES;
+        contentAdView.logoView.hidden = YES;
     }
 
     contentAdView.callToActionView.userInteractionEnabled = NO;
