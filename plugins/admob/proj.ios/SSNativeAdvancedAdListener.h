@@ -7,9 +7,10 @@
 //
 
 #import <GoogleMobileAds/GADNativeAppInstallAd.h>
+#import <GoogleMobileAds/GADNativeContentAd.h>
 
 #import "SSAdMobListenerProtocol.h"
 
-@interface SSNativeAdvancedAdListener : SSAdMobListenerProtocol<GADNativeAppInstallAdLoaderDelegate>
+@interface SSNativeAdvancedAdListener : SSAdMobListenerProtocol<GADNativeAppInstallAdLoaderDelegate, GADNativeContentAdLoaderDelegate>
 
 @end

@@ -15,10 +15,19 @@
 - (void)adLoader:(GADAdLoader *)adLoader
     didReceiveNativeAppInstallAd:(GADNativeAppInstallAd *)nativeAppInstallAd {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [self onResult:SSNativeAdvancedAdReceived message:@"Native advanced ad did received ad"];
+    [self onResult:SSNativeAdvancedAdReceived message:@"AppInstallAd did received ad"];
     
     [(AdsAdmob*)self.interface displayNativeAdvancedAd: nativeAppInstallAd adLoader:adLoader]; 
 }
+
+- (void)adLoader:(GADAdLoader *)adLoader
+    didReceiveNativeContentAd:(GADNativeContentAd *)nativeContentAd {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [self onResult:SSNativeAdvancedAdReceived message:@"ContentAd did received ad"];
+    
+    [(AdsAdmob*)self.interface displayNativeAdvancedAd: nativeContentAd adLoader:adLoader];
+}
+
 
 - (void)adLoader:(GADAdLoader *)adLoader
     didFailToReceiveAdWithError:(GADRequestError *)error {
