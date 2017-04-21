@@ -37,7 +37,7 @@
 typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     SSAdMobAdTypeBanner,
     SSAdMobAdTypeNativeExpress,
-    SSAdmobAdTypeAdvanced,
+    SSAdmobAdTypeNativeAdvanced,
 };
 
 #define OUTPUT_LOG(...)                                                        \
@@ -264,7 +264,7 @@ static NSString* const NativeAdAdvancedUsingLogoExtra       = @"asset_logo";
     NSMutableDictionary* extras = [NSMutableDictionary dictionaryWithObjectsAndKeys: layoutId, NativeAdAdvancedLayoutIdExtra, type, NativeAdAdvancedAdTypeExtra, nil];
     [extras addEntriesFromDictionary:details];
 
-    [self _createAd:SSAdmobAdTypeAdvanced
+    [self _createAd:SSAdmobAdTypeNativeAdvanced
                adId:adId
               width:width
              height:height
@@ -313,7 +313,7 @@ static NSString* const NativeAdAdvancedUsingLogoExtra       = @"asset_logo";
     } else if (adType == SSAdMobAdTypeNativeExpress) {
         view =
             [self _createNativeExpressAd:adId size:size controller:controller];
-    } else if (adType == SSAdmobAdTypeAdvanced) {
+    } else if (adType == SSAdmobAdTypeNativeAdvanced) {
         if (extras == nil) {
             NSAssert(NO, @"Admob Native Ads Advanced REQUIRED a layout.");
         }
