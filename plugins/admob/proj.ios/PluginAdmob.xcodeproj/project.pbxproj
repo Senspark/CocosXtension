@@ -48,6 +48,7 @@
 		6FF443841D5DAA1900FB4D83 /* SSAdColonyMediation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSAdColonyMediation.h; sourceTree = "<group>"; };
 		952CF5051EA4CD1000333994 /* SSNativeAdvancedAdListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSNativeAdvancedAdListener.h; sourceTree = "<group>"; };
 		952CF5061EA4CD1000333994 /* SSNativeAdvancedAdListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSNativeAdvancedAdListener.m; sourceTree = "<group>"; };
+		953F16141EA9EE4B00707196 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		FADC44A7176EA82000B2D5ED /* libPluginAdmob.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginAdmob.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FADC44AA176EA82000B2D5ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FADC44C3176EA84500B2D5ED /* AdsAdmob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdsAdmob.h; sourceTree = "<group>"; };
@@ -70,6 +71,7 @@
 		FADC449E176EA82000B2D5ED = {
 			isa = PBXGroup;
 			children = (
+				953F16141EA9EE4B00707196 /* Images.xcassets */,
 				FADC44C7176EA85F00B2D5ED /* PluginAdmob-Prefix.pch */,
 				FADC44C3176EA84500B2D5ED /* AdsAdmob.h */,
 				FADC44C4176EA84500B2D5ED /* AdsAdmob.m */,
