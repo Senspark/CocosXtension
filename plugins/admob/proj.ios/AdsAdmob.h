@@ -38,6 +38,11 @@ typedef enum {
     kTypeFullScreen,
 } AdmobType;
 
+typedef enum {
+    kNativeAdAdvancedTypeAppInstall = 0x01,
+    kNativeAdAdvancedTypeContent    = 0x02,
+} NativeAdAdvancedType;
+
 @interface AdsAdmob : NSObject <InterfaceAds> {
     SSBannerAdListener* bannerAdListener_;
     SSNativeExpressAdListener* nativeExpressAdListener_;
@@ -46,6 +51,7 @@ typedef enum {
     SSRewardedVideoAdListener* rewardedVideoAdListener_;
     
     NSMutableDictionary<NSString*, GADAdLoader*> *adLoaders_;
+    NSMutableDictionary<NSString*, NSDictionary*> *adOptions_;
     NSMutableDictionary<NSString*, UIView*>* adViews_;
     NSMutableDictionary<NSString*, NSValue*>* adSizes_;
 }

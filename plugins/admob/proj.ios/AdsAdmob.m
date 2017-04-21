@@ -44,7 +44,29 @@ typedef NS_ENUM(NSInteger, SSAdMobAdType) {
     if (self.debug)                                                            \
         NSLog(__VA_ARGS__);
 
-static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
+static NSString* const NativeAdAdvancedLayoutIdExtra        = @"layout_id";
+static NSString* const NativeAdAdvancedAdTypeExtra          = @"ad_type";
+
+/// common assets
+static NSString* const NativeAdAdvancedUsingHeadlineExtra   = @"asset_headline";
+static NSString* const NativeAdAdvancedUsingBodyExtra       = @"asset_body";
+static NSString* const NativeAdAdvancedUsingImageExtra      = @"asset_image";
+static NSString* const NativeAdAdvancedUsingCallToActionExtra    = @"asset_call_to_action";
+///
+
+/// app install ad assets
+static NSString* const NativeAdAdvancedUsingIconExtra       = @"asset_icon";
+static NSString* const NativeAdAdvancedUsingMediaExtra      = @"asset_media";
+static NSString* const NativeAdAdvancedUsingStarRatingExtra = @"asset_star_rating";
+static NSString* const NativeAdAdvancedUsingStoreExtra      = @"asset_store";
+static NSString* const NativeAdAdvancedUsingPriceExtra      = @"asset_price";
+///
+
+/// content view ad assets
+static NSString* const NativeAdAdvancedUsingAdvertiserExtra = @"asset_advertiser";
+static NSString* const NativeAdAdvancedUsingLogoExtra       = @"asset_logo";
+///
+
 
 @implementation AdsAdmob
 
@@ -70,7 +92,7 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
     adViews_ = [[NSMutableDictionary alloc] init];
     adSizes_ = [[NSMutableDictionary alloc] init];
     adLoaders_ = [[NSMutableDictionary alloc] init];
-
+    adOptions_ = [[NSMutableDictionary alloc] init];
     return self;
 }
 
@@ -102,6 +124,9 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
 
     [adLoaders_ release];
     adLoaders_ = nil;
+    
+    [adOptions_ release];
+    adOptions_ = nil;
     
     [adSizes_ release];
     adSizes_ = nil;
@@ -231,7 +256,7 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
     NSAssert([width isKindOfClass:[NSNumber class]], @"...");
     NSAssert([height isKindOfClass:[NSNumber class]], @"...");
 
-    NSDictionary* extras = [NSDictionary dictionaryWithObject:layoutId forKey:NativeAdsAdvancedLayoutIdExtra];
+    NSDictionary* extras = [NSDictionary dictionaryWithObject:layoutId forKey:NativeAdAdvancedLayoutIdExtra];
 
     [self _createAd:SSAdmobAdTypeAdvanced
                adId:adId
@@ -287,12 +312,7 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
             NSAssert(NO, @"Admob Native Ads Advanced REQUIRED a layout.");
         }
         
-        NSString* layoutId = [extras objectForKey:NativeAdsAdvancedLayoutIdExtra];
-        if (layoutId == nil) {
-            NSAssert(NO, @"Admob Native Ads Advanced layout ID is NULL.");
-        }
-        
-        view = [self _createNativeAdvancedAd:adId layout:layoutId size:size controller:controller];
+        view = [self _createNativeAdvancedAd:adId extras:extras size:size controller:controller];
     } else {
         NSAssert(NO, @"...");
     }
@@ -337,71 +357,161 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
     return view;
 }
 
-- (GADNativeAppInstallAdView*) _createNativeAdvancedAd: (NSString* _Nonnull) adId
-                                      layout: (NSString*) layout
+- (UIView*) _createNativeAdvancedAd: (NSString* _Nonnull) adId
+                                      extras: (NSDictionary* _Nonnull) extras
                                         size: (GADAdSize) size
-
                                 controller: (UIViewController* _Nonnull) controller {
     
-    GADNativeAppInstallAdView* appInstallAdView = [[[NSBundle mainBundle] loadNibNamed:layout owner:nil options:nil] firstObject];
+    NSString* layoutId = [extras objectForKey:NativeAdAdvancedLayoutIdExtra];
+    NSAssert(layoutId != nil, @"Admob Native Ad Advanced layout ID is REQUIRED.");
     
-    GADAdLoader* adLoader = [[GADAdLoader alloc] initWithAdUnitID:adId rootViewController:controller adTypes:@[kGADAdLoaderAdTypeNativeAppInstall] options:nil];
+    NSNumber* adType = [extras objectForKey:NativeAdAdvancedAdTypeExtra];
+    NSAssert(adType != nil, @"Admob Native Ad Advanced Type is REQUIRED");
     
+    UIView* adview = [[[NSBundle mainBundle] loadNibNamed:layoutId owner:nil options:nil] firstObject];
+    
+    NSMutableArray* adTypes = [NSMutableArray arrayWithCapacity:2];
+    
+    if ([adType intValue] | kNativeAdAdvancedTypeAppInstall) {
+        [adTypes addObject:kGADAdLoaderAdTypeNativeAppInstall];
+    }
+    
+    if ([adType intValue] | kNativeAdAdvancedTypeContent) {
+        [adTypes addObject:kGADAdLoaderAdTypeNativeContent];
+    }
+    
+    GADAdLoader* adLoader = [[GADAdLoader alloc] initWithAdUnitID:adId rootViewController:controller adTypes:adTypes options:nil];
     adLoader.delegate = nativeAdvancedAdListener_;
+    
     [adLoaders_ setObject:adLoader forKey:adId];
+    [adOptions_ setObject:extras forKey:adId];
     
-    CGRect frame = appInstallAdView.frame;
+    CGRect frame = adview.frame;
     frame.size = size.size;
-    appInstallAdView.frame = frame;
+    adview.frame = frame;
     
-    return appInstallAdView;
+    return adview;
 }
 
-- (void) displayNativeAdvancedAd: (GADNativeAppInstallAd* _Nonnull) ad adLoader: (GADAdLoader* _Nonnull) adLoader {
-    
-    NSString *adId = [[adLoaders_ allKeysForObject:adLoader] firstObject];
-    
-    NSAssert(adId != nil, @"Ad ID must not NIL");
-    
-    GADNativeAppInstallAdView* appInstallAdView = (GADNativeAppInstallAdView*) [adViews_ objectForKey:adId];
-    [appInstallAdView setHidden:NO];
-    
-    NSAssert(appInstallAdView != nil, @"Not provide Ad view yet!!!");
-    
+/// Gets an image representing the number of stars. Returns nil if rating is less than 3.5 stars.
+- (UIImage *)_imageForStars:(NSDecimalNumber *)numberOfStars {
+  double starRating = numberOfStars.doubleValue;
+    if (starRating >= 5) {
+        return [UIImage imageNamed:@"stars_5"];
+    } else if (starRating >= 4.5) {
+        return [UIImage imageNamed:@"stars_4_5"];
+    } else if (starRating >= 4) {
+        return [UIImage imageNamed:@"stars_4"];
+    } else if (starRating >= 3.5) {
+        return [UIImage imageNamed:@"stars_3_5"];
+    } else {
+        return nil;
+    }
+}
+
+- (void) _displayNativeAppInstallAd: (GADNativeAppInstallAd* _Nonnull) ad withId: (NSString* _Nonnull) adId andView: (GADNativeAppInstallAdView* _Nonnull) appInstallAdView {
+
     appInstallAdView.nativeAppInstallAd = ad;
     
-    ((UILabel*) appInstallAdView.headlineView).text = ad.headline;
-    ((UIImageView*) appInstallAdView.iconView).image = ad.icon.image;
-    ((UILabel*) appInstallAdView.bodyView).text = ad.body;
-    ((UIImageView *)appInstallAdView.imageView).image =
-      ((GADNativeAdImage *)[ad.images firstObject]).image;
-    [((UIButton *)appInstallAdView.callToActionView)setTitle:ad.callToAction
-                                                  forState:UIControlStateNormal];
+    NSDictionary *adOptions = [adOptions_  objectForKey:adId];
     
-    // Other assets are not, however, and should be checked first.
-    if (ad.starRating) {
-//        ((UIImageView *) appInstallAdView.starRatingView).image =
-//            [self imageForStars:ad.starRating];
-            appInstallAdView.starRatingView.hidden = NO;
+    if ([[adOptions objectForKey:NativeAdAdvancedUsingHeadlineExtra] boolValue]) {
+        ((UILabel*) appInstallAdView.headlineView).text = ad.headline;
+    }
+    
+    if ([[adOptions objectForKey:NativeAdAdvancedUsingIconExtra] boolValue]) {
+        ((UIImageView*) appInstallAdView.iconView).image = ad.icon.image;
+    }
+    
+    if ([[adOptions objectForKey:NativeAdAdvancedUsingBodyExtra] boolValue]) {
+        ((UILabel*) appInstallAdView.bodyView).text = ad.body;
+    }
+    
+    if ([[adOptions objectForKey:NativeAdAdvancedUsingImageExtra] boolValue]) {
+        ((UIImageView *)appInstallAdView.imageView).image = ((GADNativeAdImage *)[ad.images firstObject]).image;
+    }
+    
+    if ([[adOptions objectForKey:NativeAdAdvancedUsingCallToActionExtra] boolValue]) {
+        [((UIButton *)appInstallAdView.callToActionView)setTitle:ad.callToAction
+                                                  forState:UIControlStateNormal];
+    }
+    
+    if (ad.starRating && [[adOptions objectForKey:NativeAdAdvancedUsingStarRatingExtra] boolValue]) {
+        appInstallAdView.starRatingView.hidden = NO;
+        ((UIImageView*) appInstallAdView.starRatingView).image = [self _imageForStars:ad.starRating];
     } else {
         appInstallAdView.starRatingView.hidden = YES;
     }
-
-    if (ad.store) {
-        ((UILabel *)appInstallAdView.storeView).text = ad.store;
-        appInstallAdView.storeView.hidden = NO;
+    
+    if (ad.store && [[adOptions objectForKey:NativeAdAdvancedUsingStoreExtra] boolValue]) {
+        ((UILabel*)appInstallAdView.storeView).text = ad.store;
+        appInstallAdView.hidden = NO;
     } else {
-        appInstallAdView.storeView.hidden = YES;
+        appInstallAdView.hidden = YES;
     }
-
-    if (ad.price) {
-        ((UILabel *)appInstallAdView.priceView).text = ad.price;
-        appInstallAdView.priceView.hidden = NO;
+    
+    if (ad.price && [[adOptions objectForKey:NativeAdAdvancedUsingPriceExtra] boolValue]) {
+        ((UILabel*)appInstallAdView.priceView).text = ad.price;
+        appInstallAdView.hidden = NO;
     } else {
-        appInstallAdView.priceView.hidden = YES;
+        appInstallAdView.hidden = YES;
     }
     
     appInstallAdView.callToActionView.userInteractionEnabled = NO;
+}
+
+- (void) _displayNativeContentAd: (GADNativeContentAd* _Nonnull) ad withId: (NSString* _Nonnull) adId andView: (GADNativeContentAdView* _Nonnull) contentAdView {
+
+    contentAdView.nativeContentAd = ad;
+
+    NSDictionary *adOptions = [adOptions_  objectForKey:adId];
+
+    if ([[adOptions objectForKey:NativeAdAdvancedUsingHeadlineExtra] boolValue]) {
+        ((UILabel*) contentAdView.headlineView).text = ad.headline;
+    }
+
+    if ([[adOptions objectForKey:NativeAdAdvancedUsingBodyExtra] boolValue]) {
+        ((UILabel*) contentAdView.bodyView).text = ad.body;
+    }
+    
+    if ([[adOptions objectForKey:NativeAdAdvancedUsingAdvertiserExtra] boolValue])
+        
+    if ([[adOptions objectForKey:NativeAdAdvancedUsingImageExtra] boolValue]) {
+        ((UIImageView *)contentAdView.imageView).image = ((GADNativeAdImage *)[ad.images firstObject]).image;
+    }
+
+    
+    if ([[adOptions objectForKey:NativeAdAdvancedUsingCallToActionExtra] boolValue]) {
+        [((UIButton *)contentAdView.callToActionView)setTitle:ad.callToAction
+                                                  forState:UIControlStateNormal];
+    }
+    
+    if (ad.logo && [[adOptions objectForKey:NativeAdAdvancedUsingLogoExtra] boolValue]) {
+        ((UIImageView*)contentAdView.logoView).image = ad.logo.image;
+        contentAdView.hidden = NO;
+    } else {
+        contentAdView.hidden = YES;
+    }
+
+    contentAdView.callToActionView.userInteractionEnabled = NO;
+}
+
+- (void) displayNativeAdvancedAd: (GADNativeAd* _Nonnull) ad adLoader: (GADAdLoader* _Nonnull) adLoader {
+    NSString *adId = [[adLoaders_ allKeysForObject:adLoader] firstObject];
+    NSAssert(adId != nil, @"Ad ID is REQUIRED");
+    
+    id adView = [adViews_ objectForKey:adId];
+    NSAssert(adView != nil, @"AdView is REQUIRED!!!");
+    
+    [adView setHidden:NO];
+    
+    if ([adView isKindOfClass:[GADNativeAppInstallAdView class]]) {
+        [self _displayNativeAppInstallAd: (GADNativeAppInstallAd*) ad withId: adId andView: (GADNativeAppInstallAdView*) adView];
+    } else if ([adView isKindOfClass:[GADNativeContentAdView class]]) {
+        [self _displayNativeContentAd: (GADNativeContentAd*) ad withId: adId andView: (GADNativeContentAdView*) adView];
+    } else {
+        NSAssert(NO, @"Invalid ad view!");
+    }
 }
 
 
@@ -417,6 +527,7 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
     [adViews_ removeObjectForKey:adId];
     [adSizes_ removeObjectForKey:adId];
     [adLoaders_ removeObjectForKey:adId];
+    [adOptions_ removeObjectForKey:adId];
 }
 
 - (void)showAd:(NSString* _Nonnull)adId {
@@ -438,7 +549,7 @@ static NSString* const NativeAdsAdvancedLayoutIdExtra   = @"layout_id";
         GADNativeExpressAdView* _view = (GADNativeExpressAdView*)(view);
         [_view loadRequest:request];
         [_view setHidden:NO];
-    } else if ([view isKindOfClass:[GADNativeAppInstallAdView class]]) {
+    } else if ([view isKindOfClass:[GADNativeAppInstallAdView class]] || [view isKindOfClass:[GADNativeContentAd class]]) {
         GADAdLoader* adLoader = (GADAdLoader*) [adLoaders_ objectForKey:adId];
         NSAssert(adLoader != nil, @"AdLoader with ID %@ NOT existed.", adId);
         [adLoader loadRequest:request];
