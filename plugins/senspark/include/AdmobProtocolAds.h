@@ -54,10 +54,26 @@ NS_SENSPARK_PLUGIN_ADS_BEGIN
 /// info[AdmobProtocolAds::AdIdKey] = "your_ad_id";
 /// your_admob_protocol_ads_instance->configDeveloperInfo(info);
 /// @endcode
+
+namespace admob {
+/// The constants are correspondent with:
+///     - kGADAdLoaderAdTypeNativeAppInstall
+///     - kGADAdLoaderAdTypeNativeContent
+    enum class NativeAdAdvancedType {
+        AppInstall  = 0x01,
+        Content     = 0x02,
+    };
+    
+    class NativeAdAdvancedDetailBuilder;
+    
+    using NativeAdAdvancedParam = std::map<std::string, std::string>;
+};
+
+
 class AdmobProtocolAds : public cocos2d::plugin::ProtocolAds {
 public:
     class AdSize;
-
+    
     AdmobProtocolAds();
     virtual ~AdmobProtocolAds();
 
@@ -86,7 +102,7 @@ public:
     void createNativeExpressAd(const std::string& adId, int width, int height);
     
     //
-    void createNativeAdvancedAd(const std::string& adId, const std::string& layoutId, int width, int height);
+    void createNativeAdvancedAd(const std::string& adId, admob::NativeAdAdvancedType type, const std::string& layoutId, int width, int height, const admob::NativeAdAdvancedParam& params);
 
     /// Destroys the specified banner/native express ad.
     /// @param adId.
@@ -299,6 +315,39 @@ private:
     std::string _s;
     int _w;
     int _h;
+};
+
+class admob::NativeAdAdvancedDetailBuilder {
+public:
+    NativeAdAdvancedDetailBuilder& setUsingHealine(bool use);
+    NativeAdAdvancedDetailBuilder& setUsingBody(bool use);
+    NativeAdAdvancedDetailBuilder& setUsingImage(bool use);
+    NativeAdAdvancedDetailBuilder& setUsingCallToAction(bool use);
+    NativeAdAdvancedDetailBuilder& setUsingIcon(bool use);
+    NativeAdAdvancedDetailBuilder& setUsingMedia(bool use);
+    NativeAdAdvancedDetailBuilder& setUsingStarRating(bool use);
+    NativeAdAdvancedDetailBuilder& setUsingStore(bool use);
+    NativeAdAdvancedDetailBuilder& setUsingPrice(bool use);
+    NativeAdAdvancedDetailBuilder& setUsingAdvertiser(bool use);
+    NativeAdAdvancedDetailBuilder& setUsingLogo(bool use);
+
+    const NativeAdAdvancedParam& build() const;
+
+protected:
+    static const std::string AssetHeadline;
+    static const std::string AssetBody;
+    static const std::string AssetImage;
+    static const std::string AssetCallToAction;
+    static const std::string AssetIcon;
+    static const std::string AssetMedia;
+    static const std::string AssetStarRating;
+    static const std::string AssetStore;
+    static const std::string AssetPrice;
+    static const std::string AssetAdvertiser;
+    static const std::string AssetLogo;
+    
+private:
+    NativeAdAdvancedParam params_;
 };
 
 NS_SENSPARK_PLUGIN_ADS_END

@@ -12,6 +12,8 @@
 #include "../include/AdMobProtocolAds.h"
 #include "senspark/utility.hpp"
 
+#define BOOLSTR(X) (X ? "true" : "false")
+
 NS_SENSPARK_PLUGIN_ADS_BEGIN
 namespace {
 
@@ -94,10 +96,10 @@ void AdmobProtocolAds::createNativeExpressAd(const std::string& adId, int width,
     callFunction(this, "createNativeExpressAd", adId.c_str(), width, height);
 }
 
-void AdmobProtocolAds::createNativeAdvancedAd(const std::string& adId, const std::string& layoutId, int width, int height) {
+void AdmobProtocolAds::createNativeAdvancedAd(const std::string& adId, admob::NativeAdAdvancedType type, const std::string& layoutId, int width, int height, const admob::NativeAdAdvancedParam& params) {
     
     getData(this).adSizes_.emplace(std::piecewise_construct, std::forward_as_tuple(adId), std::forward_as_tuple(width, height));
-    callFunction(this, "createNativeAdvancedAd", adId.c_str(), layoutId.c_str(), width, height);
+    callFunction(this, "createNativeAdvancedAd", adId.c_str(), (int) type, layoutId.c_str(), width, height, params);
 }
 
 void AdmobProtocolAds::destroyAd(const std::string& adId) {
@@ -271,5 +273,99 @@ std::pair<int, int> AdmobProtocolAds::computeAdViewPosition(AdsPos position,
         break;
     }
     return std::make_pair(x, y);
+}
+
+const std::string admob::NativeAdAdvancedDetailBuilder::AssetHeadline = "asset_headline";
+const std::string admob::NativeAdAdvancedDetailBuilder::AssetBody = "asset_body";
+const std::string admob::NativeAdAdvancedDetailBuilder::AssetImage = "asset_image";
+const std::string admob::NativeAdAdvancedDetailBuilder::AssetCallToAction = "asset_call_to_action";
+const std::string admob::NativeAdAdvancedDetailBuilder::AssetIcon = "asset_icon";
+const std::string admob::NativeAdAdvancedDetailBuilder::AssetMedia = "asset_media";
+const std::string admob::NativeAdAdvancedDetailBuilder::AssetStarRating = "asset_star_rating";
+const std::string admob::NativeAdAdvancedDetailBuilder::AssetStore = "asset_store";
+const std::string admob::NativeAdAdvancedDetailBuilder::AssetPrice = "asset_price";
+const std::string admob::NativeAdAdvancedDetailBuilder::AssetAdvertiser = "asset_advertiser";
+const std::string admob::NativeAdAdvancedDetailBuilder::AssetLogo = "asset_logo";
+
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingHealine(bool use) {
+    
+    params_[AssetHeadline] = BOOLSTR(use);
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingBody(bool use) {
+    
+    params_[AssetBody] = BOOLSTR(use);
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingImage(bool use) {
+    
+    params_[AssetImage] = BOOLSTR(use);
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingCallToAction(bool use) {
+    
+    params_[AssetCallToAction] = BOOLSTR(use);
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingIcon(bool use) {
+    
+    params_[AssetIcon] = BOOLSTR(use);
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingMedia(bool use) {
+    
+    params_[AssetMedia] = BOOLSTR(use);
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingStarRating(bool use) {
+    
+    params_[AssetStarRating] = BOOLSTR(use);
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingStore(bool use) {
+    
+    params_[AssetStore] = BOOLSTR(use);
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingPrice(bool use) {
+    
+    params_[AssetPrice] = BOOLSTR(use);
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingAdvertiser(bool use) {
+    
+    params_[AssetAdvertiser] = BOOLSTR(use);
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingLogo(bool use) {
+    
+    params_[AssetLogo] = BOOLSTR(use);
+    
+    return *this;
+}
+
+const admob::NativeAdAdvancedParam& admob::NativeAdAdvancedDetailBuilder::build() const {
+    return params_;
 }
 NS_SENSPARK_PLUGIN_ADS_END
