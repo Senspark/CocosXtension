@@ -37,14 +37,14 @@ public class NativeAdvancedAdListener extends AdListener implements
     @Override
     public void onAppInstallAdLoaded(NativeAppInstallAd ad) {
         logD("onAppInstallAdLoaded: begin.");
-        _callback.onEvent(AdsWrapper.ResultCode.NativeAdvancedAdReceived, "Native express ad loaded");
+        _callback.onEvent(AdsWrapper.ResultCode.NativeAdvancedAdReceived, "AppInstall ad loaded");
         logD("onAppInstallAdLoaded: end.");
     }
 
     @Override
     public void onContentAdLoaded(NativeContentAd ad) {
         logD("onContentAdLoaded: begin.");
-        _callback.onEvent(AdsWrapper.ResultCode.NativeAdvancedAdReceived, "Native express ad loaded");
+        _callback.onEvent(AdsWrapper.ResultCode.NativeAdvancedAdReceived, "Content ad loaded");
         logD("onContentAdLoaded: end.");
     }
 

@@ -331,17 +331,17 @@ public:
     NativeAdAdvancedDetailBuilder& setUsingAdvertiser(bool use);
     NativeAdAdvancedDetailBuilder& setUsingLogo(bool use);
 
-    NativeAdAdvancedDetailBuilder& setUsingHealine(const std::string& _id);
-    NativeAdAdvancedDetailBuilder& setUsingBody(const std::string& _id);
-    NativeAdAdvancedDetailBuilder& setUsingImage(const std::string& _id);
-    NativeAdAdvancedDetailBuilder& setUsingCallToAction(const std::string& _id);
-    NativeAdAdvancedDetailBuilder& setUsingIcon(const std::string& _id);
-    NativeAdAdvancedDetailBuilder& setUsingMedia(const std::string& _id);
-    NativeAdAdvancedDetailBuilder& setUsingStarRating(const std::string& _id);
-    NativeAdAdvancedDetailBuilder& setUsingStore(const std::string& _id);
-    NativeAdAdvancedDetailBuilder& setUsingPrice(const std::string& _id);
-    NativeAdAdvancedDetailBuilder& setUsingAdvertiser(const std::string& _id);
-    NativeAdAdvancedDetailBuilder& setUsingLogo(const std::string& _id);
+    NativeAdAdvancedDetailBuilder& setUsingHealineId(const std::string& _id);
+    NativeAdAdvancedDetailBuilder& setUsingBodyId(const std::string& _id);
+    NativeAdAdvancedDetailBuilder& setUsingImageId(const std::string& _id);
+    NativeAdAdvancedDetailBuilder& setUsingCallToActionId(const std::string& _id);
+    NativeAdAdvancedDetailBuilder& setUsingIconId(const std::string& _id);
+    NativeAdAdvancedDetailBuilder& setUsingMediaId(const std::string& _id);
+    NativeAdAdvancedDetailBuilder& setUsingStarRatingId(const std::string& _id);
+    NativeAdAdvancedDetailBuilder& setUsingStoreId(const std::string& _id);
+    NativeAdAdvancedDetailBuilder& setUsingPriceId(const std::string& _id);
+    NativeAdAdvancedDetailBuilder& setUsingAdvertiserId(const std::string& _id);
+    NativeAdAdvancedDetailBuilder& setUsingLogoId(const std::string& _id);
 
     const NativeAdAdvancedParam& build() const;
 

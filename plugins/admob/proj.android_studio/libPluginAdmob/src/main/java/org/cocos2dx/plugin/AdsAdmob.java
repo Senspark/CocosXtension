@@ -501,7 +501,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 }
 
                 assert (info != null);
-                _addAdView(info.getView());
+                _addAdView(info, adType);
 
                 info.hide();
                 _adViewInfos.put(adId, info);
@@ -511,7 +511,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         logD("_createAd: end.");
     }
 
-    private void _addAdView(View adView) {
+    private void _addAdView(AdViewInfo info, int adType) {
         FrameLayout layout = (FrameLayout) ((Activity) PluginWrapper.getContext())
             .findViewById(android.R.id.content)
             .getRootView();
@@ -519,9 +519,14 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
         FrameLayout.LayoutParams params =
             new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT);
+
+        if (adType == AdType.NativeAdvanced) {
+            params = new FrameLayout.LayoutParams(info.getAdSize().getWidthInPixels(info.getView().getContext()), info.getAdSize().getHeightInPixels(info.getView().getContext()));
+        }
+
         params.gravity = Gravity.LEFT | Gravity.TOP;
 
-        layout.addView(adView, params);
+        layout.addView(info.getView(), params);
     }
 
     private AdViewInfo _createBannerAd(@NonNull String adId, @NonNull AdSize size,
@@ -554,13 +559,13 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                                                @NonNull AdRequest request, @NonNull JSONObject extras) {
         try {
             String layoutName = extras.getString(NativeAdAdvancedLayoutIdExtra);
-
             int layoutID = _context.getResources().getIdentifier(layoutName, "layout", _context.getPackageName());
             if (layoutID == 0) {
                 logE("Admob Native Ad Advanced layout ID is NOT CORRECT");
             }
 
             NativeAdView adView = (NativeAdView) LayoutInflater.from(_context).inflate(layoutID, null);
+
             Integer adType = extras.getInt(NativeAdAdvancedAdTypeExtra);
             logD("Admob Native Ad layout ID is: " + layoutName);
             logD("Admob Native Ad ID: " + adId);

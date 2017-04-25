@@ -109,12 +109,12 @@ class AdViewInfo {
         AdLoader.Builder builder = new AdLoader.Builder(_view.getContext(), adId);
         logD("Ad Advanced Type is: " + nativeAdvancedAdType);
 
-        if ((nativeAdvancedAdType |  AdsAdmob.NativeAdAdvancedTypeAppInstall) != 0) {
+        if ((nativeAdvancedAdType &  AdsAdmob.NativeAdAdvancedTypeAppInstall) != 0) {
             logD("Advanced Ad is consider as AppInstallAd");
             builder.forAppInstallAd(listener);
         }
 
-        if ((nativeAdvancedAdType | AdsAdmob.NativeAdAdvancedTypeContent) != 0) {
+        if ((nativeAdvancedAdType & AdsAdmob.NativeAdAdvancedTypeContent) != 0) {
             logD("Advanced Ad is consider as ContentAd");
             builder.forContentAd(listener);
         }
@@ -180,232 +180,248 @@ class AdViewInfo {
 
     private void _show() {
         logD("_show");
-        _view.setVisibility(View.VISIBLE);
+        if (_adLoader == null) {
+            _view.setVisibility(View.VISIBLE);
+        }
     }
 
-    private int getViewID(String name) {
-        return _view.getResources().getIdentifier(name, "id", _view.getContext().getPackageName());
+    private int getViewID(String field) {
+        if (_adExtras == null) {
+            return 0;
+        }
+        try {
+            if (_adExtras.has(field)) {
+                String fieldId = _adExtras.getString(field);
+                return _view.getResources().getIdentifier(fieldId, "id", _view.getContext().getPackageName());
+            } else {
+                logD("Not defined " + field);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     private void _displayAppInstallAd(NativeAppInstallAd ad) {
         logD("_displayAppInstallAd");
+        _view.setVisibility(View.VISIBLE);
         NativeAppInstallAdView appInstallAdView = (NativeAppInstallAdView) _view;
 
         appInstallAdView.setNativeAd(ad);
 
-        try {
-            int headlineId = getViewID(_adExtras.getString(NativeAdAdvancedUsingHeadlineExtra));
 
-            if (headlineId != 0) {
-                TextView headlineView = (TextView) appInstallAdView.findViewById(headlineId);
-                if (headlineView != null) {
-                    appInstallAdView.setHeadlineView(headlineView);
-                    headlineView.setText(ad.getHeadline());
-                    headlineView.setVisibility(View.VISIBLE);
-                }
-            } else if (appInstallAdView.getHeadlineView() != null) {
-                appInstallAdView.getHeadlineView().setVisibility(View.INVISIBLE);
+        int headlineId = getViewID(NativeAdAdvancedUsingHeadlineExtra);
+
+        if (headlineId != 0) {
+            TextView headlineView = (TextView) appInstallAdView.findViewById(headlineId);
+            if (headlineView != null) {
+                appInstallAdView.setHeadlineView(headlineView);
+                headlineView.setText(ad.getHeadline());
+                headlineView.setVisibility(View.VISIBLE);
             }
+        } else if (appInstallAdView.getHeadlineView() != null) {
+            appInstallAdView.getHeadlineView().setVisibility(View.INVISIBLE);
+        }
 
-            int iconId = getViewID(_adExtras.getString(NativeAdAdvancedUsingIconExtra));
-            if (iconId != 0) {
-                ImageView iconView = (ImageView) appInstallAdView.findViewById(iconId);
-                if (iconView != null) {
-                    appInstallAdView.setIconView(iconView);
-                    iconView.setImageDrawable(ad.getIcon().getDrawable());
-                    iconView.setVisibility(View.VISIBLE);
-                }
-            } else if (appInstallAdView.getIconView() != null) {
-                appInstallAdView.getIconView().setVisibility(View.INVISIBLE);
+        int iconId = getViewID(NativeAdAdvancedUsingIconExtra);
+        if (iconId != 0) {
+            ImageView iconView = (ImageView) appInstallAdView.findViewById(iconId);
+            if (iconView != null) {
+                appInstallAdView.setIconView(iconView);
+                iconView.setImageDrawable(ad.getIcon().getDrawable());
+                iconView.setVisibility(View.VISIBLE);
             }
+        } else if (appInstallAdView.getIconView() != null) {
+            appInstallAdView.getIconView().setVisibility(View.INVISIBLE);
+        }
 
-            int bodyId = getViewID(_adExtras.getString(NativeAdAdvancedUsingBodyExtra));
-            if (bodyId != 0) {
-                TextView bodyView = (TextView) appInstallAdView.findViewById(bodyId);
-                if (bodyView != null) {
-                    appInstallAdView.setBodyView(bodyView);
-                    bodyView.setText(ad.getBody());
-                    bodyView.setVisibility(View.VISIBLE);
-                }
-            } else if (appInstallAdView.getBodyView() != null) {
-                appInstallAdView.getBodyView().setVisibility(View.INVISIBLE);
+        int bodyId = getViewID(NativeAdAdvancedUsingBodyExtra);
+        if (bodyId != 0) {
+            TextView bodyView = (TextView) appInstallAdView.findViewById(bodyId);
+            if (bodyView != null) {
+                appInstallAdView.setBodyView(bodyView);
+                bodyView.setText(ad.getBody());
+                bodyView.setVisibility(View.VISIBLE);
             }
+        } else if (appInstallAdView.getBodyView() != null) {
+            appInstallAdView.getBodyView().setVisibility(View.INVISIBLE);
+        }
 
-            int imageId = getViewID(_adExtras.getString(NativeAdAdvancedUsingImageExtra));
-            if (imageId != 0) {
-                ImageView imageView = (ImageView) appInstallAdView.findViewById(imageId);
-                if (imageView != null) {
-                    appInstallAdView.setImageView(imageView);
-                    imageView.setImageDrawable(ad.getImages().get(0).getDrawable());
-                    imageView.setVisibility(View.VISIBLE);
-                }
-            } else if (appInstallAdView.getImageView() !=  null) {
-                appInstallAdView.getImageView().setVisibility(View.INVISIBLE);
+        int imageId = getViewID(NativeAdAdvancedUsingImageExtra);
+        if (imageId != 0) {
+            ImageView imageView = (ImageView) appInstallAdView.findViewById(imageId);
+            if (imageView != null) {
+                appInstallAdView.setImageView(imageView);
+                imageView.setImageDrawable(ad.getImages().get(0).getDrawable());
+                imageView.setVisibility(View.VISIBLE);
             }
+        } else if (appInstallAdView.getImageView() !=  null) {
+            appInstallAdView.getImageView().setVisibility(View.INVISIBLE);
+        }
 
-            int callToActionId = getViewID(_adExtras.getString(NativeAdAdvancedUsingCallToActionExtra));
-            if (callToActionId != 0) {
-                Button callToActionView = (Button) appInstallAdView.findViewById(callToActionId);
-                if (callToActionView != null) {
-                    appInstallAdView.setCallToActionView(callToActionView);
-                    callToActionView.setText(ad.getCallToAction());
-                    callToActionView.setVisibility(View.VISIBLE);
-                }
-            } else if (appInstallAdView.getCallToActionView() != null) {
+        int callToActionId = getViewID(NativeAdAdvancedUsingCallToActionExtra);
+        if (callToActionId != 0) {
+            Button callToActionView = (Button) appInstallAdView.findViewById(callToActionId);
+            if (callToActionView != null) {
+                appInstallAdView.setCallToActionView(callToActionView);
+                callToActionView.setText(ad.getCallToAction());
+                callToActionView.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (appInstallAdView.getCallToActionView() != null) {
                 appInstallAdView.getCallToActionView().setVisibility(View.INVISIBLE);
             }
+        }
 
-            int mediaId = getViewID(_adExtras.getString(NativeAdAdvancedUsingMediaExtra));
-            if (mediaId != 0 && ad.getVideoController().hasVideoContent()) {
-                MediaView mediaView = (MediaView) appInstallAdView.findViewById(mediaId);
-                if (mediaView != null) {
-                    appInstallAdView.setMediaView(mediaView);
-                    mediaView.setVisibility(View.VISIBLE);
-                }
-            } else {
-                if (appInstallAdView.getMediaView() != null) {
-                    appInstallAdView.getMediaView().setVisibility(View.INVISIBLE);
-                }
-                if (appInstallAdView.findViewById(mediaId) != null) {
-                    appInstallAdView.findViewById(mediaId).setVisibility(View.INVISIBLE);
-                }
-            }
 
-            int starRatingId = getViewID(_adExtras.getString(NativeAdAdvancedUsingStarRatingExtra));
-            if (starRatingId != 0 && ad.getStarRating() != 0) {
-                RatingBar starRatingView = (RatingBar) appInstallAdView.findViewById(starRatingId);
-                if (starRatingView != null) {
-                    appInstallAdView.setStarRatingView(starRatingView);
-                    starRatingView.setRating(ad.getStarRating().floatValue());
-                    starRatingView.setVisibility(View.VISIBLE);
-                }
-            } else {
-                if (appInstallAdView.getStarRatingView() != null) {
-                    appInstallAdView.getStarRatingView().setVisibility(View.INVISIBLE);
-                }
-                if (appInstallAdView.findViewById(starRatingId) != null) {
-                    appInstallAdView.findViewById(starRatingId).setVisibility(View.INVISIBLE);
-                }
+        int mediaId = getViewID(NativeAdAdvancedUsingMediaExtra);
+        if (mediaId != 0 && ad.getVideoController().hasVideoContent()) {
+            MediaView mediaView = (MediaView) appInstallAdView.findViewById(mediaId);
+            if (mediaView != null) {
+                appInstallAdView.setMediaView(mediaView);
+                mediaView.setVisibility(View.VISIBLE);
             }
+        } else {
+            if (appInstallAdView.getMediaView() != null) {
+                appInstallAdView.getMediaView().setVisibility(View.INVISIBLE);
+            }
+            if (appInstallAdView.findViewById(mediaId) != null) {
+                appInstallAdView.findViewById(mediaId).setVisibility(View.INVISIBLE);
+            }
+        }
 
-            int storeId = getViewID(_adExtras.getString(NativeAdAdvancedUsingStoreExtra));
-            if (storeId != 0 && ad.getStore() != null) {
-                TextView storeView = (TextView) appInstallAdView.findViewById(storeId);
-                if (storeView != null) {
-                    appInstallAdView.setStoreView(storeView);
-                    storeView.setText(ad.getStore());
-                    storeView.setVisibility(View.VISIBLE);
-                }
-            } else {
-                if (appInstallAdView.getStoreView() != null) {
-                    appInstallAdView.getStoreView().setVisibility(View.INVISIBLE);
-                }
-                if (appInstallAdView.findViewById(storeId) != null) {
-                    appInstallAdView.findViewById(storeId).setVisibility(View.INVISIBLE);
-                }
-            }
+        int starRatingId = getViewID(NativeAdAdvancedUsingStarRatingExtra);
+        if (starRatingId != 0 && ad.getStarRating() != 0) {
+            RatingBar starRatingView = (RatingBar) appInstallAdView.findViewById(starRatingId);
+            if (starRatingView != null) {
+                appInstallAdView.setStarRatingView(starRatingView);
+                starRatingView.setRating(ad.getStarRating().floatValue());
+                starRatingView.setVisibility(View.VISIBLE);
 
-            int priceId = getViewID(_adExtras.getString(NativeAdAdvancedUsingPriceExtra));
-            if (priceId != 0 && ad.getStore() != null) {
-                TextView priceView = (TextView) appInstallAdView.findViewById(priceId);
-                if (priceView != null) {
-                    appInstallAdView.setStoreView(priceView);
-                    priceView.setText(ad.getPrice());
-                    priceView.setVisibility(View.VISIBLE);
-                }
-            } else {
-                if (appInstallAdView.getPriceView() != null) {
-                    appInstallAdView.getPriceView().setVisibility(View.INVISIBLE);
-                }
-                if (appInstallAdView.findViewById(priceId) != null) {
-                    appInstallAdView.findViewById(priceId).setVisibility(View.INVISIBLE);
-                }
+                logD("Native Advanced Ad - Rating: " + ad.getStarRating().floatValue());
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } else {
+            if (appInstallAdView.getStarRatingView() != null) {
+                appInstallAdView.getStarRatingView().setVisibility(View.INVISIBLE);
+            }
+            if (appInstallAdView.findViewById(starRatingId) != null) {
+                appInstallAdView.findViewById(starRatingId).setVisibility(View.INVISIBLE);
+            }
+        }
+
+        int storeId = getViewID(NativeAdAdvancedUsingStoreExtra);
+        if (storeId != 0 && ad.getStore() != null) {
+            TextView storeView = (TextView) appInstallAdView.findViewById(storeId);
+            if (storeView != null) {
+                appInstallAdView.setStoreView(storeView);
+                storeView.setText(ad.getStore());
+                storeView.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (appInstallAdView.getStoreView() != null) {
+                appInstallAdView.getStoreView().setVisibility(View.INVISIBLE);
+            }
+            if (appInstallAdView.findViewById(storeId) != null) {
+                appInstallAdView.findViewById(storeId).setVisibility(View.INVISIBLE);
+            }
+        }
+
+        int priceId = getViewID(NativeAdAdvancedUsingPriceExtra);
+        if (priceId != 0 && ad.getStore() != null) {
+            TextView priceView = (TextView) appInstallAdView.findViewById(priceId);
+            if (priceView != null) {
+                appInstallAdView.setStoreView(priceView);
+                priceView.setText(ad.getPrice());
+                priceView.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (appInstallAdView.getPriceView() != null) {
+                appInstallAdView.getPriceView().setVisibility(View.INVISIBLE);
+            }
+            if (appInstallAdView.findViewById(priceId) != null) {
+                appInstallAdView.findViewById(priceId).setVisibility(View.INVISIBLE);
+            }
         }
     }
 
     private void _displayContentAd(NativeContentAd ad) {
         logD("_displayContentAd");
+        _view.setVisibility(View.VISIBLE);
         NativeContentAdView contentAdView = (NativeContentAdView) _view;
 
         contentAdView.setNativeAd(ad);
 
-        try {
-            int headlineId = getViewID(_adExtras.getString(NativeAdAdvancedUsingHeadlineExtra));
-            if (headlineId != 0) {
-                TextView headlineView = (TextView) contentAdView.findViewById(headlineId);
-                if (headlineView != null) {
-                    contentAdView.setHeadlineView(headlineView);
-                    headlineView.setText(ad.getHeadline());
-                    headlineView.setVisibility(View.VISIBLE);
-                }
-            } else if (contentAdView.getHeadlineView() != null) {
-                contentAdView.getHeadlineView().setVisibility(View.INVISIBLE);
-            }
 
-            int bodyId = getViewID(_adExtras.getString(NativeAdAdvancedUsingBodyExtra));
-            if (bodyId != 0) {
-                TextView bodyView = (TextView) contentAdView.findViewById(bodyId);
-                if (bodyView != null) {
-                    contentAdView.setBodyView(bodyView);
-                    bodyView.setText(ad.getBody());
-                    bodyView.setVisibility(View.VISIBLE);
-                }
-            } else if (contentAdView.getBodyView() != null) {
-                contentAdView.getBodyView().setVisibility(View.INVISIBLE);
+        int headlineId = getViewID(NativeAdAdvancedUsingHeadlineExtra);
+        if (headlineId != 0) {
+            TextView headlineView = (TextView) contentAdView.findViewById(headlineId);
+            if (headlineView != null) {
+                contentAdView.setHeadlineView(headlineView);
+                headlineView.setText(ad.getHeadline());
+                headlineView.setVisibility(View.VISIBLE);
             }
+        } else if (contentAdView.getHeadlineView() != null) {
+            contentAdView.getHeadlineView().setVisibility(View.INVISIBLE);
+        }
 
-            int advertiserId = getViewID(_adExtras.getString(NativeAdAdvancedUsingAdvertiserExtra));
-            if (advertiserId != 0) {
-                TextView advertiserView = (TextView) contentAdView.findViewById(advertiserId);
-                if (advertiserView != null) {
-                    contentAdView.setAdvertiserView(advertiserView);
-                    advertiserView.setText(ad.getAdvertiser());
-                    advertiserView.setVisibility(View.VISIBLE);
-                }
-            } else if (contentAdView.getAdvertiserView() != null) {
-                contentAdView.getAdvertiserView().setVisibility(View.INVISIBLE);
+        int bodyId = getViewID(NativeAdAdvancedUsingBodyExtra);
+        if (bodyId != 0) {
+            TextView bodyView = (TextView) contentAdView.findViewById(bodyId);
+            if (bodyView != null) {
+                contentAdView.setBodyView(bodyView);
+                bodyView.setText(ad.getBody());
+                bodyView.setVisibility(View.VISIBLE);
             }
+        } else if (contentAdView.getBodyView() != null) {
+            contentAdView.getBodyView().setVisibility(View.INVISIBLE);
+        }
 
-            int imageId = getViewID(_adExtras.getString(NativeAdAdvancedUsingImageExtra));
-            if (imageId != 0) {
-                ImageView imageView = (ImageView) contentAdView.findViewById(imageId);
-                if (imageView != null) {
-                    contentAdView.setImageView(imageView);
-                    imageView.setImageDrawable(ad.getImages().get(0).getDrawable());
-                    imageView.setVisibility(View.VISIBLE);
-                }
-            } else if (contentAdView.getImageView() != null) {
-                contentAdView.getImageView().setVisibility(View.INVISIBLE);
+        int advertiserId = getViewID(NativeAdAdvancedUsingAdvertiserExtra);
+        if (advertiserId != 0) {
+            TextView advertiserView = (TextView) contentAdView.findViewById(advertiserId);
+            if (advertiserView != null) {
+                contentAdView.setAdvertiserView(advertiserView);
+                advertiserView.setText(ad.getAdvertiser());
+                advertiserView.setVisibility(View.VISIBLE);
             }
+        } else if (contentAdView.getAdvertiserView() != null) {
+            contentAdView.getAdvertiserView().setVisibility(View.INVISIBLE);
+        }
 
-            int callToActionId = getViewID(_adExtras.getString(NativeAdAdvancedUsingCallToActionExtra));
-            if (callToActionId != 0) {
-                Button callToActionView = (Button) contentAdView.findViewById(callToActionId);
-                if (callToActionView != null) {
-                    contentAdView.setCallToActionView(callToActionView);
-                    callToActionView.setText(ad.getCallToAction());
-                    callToActionView.setVisibility(View.VISIBLE);
-                }
-            } else if (contentAdView.getCallToActionView() != null) {
-                contentAdView.getCallToActionView().setVisibility(View.INVISIBLE);
+        int imageId = getViewID(NativeAdAdvancedUsingImageExtra);
+        if (imageId != 0) {
+            ImageView imageView = (ImageView) contentAdView.findViewById(imageId);
+            if (imageView != null) {
+                contentAdView.setImageView(imageView);
+                imageView.setImageDrawable(ad.getImages().get(0).getDrawable());
+                imageView.setVisibility(View.VISIBLE);
             }
+        } else if (contentAdView.getImageView() != null) {
+            contentAdView.getImageView().setVisibility(View.INVISIBLE);
+        }
 
-            int logoId = getViewID(_adExtras.getString(NativeAdAdvancedUsingLogoExtra));
-            if (logoId != 0) {
-                ImageView logoView = (ImageView) contentAdView.findViewById(logoId);
-                if (logoView != null) {
-                    contentAdView.setLogoView(logoView);
-                    logoView.setImageDrawable(ad.getLogo().getDrawable());
-                    logoView.setVisibility(View.VISIBLE);
-                }
-            } else if (contentAdView.getLogoView() != null) {
-                contentAdView.getLogoView().setVisibility(View.INVISIBLE);
+        int callToActionId = getViewID(NativeAdAdvancedUsingCallToActionExtra);
+        if (callToActionId != 0) {
+            Button callToActionView = (Button) contentAdView.findViewById(callToActionId);
+            if (callToActionView != null) {
+                contentAdView.setCallToActionView(callToActionView);
+                callToActionView.setText(ad.getCallToAction());
+                callToActionView.setVisibility(View.VISIBLE);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } else if (contentAdView.getCallToActionView() != null) {
+            contentAdView.getCallToActionView().setVisibility(View.INVISIBLE);
+        }
+
+        int logoId = getViewID(NativeAdAdvancedUsingLogoExtra);
+        if (logoId != 0) {
+            ImageView logoView = (ImageView) contentAdView.findViewById(logoId);
+            if (logoView != null) {
+                contentAdView.setLogoView(logoView);
+                logoView.setImageDrawable(ad.getLogo().getDrawable());
+                logoView.setVisibility(View.VISIBLE);
+            }
+        } else if (contentAdView.getLogoView() != null) {
+            contentAdView.getLogoView().setVisibility(View.INVISIBLE);
         }
     }
 
@@ -463,13 +479,15 @@ class AdViewInfo {
 
     private void _reload() {
         if (!_isLoading()) {
-            logD("_reload");
             if (_adLoader != null) {
+                logD("_reload NativeAdAdvanced");
                 _adLoader.loadAd(_request);
             } else if (_view instanceof AdView) {
+                logD("_reload Banner");
                 AdView view = (AdView) _view;
                 view.loadAd(_request);
             } else if (_view instanceof NativeExpressAdView) {
+                logD("_reload NativeExpressedAd");
                 NativeExpressAdView view = (NativeExpressAdView) _view;
                 view.loadAd(_request);
             }
