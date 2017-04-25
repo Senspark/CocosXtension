@@ -378,11 +378,11 @@ static NSString* const NativeAdAdvancedUsingLogoExtra       = @"asset_logo";
     
     NSMutableArray* adTypes = [NSMutableArray arrayWithCapacity:2];
     
-    if ([adType intValue] | kNativeAdAdvancedTypeAppInstall) {
+    if ([adType intValue] & kNativeAdAdvancedTypeAppInstall) {
         [adTypes addObject:kGADAdLoaderAdTypeNativeAppInstall];
     }
     
-    if ([adType intValue] | kNativeAdAdvancedTypeContent) {
+    if ([adType intValue] & kNativeAdAdvancedTypeContent) {
         [adTypes addObject:kGADAdLoaderAdTypeNativeContent];
     }
     
