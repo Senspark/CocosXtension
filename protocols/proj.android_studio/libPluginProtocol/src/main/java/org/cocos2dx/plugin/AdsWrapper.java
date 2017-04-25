@@ -50,6 +50,9 @@ public class AdsWrapper {
         static final int RewardedVideoAdClosed          = 74;
         static final int RewardedVideoAdRewarded        = 75;
         static final int RewardedVideoAdLeftApplication = 76;
+
+        static final int NativeAdvancedAdReceived       = 80;
+        static final int NativeAdvancedAdFailedToLoad   = 81;
     }
 
     /// Called when an interstitial ad was shown and user click on
