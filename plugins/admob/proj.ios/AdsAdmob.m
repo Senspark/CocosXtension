@@ -275,7 +275,7 @@ static NSString* const NativeAdAdvancedUsingLogoExtra       = @"asset_logo";
              adId:(NSString* _Nonnull)adId
             width:(NSNumber* _Nonnull)width
            height:(NSNumber* _Nonnull)height
-           extras:(NSDictionary*) extras {
+           extras:(NSDictionary* _Nullable) extras {
     
     GADAdSize size = [self _createAdSize:width height:height];
     if ([self _hasAd:adId size:size]) {
