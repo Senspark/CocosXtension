@@ -34,21 +34,28 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.NativeExpressAdView;
+import com.google.android.gms.ads.formats.NativeAdView;
+import com.google.android.gms.ads.formats.NativeAppInstallAd;
+import com.google.android.gms.ads.formats.NativeContentAd;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 
@@ -112,8 +119,10 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     private static class AdType {
-        private static final int Banner        = 1;
-        private static final int NativeExpress = 2;
+        private static final int Banner         = 1;
+        private static final int NativeExpress  = 2;
+        private static final int NativeAdvanced = 3;
+
     }
 
     private static final String LOG_TAG = AdsAdmob.class.getName();
@@ -139,6 +148,12 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
 
     private       Set<String> _testDeviceIds       = null;
     private final Object      _testDeviceIdsLocker = new Object();
+
+    public final static int NativeAdAdvancedTypeAppInstall = 0x01;
+    public final static int NativeAdAdvancedTypeContent    = 0x02;
+
+    private final static String NativeAdAdvancedLayoutIdExtra           = "layout_id";
+    private final static String NativeAdAdvancedAdTypeExtra             = "ad_type";
 
     private HashMap<String, AdViewInfo> _adViewInfos = null;
 
@@ -395,7 +410,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             Integer width = params.getInt("Param2");
             Integer height = params.getInt("Param3");
 
-            _createAd(AdType.Banner, adId, width, height);
+            _createAd(AdType.Banner, adId, width, height, null);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -412,15 +427,38 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             Integer width = params.getInt("Param2");
             Integer height = params.getInt("Param3");
 
-            _createAd(AdType.NativeExpress, adId, width, height);
+            _createAd(AdType.NativeExpress, adId, width, height, null);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         logD("createNativeExpressAd: end.");
     }
 
+    @SuppressWarnings("unused") //JNI method
+    public void createNativeAdvancedAd(@NonNull JSONObject params) {
+        logD("createNativeAdvancedAd: begin json = " + params);
+        assert (params.length() == 6);
+
+        try {
+            String adId = params.getString("Param1");
+            Integer type = params.getInt("Param2");
+            String layoutId = params.getString("Param3");
+            Integer width = params.getInt("Param4");
+            Integer height = params.getInt("Param5");
+            JSONObject details =  params.getJSONObject("Param6");
+
+            details.accumulate(NativeAdAdvancedAdTypeExtra, type);
+            details.accumulate(NativeAdAdvancedLayoutIdExtra, layoutId);
+
+            _createAd(AdType.NativeAdvanced, adId, width, height, details);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        logD("createNativeAdvancedAd: end.");
+    }
+
     private void _createAd(@NonNull Integer adType, @NonNull String adId, @NonNull Integer width,
-                           @NonNull Integer height) {
+                           @NonNull Integer height, @Nullable JSONObject extras) {
         AdSize size = new AdSize(width, height);
         if (_hasAd(adId, size)) {
             logD(String.format(Locale.getDefault(),
@@ -429,7 +467,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
             return;
         }
 
-        _createAd(adType, adId, size);
+        _createAd(adType, adId, size, extras);
     }
 
     private boolean _hasAd(@NonNull String adId, @NonNull AdSize size) {
@@ -438,7 +476,7 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
     }
 
     private void _createAd(@NonNull final Integer adType, @NonNull final String adId,
-                           @NonNull final AdSize size) {
+                           @NonNull final AdSize size, @Nullable final JSONObject extras) {
         logD("_createAd: begin.");
         _runOnMainThread(new Runnable() {
             @Override
@@ -455,6 +493,11 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                     info = _createBannerAd(adId, size, request);
                 } else if (adType == AdType.NativeExpress) {
                     info = _createNativeExpressAd(adId, size, request);
+                } else if (adType == AdType.NativeAdvanced) {
+                    if (extras == null) {
+                        logE("Admob Native Ads Advanced REQUIRED a layout.");
+                    }
+                    info = _createNativeAdvancedAd(adId, size, request, extras);
                 }
 
                 assert (info != null);
@@ -505,6 +548,34 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                 AdsWrapper.onAdsResult(AdsAdmob.class.getName(), code, message);
             }
         }, view, request);
+    }
+
+    private AdViewInfo _createNativeAdvancedAd(@NonNull String adId, @NonNull AdSize size,
+                                               @NonNull AdRequest request, @NonNull JSONObject extras) {
+        try {
+            String layoutName = extras.getString(NativeAdAdvancedLayoutIdExtra);
+
+            int layoutID = _context.getResources().getIdentifier(layoutName, "layout", _context.getPackageName());
+            if (layoutID == 0) {
+                logE("Admob Native Ad Advanced layout ID is NOT CORRECT");
+            }
+
+            NativeAdView adView = (NativeAdView) LayoutInflater.from(_context).inflate(layoutID, null);
+            Integer adType = extras.getInt(NativeAdAdvancedAdTypeExtra);
+            logD("Admob Native Ad layout ID is: " + layoutName);
+            logD("Admob Native Ad ID: " + adId);
+
+            return new AdViewInfo(new NativeCallback() {
+                @Override
+                public void onEvent(@NonNull Integer code, @NonNull String message) {
+                    AdsWrapper.onAdsResult(AdsAdmob.class.getName(), code, message);
+                }
+            }, adId, adType, adView, size, request, extras);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @SuppressWarnings("unused") // JNI method.
