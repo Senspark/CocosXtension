@@ -287,7 +287,6 @@ const std::string admob::NativeAdAdvancedDetailBuilder::AssetPrice = "asset_pric
 const std::string admob::NativeAdAdvancedDetailBuilder::AssetAdvertiser = "asset_advertiser";
 const std::string admob::NativeAdAdvancedDetailBuilder::AssetLogo = "asset_logo";
 
-
 admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingHealine(bool use) {
     
     params_[AssetHeadline] = BOOLSTR(use);
@@ -361,6 +360,83 @@ admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setU
 admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingLogo(bool use) {
     
     params_[AssetLogo] = BOOLSTR(use);
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingHealine(const std::string& _id) {
+    
+    params_[AssetHeadline] = _id;
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingBody(const std::string& _id) {
+    
+    params_[AssetBody] = _id;
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingImage(const std::string& _id) {
+    
+    params_[AssetImage] = _id;
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingCallToAction(const std::string& _id) {
+    
+    params_[AssetCallToAction] = _id;
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingIcon(const std::string& _id) {
+    
+    params_[AssetIcon] = _id;
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingMedia(const std::string& _id) {
+    
+    params_[AssetMedia] = _id;
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingStarRating(const std::string& _id) {
+    
+    params_[AssetStarRating] = _id;
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingStore(const std::string& _id) {
+    
+    params_[AssetStore] = _id;
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingPrice(const std::string& _id) {
+    
+    params_[AssetPrice] = _id;
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingAdvertiser(const std::string& _id) {
+    
+    params_[AssetAdvertiser] = _id;
+    
+    return *this;
+}
+
+admob::NativeAdAdvancedDetailBuilder& admob::NativeAdAdvancedDetailBuilder::setUsingLogo(const std::string& _id) {
+    
+    params_[AssetLogo] = _id;
     
     return *this;
 }
