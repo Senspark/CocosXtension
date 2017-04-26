@@ -387,7 +387,6 @@ static NSString* const NativeAdAdvancedUsingLogoExtra       = @"asset_logo";
     }
     
     GADAdLoader* adLoader = [[GADAdLoader alloc] initWithAdUnitID:adId rootViewController:controller adTypes:adTypes options:nil];
-    adLoader.delegate = nativeAdvancedAdListener_;
     
     [adLoaders_ setObject:adLoader forKey:adId];
     [adOptions_ setObject:extras forKey:adId];
@@ -607,12 +606,17 @@ static NSString* const NativeAdAdvancedUsingLogoExtra       = @"asset_logo";
     } else if ([view isKindOfClass:[GADNativeAppInstallAdView class]] || [view isKindOfClass:[GADNativeContentAd class]]) {
         GADAdLoader* adLoader = (GADAdLoader*) [adLoaders_ objectForKey:adId];
         NSAssert(adLoader != nil, @"AdLoader with ID %@ NOT existed.", adId);
+        adLoader.delegate = nativeAdvancedAdListener_;
         [adLoader loadRequest:request];
     }
 }
 
 - (void)hideAd:(NSString* _Nonnull)adId {
     UIView* view = [adViews_ objectForKey:adId];
+    GADAdLoader* adLoader = [adLoaders_ objectForKey:adId];
+    if (adLoader != nil) {
+        adLoader.delegate = nil;
+    }
     if (view == nil) {
         NSLog(@"%s: attempted to hide a non-created ad with id = %@",
               __PRETTY_FUNCTION__, adId);
