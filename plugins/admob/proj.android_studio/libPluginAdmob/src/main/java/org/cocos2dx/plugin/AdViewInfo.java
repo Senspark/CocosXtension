@@ -37,6 +37,7 @@ class AdViewInfo {
     private AdRequest _request;
     private AdLoader  _adLoader;
     private JSONObject _adExtras;
+    private boolean _isHiden;
 
     /// common assets
     private static final String NativeAdAdvancedUsingHeadlineExtra   = "asset_headline";
@@ -66,6 +67,7 @@ class AdViewInfo {
                 _invalidate();
             }
         });
+        _isHiden = false;
         _view = view;
         _size = view.getAdSize();
         _request = request;
@@ -80,12 +82,14 @@ class AdViewInfo {
                 _invalidate();
             }
         });
+        _isHiden = false;
         _view = view;
         _size = view.getAdSize();
         _request = request;
     }
 
     AdViewInfo(@NonNull NativeCallback callback, String adId, int nativeAdvancedAdType, @NonNull NativeAdView adView, @NonNull  AdSize size, @NonNull AdRequest request, @NonNull JSONObject extras) {
+        _isHiden = false;
         _view = adView;
         _size = size;
         _request = request;
@@ -161,6 +165,7 @@ class AdViewInfo {
 
     void hide() {
         logD("hide");
+        _isHiden = true;
         _hide();
         _pause();
     }
@@ -172,6 +177,7 @@ class AdViewInfo {
 
     void show() {
         logD("show");
+        _isHiden = false;
         _show();
         _resume();
         _reload();
@@ -215,7 +221,10 @@ class AdViewInfo {
 
     private void _displayAppInstallAd(NativeAppInstallAd ad) {
         logD("_displayAppInstallAd");
-        _view.setVisibility(View.VISIBLE);
+        if(!_isHiden) {
+            _view.setVisibility(View.VISIBLE);
+        }
+        
         NativeAppInstallAdView appInstallAdView = (NativeAppInstallAdView) _view;
 
         appInstallAdView.setNativeAd(ad);
@@ -277,7 +286,9 @@ class AdViewInfo {
 
     private void _displayContentAd(NativeContentAd ad) {
         logD("_displayContentAd");
-        _view.setVisibility(View.VISIBLE);
+        if(!_isHiden) {
+            _view.setVisibility(View.VISIBLE);
+        }
         NativeContentAdView contentAdView = (NativeContentAdView) _view;
 
         contentAdView.setNativeAd(ad);
