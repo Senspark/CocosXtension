@@ -53,6 +53,7 @@
 		2C4585E41C3B649300BA43BF /* UnityProtocolAds.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UnityProtocolAds.mm; sourceTree = "<group>"; };
 		2C8AE15A1C3D2B2200FC12FC /* GooglePlusProtocolShare.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GooglePlusProtocolShare.mm; sourceTree = "<group>"; };
 		6C4A636D1CB75E5100E736E5 /* AdMobProtocolAdsImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdMobProtocolAdsImpl.cpp; sourceTree = "<group>"; };
+		6FB0CF191EC0603000259022 /* SensparkPluginFwd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SensparkPluginFwd.hpp; sourceTree = "<group>"; };
 		6FEE0D591D5C7CDA00B963C1 /* GoogleProtocolAnalyticsImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoogleProtocolAnalyticsImpl.cpp; sourceTree = "<group>"; };
 		9520E0B31B46A74800B7768B /* libPluginSenspark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginSenspark.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		952FD2B91C8542D4000F3848 /* GooglePlusProtocolUser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GooglePlusProtocolUser.mm; sourceTree = "<group>"; };
@@ -108,6 +109,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6FB0CF181EC0603000259022 /* senspark */ = {
+			isa = PBXGroup;
+			children = (
+				6FB0CF191EC0603000259022 /* SensparkPluginFwd.hpp */,
+			);
+			path = senspark;
+			sourceTree = "<group>";
+		};
 		9520E0AA1B46A74800B7768B = {
 			isa = PBXGroup;
 			children = (
@@ -151,6 +160,7 @@
 		95FE48E91B57693A00739C4A /* include */ = {
 			isa = PBXGroup;
 			children = (
+				6FB0CF181EC0603000259022 /* senspark */,
 				17F51F711C3E3FFD00FF30A3 /* GooglePlusProtocolShare.h */,
 				17F51F721C3E3FFD00FF30A3 /* GooglePlusProtocolUser.h */,
 				17F51F731C3E3FFD00FF30A3 /* SensparkPluginManager.h */,
