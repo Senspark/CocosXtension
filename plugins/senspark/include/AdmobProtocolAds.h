@@ -242,7 +242,7 @@ private:
                                               int height);
 };
 
-class CC_DEPRECATED_ATTRIBUTE AdmobProtocolAds::AdSize {
+class AdmobProtocolAds::AdSize {
 public:
     /// iPhone and iPod Touch ad size.
     ///
