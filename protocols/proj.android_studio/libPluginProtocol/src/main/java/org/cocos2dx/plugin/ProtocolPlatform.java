@@ -129,6 +129,10 @@ public class ProtocolPlatform  {
 
 		return -1;
 	}
+    
+    public String getCurrentLanguageCode() {
+        return Locale.getDefault().getLanguage();
+    }
 	
 	public String getSHA1CertFingerprint() {
 		PackageInfo info;
