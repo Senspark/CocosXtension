@@ -747,7 +747,14 @@ public class AdsAdmob implements InterfaceAds, PluginListener {
                         _refreshInterstitialAdAvailability();
                     }
                 });
-                _interstitialAd.setInAppPurchaseListener(new IAPListener(AdsAdmob.this));
+
+                try {
+                    _interstitialAd.setInAppPurchaseListener(new IAPListener(AdsAdmob.this));
+                } catch (IllegalStateException ex) {
+                    // Fatal Exception: java.lang.IllegalStateException: setInAppPurchaseListener
+                    // is not supported for current ad type.
+                    ex.printStackTrace();
+                }
 
                 AdRequest.Builder builder = new AdRequest.Builder();
                 _addTestDeviceIds(builder);
