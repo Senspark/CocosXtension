@@ -250,7 +250,10 @@ class AdViewInfo {
         ImageView imageView = (ImageView) getAssetView(appInstallAdView, NativeAdAdvancedUsingImageExtra);
         if (imageView != null) {
             appInstallAdView.setImageView(imageView);
-            imageView.setImageDrawable(ad.getImages().get(0).getDrawable());
+            //protect case: no image in ad
+            if (ad.getImages().size() > 0) {
+                imageView.setImageDrawable(ad.getImages().get(0).getDrawable());
+            }
         }
 
         Button callToActionView = (Button) getAssetView(appInstallAdView, NativeAdAdvancedUsingCallToActionExtra);
