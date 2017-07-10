@@ -143,13 +143,18 @@ public class ProtocolPlatform  {
 			MessageDigest md;
 			md = MessageDigest.getInstance("SHA1");
 			md.update(info.signatures[0].toByteArray());
-			String strResult = "";
+
+			StringBuilder builder = new StringBuilder();
 			for (byte b : md.digest()) {
-				strResult += Integer.toString(b & 0xff, 16);
+                String hex = Integer.toString(b & 0xff, 16);
+                if (hex.length() == 1) {
+                    builder.append('0');
+                }
+                builder.append(hex.toUpperCase(Locale.US));
 			}
-			strResult = strResult.toUpperCase(Locale.US);
-			Log.d("hash key", "hash=" + strResult);
-			return strResult;
+			String result = builder.toString();
+			Log.d("hash key", "hash=" + result);
+			return result;
 		} catch (Exception e) {
 			Log.e("name not found", e.toString());
 			return "";
