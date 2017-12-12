@@ -41,6 +41,7 @@ public:
     std::string getUserFullName();
     std::string getUserLastName();
     std::string getUserFirstName();
+    std::string getUserAvatarUrl();
     
     void graphRequest(const std::string& graphPath, const FBParam& param, FacebookProtocolUser::UserCallback& callback);
     void api(const std::string& graphPath, HttpMethod method, const FBParam& param, FacebookProtocolUser::UserCallback& callback);

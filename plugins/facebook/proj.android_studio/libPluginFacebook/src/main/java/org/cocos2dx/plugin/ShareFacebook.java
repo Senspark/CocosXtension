@@ -105,7 +105,7 @@ public class ShareFacebook implements InterfaceShare, PluginListener {
 		LogD("share invoked " + cpInfo.toString());
 
 		if (networkReachable()) {
-			ShareDialog mShareDialog = new ShareDialog(mContext);
+			final ShareDialog mShareDialog = new ShareDialog(mContext);
 
 			mShareDialog.registerCallback(mCallbackManager, new FacebookCallback<Sharer.Result>() {
 

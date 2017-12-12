@@ -54,6 +54,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.facebook.ProfileTracker;
+
 public class UserFacebook implements InterfaceUser, PluginListener {
 	private final static String LOG_TAG = "UserFacebook";
 	private Activity mContext = null;
@@ -75,10 +77,12 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	}
 
 	public UserFacebook(Context context) {
+
 		mContext = (Activity) context;
 		FacebookSdk.sdkInitialize(mContext.getApplicationContext());
 		AppEventsLogger.activateApp(mContext.getApplication());
 		PluginWrapper.addListener(this);
+
 		mAdapter = this;
 		mCallbackManager = CallbackManager.Factory.create();
 		mAccessTokenTracker = new AccessTokenTracker() {
@@ -95,17 +99,34 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 		LoginManager.getInstance().registerCallback(mCallbackManager,
 				new FacebookCallback<LoginResult>() {
 
+					private ProfileTracker mProfileTracker;
+
 					@Override
 					public void onSuccess(LoginResult result) {
-						LogD("Login facebook success");
-						UserWrapper.onActionResult(mAdapter,
-								UserWrapper.ACTION_RET_LOGIN_SUCCEED,
-								"Login facebook success.");
+						Log.i("FACEBOOK LOGIN","LOGIN SUCCESS");
+						mAccessToken = result.getAccessToken();
+
+						if(Profile.getCurrentProfile() == null) {
+							mProfileTracker = new ProfileTracker() {
+								@Override
+								protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+									UserWrapper.onActionResult(mAdapter, UserWrapper.ACTION_RET_LOGIN_SUCCEED, "facebook: Login succeeded");
+									mProfileTracker.stopTracking();
+								}
+							};
+							// no need to call startTracking() on mProfileTracker
+							// because it is called by its constructor, internally.
+						}
+
+						//handleFacebookAccessToken(mAccessToken);
+						//UserWrapper.onActionResult(mAdapter, UserWrapper.ACTION_RET_LOGIN_SUCCEED, "facebook: Login succeeded");
 					}
 
 					@Override
 					public void onError(FacebookException error) {
 						LogD("Login facebook error" + error.getMessage());
+
+						mAccessToken = null;
 						UserWrapper.onActionResult(mAdapter,
 								UserWrapper.ACTION_RET_LOGIN_FAILED,
 								"Login facebook fail: " + error.getMessage());
@@ -115,11 +136,14 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 					@Override
 					public void onCancel() {
 						LogD("Login facebook cancel");
+
+						mAccessToken = null;
 						UserWrapper.onActionResult(mAdapter,
 								UserWrapper.ACTION_RET_LOGIN_FAILED,
 								"Login facebook be cancelled");
 					}
 				});
+
 	}
 
 	@Override
@@ -164,16 +188,18 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 				loginWithReadPermissions("public_profile, email, user_friends");
 			}
 		});
+
 	}
 
 	@Override
 	public void logout() {
-		Log.i(LOG_TAG, mAccessToken == null ? "mAccessToken is null" : "mAccessToken is NOT null");
+
 		if (mAccessToken != null) {
 			LoginManager.getInstance().logOut();
 			mAccessToken = null;
-			UserWrapper.onActionResult(mAdapter,
-					UserWrapper.ACTION_RET_LOGOUT_SUCCEED, "Facebook logout");
+
+			UserWrapper.onActionResult(mAdapter, UserWrapper.ACTION_RET_LOGOUT_SUCCEED, "facebook logout");
+
 		} else {
 			UserWrapper.onActionResult(mAdapter,
 					UserWrapper.ACTION_RET_LOGOUT_FAILED,
@@ -183,36 +209,57 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 
 	@Override
 	public String getUserID() {
-		if (mAccessToken != null)
-			return mAccessToken.getUserId();
-		return null;
+		return mAccessToken.getUserId();
 	}
 
 	@Override
 	public String getUserAvatarUrl() {
-		return null;
+		return "https://graph.facebook.com/" + getUserID() + "/picture?type=square";
 	}
 	
 	public String getUserFullName() {
-		return Profile.getCurrentProfile().getName();
+
+		if (Profile.getCurrentProfile() != null) {
+			return Profile.getCurrentProfile().getName();
+		}
+		else {
+			return "";
+		}
 	}
 	
 	public String getUserLastName() {
-		return Profile.getCurrentProfile().getLastName();
+		if (Profile.getCurrentProfile() != null) {
+			return Profile.getCurrentProfile().getLastName();
+		}
+		else {
+			return "";
+		}
 	}
 	
 	public String getUserFirstName() {
-		return Profile.getCurrentProfile().getFirstName();
+		if (Profile.getCurrentProfile() != null) {
+			return Profile.getCurrentProfile().getFirstName();
+		}
+		else {
+			return "";
+		}
 	}
 	
 	@Override
 	public String getUserDisplayName() {
-		return Profile.getCurrentProfile().getName();
+
+		if (Profile.getCurrentProfile() != null) {
+			return Profile.getCurrentProfile().getName();
+		}
+		else {
+			return "";
+		}
 	}
 	
 	@Override
 	public boolean isLoggedIn() {
-		return AccessToken.getCurrentAccessToken() != null;
+
+		return mAccessToken != null;
 	}
 
 	@Override
@@ -371,21 +418,20 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	@Override
 	public void onStart() {
 		mAccessTokenTracker.startTracking();
+
 	}
 
 	@Override
 	public void onResume() {
-
 	}
 
 	@Override
 	public void onPause() {
-
 	}
 
 	@Override
 	public void onStop() {
-		 mAccessTokenTracker.stopTracking();
+		mAccessTokenTracker.stopTracking();
 	}
 
 	@Override
@@ -408,4 +454,5 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 		}
 		return true;
 	}
+
 }

@@ -66,6 +66,10 @@ std::string FacebookProtocolUser::getUserFirstName() {
     return callStringFuncWithParam("getUserFirstName", nullptr);
 }
 
+std::string FacebookProtocolUser::getUserAvatarUrl() {
+    return callStringFuncWithParam("getUserAvatarUrl", nullptr);
+}
+
 void FacebookProtocolUser::graphRequest(const std::string& graphPath, const FBParam& params, FacebookProtocolUser::UserCallback& callback) {
     
     PluginParam pathParam(graphPath.c_str());
