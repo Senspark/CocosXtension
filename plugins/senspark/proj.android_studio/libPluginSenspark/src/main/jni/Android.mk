@@ -42,10 +42,6 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../../../../protocols/platform/androi
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../../../include
 LOCAL_EXPORT_C_INCLUDES += $(LOCAL_PATH)/../../../../../platform/android
 
-
-LOCAL_LDLIBS := -landroid
-LOCAL_LDLIBS += -llog
-
 LOCAL_STATIC_LIBRARIES := android_native_app_glue
 LOCAL_STATIC_LIBRARIES += PluginProtocolStatic
 
