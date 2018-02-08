@@ -26,8 +26,7 @@ $(addprefix ../../platform/android/, \
 ../../PluginManager.cpp \
 ../../PluginParam.cpp
 
-LOCAL_CFLAGS := -std=c++11 -Wno-psabi
-LOCAL_EXPORT_CFLAGS := -Wno-psabi
+LOCAL_CFLAGS := -std=c++11
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../include
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../platform/android
@@ -35,10 +34,4 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../platform/android
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../include
 LOCAL_EXPORT_C_INCLUDES += $(LOCAL_PATH)/../../platform/android
 
-LOCAL_LDLIBS := -landroid
-LOCAL_LDLIBS += -llog
-LOCAL_STATIC_LIBRARIES := android_native_app_glue
-
 include $(BUILD_STATIC_LIBRARY)
-
-$(call import-module,android/native_app_glue)
