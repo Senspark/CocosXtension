@@ -26,12 +26,18 @@ ext {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
+    buildToolsVersion '27.0.2'
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 25
+        minSdkVersion 14
+        targetSdkVersion 27
+    }
+
+    sourceSets {
+        main {
+            jni.srcDirs = []
+        }
     }
 
     buildTypes {
@@ -44,10 +50,9 @@ android {
 
 dependencies {
     provided fileTree(dir: 'libs', include: ['*.jar'])
-    provided 'com.google.android.gms:play-services-ads:10.0.1'
+    provided 'com.google.android.gms:play-services-ads:11.6.2'
     compile project(':libPluginProtocol')
 }
-
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

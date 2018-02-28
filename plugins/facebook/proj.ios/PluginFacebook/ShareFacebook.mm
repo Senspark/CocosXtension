@@ -55,6 +55,8 @@
         _callbackID = callbackID;
     }
     
+    NSLog(@"Facebook SDK version: %@", [FBSDKSettings sdkVersion]);
+    
     return self;
 }
 
@@ -80,9 +82,8 @@
 }
 
 - (void) dealloc {
-    [super dealloc];
-    
     [_shareInfo release];
+    [super dealloc];
 }
 
 #pragma mark -
@@ -145,12 +146,15 @@
         NSString *desc = [shareInfo objectForKey:@"description"];
         NSString *photo = [shareInfo objectForKey:@"picture"];
         
-        FBSDKShareLinkContent* content = [[[FBSDKShareLinkContent alloc] init] autorelease];
-        content.contentURL = [NSURL URLWithString:link];
-        content.contentTitle = caption;
-        content.contentDescription = desc;
-        content.imageURL = [NSURL URLWithString:photo];
+        NSURL *imageURL = [NSURL URLWithString:photo];
+        NSURL *contentURL = [NSURL URLWithString:link];
         
+        FBSDKShareLinkContent* content = [[[FBSDKShareLinkContent alloc] init] autorelease];
+        [content setContentURL:contentURL];
+//        [content setImageURL:imageURL];
+//        [content setContentTitle:caption];
+//        [content setContentDescription:desc];
+
         // If the Facebook app is installed and we can present the share dialog
         [FBSDKShareDialog showFromViewController:[ShareWrapper getCurrentRootViewController] withContent:content delegate:[[FacebookSharingDelegate alloc] initWithSharer:self andCallbackID:cbID]];
     }

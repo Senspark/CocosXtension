@@ -23,8 +23,6 @@
  ****************************************************************************/
 
 #import "UserFacebook.h"
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import "UserWrapper.h"
 #import "ProtocolUser.h"
 #import "ParseUtils.h"
@@ -44,8 +42,13 @@ using namespace cocos2d::plugin;
 }
 
 - (void) login {
+    [[NSNotificationCenter defaultCenter] removeObserver:FBSDKProfileDidChangeNotification];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:
+     @selector(userLoginStatusChanged) name:FBSDKProfileDidChangeNotification object:nil];
+    
     self.permissions = @[@"public_profile", @"email", @"user_friends"];
     [self loginWithReadPermissionsInArray:_permissions];
+    [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
 }
 
 - (void) loginWithReadPermissions: (NSString *) permissions {
@@ -66,7 +69,7 @@ using namespace cocos2d::plugin;
     } else if (result.declinedPermissions.count > 0) {
         [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLoginFailed withMsg:@"Permission declined"];
     } else {
-        [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLoginSucceed withMsg:@"Login facebook success"];
+//        [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLoginSucceed withMsg:@"Login facebook success"];
     }
 }
 
@@ -95,13 +98,20 @@ using namespace cocos2d::plugin;
     }
 }
 
+- (void)userLoginStatusChanged {
+    NSLog(@">>>> userLoginStatusChanged");
+    [UserWrapper onActionResult:self withRet: (int) UserActionResultCode::kLoginSucceed withMsg:@"Login facebook success"];
+
+}
+
 - (NSString *) getUserID {
     return [FBSDKAccessToken currentAccessToken].userID;
 }
 
 -(NSString*) getUserFullName {
     NSLog(@"user name %@",[FBSDKProfile currentProfile].name);
-    return [FBSDKProfile currentProfile].name;
+    auto currentProfile = [FBSDKProfile currentProfile];
+    return currentProfile.name;
 }
 
 -(NSString*) getUserLastName {
@@ -112,6 +122,10 @@ using namespace cocos2d::plugin;
 -(NSString*) getUserFirstName {
     NSLog(@"user first name %@", [[FBSDKProfile currentProfile] firstName]);
     return [[FBSDKProfile currentProfile] firstName];
+}
+
+-(NSString*) getUserAvatarUrl {
+    return [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=square", [self getUserID]];
 }
 
 - (BOOL) isLoggedIn{
@@ -196,5 +210,13 @@ using namespace cocos2d::plugin;
     return @"0.1.0";
 }
 
+
+- (void)loginButton:(FBSDKLoginButton *)loginButton didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)error {
+    //
+}
+
+- (void)loginButtonDidLogOut:(FBSDKLoginButton *)loginButton {
+    //
+}
 
 @end
