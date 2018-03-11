@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C0FB1E21C3D2D8E009511B4 /* UserGooglePlus.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C0FB1E11C3D2D8E009511B4 /* UserGooglePlus.mm */; };
-		2C0FB1E51C3D2DB1009511B4 /* ShareGooglePlus.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C0FB1E41C3D2DB1009511B4 /* ShareGooglePlus.mm */; };
-		2C0FB1E91C3DFD71009511B4 /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C0FB1E61C3DFD71009511B4 /* GoogleOpenSource.framework */; };
-		2C0FB1EB1C3DFD71009511B4 /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C0FB1E81C3DFD71009511B4 /* GooglePlus.framework */; };
+		0F4FD7311F62416A00153413 /* UserGoogleSignIn.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F4FD72F1F62416A00153413 /* UserGoogleSignIn.mm */; };
+		0F4FD75C1F6282A400153413 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F4FD75A1F6282A400153413 /* GoogleSignIn.framework */; };
+		0F4FD75D1F6282A400153413 /* GoogleSignInDependencies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F4FD75B1F6282A400153413 /* GoogleSignInDependencies.framework */; };
 		2C0FB1EE1C3DFD93009511B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C0FB1ED1C3DFD93009511B4 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,13 +26,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2C0FB1E01C3D2D8E009511B4 /* UserGooglePlus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserGooglePlus.h; sourceTree = "<group>"; };
-		2C0FB1E11C3D2D8E009511B4 /* UserGooglePlus.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UserGooglePlus.mm; sourceTree = "<group>"; };
-		2C0FB1E31C3D2DB1009511B4 /* ShareGooglePlus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareGooglePlus.h; sourceTree = "<group>"; };
-		2C0FB1E41C3D2DB1009511B4 /* ShareGooglePlus.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ShareGooglePlus.mm; sourceTree = "<group>"; };
-		2C0FB1E61C3DFD71009511B4 /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleOpenSource.framework; path = platform/ios/GoogleOpenSource.framework; sourceTree = "<group>"; };
-		2C0FB1E71C3DFD71009511B4 /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlus.bundle; path = platform/ios/GooglePlus.bundle; sourceTree = "<group>"; };
-		2C0FB1E81C3DFD71009511B4 /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlus.framework; path = platform/ios/GooglePlus.framework; sourceTree = "<group>"; };
+		0F4FD72F1F62416A00153413 /* UserGoogleSignIn.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UserGoogleSignIn.mm; sourceTree = "<group>"; };
+		0F4FD7301F62416A00153413 /* UserGoogleSignIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserGoogleSignIn.h; sourceTree = "<group>"; };
+		0F4FD75A1F6282A400153413 /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignIn.framework; path = ../platform/ios/GoogleSignIn.framework; sourceTree = "<group>"; };
+		0F4FD75B1F6282A400153413 /* GoogleSignInDependencies.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignInDependencies.framework; path = ../platform/ios/GoogleSignInDependencies.framework; sourceTree = "<group>"; };
+		0F4FD75E1F6283B200153413 /* ShareGooglePlus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareGooglePlus.h; sourceTree = "<group>"; };
+		0F4FD75F1F6283B200153413 /* ShareGooglePlus.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ShareGooglePlus.mm; sourceTree = "<group>"; };
+		0F4FD7601F6283B200153413 /* UserGooglePlus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserGooglePlus.h; sourceTree = "<group>"; };
+		0F4FD7611F6283B200153413 /* UserGooglePlus.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UserGooglePlus.mm; sourceTree = "<group>"; };
 		2C0FB1ED1C3DFD93009511B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2C8AE1651C3D2C8800FC12FC /* libPluginGooglePlus.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginGooglePlus.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -43,9 +43,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F4FD75C1F6282A400153413 /* GoogleSignIn.framework in Frameworks */,
+				0F4FD75D1F6282A400153413 /* GoogleSignInDependencies.framework in Frameworks */,
 				2C0FB1EE1C3DFD93009511B4 /* Foundation.framework in Frameworks */,
-				2C0FB1E91C3DFD71009511B4 /* GoogleOpenSource.framework in Frameworks */,
-				2C0FB1EB1C3DFD71009511B4 /* GooglePlus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,10 +55,9 @@
 		2C0FB1EC1C3DFD7A009511B4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0F4FD75A1F6282A400153413 /* GoogleSignIn.framework */,
+				0F4FD75B1F6282A400153413 /* GoogleSignInDependencies.framework */,
 				2C0FB1ED1C3DFD93009511B4 /* Foundation.framework */,
-				2C0FB1E61C3DFD71009511B4 /* GoogleOpenSource.framework */,
-				2C0FB1E71C3DFD71009511B4 /* GooglePlus.bundle */,
-				2C0FB1E81C3DFD71009511B4 /* GooglePlus.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -66,10 +65,12 @@
 		2C8AE15C1C3D2C8800FC12FC = {
 			isa = PBXGroup;
 			children = (
-				2C0FB1E31C3D2DB1009511B4 /* ShareGooglePlus.h */,
-				2C0FB1E41C3D2DB1009511B4 /* ShareGooglePlus.mm */,
-				2C0FB1E01C3D2D8E009511B4 /* UserGooglePlus.h */,
-				2C0FB1E11C3D2D8E009511B4 /* UserGooglePlus.mm */,
+				0F4FD7301F62416A00153413 /* UserGoogleSignIn.h */,
+				0F4FD72F1F62416A00153413 /* UserGoogleSignIn.mm */,
+				0F4FD75E1F6283B200153413 /* ShareGooglePlus.h */,
+				0F4FD75F1F6283B200153413 /* ShareGooglePlus.mm */,
+				0F4FD7601F6283B200153413 /* UserGooglePlus.h */,
+				0F4FD7611F6283B200153413 /* UserGooglePlus.mm */,
 				2C0FB1EC1C3DFD7A009511B4 /* Frameworks */,
 				2C8AE1661C3D2C8800FC12FC /* Products */,
 			);
@@ -139,8 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C0FB1E51C3D2DB1009511B4 /* ShareGooglePlus.mm in Sources */,
-				2C0FB1E21C3D2D8E009511B4 /* UserGooglePlus.mm in Sources */,
+				0F4FD7311F62416A00153413 /* UserGoogleSignIn.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +255,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../platform/ios",
 					"$(PROJECT_DIR)/platform/ios",
+					"$(PROJECT_DIR)/frameworks",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -278,6 +279,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../platform/ios",
 					"$(PROJECT_DIR)/platform/ios",
+					"$(PROJECT_DIR)/frameworks",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

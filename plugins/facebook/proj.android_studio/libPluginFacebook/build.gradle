@@ -26,12 +26,18 @@ ext {
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 27
+    buildToolsVersion '27.0.2'
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
+        minSdkVersion 14
+        targetSdkVersion 27
+    }
+
+    sourceSets {
+        main {
+            jni.srcDirs = []
+        }
     }
 
     buildTypes {
@@ -44,7 +50,7 @@ android {
 
 dependencies {
     compile project(':libPluginProtocol')
-    compile 'com.facebook.android:facebook-android-sdk:4.12.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.26.0'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'

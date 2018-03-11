@@ -23,8 +23,11 @@
  ****************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+
 #import "InterfaceUser.h"
-@interface UserFacebook : NSObject <InterfaceUser>{
+@interface UserFacebook : NSObject <InterfaceUser, FBSDKLoginButtonDelegate>{
 }
 
 @property BOOL debug;
@@ -38,6 +41,7 @@
 - (NSString*) getUserFullName;
 - (NSString*) getUserLastName;
 - (NSString*) getUserFirstName;
+- (NSString*) getUserAvatarUrl;
 - (NSString*) getAccessToken;
 - (NSString*) getPermissionList;
 

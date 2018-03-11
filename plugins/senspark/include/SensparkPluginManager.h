@@ -57,6 +57,7 @@ enum class UserPluginType {
     GAME_CENTER,
     GOOGLE_PLAY,
     GOOGLE_PLUS,
+    GOOGLE_SIGNIN
 };
 
 enum class BaaSPluginType {

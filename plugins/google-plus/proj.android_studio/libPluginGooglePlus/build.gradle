@@ -26,12 +26,18 @@ ext {
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 27
+    buildToolsVersion '27.0.2'
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
+        minSdkVersion 14
+        targetSdkVersion 27
+    }
+
+    sourceSets {
+        main {
+            jni.srcDirs = []
+        }
     }
 
     buildTypes {
@@ -44,10 +50,12 @@ android {
 
 dependencies {
     compile project(':libPluginProtocol')
-    provided 'com.google.android.gms:play-services:8.4.0'
-    provided 'com.google.android.gms:play-services-ads:8.4.0'
-    provided 'com.google.android.gms:play-services-auth:8.4.0'
-    provided 'com.google.android.gms:play-services-gcm:8.4.0'
+
+    provided 'com.google.android.gms:play-services-ads:11.6.2'
+    provided 'com.google.android.gms:play-services-auth:11.6.2'
+    provided 'com.google.android.gms:play-services-gcm:11.6.2'
+    provided 'com.google.android.gms:play-services-plus:11.6.2'
+    provided 'com.google.firebase:firebase-auth:11.6.2'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'

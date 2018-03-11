@@ -57,6 +57,7 @@ SensparkPluginManager::SensparkPluginManager(void)
     REGISTER_PLUGIN_NAME(UserPluginType, GAME_CENTER,   "UserGameCenter");
     REGISTER_PLUGIN_NAME(UserPluginType, GOOGLE_PLAY,   "UserGooglePlay");
     REGISTER_PLUGIN_NAME(UserPluginType, GOOGLE_PLUS,   "UserGooglePlus");
+    REGISTER_PLUGIN_NAME(UserPluginType, GOOGLE_SIGNIN, "UserGoogleSignIn");
 
     //------ Register Share Serice ------
     REGISTER_PLUGIN_NAME(SharePluginType, FACEBOOK,     "ShareFacebook");
