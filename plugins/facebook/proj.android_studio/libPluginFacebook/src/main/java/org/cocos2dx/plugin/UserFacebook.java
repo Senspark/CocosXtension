@@ -209,7 +209,10 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 
 	@Override
 	public String getUserID() {
-		return mAccessToken.getUserId();
+		if (mAccessToken != null) {
+			return mAccessToken.getUserId();
+		}
+		return "";
 	}
 
 	@Override
