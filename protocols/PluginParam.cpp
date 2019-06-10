@@ -37,7 +37,7 @@ PluginParam::PluginParam(int nValue)
 	_type = kParamTypeInt;
 }
     
-PluginParam::PluginParam(long lValue) : _longValue(lValue) {
+PluginParam::PluginParam(long long lValue) : _longValue(lValue) {
     _type = kParamTypeLong;
 }
 

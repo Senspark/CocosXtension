@@ -38,7 +38,7 @@ void GameCenterProtocolSocial::revealAchievement(const std::string& achievementI
     PluginParam achInfoParam(achievementId.c_str());
     
     CallbackWrapper* wrapper = new CallbackWrapper(pcb);
-    PluginParam callbackParam((long) wrapper);
+    PluginParam callbackParam((long long) wrapper);
     
     callFuncWithParam("revealAchievement", &achInfoParam, &callbackParam, nullptr);
 }
@@ -47,7 +47,7 @@ void GameCenterProtocolSocial::resetAchievement(const std::string& achievementId
     PluginParam achInfoParam(achievementId.c_str());
     
     CallbackWrapper* wrapper = new CallbackWrapper(pcb);
-    PluginParam callbackParam((long) wrapper);
+    PluginParam callbackParam((long long) wrapper);
     
     callFuncWithParam("resetAchievement", &achInfoParam, &callbackParam, nullptr);
 }
@@ -55,7 +55,7 @@ void GameCenterProtocolSocial::resetAchievement(const std::string& achievementId
 void GameCenterProtocolSocial::resetAchievements(const GameCenterProtocolSocial::SocialCallback& pcb) {
     
     CallbackWrapper* wrapper = new CallbackWrapper(pcb);
-    PluginParam callbackParam((long) wrapper);
+    PluginParam callbackParam((long long) wrapper);
     
     callFuncWithParam("resetAchievements", &callbackParam, nullptr);
 }

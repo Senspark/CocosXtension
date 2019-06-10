@@ -31,7 +31,7 @@ THE SOFTWARE.
 namespace cocos2d { namespace plugin {
 
 extern "C" {
-    JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_SocialWrapper_nativeOnSocialResult(JNIEnv*  env, jobject thiz, jstring className, jboolean ret, jstring msg, jint cbID)
+    JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_SocialWrapper_nativeOnSocialResult(JNIEnv*  env, jobject thiz, jstring className, jboolean ret, jstring msg, jlong cbID)
     {
         std::string strMsg = PluginJniHelper::jstring2string(env, msg);
         std::string strClassName = PluginJniHelper::jstring2string(env, className);
@@ -56,7 +56,7 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_SocialWrapper_nativeOnDialogDismissed(JNIEnv*  env, jobject thiz, jint cbID)
+    JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_SocialWrapper_nativeOnDialogDismissed(JNIEnv*  env, jobject thiz, jlong cbID)
     {
         PluginUtils::outputLog("ProtocolSocial", "nativeOnDialogDismissed()");
         if (cbID)
@@ -121,7 +121,7 @@ void ProtocolSocial::submitScore(const std::string& leadboardID, int score, cons
         CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
 
         // invoke java method
-        t.env->CallVoidMethod(pData->jobj, t.methodID, strID, score, (jint) cbWrapper);
+        t.env->CallVoidMethod(pData->jobj, t.methodID, strID, score, (jlong) cbWrapper);
         t.env->DeleteLocalRef(strID);
         t.env->DeleteLocalRef(t.classID);
     }
@@ -139,7 +139,7 @@ void ProtocolSocial::showLeaderboard(const std::string& leaderboardID, const Dia
         jstring strID = PluginUtils::getEnv()->NewStringUTF(leaderboardID.c_str());
         CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
         // invoke java method
-        t.env->CallVoidMethod(pData->jobj, t.methodID, strID, (jint) cbWrapper);
+        t.env->CallVoidMethod(pData->jobj, t.methodID, strID, (jlong) cbWrapper);
         t.env->DeleteLocalRef(strID);
         t.env->DeleteLocalRef(t.classID);
     }
@@ -155,7 +155,7 @@ void ProtocolSocial::showLeaderboards(const DialogCallback& cb) {
 	    {
 	    	CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
 	        // invoke java method
-	        t.env->CallVoidMethod(pData->jobj, t.methodID, (jint) cbWrapper);
+	        t.env->CallVoidMethod(pData->jobj, t.methodID, (jlong) cbWrapper);
 	        t.env->DeleteLocalRef(t.classID);
 	    }
 }
@@ -174,7 +174,7 @@ void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo, const SocialCal
         jobject obj_Map = PluginUtils::createJavaMapObject(&achInfo);
         CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
         // invoke java method
-        t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map, (jint) cbWrapper);
+        t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map, (jlong) cbWrapper);
         t.env->DeleteLocalRef(obj_Map);
         t.env->DeleteLocalRef(t.classID);
     }
@@ -193,7 +193,7 @@ void ProtocolSocial::resetAchievements(const SocialCallback& cb)
         // generate the hashtable from map
         CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
         // invoke java method
-        t.env->CallVoidMethod(pData->jobj, t.methodID, (jint) cbWrapper);
+        t.env->CallVoidMethod(pData->jobj, t.methodID, (jlong) cbWrapper);
         t.env->DeleteLocalRef(t.classID);
     }
 }
@@ -209,7 +209,7 @@ void ProtocolSocial::showAchievements(const DialogCallback& cb)
 		    {
 		    	CallbackWrapper* cbWrapper = new CallbackWrapper(cb);
 		        // invoke java method
-		        t.env->CallVoidMethod(pData->jobj, t.methodID, (jint) cbWrapper);
+		        t.env->CallVoidMethod(pData->jobj, t.methodID, (jlong) cbWrapper);
 		        t.env->DeleteLocalRef(t.classID);
 		    }
 }

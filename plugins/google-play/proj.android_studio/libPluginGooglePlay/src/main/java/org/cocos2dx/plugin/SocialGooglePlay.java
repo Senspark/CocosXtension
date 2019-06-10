@@ -27,7 +27,7 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 	public static final int REQUEST_CODE_LEADERBOARD = 0x1001;
 	public static final int REQUEST_CODE_ACHIEVEMENT = 0x1002;
 	
-	protected int mCurrentCallbackID = 0;
+	protected long mCurrentCallbackID = 0;
 
 	public SocialGooglePlay(Context context) {
 		mContext = context;
@@ -51,7 +51,7 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 	}
 
 	@Override
-	public void submitScore(String leaderboard_id, int submitscore, final int callbackID) {
+	public void submitScore(String leaderboard_id, int submitscore, final long callbackID) {
 		final String leaderboardID = leaderboard_id;
 		final long score = submitscore;
 		logD("Submit score " + score + " to leaderboard " + leaderboardID);
@@ -84,7 +84,7 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 		task.execute();
 	}
 
-	public void showLeaderboards(int callbackID) {
+	public void showLeaderboards(long callbackID) {
 		mCurrentCallbackID = callbackID;
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
@@ -95,7 +95,7 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 	}
 	
 	@Override
-	public void showLeaderboard(final String leaderboardID, int callbackID) {
+	public void showLeaderboard(final String leaderboardID, long callbackID) {
 		mCurrentCallbackID = callbackID;
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
@@ -106,7 +106,7 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 	}
 
 	@Override
-	public void unlockAchievement(Hashtable<String, String> achInfo, final int callbackID) {
+	public void unlockAchievement(Hashtable<String, String> achInfo, final long callbackID) {
 		final String achievementId = achInfo.get("achievementId");
 		final int percentComplete = Integer.parseInt(achInfo.get("percent").trim());
 
@@ -160,7 +160,7 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 		}
 	}
 
-	public void revealAchievement(Hashtable<String, String> achInfo, final int callbackID) {
+	public void revealAchievement(Hashtable<String, String> achInfo, final long callbackID) {
 		final String achievementId = achInfo.get("achievementId");
 		
 		AsyncTask<Void, Void, Integer> task = new AsyncTask<Void, Void, Integer>() {
@@ -185,18 +185,18 @@ public class SocialGooglePlay implements InterfaceSocial, PluginListener {
 		task.execute();
 	}
 
-	public void resetAchievement(final String achievementID, final int callbackID) {
+	public void resetAchievement(final String achievementID, final long callbackID) {
 		logD("Comming soon.");
 		SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_RESETACH_FAILED, "Comming soon.", 0);
 	}
 
-	public void resetAchievements(int callbackID) {
+	public void resetAchievements(long callbackID) {
 		logD("Comming soon.");
 		SocialWrapper.onSocialResult(mAdapter, SocialWrapper.SOCIAL_RESETACH_FAILED, "Comming soon.", 0);
 	}
 	
 	@Override
-	public void showAchievements(int callbackID) {
+	public void showAchievements(long callbackID) {
 		mCurrentCallbackID = callbackID;
 		PluginWrapper.runOnMainThread(new Runnable() {
 			

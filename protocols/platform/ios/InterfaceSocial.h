@@ -25,15 +25,15 @@ THE SOFTWARE.
 @protocol InterfaceSocial <NSObject>
 
 - (void) configDeveloperInfo : (NSDictionary*) cpInfo;
-- (void) submitScore: (NSString*) leaderboardID withScore: (int) score withCallback: (long) callbackID;
+- (void) submitScore: (NSString*) leaderboardID withScore: (int) score withCallback: (long long) callbackID;
 
-- (void) showLeaderboard: (NSString*) leaderboardID withCallback: (long) callbackID;
-- (void) showLeaderboards: (long) callbackID;
+- (void) showLeaderboard: (NSString*) leaderboardID withCallback: (long long) callbackID;
+- (void) showLeaderboards: (long long) callbackID;
 
-- (void) unlockAchievement: (NSDictionary*) achInfo withCallback:(long) callbackID;
-- (void) showAchievements: (long) callbackID;
+- (void) unlockAchievement: (NSDictionary*) achInfo withCallback:(long long) callbackID;
+- (void) showAchievements: (long long) callbackID;
 
-- (void) resetAchievements: (long) callbackID;
+- (void) resetAchievements: (long long) callbackID;
 
 - (void) setDebugMode: (BOOL) debug;
 - (NSString*) getSDKVersion;

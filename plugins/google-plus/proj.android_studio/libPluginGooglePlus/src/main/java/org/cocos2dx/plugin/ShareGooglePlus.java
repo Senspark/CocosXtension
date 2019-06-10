@@ -19,7 +19,7 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
 
 	private static final int RC_SHARE_G_PLUS = 8891;
 	private static final int RESULT_OK = -1;
-	private int pCallbackID;
+	private long pCallbackID;
 	private Hashtable<String, String> mShareInfo;
 
 	protected void LogE(String msg, Exception e) {
@@ -146,7 +146,7 @@ public class ShareGooglePlus implements InterfaceShare, PluginListener {
 	}
 
 	@Override
-	public void share(Hashtable<String, String> cpInfo, int callbackID) {
+	public void share(Hashtable<String, String> cpInfo, long callbackID) {
 		pCallbackID = callbackID;
 		mShareInfo = cpInfo;
 

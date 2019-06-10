@@ -24,7 +24,7 @@ std::string ParseProtocolBaaS::setUserInfo(const std::string& jsonChanges) {
 void ParseProtocolBaaS::saveUserInfo(BaaSCallback &cb) {
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
 
-    PluginParam callbackParam((long) wrapper);
+    PluginParam callbackParam((long long) wrapper);
 
     callFuncWithParam("saveUserInfo", &callbackParam, nullptr);
 }
@@ -32,7 +32,7 @@ void ParseProtocolBaaS::saveUserInfo(BaaSCallback &cb) {
 void ParseProtocolBaaS::fetchUserInfo(BaaSCallback &cb) {
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
 
-    PluginParam callbackParam((long) wrapper);
+    PluginParam callbackParam((long long) wrapper);
 
     callFuncWithParam("fetchUserInfo", &callbackParam, nullptr);
 }
@@ -49,14 +49,14 @@ std::string ParseProtocolBaaS::setInstallationInfo(const std::string& changes) {
 
 void ParseProtocolBaaS::saveInstallationInfo(BaaSCallback& cb) {
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
-    PluginParam callbackParam((long) wrapper);
+    PluginParam callbackParam((long long) wrapper);
     callFuncWithParam("saveInstallationInfo", &callbackParam, nullptr);
 }
 
 void ParseProtocolBaaS::loginWithFacebookAccessToken(BaaSCallback& cb) {
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
 
-    PluginParam callbackParam((long) wrapper);
+    PluginParam callbackParam((long long) wrapper);
 
     callFuncWithParam("loginWithFacebookAccessToken", &callbackParam, nullptr);
 }

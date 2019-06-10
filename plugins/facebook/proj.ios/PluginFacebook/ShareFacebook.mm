@@ -39,7 +39,7 @@
 @property (nonatomic, retain) ShareFacebook* sharer;
 @property (nonatomic, retain) NSDictionary* shareInfo;
 
-- (id) initWithSharer: (id) sharer andCallbackID:(long)callbackID;
+- (id) initWithSharer: (id) sharer andCallbackID:(long long)callbackID;
 
 @end
 
@@ -48,7 +48,7 @@
 @synthesize sharer      = _sharer;
 @synthesize shareInfo   = _shareInfo;
 
-- (id) initWithSharer: (id) sharer andCallbackID:(long)callbackID
+- (id) initWithSharer: (id) sharer andCallbackID:(long long)callbackID
 {
     if (self = [super init]) {
         self.sharer = sharer;

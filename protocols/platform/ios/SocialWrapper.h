@@ -30,8 +30,8 @@ THE SOFTWARE.
 @interface SocialWrapper : NSObject
 {}
 
-+ (void) onSocialResult:(id) obj withRet:(bool) ret withMsg:(NSString*) msg andCallback: (long) callbackID;
-+ (void) onDialogDismissedWithCallback: (long) callbackID;
++ (void) onSocialResult:(id) obj withRet:(bool) ret withMsg:(NSString*) msg andCallback: (long long) callbackID;
++ (void) onDialogDismissedWithCallback: (long long) callbackID;
 
 + (UIViewController *) getCurrentRootViewController;
 @end

@@ -101,7 +101,7 @@ public class ShareFacebook implements InterfaceShare, PluginListener {
 
 
 	@Override
-	public void share(final Hashtable<String, String> cpInfo, final int callbackID) {
+	public void share(final Hashtable<String, String> cpInfo, final long callbackID) {
 		LogD("share invoked " + cpInfo.toString());
 
 		if (networkReachable()) {
@@ -210,7 +210,7 @@ public class ShareFacebook implements InterfaceShare, PluginListener {
 		return bRet;
 	}
 
-	void sendGameRequest(final Hashtable<String, String> info, final int callbackID) {
+	void sendGameRequest(final Hashtable<String, String> info, final long callbackID) {
 
 		Log.i(LOG_TAG, "Info: " + info);
 		Log.i(LOG_TAG, "CallbackID: " + callbackID);

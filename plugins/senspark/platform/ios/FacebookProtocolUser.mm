@@ -75,7 +75,7 @@ void FacebookProtocolUser::graphRequest(const std::string& graphPath, const FBPa
     PluginParam pathParam(graphPath.c_str());
     PluginParam paramsParam(params);
     CallbackWrapper *wrapper = new CallbackWrapper(callback);
-    PluginParam cbID((long)wrapper);
+    PluginParam cbID((long long)wrapper);
     
     callFuncWithParam("graphRequestWithParams", &pathParam, &paramsParam, &cbID, nullptr);
 }
@@ -86,7 +86,7 @@ void FacebookProtocolUser::api(const std::string &graphPath, HttpMethod method, 
     PluginParam _method((int) method);
     PluginParam paramsParam(params);
     CallbackWrapper *wrapper = new CallbackWrapper(callback);
-    PluginParam cbID((long)wrapper);
+    PluginParam cbID((long long)wrapper);
     
     callFuncWithParam("api", &pathParam, &_method, &paramsParam, &cbID, NULL);
 }

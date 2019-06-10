@@ -38,7 +38,7 @@ public class ShareWrapper {
 	public static final int SHARERESULT_CANCEL  = 2;
 	public static final int SHARERESULT_TIMEOUT = 3;
 
-	public static void onShareResult(final InterfaceShare obj, final int ret, final Hashtable<String, String> content, final String msg, final int callbackID) {
+	public static void onShareResult(final InterfaceShare obj, final int ret, final Hashtable<String, String> content, final String msg, final long callbackID) {
 
 		PluginWrapper.runOnGLThread(new Runnable() {
 			@Override
@@ -63,5 +63,5 @@ public class ShareWrapper {
 		});
 
 	}
-	private static native void nativeOnShareResult(String className, int ret, JSONObject json, String msg, int callbackID);
+	private static native void nativeOnShareResult(String className, int ret, JSONObject json, String msg, long callbackID);
 }

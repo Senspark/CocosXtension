@@ -38,7 +38,7 @@ void FacebookProtocolShare::openInviteDialog(FBParam &info, FacebookProtocolShar
     FacebookProtocolShare::CallbackWrapper* wrapper = new FacebookProtocolShare::CallbackWrapper(callback);
     
     PluginParam params(info);
-    PluginParam callbackID((long)wrapper);
+    PluginParam callbackID((long long)wrapper);
     
     callFuncWithParam("openInviteDialog", &params, &callbackID, nullptr);
 }
@@ -47,7 +47,7 @@ void FacebookProtocolShare::sendGameRequest(FBParam &info, FacebookProtocolShare
     FacebookProtocolShare::CallbackWrapper* wrapper = new FacebookProtocolShare::CallbackWrapper(callback);
     
     PluginParam params(info);
-    PluginParam callbackID((long)wrapper);
+    PluginParam callbackID((long long)wrapper);
     
     callFuncWithParam("sendGameRequest", &params, &callbackID, nullptr);
 }

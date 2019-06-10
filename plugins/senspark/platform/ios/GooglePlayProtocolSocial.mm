@@ -42,7 +42,7 @@ void GooglePlayProtocolSocial::revealAchievement(const std::string& achievementI
     PluginParam idParam(achievementId.c_str());
     
     CallbackWrapper* wrapper = new CallbackWrapper(pcb);
-    PluginParam cbParam((long) wrapper);
+    PluginParam cbParam((long long) wrapper);
     
     callFuncWithParam("revealAchievement", &idParam, &cbParam, nullptr);
 }
@@ -51,7 +51,7 @@ void GooglePlayProtocolSocial::resetAchievement(const std::string& achievementId
     PluginParam idParam(achievementId.c_str());
     
     CallbackWrapper* wrapper = new CallbackWrapper(pcb);
-    PluginParam cbParam((long) wrapper);
+    PluginParam cbParam((long long) wrapper);
     
     callFuncWithParam("resetAchievement", &idParam, &cbParam, nullptr);
 }
@@ -59,7 +59,7 @@ void GooglePlayProtocolSocial::resetAchievement(const std::string& achievementId
 void GooglePlayProtocolSocial::resetAchievements(const GooglePlayProtocolSocial::SocialCallback& pcb) {
     
     CallbackWrapper* wrapper = new CallbackWrapper(pcb);
-    PluginParam cbParam((long) wrapper);
+    PluginParam cbParam((long long) wrapper);
     
     
     callFuncWithParam("resetAchievements", &cbParam, nullptr);

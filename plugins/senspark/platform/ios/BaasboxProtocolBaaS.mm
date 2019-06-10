@@ -26,7 +26,7 @@ void BaasboxProtocolBaaS::loginWithFacebookToken(const std::string &facebookToke
     
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
     
-    PluginParam callbackParam((long) wrapper);
+    PluginParam callbackParam((long long) wrapper);
     
     callFuncWithParam("loginWithFacebookToken", &facebookTokenParam, &callbackParam, nullptr);
 }
@@ -36,7 +36,7 @@ void BaasboxProtocolBaaS::updateUserProfile(const std::string &profile, BaaSCall
     
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
     
-    PluginParam callbackParam((long) wrapper);
+    PluginParam callbackParam((long long) wrapper);
     
     callFuncWithParam("updateUserProfile", &profileParam, &callbackParam, nullptr);
 }
@@ -44,7 +44,7 @@ void BaasboxProtocolBaaS::updateUserProfile(const std::string &profile, BaaSCall
 void BaasboxProtocolBaaS::fetchUserProfile(BaaSCallback &cb){
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
     
-    PluginParam callbackParam((long) wrapper);
+    PluginParam callbackParam((long long) wrapper);
     
     callFuncWithParam("fetchUserProfileWithCallbackId", &callbackParam, nullptr);
 }
@@ -54,7 +54,7 @@ void BaasboxProtocolBaaS::loadUsersWithParameters(const std::string& condition, 
     
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
     
-    PluginParam callbackParam((long) wrapper);
+    PluginParam callbackParam((long long) wrapper);
     
     callFuncWithParam("loadUsersWithParameters", &conditionParam, &callbackParam, nullptr);
 }
@@ -64,7 +64,7 @@ void BaasboxProtocolBaaS::loadAssetJSON(const std::string &assetName, BaaSCallba
     
     CallbackWrapper *wrapper = new CallbackWrapper(cb);
     
-    PluginParam callbackParam((long)wrapper);
+    PluginParam callbackParam((long long)wrapper);
     
     callFuncWithParam("loadAssetJSON", &assetNameParam, &callbackParam,nullptr);
 }

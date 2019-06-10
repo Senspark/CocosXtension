@@ -308,7 +308,7 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 	}
 
 	public void graphRequest(final String graphPath, final JSONObject params,
-			final int nativeCallback) {
+			final long nativeCallback) {
 		PluginWrapper.runOnMainThread(new Runnable() {
 
 			@Override
@@ -354,9 +354,10 @@ public class UserFacebook implements InterfaceUser, PluginListener {
 		try {
 			String graphPath = info.getString("Param1");
 			JSONObject jsonParameters = info.getJSONObject("Param2");
-			int nativeCallback = info.getInt("Param3");
+			long nativeCallback = info.getLong("Param3");
 
 			graphRequest(graphPath, jsonParameters, nativeCallback);
+
 		} catch (JSONException ex) {
 			ex.printStackTrace();
 		}

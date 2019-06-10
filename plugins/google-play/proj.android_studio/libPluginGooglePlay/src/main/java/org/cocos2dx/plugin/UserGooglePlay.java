@@ -57,15 +57,15 @@ public class UserGooglePlay implements InterfaceUser, PluginListener {
 	
 	@Override
 	public void configDeveloperInfo(Hashtable<String, String> cpInfo) {
-		PluginWrapper.runOnMainThread(new Runnable() {
-			@Override
-			public void run() {
+		//PluginWrapper.runOnMainThread(new Runnable() {
+		//	@Override
+		//	public void run() {
 				mGameHelper.setMaxAutoSignInAttempts(0);
 				mGameHelper.setup(mGameHelperListener);
 //				mGameHelper.setConnectOnStart(false);
 				setDebugMode(bDebug);
-			}
-		});
+		//	}
+		//});
 	}
 
 	@Override

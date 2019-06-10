@@ -33,11 +33,11 @@ public class SocialWrapper {
     public static final int SOCIAL_RESETACH_SUCCESS = 7;
     public static final int SOCIAL_RESETACH_FAILED = 8;
 
-    public static void onSocialResult(InterfaceSocial obj, int ret, String msg, int callbackID) {
+    public static void onSocialResult(InterfaceSocial obj, int ret, String msg, long callbackID) {
         final int curRet = ret;
         final String curMsg = msg;
         final InterfaceSocial curAdapter = obj;
-        final int cbID = callbackID;
+        final long cbID = callbackID;
 
         PluginWrapper.runOnGLThread(new Runnable() {
             @Override
@@ -49,7 +49,7 @@ public class SocialWrapper {
         });
     }
 
-    public static void onDialogDissmissedWithCallback(final int callbackID) {
+    public static void onDialogDissmissedWithCallback(final long callbackID) {
         PluginWrapper.runOnGLThread(new Runnable() {
             @Override
             public void run() {
@@ -58,6 +58,6 @@ public class SocialWrapper {
         });
     }
 
-    private static native void nativeOnSocialResult(String className, int ret, String msg, int callbackID);
-    private static native void nativeOnDialogDismissed(int callbackID);
+    private static native void nativeOnSocialResult(String className, int ret, String msg, long callbackID);
+    private static native void nativeOnDialogDismissed(long callbackID);
 }

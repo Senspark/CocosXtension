@@ -29,11 +29,11 @@ public interface InterfaceSocial {
     public final int PluginType = 6;
 
     public void configDeveloperInfo(Hashtable<String, String> cpInfo);
-    public void submitScore(String leaderboardID, int score, int callbackID);
-    public void showLeaderboard(String leaderboardID, int callbackID);
-    public void unlockAchievement(Hashtable<String, String> achInfo, int callbackID);
-    public void showAchievements(int callbackID);
-    public void resetAchievements(int callbackID);
+    public void submitScore(String leaderboardID, int score, long callbackID);
+    public void showLeaderboard(String leaderboardID, long callbackID);
+    public void unlockAchievement(Hashtable<String, String> achInfo, long callbackID);
+    public void showAchievements(long callbackID);
+    public void resetAchievements(long callbackID);
     public void setDebugMode(boolean debug);
     public String getSDKVersion();
     public String getPluginVersion();

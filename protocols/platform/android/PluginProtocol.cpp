@@ -131,7 +131,7 @@ void PluginProtocol::callFuncWithParam(const char* funcName, std::vector<PluginP
         	PluginUtils::callJavaFunctionWithName_oneParam(this, funcName, "(D)V", pRetParam->getDoubleValue());
         	break;
         case PluginParam::kParamTypeLong:
-        	PluginUtils::callJavaFunctionWithName_oneParam(this, funcName, "(I)V", pRetParam->getLongValue());
+        	PluginUtils::callJavaFunctionWithName_oneParam(this, funcName, "(J)V", pRetParam->getLongValue());
         	break;
         case PluginParam::kParamTypeStringMap:
         case PluginParam::kParamTypeMap:

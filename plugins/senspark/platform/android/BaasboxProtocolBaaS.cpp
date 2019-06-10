@@ -27,9 +27,9 @@ void BaasboxProtocolBaaS::loginWithFacebookToken(const std::string &facebookToke
 		jstring strFacebookToken = t.env->NewStringUTF(facebookToken.c_str());
 
 		CallbackWrapper* wrapper = new CallbackWrapper(cb);
-		PluginUtils::outputLog("BaasboxProtocolBaaS", "callback id %d", (long)wrapper);
+		PluginUtils::outputLog("BaasboxProtocolBaaS", "callback id %d", (long long)wrapper);
 		// invoke java method
-		t.env->CallVoidMethod(pData->jobj, t.methodID, strFacebookToken, (long) wrapper);
+		t.env->CallVoidMethod(pData->jobj, t.methodID, strFacebookToken, (long long) wrapper);
 		t.env->DeleteLocalRef(strFacebookToken);
 		t.env->DeleteLocalRef(t.classID);
 	}
@@ -77,7 +77,7 @@ void BaasboxProtocolBaaS::loadUsersWithParameters(const std::string& condition, 
 		CallbackWrapper* wrapper = new CallbackWrapper(cb);
 
 		// invoke java method
-		t.env->CallVoidMethod(pData->jobj, t.methodID, strCondition, (long)wrapper);
+		t.env->CallVoidMethod(pData->jobj, t.methodID, strCondition, (long long)wrapper);
 		t.env->DeleteLocalRef(strCondition);
 		t.env->DeleteLocalRef(t.classID);
 	}
@@ -96,7 +96,7 @@ void BaasboxProtocolBaaS::loadAssetJSON(const std::string &assetName, BaaSCallba
         CallbackWrapper* wrapper = new CallbackWrapper(cb);
         
         // invoke java method
-        t.env->CallVoidMethod(pData->jobj, t.methodID, strAssetName, (long)wrapper);
+        t.env->CallVoidMethod(pData->jobj, t.methodID, strAssetName, (long long)wrapper);
         t.env->DeleteLocalRef(strAssetName);
         t.env->DeleteLocalRef(t.classID);
     }

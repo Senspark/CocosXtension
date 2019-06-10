@@ -18,8 +18,8 @@
 @property BOOL debug;
 @property (retain) NSMutableDictionary* earnedAchievementCache;
 
-- (void) submitAchievement: (NSString*) identifier percentComplete: (double) percentComplete andCallback: (long) cbID;
+- (void) submitAchievement: (NSString*) identifier percentComplete: (double) percentComplete andCallback: (long long) cbID;
 
-- (void) resetAchievements: (long) cbID;
+- (void) resetAchievements: (long long) cbID;
 
 @end

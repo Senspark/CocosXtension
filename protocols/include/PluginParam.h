@@ -37,7 +37,7 @@ class PluginParam
 public:
     PluginParam();
 	PluginParam(int nValue);
-    PluginParam(long lValue);
+    PluginParam(long long lValue);
 	PluginParam(float fValue);
 	PluginParam(double dValue);
 	PluginParam(bool bValue);
@@ -64,7 +64,7 @@ public:
 		return _intValue;
 	}
 
-    inline long getLongValue() {
+    inline long long getLongValue() {
         return _longValue;
     }
     
@@ -99,7 +99,7 @@ private:
 private:
 	ParamType _type;
     
-    long    _longValue;
+    long long   _longValue;
 	int     _intValue;
 	float   _floatValue;
 	double	_doubleValue;

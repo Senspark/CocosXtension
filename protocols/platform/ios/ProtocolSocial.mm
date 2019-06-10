@@ -61,7 +61,7 @@ void ProtocolSocial::submitScore(const std::string& leadboardID, int score, cons
         CallbackWrapper *wrapper = new CallbackWrapper(cb);
         
         NSString* pID = [NSString stringWithUTF8String:leadboardID.c_str()];
-        [curObj submitScore:pID withScore:score withCallback:(long)wrapper];
+        [curObj submitScore:pID withScore:score withCallback:(long long )wrapper];
     }
 }
 

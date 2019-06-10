@@ -40,7 +40,7 @@ void FacebookProtocolShare::openInviteDialog(FBParam &info, FacebookProtocolShar
     FacebookProtocolShare::CallbackWrapper* wrapper = new FacebookProtocolShare::CallbackWrapper(callback);
 
     PluginParam params(info);
-    PluginParam callbackID((long)wrapper);
+    PluginParam callbackID((long long)wrapper);
 
     callFuncWithParam("openInviteDialog", &params, &callbackID, nullptr);
 }
@@ -56,7 +56,7 @@ void FacebookProtocolShare::sendGameRequest(FBParam &info, FacebookProtocolShare
 
         CallbackWrapper* wrapper = new CallbackWrapper(callback);
 
-        t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map, (long)wrapper);
+        t.env->CallVoidMethod(pData->jobj, t.methodID, obj_Map, (long long)wrapper);
         t.env->DeleteLocalRef(obj_Map);
         t.env->DeleteLocalRef(t.classID);
     }

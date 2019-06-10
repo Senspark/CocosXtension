@@ -14,10 +14,10 @@
 
 @interface GameCenterControllerDelegate: NSObject <GKGameCenterControllerDelegate>
 {
-    long _callbackID;
+    long long _callbackID;
 }
 
-- (id) initWithCallbackID: (long) callbackID;
+- (id) initWithCallbackID: (long long) callbackID;
 
 - (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController;
 
@@ -25,7 +25,7 @@
 
 @implementation GameCenterControllerDelegate
 
-- (id) initWithCallbackID: (long) callbackID {
+- (id) initWithCallbackID: (long long) callbackID {
     if (self = [self init]) {
         _callbackID = callbackID;
     }
@@ -60,7 +60,7 @@
     
 }
 
-- (void) submitScore: (NSString*) leaderboardID withScore: (int) score withCallback:(long)callbackID
+- (void) submitScore: (NSString*) leaderboardID withScore: (int) score withCallback:(long long)callbackID
 {
     GKScore *myScore = [[[GKScore alloc] initWithLeaderboardIdentifier:leaderboardID] autorelease];
     myScore.value = score;
@@ -78,7 +78,7 @@
     }];
 }
 
-- (void) showLeaderboard: (NSString*) leaderboardID withCallback:(long)callbackID
+- (void) showLeaderboard: (NSString*) leaderboardID withCallback:(long long)callbackID
 {
     GKGameCenterViewController *viewController = [[[GKGameCenterViewController alloc] init] autorelease];
     
@@ -92,12 +92,12 @@
     });
 }
 
-- (void) showLeaderboards: (long) cbID
+- (void) showLeaderboards: (long long) cbID
 {
     [self showLeaderboard: nil withCallback:cbID];
 }
 
-- (void) unlockAchievement: (NSDictionary*) achInfo withCallback:(long)callbackID
+- (void) unlockAchievement: (NSDictionary*) achInfo withCallback:(long long)callbackID
 {
     NSString* achievementId = [achInfo objectForKey:@"achievementId"];
     double percentComplete = [(NSNumber*) [achInfo objectForKey:@"percent"] doubleValue];
@@ -105,7 +105,7 @@
     [self submitAchievement:achievementId percentComplete:percentComplete andCallback:callbackID];
 }
 
-- (void) showAchievements: (long) cbID
+- (void) showAchievements: (long long) cbID
 {
     GKGameCenterViewController *viewController = [[[GKGameCenterViewController alloc] init] autorelease];
     viewController.viewState = GKGameCenterViewControllerStateAchievements;
@@ -117,7 +117,7 @@
     });
 }
 
-- (void) resetAchievements: (long) cbID
+- (void) resetAchievements: (long long) cbID
 {
     self.earnedAchievementCache= NULL;
     [GKAchievement resetAchievementsWithCompletionHandler: ^(NSError *error) {
@@ -146,7 +146,7 @@
     return @"0.1.0";
 }
 
-- (void) submitAchievement:(NSString *)identifier percentComplete:(double)percentComplete  andCallback:(long) cbID
+- (void) submitAchievement:(NSString *)identifier percentComplete:(double)percentComplete  andCallback:(long long) cbID
 {
 
     //GameCenter check for duplicate achievements when the achievement is submitted, but if you only want to report

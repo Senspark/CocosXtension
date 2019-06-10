@@ -51,7 +51,7 @@ void ProtocolShare::share(TShareInfo &info, ShareCallback& cb)
         
         CallbackWrapper* wrapper = new CallbackWrapper(cb);
         
-        [curObj share:pDict withCallback:(long) wrapper];
+        [curObj share:pDict withCallback:(long long) wrapper];
     }
 }
     

@@ -52,7 +52,7 @@ using namespace cocos2d::plugin;
     }
 }*/
 
-+ (void) onShareResult:(id) obj withRet:(int) ret withContent: (NSDictionary*) content withMsg:(NSString*) msg andCallbackID: (long) cbID {
++ (void) onShareResult:(id) obj withRet:(int) ret withContent: (NSDictionary*) content withMsg:(NSString*) msg andCallbackID: (long long) cbID {
     PluginProtocol* pPlugin = PluginUtilsIOS::getPluginPtr(obj);
     ProtocolShare* pShare = dynamic_cast<ProtocolShare*>(pPlugin);
     if (pShare && cbID) {
